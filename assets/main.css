@@ -84,7 +84,7 @@
         /* font-size */
         --fs-ui: 14px; /* nav and menu */
         --fs-header-title: 64px;
-        --fs-article: 16.4px; /* size inherited for p, ol, ul */
+        --fs-article: 18px; /* size inherited for p, ol, ul */
         --fs-blockquote: 0.975em;
         --fs-small: 14.4px;
         --fs-first-heading: 36px;
@@ -99,8 +99,8 @@
         --page-bg: #ffffff;
         --header-bg: #fff;
         --header-text-color-1: #333;
-        --header-text-color-2: #6a59df;
-        --nav-bg: #fff;
+        --header-text-color-2: #7060d9;
+        --nav-bg: #f7f8f9;
         --nav-color: #808080;
         --nav-svg: #999;
         --nav-border: #d5d5d5;
@@ -152,7 +152,7 @@
         /* line-height */
         --lh-ui: 1.5;
         --lh-toc: 1.25;
-        --lh-article: 1.725; /* main text */
+        --lh-article: 1.7; /* main text */
         --lh-first-heading: 1.2;
         --lh-heading: 1.3;
         --lh-table: 1.5;
