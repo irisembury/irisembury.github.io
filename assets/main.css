@@ -86,7 +86,7 @@
         --fs-header-title: 64px;
         --fs-article: 16.4px; /* size inherited for p, ol, ul */
         --fs-blockquote: 0.975em;
-        --fs-small: 15.0px;
+        --fs-small: 14.4px;
         --fs-first-heading: 36px;
         --fs-h1: 24px;
         --fs-h2: 22px;
@@ -99,7 +99,7 @@
         --page-bg: #ffffff;
         --header-bg: #fff;
         --header-text-color-1: #333;
-        --header-text-color-2: #777;
+        --header-text-color-2: #6a59df;
         --nav-bg: #fff;
         --nav-color: #808080;
         --nav-svg: #999;
@@ -421,9 +421,6 @@
         .toc .title-container { padding-left: calc(var(--toc-width) + var(--toc-side-pad)); padding-right: var(--right-correction-pad); }
             .header-title { color: var(--header-text-color-1); font-family: var(--ff-header-title); font-size: var(--fs-header-title); line-height: 1; }
                 .header-title span { color: var(--header-text-color-2); }
-                .header-title::after { max-width: 236px; content: ""; left: 0; height: 2px; bottom: 6px; width: 100%; background-color: var(--header-text-color-1); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; position: relative; display: block; }
-                .header-title:hover { text-decoration: none; }
-                .header-title:hover::after { transform: scaleX(1); }
 
     .nav-wrapper { font-family: var(--ff-nav); background-color: var(--nav-bg); color: var(--nav-color); position: sticky; top: 0px; height: var(--nav-height); border-bottom: 1px solid var(--nav-border); }
     .toc .nav-wrapper { padding-right: var(--right-correction-pad); }
