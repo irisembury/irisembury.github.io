@@ -65,7 +65,7 @@
         --plug-icon-size: 18px;
         /* font-family */
         --ff-ui: Segoe UI, Nirmala UI, system-ui, sans-serif;
-        --ff-header-title: Georgia, serif;
+        --ff-index-title: Times, serif;
         --ff-nav: Trebuchet MS, Nirmala UI, Segoe UI, system-ui, sans-serif;
         --ff-article: Roboto Serif, Georgia, sans-serif;
         --ff-article-digit: Georgia Pro, Georgia, sans-serif;
@@ -82,23 +82,23 @@
         --ff-lb-caption: Roboto, sans-serif;
         /* font-size */
         --fs-ui: 14px; /* nav and menu */
-        --fs-header-title: 54px;
-        --fs-article: 17px; /* size inherited for p, ol, ul */
-        --fs-blockquote: 0.975em;
+        --fs-index-title: 36px;
+        --fs-article: 16px;
+        --fs-blockquote: 0.9625em;
         --fs-small: 14.4px;
-        --fs-first-heading: 36px;
-        --fs-h1: 24px;
-        --fs-h2: 22px;
-        --fs-h3: 20px;
+        --fs-first-heading: 2.25em;
+        --fs-h1: 1.5em;
+        --fs-h2: 1.375em;
+        --fs-h3: 1.25em;
         --fs-h4: 1em;
-        --fs-table: 15px;
-        --fs-lb-caption: 15px;
+        --fs-table: 0.9375em;
+        --fs-lb-caption: 0.9375em;
         --fs-cite: 0.85em;
         /* colors */
+        --index-text-color-1: #333;
+        --index-text-color-2: #6062ea;
         --page-bg: #ffffff;
         --header-bg: #fff;
-        --header-text-color-1: #333;
-        --header-text-color-2: #6062ea;
         --nav-bg: #f7f8f9;
         --nav-color: #808080;
         --nav-svg: #999;
@@ -177,7 +177,7 @@
     html.blue {
         --page-bg: #292f3e;
         --header-bg: #111;
-        --header-text-color-2: #5552ac;
+        --index-text-color-2: #5552ac;
         --nav-bg: #3b4255;
         --nav-border: #393f57;
         --nav-color: #888c9f;
@@ -196,7 +196,7 @@
     html.red {
         --page-bg: #f2f2f2;
         --header-bg: #111;
-        --header-text-color-2: #914a4d;
+        --index-text-color-2: #914a4d;
         --nav-bg: #592b2d;
         --nav-border: #4f2020;
         --nav-color: #b49d9d;
@@ -214,8 +214,8 @@
     html.dark {
         --page-bg: #262728;
         --header-bg: #121315;
-        --header-text-color-1: #999;
-        --header-text-color-2: #6657a2;
+        --index-text-color-1: #999;
+        --index-text-color-2: #6657a2;
         --nav-bg: #2c2c2f;
         --nav-color: #666;
         --nav-border: #393939;
@@ -234,7 +234,7 @@
         --grey-c: #505050;
         --grey-e: #393a3c;
         --grey-f: #2e2f31;
-        --link-color: #828eb0;
+        --link-color: #7485b5;
         --link-dotted-underline: #505666;
         --selection-color: #a4a4a4;
         --selection-bg: #4c4f5b;
@@ -265,8 +265,8 @@
     html.dark-warm {
         --page-bg: #242423;
         --header-bg: #121315;
-        --header-text-color-1: #999;
-        --header-text-color-2: #ac7443;
+        --index-text-color-1: #999;
+        --index-text-color-2: #ac7443;
         --nav-bg: #2f2f2f;
         --nav-color: #666;
         --nav-border: #393939;
@@ -315,8 +315,8 @@
     }
     html.darker {
         --header-bg: #000;
-        --header-text-color-1: #555;
-        --header-text-color-2: #4c3f7b;
+        --index-text-color-1: #555;
+        --index-text-color-2: #4c3f7b;
         --nav-bg: #080808;
         --nav-color: #333;
         --nav-svg: #303030;
@@ -418,8 +418,8 @@
     .main-header { height: 100px; background-color: var(--header-bg); }
         .title-container { width: 100%; max-width: var(--main-width); display: flex; justify-content: center; }
         .toc .title-container { padding-left: calc(var(--toc-width) + var(--toc-side-pad)); padding-right: var(--right-correction-pad); }
-            .header-title { color: var(--header-text-color-1); font-family: var(--ff-header-title); font-size: var(--fs-header-title); line-height: 1; }
-                .header-title span { color: var(--header-text-color-2); }
+            .index-title { color: var(--index-text-color-1); font-family: var(--ff-index-title); font-size: var(--fs-index-title); line-height: 1; letter-spacing: 3px; }
+                .index-title span { color: var(--index-text-color-2); margin-left: -5px; }
 
     .nav-wrapper { font-family: var(--ff-nav); background-color: var(--nav-bg); color: var(--nav-color); position: sticky; top: 0px; height: var(--nav-height); border-bottom: 1px solid var(--nav-border); }
     .toc .nav-wrapper { padding-right: var(--right-correction-pad); }
