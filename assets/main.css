@@ -95,8 +95,8 @@
         --fs-lb-caption: 0.9375em;
         --fs-cite: 0.85em;
         /* colors */
-        --index-text-color-1: #333;
-        --index-text-color-2: #6062ea;
+        --index-name-color-1: #333;
+        --index-name-color-2: #6062ea;
         --page-bg: #ffffff;
         --header-bg: #fff;
         --nav-bg: #f7f8f9;
@@ -137,17 +137,17 @@
         --c-light-blue: #9baee6;
         --c-pale-blue: #e4ebff;
         /* svg colors */
-        --github: #3c3c3c;
-        --bluesky: #63aef9;
-        --tumblr: #393979;
-        --tumblr-white: #fff;
-        --youtube: #c33c3c;
-        --youtube-white: #fff;
-        --twitter: #111;
-        --discord: #6d75cc;
-        --substack: #d9803f;
-        --kofi: #f30;
-        --patreon: #f92;
+        --c-github: #3c3c3c;
+        --c-bluesky: #63aef9;
+        --c-tumblr: #393979;
+        --c-tumblr-white: #fff;
+        --c-youtube: #c33c3c;
+        --c-youtube-white: #fff;
+        --c-twitter: #111;
+        --c-discord: #6d75cc;
+        --c-substack: #d9803f;
+        --c-kofi: #f30;
+        --c-patreon: #f92;
         /* line-height */
         --lh-ui: 1.5;
         --lh-toc: 1.25;
@@ -177,7 +177,7 @@
     html.blue {
         --page-bg: #292f3e;
         --header-bg: #111;
-        --index-text-color-2: #5552ac;
+        --index-name-color-2: #5552ac;
         --nav-bg: #3b4255;
         --nav-border: #393f57;
         --nav-color: #888c9f;
@@ -196,7 +196,7 @@
     html.red {
         --page-bg: #f2f2f2;
         --header-bg: #111;
-        --index-text-color-2: #914a4d;
+        --index-name-color-2: #914a4d;
         --nav-bg: #592b2d;
         --nav-border: #4f2020;
         --nav-color: #b49d9d;
@@ -214,8 +214,8 @@
     html.dark {
         --page-bg: #262728;
         --header-bg: #121315;
-        --index-text-color-1: #999;
-        --index-text-color-2: #6657a2;
+        --index-name-color-1: #999;
+        --index-name-color-2: #685fac;
         --nav-bg: #2c2c2f;
         --nav-color: #666;
         --nav-border: #393939;
@@ -251,22 +251,22 @@
         --c-light-blue: #39477f;
         --c-pale-blue: #414757;
         --c-orange: #bd8b49;
-        --github: #685c91;
-        --bluesky: #5e88b3;
-        --tumblr: #444480;
-        --tumblr-white: #fff;
-        --youtube: #b13a3a;
-        --youtube-white: #e6e6e6;
-        --twitter: #aaa;
-        --discord: #6068bf;
-        --substack: #bd723c;
+        --c-github: #685c91;
+        --c-bluesky: #5e88b3;
+        --c-tumblr: #444480;
+        --c-tumblr-white: #fff;
+        --c-youtube: #b13a3a;
+        --c-youtube-white: #e6e6e6;
+        --c-twitter: #aaa;
+        --c-discord: #6068bf;
+        --c-substack: #bd723c;
         --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><rect x='17' y='17' width='66' height='66' fill='%23888'/></svg>");
     }
     html.dark-warm {
         --page-bg: #242423;
         --header-bg: #121315;
-        --index-text-color-1: #999;
-        --index-text-color-2: #ac7443;
+        --index-name-color-1: #999;
+        --index-name-color-2: #ac7443;
         --nav-bg: #2f2f2f;
         --nav-color: #666;
         --nav-border: #393939;
@@ -302,21 +302,21 @@
         --c-light-blue: #39477f;
         --c-pale-blue: #414757;
         --c-orange: #bd8b49;
-        --github: #685c91;
-        --bluesky: #5e88b3;
-        --tumblr: #444480;
-        --tumblr-white: #fff;
-        --youtube: #b13a3a;
-        --youtube-white: #e6e6e6;
-        --twitter: #aaa;
-        --discord: #6068bf;
-        --substack: #bd723c;
+        --c-github: #685c91;
+        --c-bluesky: #5e88b3;
+        --c-tumblr: #444480;
+        --c-tumblr-white: #fff;
+        --c-youtube: #b13a3a;
+        --c-youtube-white: #e6e6e6;
+        --c-twitter: #aaa;
+        --c-discord: #6068bf;
+        --c-substack: #bd723c;
         --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><rect x='17' y='17' width='66' height='66' fill='%23888'/></svg>");
     }
     html.darker {
         --header-bg: #000;
-        --index-text-color-1: #555;
-        --index-text-color-2: #4c3f7b;
+        --index-name-color-1: #555;
+        --index-name-color-2: #4c3f7b;
         --nav-bg: #080808;
         --nav-color: #333;
         --nav-svg: #303030;
@@ -353,15 +353,15 @@
         --c-teal: #111c1c;
         --c-purple: #47364f;
         --c-orange: #5e3f18;
-        --github: #3e3857;
-        --bluesky: #3b5875;
-        --tumblr: #1d1d46;
-        --tumblr-white: #6e6f73;
-        --youtube: #713232;
-        --youtube-white: #737373;
-        --twitter: #6a6a6a;
-        --discord: #3f4482;
-        --substack: #714b33;
+        --c-github: #3e3857;
+        --c-bluesky: #3b5875;
+        --c-tumblr: #1d1d46;
+        --c-tumblr-white: #6e6f73;
+        --c-youtube: #713232;
+        --c-youtube-white: #737373;
+        --c-twitter: #6a6a6a;
+        --c-discord: #3f4482;
+        --c-substack: #714b33;
         --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><rect x='17' y='17' width='66' height='66' fill='%23444'/></svg>");
     }
     .darker img { opacity: 0.7; }
@@ -418,8 +418,8 @@
     .main-header { height: 100px; background-color: var(--header-bg); }
         .title-container { width: 100%; max-width: var(--main-width); display: flex; justify-content: center; }
         .toc .title-container { padding-left: calc(var(--toc-width) + var(--toc-side-pad)); padding-right: var(--right-correction-pad); }
-            .index-title { color: var(--index-text-color-1); font-family: var(--ff-index-title); font-size: var(--fs-index-title); line-height: 1; letter-spacing: 3px; }
-                .index-title span { color: var(--index-text-color-2); margin-left: -5px; }
+            .index-title { color: var(--index-name-color-1); font-family: var(--ff-index-title); font-size: var(--fs-index-title); line-height: 1; letter-spacing: 1px; }
+                .index-title span { color: var(--index-name-color-2); margin-left: -5px; }
 
     .nav-wrapper { font-family: var(--ff-nav); background-color: var(--nav-bg); color: var(--nav-color); position: sticky; top: 0px; height: var(--nav-height); border-bottom: 1px solid var(--nav-border); }
     .toc .nav-wrapper { padding-right: var(--right-correction-pad); }
@@ -491,7 +491,7 @@
 
             #article > * { margin-top: 1em; }
             #article .image-span, #article .image-float, #article .captioned-gallery, #article .square-gallery { margin-top: 1.2em; }
-            #article .table-wrapper { margin-bottom: 1.1em; font-size: var(--fs-table); }
+            #article .table-wrapper { margin-bottom: 1.1em; font-size: var(--fs-table); font-family: var(--ff-table); line-height: var(--lh-table); }
 
             #article p b,
             #article li b,
@@ -514,8 +514,7 @@
                 #article .small * { color: inherit; font-size: inherit !important; font-family: inherit !important; }
                 #article .small a { text-decoration: 1px dotted underline var(--grey-9); }
 
-            .rows .row { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0px 3px; line-height: var(--lh-table); }
-            .rows .cell { font-family: var(--ff-table); line-height: var(--lh-table); }
+            .rows .row { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0px 3px; }
 
             .auto-list { padding: 0 2.5em; margin: 0; }
                 .auto-list li { margin-top: 0.6em; }
@@ -559,7 +558,7 @@
             .auto-table { border-collapse: collapse; }
                 .auto-table br { margin-bottom: 0.5em; }
                 .auto-table th,
-                .auto-table td { padding: 5px 6px 4px; vertical-align: top; font-size: var(--fs-table); line-height: var(--lh-table); }
+                .auto-table td { padding: 5px 6px 4px; vertical-align: top; }
 
             .auto-video { background-color: var(--grey-1); }
             .auto-video video { display: block; margin-inline: auto; width: 100%; }
@@ -570,7 +569,7 @@
                     .collapse-button-container .flat-button { margin: 8px 0; background-color: var(--white); border: 1px solid var(--grey-a); padding: 3px 8px 4px; }
                     .collapse-button-container .flat-button:hover { background-color: var(--grey-c); }
 
-            .yt-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); line-height: var(--lh-figcaption); font-family: var(--ff-table); gap: 9px 14px; }
+            .yt-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); line-height: var(--lh-figcaption); gap: 9px 14px; }
                 .yt-gallery figure { margin: 0 auto; }
                     .yt-gallery img { width: 100%; object-fit: cover; aspect-ratio: 16/8.9; border: 1px solid var(--grey-a); box-sizing: border-box; }
                 .yt-title { color: var(--grey-5); padding: 5px 0; display: block; }
