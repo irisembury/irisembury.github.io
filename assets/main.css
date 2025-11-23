@@ -506,7 +506,7 @@
             #article p a:not(.citeref), #article li a:not(.citeref) { text-decoration: 1px dotted underline var(--link-dotted-underline); }
             #article a:hover { text-decoration: 1px solid underline currentcolor; }
             
-            #article a.citeref { vertical-align: top; font-size: 0.7em; margin-left: 2px; font-family: var(--ff-citeref); }
+            #article a.citeref { vertical-align: top; font-size: 0.7em; margin-left: 1px; font-family: var(--ff-citeref); }
             #article a.citeref::before { content: "\00A0"; font-size: 0.1px; }
 
             #article .small { color: var(--grey-8); font-size: var(--fs-small); font-family: var(--ff-small); line-height: var(--lh-small); }
