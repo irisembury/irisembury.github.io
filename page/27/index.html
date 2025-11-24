@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Soundboard</title>
+    <link rel="stylesheet" href="../../assets/main.css">
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+    <style>
+    #soundboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 5px 5px;
+        font-size: 13px;
+        font-family: var(--ff-ui);
+    }
+    #soundboard > div {
+        display: flex;
+        aspect-ratio: 4/3;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 4px;
+        border: 1px solid var(--grey-c);
+        background-color: #3d72c117;
+    }
+    #soundboard > div.hl {
+        background-color: var(--c-blue) !important;
+        color: var(--grey-c);
+    }
+    .stop-btn:hover,
+    #soundboard > div:hover {
+        background-color: var(--grey-e);
+        border-color: var(--grey-8);
+        cursor: pointer;
+    }
+    .stop-btn {
+        font-family: var(--ff-ui);
+        cursor: pointer;
+        border: 1px solid var(--grey-a);
+        padding: 1px 8px;
+        background-color: #f002;
+    }
+    </style>
+</head>
+<body>
+
+Soundboard
+
+\<div id="soundboard">
+    <div>A few moments later (Narrator, SpongeBob SquarePants)</div>
+    <div>Curb your enthusiasm (outro music)</div>
+    <div>Discord call join</div>
+    <div>Discord call leave</div>
+    <div>Grindr alert</div>
+    <div>Hah, gay! (Ben Chang, Community)</div>
+    <div>He can't keep getting away with it (Jesse Pinkman, Breaking Bad)</div>
+    <div>How the turn tables (Michael Scott, The Office)</div>
+    <div>I can't believe you've done this</div>
+    <div>Laugh track (stock)</div>
+    <div>Meta Gear Solid Alert (noise)</div>
+    <div>Oh, good for you (Christian Bale)</div>
+    <div>The Price Is Right (loss noise)</div>
+    <div>We don't say that word</div>
+    <div>What don't you fucking understand? (Christian Bale)</div>
+    <div>What the hell is even that?</div>
+    <div>What? Who? Who said that? (Mr. Plinkett)</div>
+    <div>What's wrong with your face? (Mr. Plinkett)</div>
+    <div>Wow (Stock anime noise)</div>
+    <div>You are such a simp (Martha, Who's Afraid of Virginia Woolf)</div>
+    <div>You guys I'm like really smart now you don't even know (Kelly Kapoor, The Office)</div>
+</div>
+
+\<div class="flex-end"><span class="stop-btn" onclick="stopSounds()">❌ Stop all sounds</span>
+</div>
+
+\<script src="../../assets/layout.js"></script>
+<script>
+
+const soundsPlaying = [];
+
+function stopSounds() {
+    while (soundsPlaying.length > 0) {
+        soundsPlaying[0].pause();
+        soundsPlaying[0].currentTime = 0;
+        soundsPlaying.shift();
+    }
+    let soundboard = Array.from(document.getElementById("soundboard").children);
+    soundboard.forEach(k => k.classList.remove("hl"))
+}
+
+function sbSetup() {
+    let soundboard = document.getElementById("soundboard").children;
+    for (let i = 0; i < soundboard.length; i += 1) {
+        let url = "media/" + soundboard[i].innerHTML.replaceAll("?", "") + ".mp3";
+        soundboard[i].addEventListener("click",function() {
+            const sound = new Audio(url);
+            sound.play();
+            soundsPlaying.push(sound);
+            soundboard[i].classList.add("hl");
+            sound.addEventListener("loadedmetadata", function() {
+                setTimeout(function() {
+                    let index = -1;
+                    let index2 = -1;
+                    for (let j = 0; j < soundsPlaying.length; j += 1) {
+                        if (index == -1 && soundsPlaying[j].src == sound.src) {
+                            index = j;
+                        } else if (index2 == -1 && soundsPlaying[j].src == sound.src) {
+                            index2 = j;
+                            break;
+                        }
+                    }
+                    if (index > -1) {
+                        soundsPlaying.splice(index, 1);
+                        if (index2 == -1) {
+                            soundboard[i].classList.remove("hl");
+                        }
+                    }
+                }, sound.duration * 1000);
+            })
+        })
+    }
+}
+
+window.addEventListener("load", sbSetup);
+
+
+</script>
+</body></html>
+
+
+

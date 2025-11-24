@@ -437,8 +437,8 @@
     .menu-line { position: sticky; top: calc(var(--nav-height) - 0px); display: flex; justify-content: center; }
         .menu-aligner { max-width: calc(var(--main-width) + calc(2 * var(--article-side-pad))); width: 100%; display: flex; justify-content: right; }
         .toc .menu-aligner { max-width: calc(var(--main-width) + var(--toc-width)); }
-            .menu { border: 2px solid var(--link-color); border-top: none; position: absolute; background-color: var(--grey-f); max-width: var(--menu-width); }
-                .menu-inner { border: 1px solid var(--grey-3); border-top: none; padding: 1em; display: flex; flex-direction: column; gap: 2px; }
+            .menu { border-top: none; position: absolute; background-color: var(--grey-f); max-width: var(--menu-width); }
+                .menu-inner { border: 1px solid var(--grey-5); border-top: none; padding: 1em; display: flex; flex-direction: column; gap: 2px; }
                 .menu h3 { font-size: 1em; }
                 .menu hr { margin: 5px 0 3px; border-bottom: 1px dotted var(--grey-8); }
                 .menu select { width: 100%; height: 2em; border: 1px solid var(--grey-a); background-color: var(--c-white); color: var(--grey-3); padding: 2px 4px; }
