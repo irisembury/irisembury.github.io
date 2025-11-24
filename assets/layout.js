@@ -13,7 +13,7 @@ const socialLinks = `<a title="YouTube" class="plug" href="https://www.youtube.c
 | <a title="Bluesky" class="plug" href="https://bsky.app/profile/irisembury.bsky.social">${ blueskySvg } Bluesky</a>
 | <a title="Tumblr" class="plug" href="https://irisembury.tumblr.com/">${ tumblrSvg } Tumblr</a>
 | <a title="Discord" class="plug" href="https://discord.gg/fGdV7x5dk2">${ discordSvg } Discord</a>
-| <a title="Substack" class="plug" href="https://perennialiris.substack.com">${ substackSvg } Substack</a>
+| <a title="Substack" class="plug" href="https://irisembury.substack.com">${ substackSvg } Substack</a>
 | <a title="Twitter" class="plug" href="https://x.com/irisembury">${ twitterSvg } Twitter</a>
 `;
 const beggingLinks = `<a title="Ko-fi" class="plug" href="https://ko-fi.com/irisembury">${ kofiSvg } Ko-fi</a>

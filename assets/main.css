@@ -170,8 +170,6 @@
         --fw-h4: 700;
         --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><rect x='17' y='17' width='66' height='66' fill='%236a6a6a'/></svg>");
     }
-    html.wide { --main-width: 940px; }
-    html.narrow .c2 { max-width: calc(var(--main-width) - 200px); margin: auto; }
     html.full-width { --main-width: 1920px; }
     html.full-width .main-nav { padding-right: 1rem; }
     html.blue {
@@ -451,10 +449,11 @@
                 .menu-checkbox { appearance: none; cursor: pointer; width: 13px; height: 13px; border: 1px solid var(--grey-8); background-color: var(--c-white); border-radius: 2px; transform: translateY(1px); background-size: cover; background-position: center; }
                 .menu-checkbox:checked { background-image: var(--checkbox-check); }
 
-    .c1 { margin: 0 auto; padding: 0; justify-content: center; display: flex; align-items: stretch; }
-        .c2 { }
-        .toc .c2 { max-width: 100%; display: flex; justify-content: center; padding-right: var(--right-correction-pad); }
-            .c3 { max-width: calc(var(--main-width) + calc(2 * var(--article-side-pad))); background-color: var(--c3-bg); box-sizing: border-box; padding: 40px var(--article-side-pad); }
+    .toc .c1 { display: flex; }
+    .c1 { justify-content: center; align-items: stretch; }
+        .c2 {  }
+        .toc .c2 { padding-right: var(--right-correction-pad); }
+            .c3 { margin: 0 auto; max-width: var(--main-width); background-color: var(--c3-bg); padding: 40px var(--article-side-pad); }
 
             .toc .toc-wrapper { display: block; padding-top: 40px; }
             .toc-wrapper { display: none; }
@@ -475,7 +474,7 @@
         #homelinks { display: flex; flex-direction: column; gap: 13px; color: var(--grey-8); margin-bottom: 2em; }
         #homelinks .hl-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 13px; }
 
-        #article { font-family: var(--ff-article); font-size: var(--fs-article); line-height: var(--lh-article); width: 100%; }
+        #article { font-family: var(--ff-article); font-size: var(--fs-article); line-height: var(--lh-article); }
             #article > :nth-child(1) { margin-top: 0 !important; }
             #article .heading.first-heading { font-size: var(--fs-first-heading); line-height: var(--lh-first-heading); font-weight: 700; }
             
