@@ -34,8 +34,6 @@
 </head>
 <body>
 
-\<div style="width:var(--main-width)"></div><svg aria-hidden="true" focusable="false" class="octicon octicon-arrow-switch" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>
-
 ---
 
 Most recent videos:
@@ -109,11 +107,13 @@ A few other things:
 [A beauty holding a bird](page/21/index.html)
 [Every movie I have ever seen](page/movies/index.html)
 
+\<div style="opacity:0; user-select:none; margin-bottom: -2em;">This invisible text is needed here so the page displays properly. It's also possible I will fix the display issue and forget to remove this text in which case it's here unnecessarily. If you notice that is the case then it could be removed. This invisible text is needed here so the page displays properly. It's also possible I will fix the display issue and forget to remove this text in which case it's here unnecessarily. If you notice that is the case then it could be removed. This invisible text is needed here so the page displays properly. It's also possible I will fix the display issue and forget to remove this text in which case it's here unnecessarily. If you notice that is the case then it could be removed.</div>
+
 \<div id="index"></div>
 <script src="assets/layout.js"></script>
 <script>
 window.addEventListener("load", function() {
-    document.querySelector(".yt-gallery").parentNode.innerHTML += `<div style="text-align:right; margin-top:10px;"><span><a href="https://www.youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">Link to all videos &rarr;</a></span></div>`;
+    document.querySelector(".yt-gallery").parentNode.innerHTML += `<div style="text-align:right; margin-top:10px;"><span><a href="page/videos/index.html">All videos &rarr;</a></span></div>`;
 })
 </script>
 </body></html>
