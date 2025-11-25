@@ -94,6 +94,7 @@ const soundsPlaying = [];
 function stopSounds() {
     while (soundsPlaying.length > 0) {
         soundsPlaying[0].pause();
+        soundsPlaying[0].src = "";
         soundsPlaying.shift();
     }
     Array.from(document.getElementById("soundboard").children).forEach(k => k.classList.remove("pressed"));
@@ -134,7 +135,6 @@ function sbSetup() {
             })
         })
     }
-    
     window.addEventListener("keydown", k => {
         if (k.keyCode==27) {
             stopSounds();
