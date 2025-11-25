@@ -55,7 +55,7 @@ window.addEventListener("load", function() {
                             </tr>
                         </tbody>
                     </table>
-                    <div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>
+                    ${ index ? "" : `<div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
                     ${ HTML.classList.contains("toc") ? `<div class="align-center flex-end"><label for="show-toc">Show table of contents:</label><input type="checkbox" class="menu-checkbox" checked id="show-toc"></div>` : "" }
                     <hr>
                     <h3>Fonts override:</h3>
@@ -109,7 +109,7 @@ window.addEventListener("load", function() {
     </div>
     ${ index ? `
         <div style="max-width: var(--main-width); margin: 0 auto; padding: 0 var(--article-side-pad); background-color: var(--c3-bg)">
-            <div class="center" style="padding: 24px 0 12px"><span class="index-title" style="font-family: Constantia, Georgia, serif; font-size: 37px;">Iris <span>Embury</span></span></div>
+            <div class="center" style="padding: 24px 0 12px"><span class="index-title" style="font-family: Constantia, Georgia, serif; font-size: 33px;">Iris <span>Embury</span></span></div>
             <div style="color: var(--grey-8); display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;"><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social">Bluesky</a> | <a title="Tumblr" href="https://irisembury.tumblr.com/">Tumblr</a> | <a title="Discord" href="https://discord.gg/fGdV7x5dk2">Discord</a> | <a title="Substack" href="https://irisembury.substack.com">Substack</a> | <a title="Twitter" href="https://x.com/irisembury">Twitter</a></div>
         </div>
     `
@@ -207,14 +207,16 @@ window.addEventListener("load", function() {
         localStorage.setItem("tableFont", this.value);
         updateFonts();
     });
-    if (localStorage.getItem(window.location.href + "-full-width") == "true") {
+    if (!index && localStorage.getItem(window.location.href + "-full-width") == "true") {
         HTML.classList.add("full-width");
         document.getElementById("page-full-width").checked = true;
     }
-    document.getElementById("page-full-width").addEventListener("change", function() {
-        HTML.classList.toggle("full-width", this.checked);
-        localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
-    });
+    if (!index) {
+        document.getElementById("page-full-width").addEventListener("change", function() {
+            HTML.classList.toggle("full-width", this.checked);
+            localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
+        });
+    }
     /* ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- ---- */
     if (HTML.classList.contains("toc")) {
         document.getElementById("show-toc").addEventListener("change", function() {

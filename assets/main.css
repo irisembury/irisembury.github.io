@@ -570,7 +570,7 @@
 
             .yt-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); line-height: var(--lh-figcaption); gap: 9px 14px; }
                 .yt-gallery figure { margin: 0 auto; }
-                    .yt-gallery img { width: 100%; object-fit: cover; aspect-ratio: 16/8.9; border: 1px solid var(--grey-a); box-sizing: border-box; }
+                    .yt-gallery img { width: 100%; object-fit: cover; aspect-ratio: 16 / 8.8; border: 1px solid var(--grey-a); box-sizing: border-box; }
                 .yt-title { color: var(--grey-5); padding: 5px 0; display: block; }
                 .yt-date { color: var(--grey-9); }
 
