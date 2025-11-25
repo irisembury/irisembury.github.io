@@ -475,7 +475,7 @@
                     #toc-x-button { opacity: 0.6; stroke: var(--toc-color); padding: 2px; cursor: pointer; }
                     #toc-x-button:hover { opacity: 0.4; }
 
-        #homelinks { display: flex; flex-direction: column; gap: 13px; color: var(--grey-8); margin-bottom: 2em; }
+        #homelinks { display: flex; flex-direction: column; gap: 13px; color: var(--grey-8); margin: 2em 0; }
         #homelinks .hl-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 13px; }
 
         #article { font-family: var(--ff-article); font-size: var(--fs-article); line-height: var(--lh-article); }
