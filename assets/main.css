@@ -90,7 +90,7 @@
         --fs-h1: 1.5em;
         --fs-h2: 1.375em;
         --fs-h3: 1.25em;
-        --fs-h4: 1em;
+        --fs-h4: 1.05em;
         --fs-table: 0.9375em;
         --fs-lb-caption: 0.9375em;
         --fs-cite: 0.85em;
@@ -169,16 +169,16 @@
         --fw-h2: 700;
         --fw-h3: 700;
         --fw-h4: 700;
-        --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><rect x='17' y='17' width='66' height='66' fill='%236a6a6a'/></svg>");
+        --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><circle cx='50' cy='50' r='33' fill='%236a6a6a'/></svg>");
     }
     html.toc { --main-width: 920px; }
     html.full-width { --main-width: 1920px; }
     html.full-width .main-nav { padding-right: 1rem; }
     html.blue {
-        --page-bg: #1e2028;
+        --page-bg: #303137;
         --header-bg: #111;
         --index-name-color-2: #5552ac;
-        --nav-bg: #353f5b;
+        --nav-bg: #414d71;
         --nav-border: #393f57;
         --nav-color: #888c9f;
         --nav-svg: #777b91;
@@ -261,7 +261,7 @@
         --c-twitter: #aaa;
         --c-discord: #6068bf;
         --c-substack: #bd723c;
-        --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><rect x='17' y='17' width='66' height='66' fill='%23888'/></svg>");
+        --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><circle cx='50' cy='50' r='33' fill='%23888'/></svg>");
     }
     html.dark-warm {
         --page-bg: #242423;
@@ -313,7 +313,7 @@
         --c-twitter: #aaa;
         --c-discord: #6068bf;
         --c-substack: #bd723c;
-        --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><rect x='17' y='17' width='66' height='66' fill='%23888'/></svg>");
+        --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><circle cx='50' cy='50' r='33' fill='%23888'/></svg>");
     }
     html.darker {
         --header-bg: #000;
@@ -365,7 +365,7 @@
         --c-twitter: #6a6a6a;
         --c-discord: #3f4482;
         --c-substack: #714b33;
-        --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><rect x='17' y='17' width='66' height='66' fill='%23444'/></svg>");
+        --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><circle cx='50' cy='50' r='33' fill='%23444'/></svg>");;
     }
     .darker img { opacity: 0.7; }
 
@@ -451,7 +451,7 @@
                 .menu td:first-child { padding-right: 1em; }
                 .menu label { padding-right: 6px; cursor: pointer; }
                 .menu-switch-right { display: flex; align-items: center; justify-content: flex-end; color: var(--grey-8); }
-                .menu-checkbox { appearance: none; cursor: pointer; width: 13px; height: 13px; border: 1px solid var(--grey-8); background-color: var(--c-white); border-radius: 2px; transform: translateY(1px); background-size: cover; background-position: center; }
+                .menu-checkbox { appearance: none; cursor: pointer; width: 13px; height: 13px; border: 1px solid var(--grey-8); background-color: var(--c-white); border-radius: 9px; transform: translateY(1px); background-size: cover; background-position: center; }
                 .menu-checkbox:checked { background-image: var(--checkbox-check); }
 
     .toc .c1 { display: flex; }
