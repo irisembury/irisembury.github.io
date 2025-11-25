@@ -59,14 +59,6 @@ window.addEventListener("load", function() {
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Text size:</td>
-                                <td>
-                                    <select class="menu-select" id="size-select">
-                                        <option value="normal-text">Large</option>
-                                        <option value="small-text">Small</option>
-                                    </select>
-                                </td>
                         </tbody>
                     </table>
                     <div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>
@@ -149,7 +141,7 @@ window.addEventListener("load", function() {
     
     document.querySelector(".lightbox-wrapper").addEventListener("click", () => {
         setLightbox("close")
-    });
+    })
     
     Array.from(document.getElementsByClassName("ie-expand")).forEach(e => {
         e.classList.add("collapsed")
@@ -169,7 +161,7 @@ window.addEventListener("load", function() {
                 e.scrollIntoView({ behavior: "smooth" });
             }
         })
-    });
+    })
     
     /* ---------------------- setting up menu: ---------------------- */
     const hamburger = document.querySelector(".hamburger");
@@ -188,13 +180,14 @@ window.addEventListener("load", function() {
         if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
             menuToggle("close");
         }
-    });
+    })
+    
     window.addEventListener("keydown", function(e) {
         if (e.key === "Escape") {
             menuToggle("close");
             setLightbox("close");
         }
-    });
+    })
 
     /* ---- ---- ---- ---- ---- ---- ---- set-up for menu items: ---- ---- ---- ---- ---- ---- ---- */
     setBrightness();
