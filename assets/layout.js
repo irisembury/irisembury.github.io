@@ -125,7 +125,7 @@ window.addEventListener("load", function() {
         ${ HTML.classList.contains("toc") ? `<div class="toc-wrapper"><nav id="table-of-contents"></nav></div>` : "" }
         <div class="c2">
             <div class="c3">
-                ${ index ? `<div class="center" style="margin-bottom:30px;margin-top:-5px;"><div class="index-title">Iris <span>Embury</span></div></div>
+                ${ index ? `<div class="center"><div class="index-title">Iris <span>Embury</span></div></div>
                 <div id="homelinks"><div class="hl-row">${ socialLinks }</div></div>` : "" }
                 <div id="article">${ document.body.innerHTML }</div>
                 <div id="article-footer">
@@ -134,7 +134,6 @@ window.addEventListener("load", function() {
             </div>
         </div>
     </div>
-    <div class="page-bottom"></div>
     <div class="lb-container">
         <div id="lightbox-top-left"></div>
         <div class="lightbox-wrapper"><img id="lightbox"></div>
