@@ -101,7 +101,7 @@ function stopSounds() {
 
 function sbSetup() {
     let sb = document.getElementById("soundboard");
-    let blocks = sb.innerHTML.split("\n").filter(l => l.length > 1).map(l => `<div class="sb-btn no-select">${ l }</div>`).join("");
+    let blocks = sb.innerHTML.split("\n").filter(l => l.trim().length > 1).map(l => `<div class="sb-btn no-select">${ l.trim() }</div>`).join("");
     sb.innerHTML = blocks;
     blocks = sb.children;
     
