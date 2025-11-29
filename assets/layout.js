@@ -667,8 +667,9 @@ function interpreter(argValue) {
                 while (rowData.length < 5) { rowData.push(""); }
                 let entryImageUrl = rowData[0];
                 let entryName = rowData[1];
-                let entryTitle = rowData[2];
-                let entryDescription = rowData[3].split(" - ").map(p => "<div>" + p + "</div>").join("");
+                let entryBirthdate = rowData[2];
+                let entryTitle = rowData[3];
+                let entryDescription = rowData[4].split(" - ").map(p => "<div>" + p + "</div>").join("");
                 
                 return `
                 <div class="grid-entry">
@@ -851,6 +852,26 @@ function interpreter(argValue) {
     })
     
     return input.join("");
+}
+
+function ageFromDate(argDate) {
+    /* assumes ISO format YYYY-MM-DD */
+    argDate = argDate.replace(/\D/g, "");
+    if (argDate.length < 8) {
+        return argDate;
+    }
+    const entryYear = parseInt(argDate.substring(0, 4));
+    const entryMonth = parseInt(argDate.substring(4, 6));
+    const entryDay = parseInt(argDate.substring(6));
+    if (entryYear < 999 || entryMonth > 12 || entryDay > 31) {
+        console.error("date-format-error");
+        return;
+    }
+    const todaysDate = new Date();
+    let age = todaysDate.getYear() - entryYear;
+    if (entryMonth > todaysDate.getMonth() && entryDay > todaysDate.getDate()) {
+        age += 1;
+    }
 }
 
 function format_(input_string) {
