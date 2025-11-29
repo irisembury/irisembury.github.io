@@ -109,8 +109,8 @@ window.addEventListener("load", function() {
     </div>
     ${ index ? `
         <div style="max-width: var(--main-width); margin: 0 auto; padding: 0 var(--article-side-pad); background-color: var(--c3-bg)">
-            <div class="center" style="padding: 24px 0 12px"><span class="index-title" style="font-family: Constantia, Georgia, serif; font-size: 33px;">Iris <span>Embury</span></span></div>
-            <div style="color: var(--grey-8); display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;"><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social">Bluesky</a> | <a title="Tumblr" href="https://irisembury.tumblr.com/">Tumblr</a> | <a title="Discord" href="https://discord.gg/fGdV7x5dk2">Discord</a> | <a title="Substack" href="https://irisembury.substack.com">Substack</a> | <a title="Twitter" href="https://x.com/irisembury">Twitter</a></div>
+            <div class="center" style="padding: 24px 0 9px"><span class="index-title" style="font-family: Constantia, Georgia, serif; font-size: 30px;">Iris <span>Embury</span></span></div>
+            <div style="color: var(--grey-8); display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;"><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social">Bluesky</a><span class="no-select"> | </span><a title="Tumblr" href="https://irisembury.tumblr.com/">Tumblr</a><span class="no-select"> | </span><a title="Discord" href="https://discord.gg/fGdV7x5dk2">Discord</a><span class="no-select"> | </span><a title="Substack" href="https://irisembury.substack.com">Substack</a><span class="no-select"><span class="no-select"> | </span></span><a title="Twitter" href="https://x.com/irisembury">Twitter</a></div>
         </div>
     `
     : ""
@@ -660,6 +660,34 @@ function interpreter(argValue) {
         chunk = chunk.replace(/\[\[(.+?)\]\]/g, (match, displayText) => {
             return `<a title="Jump to section" href="#${ displayText.replaceAll(" ", "_") }">${ displayText }</a>`
         });
+        
+        if (chunk.startsWith("||profile-grid")) {
+            let data = chunk.split("\n").slice(1).filter(c => c.length > 3).map(row => {
+                let rowData = row.replaceAll("\\|","&verbar;").split("|").map(c => c.trim());
+                while (rowData.length < 5) { rowData.push(""); }
+                let entryImageUrl = rowData[0];
+                let entryName = rowData[1];
+                let entryTitle = rowData[2];
+                let entryDescription = rowData[3].split(" - ").map(p => "<div>" + p + "</div>").join("");
+                
+                return `
+                <div class="grid-entry">
+                        <div class="align-center gap-10">
+                            <div>
+                                <img onclick="setLightbox(this)" class="profile-grid-img" src="media/${ entryImageUrl }">
+                            </div>
+                            <div>
+                                <div class="entry-name">${ entryName }</div>
+                                <div class="entry-title">${ entryTitle }</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="entry-description">${ format_(entryDescription) }</div>
+                        </div>
+                    </div>`;
+            })
+            return `<div class="profile-grid">${ data.join("") }</div>`;
+        }
 
         /* ------------------------------------- table ------------------------------------- */
         if (chunk.startsWith("||table")) {

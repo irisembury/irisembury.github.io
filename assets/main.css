@@ -73,7 +73,7 @@
         --ff-table: Roboto, sans-serif;
         --ff-table-digit: inherit;
         --ff-small: var(--ff-ui);
-        --ff-citeref: Arial,Verdana,var(--ff-monospace);
+        --ff-citeref: Arial,var(--ff-monospace);
         --ff-monospace: Consolas, monospace;
         --ff-mdash: Ubuntu, var(--ff-ui);
         --ff-cite: Tahoma, Arial, sans-serif;
@@ -97,10 +97,10 @@
         --index-name-color-2: #6062ea;
         --page-bg: #ffffff;
         --header-bg: #fff;
-        --nav-bg: #f7f8f9;
+        --nav-bg: #f0f0f0;
         --nav-color: #808080;
         --nav-svg: #999;
-        --nav-border: #d5d5d5;
+        --nav-border: #d2d5d9;
         --toc-color: #999;
         --toc-active-color: #3a3a3a;
         --toc-scrollbar-color-1: #999;
@@ -592,6 +592,46 @@
                     .square-gallery div { width: var(--square-gallery-image-width); height: var(--square-gallery-image-width); border: 1px solid var(--grey-a); background-color: var(--grey-f); }
                         .square-gallery img { max-width: 100%; max-height: 100%; }
                     .square-gallery figcaption { max-width: var(--square-gallery-image-width); text-align: center; margin: 5px; line-height: var(--lh-figcaption); font-family: var(--ff-ui); color: var(--grey-5); font-size: var(--fs-small); }
+
+
+            .profile-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 10px;
+                line-height: 1.4;
+            }
+                .grid-entry {
+                    min-width: 200px;
+                    max-width: 280px;
+                    border: 1px solid var(--grey-e);
+                    font-family: var(--ff-table);
+                    font-size: var(--fs-table);
+                    overflow: hidden;
+                    padding: 10px;
+                }
+                        .entry-name {
+                            color: var(--grey-2);
+                            font-size: 16px;
+                            font-weight: 600;
+                        }
+                        .entry-title {
+                            color: var(--grey-8);
+                            font-size: 14px;
+                        }
+                        .entry-description {
+                            margin-top: 0.5em;
+                            font-size: 15px;
+                            font-family: var(--ff-ui);
+                        }
+                            .entry-description div + div {
+                                margin-top: 4px;
+                            }
+                .profile-grid-img {
+                    border: 1px solid var(--grey-a);
+                    max-height: 68px;
+                    display: block;
+                    cursor: pointer;
+                }
 
         #article-footer {
             padding-top: 2em;
