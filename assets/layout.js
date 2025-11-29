@@ -1,4 +1,4 @@
-f:"use strict"
+"use strict"
 const HTML = document.documentElement;
 // const githubSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 24 24"><path d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z"></path></svg>`;
 // const youtubeSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30"><path fill="var(--c-youtube)" d="M29.2 8.6c-.3-1.6-1.6-2.8-3.2-3C23 5.2 15 5.2 15 5.2s-8 0-11 .4c-1.6.2-2.9 1.4-3.2 3C.4 11.6.4 15 .4 15s0 3.4 .4 6.4c.3 1.6 1.6 2.8 3.2 3C7 24.8 15 24.8 15 24.8s8 0 11-.4c1.6-.2 2.9-1.4 3.2-3 .4-3 .4-6.4 .4-6.4s0-3.4-.4-6.4z"/><path fill="var(--c-youtube-white)" d="M12 19.2V10.8l7.8 4.2-7.8 4.2z"/></svg>`;
@@ -15,7 +15,25 @@ const xButtonSvg = `<svg id="toc-x-button" width="15" height="15" viewBox="0 0 7
 // const beggingLinks = `<a title="Ko-fi" class="plug" href="https://ko-fi.com/irisembury">${ kofiSvg } Ko-fi</a><a title="Patreon" class="plug" href="https://www.patreon.com/irisembury">${ patreonSvg } Patreon</a>`;
 // const upDownArrowsIconSvg = `↑↓`; /* note to self: replace this with an actual arrow svg */
 const leftRightArrowsIconSvg = `<svg style="transform:rotate(90deg)" aria-hidden="true" focusable="false" class="octicon octicon-arrow-switch" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>`;
-const hamburgerSvg = `<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6H20 M4 12H20 M4 18H20" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const fontOptions = `
+<option value="Arial">Arial</option>
+<option value="Epilogue">Epilogue</option>
+<option value="Faculty Glyphic">Faculty Glyphic</option>
+<option value="Georgia">Georgia</option>
+<option value="IBM Plex Sans">IBM Plex Sans</option>
+<option value="IBM Plex Serif">IBM Plex Serif</option>
+<option value="Inter">Inter</option>
+<option value="Lora">Lora</option>
+<option value="Merriweather">Merriweather</option>
+<option value="Open Sans">Open Sans</option>
+<option value="Palatino Linotype">Palatino Linotype</option>Palatino Linotype
+<option value="Roboto">Roboto</option>
+<option value="Roboto Slab">Roboto Slab</option>
+<option value="Segoe UI">Segoe UI</option>
+<option value="Trebuchet MS">Trebuchet MS</option>
+<option value="Times New Roman">Times New Roman</option>
+<option value="Ubuntu">Ubuntu</option>
+`;
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
@@ -29,7 +47,7 @@ window.addEventListener("load", function() {
             </div>
             <div class="align-center">
                 ${ index ? "" : `<a id="to-top-button">Jump to Top</a>` }
-                <a class="hamburger icon">${ hamburgerSvg }</a>
+                <a class="hamburger icon"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 6H20 M4 12H20 M4 18H20" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
         </div>
     </nav>
@@ -65,12 +83,7 @@ window.addEventListener("load", function() {
                                 <td>Headings:</td>
                                 <td>
                                     <select class="menu-select" id="heading-font-select">
-                                        <option value="Faculty Glyphic">Faculty Glyphic</option>
-                                        <option value="Georgia">Georgia</option>
-                                        <option value="IBM Plex Serif">IBM Plex Serif</option>
-                                        <option value="Lora">Lora</option>
-                                        <option value="Roboto">Roboto</option>
-                                        <option value="Trebuchet MS">Trebuchet MS</option>
+                                    ${ fontOptions }
                                     </select>
                                 </td>
                             </tr>
@@ -78,11 +91,7 @@ window.addEventListener("load", function() {
                                 <td>Body:</td>
                                 <td>
                                     <select class="menu-select" id="body-font-select">
-                                        <option value="Faculty Glyphic">Faculty Glyphic</option>
-                                        <option value="Georgia">Georgia</option>
-                                        <option value="Roboto">Roboto</option>
-                                        <option value="Times New Roman">Times New Roman</option>
-                                        <option value="Trebuchet MS">Trebuchet MS</option>
+                                    ${ fontOptions }
                                     </select>
                                 </td>
                             </tr>
@@ -90,11 +99,7 @@ window.addEventListener("load", function() {
                                 <td>Tables:</td>
                                 <td>
                                     <select class="menu-select" id="table-font-select">
-                                        <option value="Faculty Glyphic">Faculty Glyphic</option>
-                                        <option value="Georgia">Georgia</option>
-                                        <option value="Roboto">Roboto</option>
-                                        <option value="Segoe UI">Segoe UI</option>
-                                        <option value="Trebuchet MS">Trebuchet MS</option>
+                                    ${ fontOptions }
                                     </select>
                                 </td>
                             </tr>
@@ -664,27 +669,29 @@ function interpreter(argValue) {
         if (chunk.startsWith("||profile-grid")) {
             let data = chunk.split("\n").slice(1).filter(c => c.length > 3).map(row => {
                 let rowData = row.replaceAll("\\|","&verbar;").split("|").map(c => c.trim());
-                while (rowData.length < 5) { rowData.push(""); }
+                while (rowData.length < 6) { rowData.push(""); }
                 let entryImageUrl = rowData[0];
                 let entryName = rowData[1];
                 let entryBirthdate = rowData[2];
                 let entryTitle = rowData[3];
                 let entryDescription = rowData[4].split(" - ").map(p => "<div>" + p + "</div>").join("");
+                let entryIcon = rowData[5];
                 
                 return `
                 <div class="grid-entry">
-                        <div class="align-center gap-10">
+                        <div class="gap-10">
                             <div>
                                 <img onclick="setLightbox(this)" class="profile-grid-img" src="media/${ entryImageUrl }">
                             </div>
                             <div>
-                                <div class="entry-name">${ entryName }</div>
+                                <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromDate(entryBirthdate) + "</span>" }</div>
                                 <div class="entry-title">${ entryTitle }</div>
                             </div>
                         </div>
                         <div>
                             <div class="entry-description">${ format_(entryDescription) }</div>
                         </div>
+                        ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="media/${ entryIcon }"></div>` : "" }
                     </div>`;
             })
             return `<div class="profile-grid">${ data.join("") }</div>`;
@@ -865,13 +872,14 @@ function ageFromDate(argDate) {
     const entryDay = parseInt(argDate.substring(6));
     if (entryYear < 999 || entryMonth > 12 || entryDay > 31) {
         console.error("date-format-error");
-        return;
+        return ageDate;
     }
     const todaysDate = new Date();
-    let age = todaysDate.getYear() - entryYear;
+    let age = todaysDate.getFullYear() - entryYear;
     if (entryMonth > todaysDate.getMonth() && entryDay > todaysDate.getDate()) {
         age += 1;
     }
+    return age;
 }
 
 function format_(input_string) {
