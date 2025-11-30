@@ -467,8 +467,8 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 const imgUrl = "media/" + parts[0].trim();
-                let figCaption = format_(parts[1].trim());
-                let altText = format_(parts[2].trim().replace(/"/g,"&quot;"));
+                let figCaption = applyFormatting(parts[1].trim());
+                let altText = applyFormatting(parts[2].trim().replace(/"/g,"&quot;"));
                 if (figCaption && !altText) { altText = figCaption }
                 if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
                 
@@ -488,7 +488,7 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 let imgUrl = "media/" + parts[0].trim();
-                let altText = format_(parts[1].trim().replace(/"/g,"&quot;"));
+                let altText = applyFormatting(parts[1].trim().replace(/"/g,"&quot;"));
                 return `<div><img style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
             });
             return `<div class="image-span align-center space-evenly">${ galleryFigures.join("") }</div>`;
@@ -505,8 +505,8 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 let imgUrl = "media/" + parts[0].trim();
-                let caption = format_(parts[1].trim());
-                let altText = format_(parts[2].trim().replace(/"/g,"&quot;"));
+                let caption = applyFormatting(parts[1].trim());
+                let altText = applyFormatting(parts[2].trim().replace(/"/g,"&quot;"));
                 return `<figure><img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"><figcaption>${ caption }</figcaption></figure>`;
             });
             return `<div class="captioned-gallery">${ galleryFigures.join("") }</div>`;
@@ -523,8 +523,8 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 const imgUrl = "media/" + parts[0].trim();
-                let figCaption = format_(parts[1].trim());
-                let altText = format_(parts[2].trim().replace(/"/g,"&quot;"));
+                let figCaption = applyFormatting(parts[1].trim());
+                let altText = applyFormatting(parts[2].trim().replace(/"/g,"&quot;"));
                 if (figCaption) {
                     figCaption = `<figcaption>${ figCaption }</figcaption>`;
                 }
@@ -679,20 +679,20 @@ function interpreter(argValue) {
                 
                 return `
                 <div class="grid-entry">
-                        <div class="gap-10">
-                            <div>
-                                <img onclick="setLightbox(this)" class="profile-grid-img" src="media/${ entryImageUrl }">
-                            </div>
-                            <div>
-                                <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromDate(entryBirthdate) + "</span>" }</div>
-                                <div class="entry-title">${ entryTitle }</div>
-                            </div>
+                    <div class="gap-10 align-center">
+                        <div>
+                            <img onclick="setLightbox(this)" class="profile-grid-img" src="media/${ entryImageUrl }">
                         </div>
                         <div>
-                            <div class="entry-description">${ format_(entryDescription) }</div>
+                            <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromDate(entryBirthdate) + "</span>" }</div>
+                            <div class="entry-title">${ entryTitle }</div>
                         </div>
-                        ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="media/${ entryIcon }"></div>` : "" }
-                    </div>`;
+                    </div>
+                    <div>
+                        <div class="entry-description">${ applyFormatting(entryDescription) }</div>
+                    </div>
+                    ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="media/${ entryIcon }"></div>` : "" }
+                </div>`;
             })
             return `<div class="profile-grid">${ data.join("") }</div>`;
         }
@@ -712,7 +712,7 @@ function interpreter(argValue) {
                 let cells = rows[r].replace(/\\\|/g, "&verbar;").split("|");
                 for (let c = 0; c < cells.length; c += 1) {
                     let cellNum = c + 1;
-                    cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ format_(cells[c].trim()) }</td>`;
+                    cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ applyFormatting(cells[c].trim()) }</td>`;
                     if (c + 1 > tableWidth) {
                         tableWidth = c + 1;
                     }
@@ -725,7 +725,7 @@ function interpreter(argValue) {
                 if (tableHead.length == 1) {
                     /* for giving the table a title ("||th List of releases") */
                     tableHead = tableHead[0];
-                    tableHead = `<thead><th class="toc-include" id="${ tableHead.replaceAll(" ", "_").replaceAll("*", "") }" colspan="${ tableWidth }">${ format_(tableHead) }</th></thead>`;
+                    tableHead = `<thead><th class="toc-include" id="${ tableHead.replaceAll(" ", "_").replaceAll("*", "") }" colspan="${ tableWidth }">${ applyFormatting(tableHead) }</th></thead>`;
                 }
                 else {
                     /* for labelling columns ("||th Date | Name | Category") */
@@ -752,7 +752,7 @@ function interpreter(argValue) {
                 let cells = rows[i].split("|");
                 if (cells.length == 1) { cells.push(""); }
                 for (let j = 0; j < cells.length; j += 1) {
-                    cells[j] = `<div class="cell col-${ j + 1 } col-${ (j + 1) % 2 == 1 ? "odd" : "even" }">${ format_(cells[j]) }</div>`;
+                    cells[j] = `<div class="cell col-${ j + 1 } col-${ (j + 1) % 2 == 1 ? "odd" : "even" }">${ applyFormatting(cells[j]) }</div>`;
                 }
                 rows[i] = `<div class="row row-${ i + 1 } row-${ (i + 1) % 2 == 1 ? "odd" : "even" }">${ cells.join("") }</div>`;
             }
@@ -771,7 +771,7 @@ function interpreter(argValue) {
                 return `<p>${line}</p>`;
             })
 
-            return `<blockquote>${ format_(lines.join("")) }</blockquote>`;
+            return `<blockquote>${ applyFormatting(lines.join("")) }</blockquote>`;
         }
 
         /* ------------------------------------- lists ------------------------------------- */
@@ -796,7 +796,7 @@ function interpreter(argValue) {
                 else {
                     li_ += ` class="no-marker"`;
                 }
-                return li_ + `>${ format_(line) }</li>`;
+                return li_ + `>${ applyFormatting(line) }</li>`;
             })
             let list = `<${listTag} class="auto-list"`;
             if (startNumber) {
@@ -810,7 +810,7 @@ function interpreter(argValue) {
         }
         
         if ( chunk.startsWith("-- ")) {
-            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ format_(li.substring(2).trim()) }</li>`).join("") }</ul>`;
+            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ applyFormatting(li.substring(2).trim()) }</li>`).join("") }</ul>`;
         }
         
         /* ----------------------------------- headings ----------------------------------- */
@@ -820,17 +820,17 @@ function interpreter(argValue) {
             const headingId = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replaceAll("*" ,"");
             
             if (headingTag == "h4") {
-                return `<h4 id="${ headingId }" class="heading">${ format_(chunk) }</h4>`;
+                return `<h4 id="${ headingId }" class="heading">${ applyFormatting(chunk) }</h4>`;
             }
             if (headingTag == "h1" && firstHeading) {
                 firstHeading = false;
                 if (document.title == "") {
                     document.title = chunk;
                 }
-                return `<h1 id="${ headingId }" class="heading toc-include first-heading">${ format_(chunk) }</h1>`;
+                return `<h1 id="${ headingId }" class="heading toc-include first-heading">${ applyFormatting(chunk) }</h1>`;
             }
             firstHeading = false;
-            return `<${ headingTag } id="${ headingId }" class="heading toc-include">${ format_(chunk) }</${ headingTag }>`;
+            return `<${ headingTag } id="${ headingId }" class="heading toc-include">${ applyFormatting(chunk) }</${ headingTag }>`;
         }
 
         /* ----------------------------------- see also ----------------------------------- */
@@ -844,9 +844,9 @@ function interpreter(argValue) {
             return;
         }
 
-        /* ------------------------ finalizing (normal paragraphs) ------------------------ */
+        /* ------------------------ finalizing for normal paragraphs ------------------------ */
         
-        chunk = format_(chunk);
+        chunk = applyFormatting(chunk);
         
         if (pStyle.includes("small")) {
             chunk = chunk.replaceAll("\n", "<br>");
@@ -876,38 +876,57 @@ function ageFromDate(argDate) {
     }
     const todaysDate = new Date();
     let age = todaysDate.getFullYear() - entryYear;
-    if (entryMonth > todaysDate.getMonth() && entryDay > todaysDate.getDate()) {
-        age += 1;
+    
+    // not birth-month yet
+    if (todaysDate.getMonth() < entryMonth) {
+        age -= 1;
+    } else {
+        // in birth-month, but not birthday yet:
+        if (todaysDate.getMonth() == entryMonth && todaysDate.getDate < entryDay) {
+            age -= 1;
+        }
     }
+    
     return age;
 }
 
-function format_(input_string) {
+function applyFormatting(input_string) {
     input_string = input_string.trim();
     if (input_string == "") { return input_string; }
-    
     let output = "";
     
     /* first: replacements that shouldn't affect inside of tags */
     let left = 0;
-    let overflow_check = 0;
+    let overflow = 0;
     while (true) {
-        /* the logic here is funky because it makes curly quotes easier (see wrapDigits for alternative logic) */
+        /* 
+            This version makes curly-quote replacements easier by including
+            the triangle tags in the string we apply replacements to.
+            So:
+                "a b <c> d e"
+            becomes
+                "a b <"  "c"  "> d e"
+            then we apply replacements to "a b <" and "> d e", but not "c", which is protected.
+            
+            This lets the applyReplacements function see that "b" is not the end of the string
+            and "d" is not the start of the string.
+            
+            The logic in wrapDigits() is simpler because it doesn't need to do this.
+       */
         let openTag = input_string.indexOf("<"),
             closeTag = openTag + input_string.substring(openTag).indexOf(">");
         if (openTag == -1 || closeTag == -1) { break; }
-        output += replacements_(input_string.substring(0, openTag + 1)) + input_string.substring(openTag + 1, closeTag);
+        output += applyReplacements(input_string.substring(0, openTag + 1)) + input_string.substring(openTag + 1, closeTag);
         input_string = input_string.substring(closeTag);
         
-        if (overflow_check++ > 99) { break; }
-            // prevent recursion while testing
+        if (overflow++ > 149) { console.error(); break; }
     }
-    return (output + replacements_(input_string))
+    return (output + applyReplacements(input_string))
         .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
         .replace(/\*(.+?)\*/g, "<i>$1</i>");
 }
 
-function replacements_(input_string) {
+function applyReplacements(input_string) {
     if (input_string == "") { return input_string; }
     /* escaped symbols */
     input_string = input_string.replaceAll("\\*", "&ast;")
@@ -920,6 +939,8 @@ function replacements_(input_string) {
         .replaceAll("\\]", "&rbrack;")
         .replaceAll("\\", "&#92;")
         .replaceAll("\\^", "&Hat;");
+    
+    /* colors: */
 
     /* curly quotes: */
     if (input_string.indexOf("'") != -1 || input_string.indexOf("\"") != -1) {
@@ -938,6 +959,7 @@ function replacements_(input_string) {
     /* dashes */
     input_string = input_string.replaceAll("---", "<span class='mdash'>&mdash;</span>")
         .replaceAll("--", "&ndash;");
+    input_string = input_string.replace(/@([^\s\/]+)\./g, "<span class=\"text-$1\">").replace(/@[^\s]+\./g, "</span>");
     
     return input_string;
 }
