@@ -2,11 +2,11 @@
 const HTML = document.documentElement;
 // const githubSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 24 24"><path d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z"></path></svg>`;
 // const youtubeSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30"><path fill="var(--c-youtube)" d="M29.2 8.6c-.3-1.6-1.6-2.8-3.2-3C23 5.2 15 5.2 15 5.2s-8 0-11 .4c-1.6.2-2.9 1.4-3.2 3C.4 11.6.4 15 .4 15s0 3.4 .4 6.4c.3 1.6 1.6 2.8 3.2 3C7 24.8 15 24.8 15 24.8s8 0 11-.4c1.6-.2 2.9-1.4 3.2-3 .4-3 .4-6.4 .4-6.4s0-3.4-.4-6.4z"/><path fill="var(--c-youtube-white)" d="M12 19.2V10.8l7.8 4.2-7.8 4.2z"/></svg>`;
-const tumblrSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg>`;
-const twitterSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="-1 -1 25 25"><path fill="var(--c-twitter)" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>`;
-const blueskySvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 57" width="18" height="18"><path fill="var(--c-bluesky)" d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805ZM50.127 3.805C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745Z"></path></svg>`;
-const discordSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16"><path fill="var(--c-discord)" d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/></svg>`;
-const substackSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg>`;
+const tumblrSvg = `<svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg>`;
+const twitterSvg = `<svg title="Twitter/X" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="-1 -1 25 25"><path fill="var(--c-twitter)" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>`;
+const blueskySvg = `<svg title="Bluesky"" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 57" width="18" height="18"><path fill="var(--c-bluesky)" d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805ZM50.127 3.805C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745Z"></path></svg>`;
+const discordSvg = `<svg title="Discord" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16"><path fill="var(--c-discord)" d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/></svg>`;
+const substackSvg = `<svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg>`;
 
 const xButtonSvg = `<svg id="toc-x-button" width="15" height="15" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 16 L60 60 M60 16 L16 60" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/></svg>`;
 // const tocSvg = `<svg role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 150 150"><rect x="20" y="30" width="20" height="20" fill="black"/><rect x="50" y="30" width="80" height="20" fill="black"/><rect x="20" y="65" width="20" height="20" fill="black"/><rect x="50" y="65" width="80" height="20" fill="black"/><rect x="20" y="100" width="20" height="20" fill="black"/><rect x="50" y="100" width="80" height="20" fill="black"/></svg>`;
@@ -35,13 +35,14 @@ const fontOptions = `<option value="Arial">Arial</option>
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
-    const homeLink = index ? "" : "../../index.html";
+    const indexSecondary = document.getElementById("index-secondary") != null;
+    const pathToRoot = index ? "" : "../../";
     
     document.body.innerHTML =
     `<nav class="nav-wrapper no-select">
         <div class="main-nav stretch space-between">
             <div class="align-center">
-                <div class="page-name-display text-select"><div><a href="${ homeLink }">Index</a> &#47; ${ document.title || "This page" }</div></div>
+                <div class="page-name-display text-select"><div><a href="${ pathToRoot }index.html">Index</a> &#47; ${ document.title || "This page" }</div></div>
             </div>
             <div class="align-center">
                 ${ index ? "" : `<a id="to-top-button">Jump to Top</a>` }
@@ -113,53 +114,79 @@ window.addEventListener("load", function() {
     <style>
         #index-top-header {
             max-width: var(--main-width);
-            margin: 0 auto;
+            margin: 0 auto -26px;
             padding: 0 var(--article-side-pad);
             background-color: var(--c3-bg);
         }
         #index-banner-img {
-            max-width: 100%;
+            max-width: calc(100% + calc(2 * var(--article-side-pad)));
+            margin-inline: calc(-1 * var(--article-side-pad));
         }
         #index-profile-img {
             width: 100px;
             height: 100px;
-            border: 2px solid var(--grey-c);
+            border: 2px solid var(--grey-e);
             border-radius: 2px;
         }
         #index-header-left {
-            display: flex;
-            align-items: center;
             margin: 1rem;
-            gap: 9px;
             position: relative;
-            top: -38px;
+            margin-top: -4rem;
         }
+            #index-name-container {
+                margin-top: 8px;
+                margin-left: 2px;
+            }
+            .index-title {
+                font-family: Constantia,Palatino Linotype,Georgia,serif;
+                font-size: 30px;
+            }
         #index-header-right {
             color: var(--link-color);
-            margin: 5px 1rem;
+            margin: 8px 1rem;
         }
-        .index-links {
-            display: inline-flex;
-            gap: 3px;
-            align-items: center;
+            #index-header-right svg {
+                vertical-align: -4px;
+                margin-right: 1px;
+            }
+        #index-header-right a {
+            border: 1px solid var(--grey-c);
+            background-color: var(--grey-f);
+            border-radius: 3px;
+            padding: 4px 13px 4px 9px;
+            display: inline-block;
+        }
+        #index-header-right a + a {
+            margin-top: 4px;
+        }
+        #index-header-right a:hover {
+            background-color: var(--grey-e);
+            text-decoration: none;
         }
     </style>
-    ${ index ? `
+    ${ index || indexSecondary ? `
         <div id="index-top-header">
-            <img id="index-banner-img" src="assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg">
-            <div class="space-between">
-                <div id="index-header-left">
-                    <img width="100" height="100" src="assets/grandchamp.png" id="index-profile-img">
-                    <div><span class="index-title" style="font-family: Constantia, Georgia, serif; font-size: 30px;">Iris <span>Embury</span></span></div>
-                </div>
-                <div id="index-header-right">
-                    <div><a class="index-links" title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social">${blueskySvg}Bluesky</a></div>
-                    <div><a class="index-links" title="Tumblr" href="https://irisembury.tumblr.com/">${tumblrSvg} Tumblr</a></div>
-                    <div><a class="index-links" title="Discord" href="https://discord.gg/fGdV7x5dk2">${discordSvg}Discord server</a></div>
-                    <div><a class="index-links" title="Substack" href="https://irisembury.substack.com">${substackSvg}Substack</a></div>
-                    <div><a class="index-links" title="Twitter" href="https://x.com/irisembury">${twitterSvg}Twitter</a></div>
-                </div>
-            </div>
+            <img id="index-banner-img" src="${ pathToRoot }assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg">
+            ${
+                index ? `<div style="display:flex; justify-content:space-between;">
+                    <div id="index-header-left">
+                        <div>
+                            <img width="100" height="100" src="assets/grandchamp.png" id="index-profile-img">
+                        </div>
+                        <div id="index-name-container">
+                            <div><span class="index-title">Iris <span>Embury</span></span></div>
+                        </div>
+                    </div>
+                    <div id="index-header-right">
+                        <a class="index-links" title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social">${ blueskySvg } Bluesky</a>
+                        <a class="index-links" title="Tumblr" href="https://irisembury.tumblr.com/">${ tumblrSvg } Tumblr</a>
+                        <a class="index-links" title="Discord" href="https://discord.gg/fGdV7x5dk2">${ discordSvg } Discord</a>
+                        <a class="index-links" title="Substack" href="https://irisembury.substack.com">${ substackSvg } Substack</a>
+                        <a class="index-links" title="Twitter" href="https://x.com/irisembury">${ twitterSvg } Twitter</a>
+                    </div>
+                </div>`
+                :""
+            }
         </div>
     `
     : ""
