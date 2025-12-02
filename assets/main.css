@@ -84,7 +84,7 @@
         --ff-lb-caption: Roboto, sans-serif;
         /* font-size */
         --fs-ui: 14px; /* nav and menu */
-        --fs-article: 16px;
+        --fs-article: 15.4px;
         --fs-blockquote: 0.9625em;
         --fs-small: 14.4px;
         --fs-first-heading: 2.25em;
@@ -172,7 +172,7 @@
         --fw-h4: 700;
         --checkbox-check: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><circle cx='50' cy='50' r='33' fill='%236a6a6a'/></svg>");
     }
-    html.toc { --main-width: 830px; }
+    html.toc { --main-width: 804px; }
     html.full-width { --main-width: 1920px; }
     html.full-width .main-nav { padding-right: 1rem; }
     html.blue {
@@ -426,7 +426,7 @@
     .nav-wrapper { font-family: var(--ff-nav); background-color: var(--nav-bg); color: var(--nav-color); position: sticky; top: -1px; margin-top: -1px; height: var(--nav-height); border-bottom: 1px solid var(--nav-border); }
     .toc .nav-wrapper { padding-right: var(--right-correction-pad); }
         .main-nav { max-width: var(--main-width); padding: 0 1rem; margin: 0 auto; height: var(--nav-height);  }
-        .toc .main-nav { padding-left: calc(var(--toc-width) + var(--article-side-pad) + var(--toc-side-pad)); padding-right: var(--article-side-pad); }
+        .toc .main-nav { padding-left: calc(var(--toc-width) + var(--article-side-pad)); padding-right: var(--article-side-pad); }
             .main-nav .align-center { gap: 10px; }
             .page-name-display { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; padding-right: 10px; user-select: text; }
             .main-nav a:not(.hamburger):hover { filter: brightness(1.25); }
