@@ -5,8 +5,21 @@
     <link rel="stylesheet" href="../../assets/main.css">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <style>
+    #article > *:not(.profile-grid):not(hr) {
+        max-width: 634px;
+    }
+    .full-width .profile-grid {
+        max-width: calc(var(--main-width) * 0.75);
+    }
+    #article > * {
+        margin-inline: auto;
+    }
     #article h1 {
-        font-size: 2em;
+        font-size: 200%;
+    }
+    #article p {
+        border-left: 1px solid var(--grey-a);
+        padding-left: 20px;
     }
     </style>
 </head>
@@ -141,7 +154,7 @@ mark-kelly.jpg | Mark Kelly | 1964-02-21 | Senator, Arizona
 adam-schiff.jpg | Adam Schiff | 1960-06-22 | Senator, California
 elissa-slotkin.jpg | Elissa Slotkin | 1976-07-10 | Senator, Michigan
 hakeem-jeffries.jpg | Hakeem Jeffries | 1970-08-04 | House Leader, New York
-nancy-pelosi.jpg | Nancy Pelosi | 1940-03-26 | House Rep, California | Fmr. House Speaker (2007--11, 2019--23). - To retire; not seeking reëlection.
+nancy-pelosi.jpg | Nancy Pelosi | 1940-03-26 | House Rep, California | Fmr. House Speaker (2007--11, 2019--23). - To retire; is not seeking reëlection.
 jasmine-crockett.jpg | Jasmine Crockett | 1981-03-29 | House Rep, Texas
 ilhan-omar.jpg | Ilhan Omar | 1982-10-04 | House Rep, Minnesota
 ritchie-torres.jpg | Ritchie Torres | 1988-03-12 | House Rep, New York
