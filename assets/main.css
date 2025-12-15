@@ -1,4 +1,13 @@
 
+    @font-face { font-family: "Georgia Pro Digits"; unicode-range: U+0030-0039; font-display: swap; src: url(fonts/georgia-pro-regular.ttf) format('truetype'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: "Georgia Pro Digits"; unicode-range: U+0030-0039; font-display: swap; src: url(fonts/georgia-pro-italic.ttf) format('truetype'); font-weight: 400; font-style: italic; }
+    @font-face { font-family: "Georgia Pro Digits"; unicode-range: U+0030-0039; font-display: swap; src: url(fonts/georgia-pro-bold.ttf) format('truetype'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: "Georgia Pro Digits"; unicode-range: U+0030-0039; font-display: swap; src: url(fonts/georgia-pro-bold-italic.ttf) format('truetype'); font-weight: 700; font-style: italic; }
+    @font-face { font-family: "Georgia Pro Digits"; unicode-range: U+0030-0039; font-display: swap; src: url(fonts/georgia-pro-semibold.ttf) format('truetype'); font-weight: 600; font-style: normal; }
+    @font-face { font-family: "Georgia Pro Digits"; unicode-range: U+0030-0039; font-display: swap; src: url(fonts/georgia-pro-semibold-italic.ttf) format('truetype'); font-weight: 600; font-style: italic; }
+    @font-face { font-family: "Georgia Pro Digits"; unicode-range: U+0030-0039; font-display: swap; src: url(fonts/georgia-pro-black.ttf) format('truetype'); font-weight: 900; font-style: normal; }
+    @font-face { font-family: "Georgia Pro Digits"; unicode-range: U+0030-0039; font-display: swap; src: url(fonts/georgia-pro-black-italic.ttf) format('truetype'); font-weight: 900; font-style: italic; }
+
     @font-face { font-family: "Georgia Pro"; src: url(fonts/georgia-pro-regular.ttf) format("truetype"); font-weight: 400; font-style: normal; }
     @font-face { font-family: "Georgia Pro"; src: url(fonts/georgia-pro-italic.ttf) format("truetype"); font-weight: 400; font-style: italic; }
     @font-face { font-family: "Georgia Pro"; src: url(fonts/georgia-pro-bold.ttf) format("truetype"); font-weight: 700; font-style: normal; }
@@ -7,31 +16,46 @@
     @font-face { font-family: "Georgia Pro"; src: url(fonts/georgia-pro-semibold-italic.ttf) format("truetype"); font-weight: 600; font-style: italic; }
     @font-face { font-family: "Georgia Pro"; src: url(fonts/georgia-pro-black.ttf) format("truetype"); font-weight: 900; font-style: normal; }
     @font-face { font-family: "Georgia Pro"; src: url(fonts/georgia-pro-black-italic.ttf) format("truetype"); font-weight: 900; font-style: italic; }
+
     @font-face { font-family: "Inter"; src: url(fonts/inter-regular.woff2) format("woff2"); font-weight: 400 700; font-style: normal; }
     @font-face { font-family: "Inter"; src: url(fonts/inter-italic.woff2) format("woff2"); font-weight: 400 700; font-style: italic; }
+
     @font-face { font-family: "Roboto"; src: url(fonts/roboto-regular.woff2) format("woff2"); font-weight: 400 700; font-style: normal; }
     @font-face { font-family: "Roboto"; src: url(fonts/roboto-italic.woff2) format("woff2"); font-weight: 400 700; font-style: italic; }
+
     @font-face { font-family: "Open Sans"; src: url(fonts/open-sans-regular.woff2) format("woff2"); font-weight: 400 700; font-style: normal; }
     @font-face { font-family: "Open Sans"; src: url(fonts/open-sans-italic.woff2) format("woff2"); font-weight: 400 700; font-style: italic; }
+
     @font-face { font-family: "IBM Plex Sans"; src: url(fonts/ibm-plex-sans-regular.woff2) format("woff2"); font-weight: 400 700; font-style: normal; }
     @font-face { font-family: "IBM Plex Sans"; src: url(fonts/ibm-plex-sans-italic.woff2) format("woff2"); font-weight: 400 700; font-style: italic; }
+
     @font-face { font-family: "IBM Plex Serif"; src: url(fonts/ibm-plex-serif-regular.woff2) format("woff2"); font-weight: 400; font-style: regular; }
     @font-face { font-family: "IBM Plex Serif"; src: url(fonts/ibm-plex-serif-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; }
     @font-face { font-family: "IBM Plex Serif"; src: url(fonts/ibm-plex-serif-bold.woff2) format("woff2"); font-weight: 700; font-style: regular; }
     @font-face { font-family: "IBM Plex Serif"; src: url(fonts/ibm-plex-serif-bold-italic.woff2) format("woff2"); font-weight: 700; font-style: italic; }
     @font-face { font-family: "IBM Plex Serif"; src: url(fonts/ibm-plex-serif-semibold.woff2) format("woff2"); font-weight: 600; font-style: regular; }
     @font-face { font-family: "IBM Plex Serif"; src: url(fonts/ibm-plex-serif-semibold-italic.woff2) format("woff2"); font-weight: 600; font-style: italic; }
+
     @font-face { font-family: "Ubuntu"; src: url(fonts/ubuntu-regular.woff2) format("woff2"); font-weight: 400; font-style: normal; }
     @font-face { font-family: "Ubuntu"; src: url(fonts/ubuntu-bold.woff2) format("woff2"); font-weight: 700; font-style: normal; }
     @font-face { font-family: "Ubuntu"; src: url(fonts/ubuntu-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; }
     @font-face { font-family: "Ubuntu"; src: url(fonts/ubuntu-bold-italic.woff2) format("woff2"); font-weight: 700; font-style: italic; }
-    /* @font-face { font-family: "Faculty Glyphic"; src: url(fonts/faculty-glyphic.woff2) format("woff2"); font-style: normal; font-weight: 400 600 700; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; } */
-    /* @font-face { font-family: "Faculty Glyphic"; src: url(fonts/faculty-glyphic-ext.woff2) format("woff2"); font-style: normal; font-weight: 400 600 700; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; } */
+
     @font-face { font-family: "Lora"; src: url(fonts/lora-regular.woff2) format("woff2"); font-weight: 400 700; font-style: normal; }
     @font-face { font-family: "Lora"; src: url(fonts/lora-italic.woff2) format("woff2"); font-weight: 400 700; font-style: italic; }
-    /* @font-face { font-family: "Noto Sans JP"; font-style: normal; font-weight: 400 700; src: url(fonts/noto-sans-jp.woff2) format('woff2'); font-style: normal; } */
+
     @font-face { font-family: "Roboto Slab"; font-weight: 400 700; src: url(fonts/roboto-slab-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
     @font-face { font-family: "Roboto Slab"; font-style: normal; font-weight: 100 900; src: url(fonts/roboto-slab.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+    @font-face { font-family: "Merriweather"; font-style: normal; font-weight: 400 700; src: url(fonts/merriweather-regular.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: "Merriweather"; font-style: italic; font-weight: 400 700; src: url(fonts/merriweather-italic.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: "Merriweather"; font-style: normal; font-weight: 400 700; src: url(fonts/merriweather-regular-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+    @font-face { font-family: "Merriweather"; font-style: italic; font-weight: 400 700; src: url(fonts/merriweather-italic-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+    /* @font-face { font-family: "Faculty Glyphic"; src: url(fonts/faculty-glyphic.woff2) format("woff2"); font-style: normal; font-weight: 400 600 700; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; } */
+    /* @font-face { font-family: "Faculty Glyphic"; src: url(fonts/faculty-glyphic-ext.woff2) format("woff2"); font-style: normal; font-weight: 400 600 700; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; } */
+
+    /* @font-face { font-family: "Noto Sans JP"; font-style: normal; font-weight: 400 700; src: url(fonts/noto-sans-jp.woff2) format('woff2'); font-style: normal; } */
     /* @font-face { font-family: "Epilogue"; font-style: normal; font-weight: 100 900; src: url(fonts/epilogue-regular.woff2) format('woff2'); unicode range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; } */
     /* @font-face { font-family: "Epilogue"; font-style: normal; font-weight: 100 900; src: url(fonts/epilogue-regular-ext.woff2) format('woff2'); unicode range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; font-style: normal; } */
     /* @font-face { font-family: "Epilogue"; font-style: italic; font-weight: 100 900; src: url(fonts/epilogue-italic.woff2) format('woff2'); } */
@@ -42,10 +66,6 @@
     /* @font-face { font-family: "Sora"; font-style: normal; font-weight: 400 700; src: url(fonts/sora-regular.woff2) format('woff2'); font-style: normal; } */
     /* @font-face { font-family: "Roboto Serif"; src: url(fonts/roboto-serif.ttf) format("truetype"); font-weight: 300 900; font-style: normal; } */
     /* @font-face { font-family: "Roboto Serif"; src: url(fonts/roboto-serif-italic.ttf) format("truetype"); font-weight: 300 900; font-style: italic; } */
-    @font-face { font-family: "Merriweather"; font-style: normal; font-weight: 400 700; src: url(fonts/merriweather-regular.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-    @font-face { font-family: "Merriweather"; font-style: italic; font-weight: 400 700; src: url(fonts/merriweather-italic.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-    @font-face { font-family: "Merriweather"; font-style: normal; font-weight: 400 700; src: url(fonts/merriweather-regular-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-    @font-face { font-family: "Merriweather"; font-style: italic; font-weight: 400 700; src: url(fonts/merriweather-italic-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 
     :root {
         /* layout dimensions */
@@ -72,13 +92,9 @@
         --ff-ui: Segoe UI, Nirmala UI, system-ui, sans-serif;
         --ff-nav: Trebuchet MS, Nirmala UI, Segoe UI, system-ui, sans-serif;
         --ff-article: Roboto Serif, Georgia, sans-serif;
-        --ff-article-digit: Georgia Pro, Georgia, sans-serif;
         --ff-heading: Georgia Pro, sans-serif;
-        --ff-heading-digit: inherit;
         --ff-table: Roboto, sans-serif;
-        --ff-table-digit: inherit;
         --ff-small: var(--ff-ui);
-        --ff-autoref: Verdana,var(--ff-monospace);
         --ff-monospace: Consolas, monospace;
         --ff-mdash: Ubuntu, var(--ff-ui);
         --ff-cite: Tahoma, Arial, sans-serif;
@@ -90,7 +106,7 @@
         --fs-blockquote: 15.4px;
         --fs-small: 14px;
         --fs-first-heading: 2.25em;
-        --fs-h1: 1.5em;
+        --fs-h1: 2em;
         --fs-h2: 1.375em;
         --fs-h3: 1.25em;
         --fs-h4: 1.05em;
@@ -99,8 +115,8 @@
         --fs-cite: 0.85em;
         /* colors */
         --index-name-color-1: #333;
-        --index-name-color-2: #5c62cc;
-        --page-bg: #f9fafb;
+        --index-name-color-2: #5c61c1;
+        --page-bg: #f8f8f8;
         --header-bg: #fff;
         --nav-bg: #333;
         --nav-border: #404040;
@@ -118,7 +134,7 @@
         --grey-3: #303030; /* main text */
         --grey-5: #555; /* blockquote, figcaption */
         --grey-8: #797979;
-        --grey-9: #999;
+        --grey-9: #909090;
         --grey-a: #aaa; /* borders, hr */
         --grey-c: #d5d5d5;
         --grey-e: #eee;
@@ -140,6 +156,7 @@
         --c-medium-blue: #657aba;
         --c-light-blue: #9baee6;
         --c-pale-blue: #e4ebff;
+        --c-dark-blue-bg: #2b3b55;
         /* svg colors */
         --c-github: #3c3c3c;
         --c-bluesky: #63aef9;
@@ -207,6 +224,7 @@
         --selection-bg: #4c4f5b;
         --codeblock-mark: #4a483e;
         --blockquote-accent: #5d6786;
+        --c-dark-blue-bg: #2c3442;
         --c-pale-yellow: #55503b;
         --c-red: #994949;
         --c-pale-red: #563636;
@@ -270,19 +288,18 @@
     .pseudo-link { cursor: pointer; }
     .fade-out { opacity: 0; transition: opacity 0.7s 0.4s !important; }
 
-    html { scroll-padding-top: calc(var(--nav-height) + 30px); color: var(--grey-3); font-size: var(--fs-ui); scrollbar-color: var(--grey-9) var(--grey-e); background-color: var(--page-bg); }
-    html:not(.layout) { white-space: preserve-breaks; padding: 100px; font-size: 16px; line-height: 1.3; }
-    html:not(.layout) .main-header,
+    html:not(.layout) body { margin: 2em 5em; min-height: unset; white-space: preserve-breaks; font-family: sans-serif; font-size: 16px; line-height: 1.5; }
+    html:not(.layout) .menu-line,
     html:not(.layout) .nav-wrapper { display: none; }
 
-    .nav-wrapper, .menu-line { z-index: 2; }
-    .lb-container { z-index: 3; }
-
-    html.layout { padding: 0; min-width: 350px; min-height: 100vh; line-height: var(--lh-ui); font-family: var(--ff-ui); font-size: var(--fs-ui); }
-    body { background-color: inherit; min-height: 100vh; }
+    html.layout { scroll-padding-top: calc(var(--nav-height) + 30px); color: var(--grey-3); font-size: var(--fs-ui); scrollbar-color: var(--grey-9) var(--grey-e); background-color: var(--page-bg); padding: 0; min-width: 350px; min-height: 100vh; line-height: var(--lh-ui); font-family: var(--ff-ui); }
+        html.layout body { background-color: inherit; min-height: 100vh; }
+            html.layout .nav-wrapper,
+            html.layout .menu-line { z-index: 2; }
+            html.layout .lb-container { z-index: 3; }
 
     .index-title { color: var(--index-name-color-1); line-height: 1; }
-        .index-title span { color: var(--index-name-color-2); margin-left: -5px; }
+        .index-title span { color: var(--index-name-color-2); margin-left: -6px; }
 
     .nav-wrapper { font-family: var(--ff-nav); background-color: var(--nav-bg); color: var(--nav-color); position: sticky; top: -1px; margin-top: -1px; height: var(--nav-height); border-bottom: 1px solid var(--nav-border); }
     .toc .nav-wrapper { padding-right: var(--right-correction-pad); }
@@ -292,7 +309,7 @@
             .page-name-display { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; padding-right: 10px; user-select: text; }
             .main-nav a:not(.hamburger):hover { filter: brightness(1.25); }
 
-            .hamburger { cursor: pointer; height: var(--menu-button-size); width: calc(1.25 * var(--menu-button-size)); border: none; background-color: #0000; }
+            .hamburger { text-align: center; cursor: pointer; height: var(--menu-button-size); width: calc(1.25 * var(--menu-button-size)); border: none; background-color: #0000; }
                 .hamburger svg path { stroke: var(--nav-svg); }
                 .hamburger svg:hover { opacity: 0.8; }
 
@@ -365,10 +382,6 @@
             #article > :nth-child(1) { margin-top: 0 !important; }
             #article .heading.first-heading { font-size: var(--fs-first-heading); line-height: var(--lh-first-heading); font-weight: 700; }
             
-            #article .article-digit { font-family: var(--ff-article-digit); }
-            #article .table-digit { font-family: var(--ff-table-digit); }
-            #article .heading-digit { font-family: var(--ff-heading-digit); }
-            
             #article .heading { line-height: var(--lh-heading); clear: both; color: var(--grey-2); font-family: var(--ff-heading); margin-top: 1em; }
             #article h1 { font-size: var(--fs-h1); font-weight: var(--fw-h1); }
             #article h2 { font-size: var(--fs-h2); font-weight: var(--fw-h2); }
@@ -379,6 +392,7 @@
             #article .image-span, #article .image-float, #article .captioned-gallery, #article .square-gallery { margin-top: 1.2em; }
             #article .table-wrapper { margin-bottom: 1.1em; font-size: var(--fs-table); font-family: var(--ff-table); line-height: var(--lh-table); }
 
+            #article .rsquo { margin-right: 1px; }
             #article p b,
             #article li b,
             #article h4 { letter-spacing: var(--ls-bold); }
@@ -392,9 +406,8 @@
             #article a { color: var(--link-color); }
             #article a:hover { text-decoration: 1px solid underline currentcolor; }
             
-            #article a.autoref { vertical-align: top; font-size: 11px; margin-left: 1px; }
+            #article a.autoref { vertical-align: top; font-size: 0.85em; margin-left: 1px; }
             #article a.autoref::before { content: "\00A0"; font-size: 0.1px; }
-            #article a.autoref .digit { font-family: var(--ff-autoref); }
 
             #article .small { color: var(--grey-8); font-size: var(--fs-small); font-family: var(--ff-small); line-height: var(--lh-small); }
                 #article .small ::marker,
@@ -458,7 +471,7 @@
             .yt-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--yt-gallery-grid), 1fr)); line-height: var(--lh-figcaption); gap: 9px 14px; }
                 .yt-gallery figure { margin: 0 auto; }
                     .yt-gallery img { width: 100%; object-fit: cover; aspect-ratio: 16 / 8.8; border: 1px solid var(--grey-a); box-sizing: border-box; }
-                .yt-title { color: var(--grey-5); padding: 5px 0; display: block; }
+                .yt-title { padding: 5px 0; display: block; }
                 .yt-date { color: var(--grey-9); }
 
             .image-float { clear: right; margin-bottom: 10px; margin-left: 1em; float: right; gap: 10px; display: flex; flex-direction: column; }
@@ -500,7 +513,7 @@
             .index-name-container { margin-top: 8px; margin-left: 2px; }
             .index-title { font-family: Constantia,Palatino Linotype,Georgia,serif; font-size: 30px; }
         .index-header-right { color: var(--link-color); margin: 8px 1rem; }
-            .index-header-right a { border: 1px solid var(--grey-c); background: linear-gradient(transparent 55%, var(--grey-e) 77%); border-radius: 3px; padding: 4px 13px 4px 9px; display: inline-block; }
+            .index-header-right a { border: 1px solid var(--grey-c); background: linear-gradient(transparent 45%, var(--grey-f) 65%); border-radius: 3px; padding: 4px 13px 4px 9px; display: inline-block; }
             .dark .index-header-right a { background: linear-gradient(var(--grey-f) 44%, transparent 66%); border-color: #373737; }
             .index-header-right a:hover { text-decoration: none; border-color: var(--grey-a); }
                 .index-header-right a svg { vertical-align: -4px; margin-right: 1px; }

@@ -38,6 +38,7 @@ window.addEventListener("load", function() {
                             </tr>
                         </tbody>
                     </table>
+                    <hr>
                     ${ index ? "" : `<div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
                     ${ HTML.classList.contains("toc") ? `<div class="menu-switch-right"><label for="show-toc">Show table of contents:</label><input type="checkbox" class="menu-checkbox" checked id="show-toc"></div>` : "" }
                     <hr>
@@ -317,13 +318,8 @@ window.addEventListener("load", function() {
             window.removeEventListener("scroll", tocHighlightUpdateAttempt);
         });
     }
-    /* ---- ---- ---- ---- ---- / table of contents ---- ---- ---- ---- ---- ---- ---- */
+    /* ---- ---- ---- ---- ---- /table of contents ---- ---- ---- ---- ---- ---- ---- */
 
-    Array.from(article_.getElementsByTagName("p")).forEach(e => wrapDigits(e, "digit"));
-    // Array.from(article_.getElementsByTagName("li")).forEach(e => wrapDigits(e, "digit"));
-    // Array.from(article_.getElementsByTagName("td")).forEach(e => wrapDigits(e, "table-digit"));
-    // Array.from(article_.getElementsByClassName("heading")).forEach(e => wrapDigits(e, "heading-digit"));
-    
     if (!document.getElementById("index")) {
         document.getElementById("to-top-button").addEventListener("click", scrollToTop);
     }
@@ -391,6 +387,7 @@ function setBrightness(setValue) {
     localStorage.setItem("brightness", brightness);
     document.getElementById("brightness-select").value = brightness;
 }
+function fontName(x) { if (x == "Georgia") return "\"--GPN\",\"Georgia\",sans-serif"; return x; }
 function updateFonts() {
     let headingFont = localStorage.getItem("headingFont") || "Lora";
     let bodyFont = localStorage.getItem("bodyFont") || "Georgia";
@@ -399,14 +396,10 @@ function updateFonts() {
     document.getElementById("body-font-select").value = bodyFont;
     document.getElementById("table-font-select").value = tableFont;
     document.getElementById("--custom-style").innerHTML = ` body {
-        --ff-heading: ${ headingFont=="Georgia"? "Georgia Pro":headingFont },sans-serif;
-        --ff-heading-digit: ${ headingFont=="Georgia" ? "Georgia Pro":headingFont };
-        --ff-article: ${ bodyFont },sans-serif;
-        --ff-article-digit: ${ bodyFont=="Georgia" ? "Georgia Pro":bodyFont };
-        --ff-table: ${ tableFont },sans-serif;
-        --ff-table-digit: ${ tableFont=="Georgia" ? "Georgia Pro":tableFont };
-        ${ bodyFont == "Times" || bodyFont == "Times New Roman" ? "--fs-article: 16.4px; --lh-article: 1.5;" : "" }
-        ${ headingFont == "Georgia" ? " --fw-h1: 600; --fw-h2: 600; " : "" }
+        --ff-heading: ${ headingFont=="Georgia" ? "Georgia Pro,Georgia":headingFont },sans-serif;
+        --ff-article: ${ bodyFont=="Georgia" ? "Georgia Pro Digits,Georgia":bodyFont },sans-serif;
+        --ff-table: ${ tableFont=="Georgia" ? "Georgia Pro Digits,Georgia":tableFont },sans-serif;
+        ${ headingFont=="Georgia" ? "--fw-h1: 600; --fw-h2: 600;" :"" }
     }`;
 }
 function menuRestoreDefaults() {
@@ -566,7 +559,7 @@ function interpreter(argValue) {
 
                 return `<figure>
                     <div>${ videoLink }</div>
-                    <figcaption><span class="yt-title"><a href="${ videoUrl }">${ title }</a></span> <span class="yt-date">${ wrapDigits(date, "table-digit") }</span></figcaption>
+                    <figcaption><span class="yt-title"><a href="${ videoUrl }">${ title }</a></span> <span class="yt-date">${ date }</span></figcaption>
                 </figure>`;
             });
             return `<div class="table-wrapper"><div class="yt-gallery">${ rows.join("") }</div></div>`;
@@ -633,7 +626,7 @@ function interpreter(argValue) {
             }
             else {
                 if (displayText == "") {
-                    a = `<a href="${ address }" title="${ address }" class="autoref">[${ linkNum }]</span></a>`;
+                    a = `<a href="${ address }" title="${ address }" class="autoref">[${ linkNum++ }]</span></a>`;
                 }
                 else {
                     a = `<a href="${ address }" title="${ address }">${ displayText }</a>`;
@@ -820,7 +813,7 @@ function interpreter(argValue) {
         if (chunk.startsWith("||see-also")) {
             document.getElementById("article-footer").appendChild(document.createElement("div")).innerHTML = "<div>The content on this page was also posted in other places:</div>" + chunk.split("\n").slice(1)
                 .map( line => {
-                    const url = line .replace(/substack\|(\w+)/, "https://perennialiris.substack.com/p/$1")
+                    const url = line .replace(/substack\|(\w+)/, "https://irisembury.substack.com/p/$1")
                         .replace(/tumblr\|(\d+)/, "https://irisembury.tumblr.com/post/$1");
                     return `<div><a href="${ url }" target="_blank">${ url }</a></div>`;
                 }).join("");
@@ -893,16 +886,17 @@ function applyFormatting(input_string) {
             
             This lets the applyReplacements function see that "b" is not the end of the string
             and "d" is not the start of the string.
-            
-            The logic in wrapDigits() is simpler because it doesn't need to do this.
        */
-        let openTag = input_string.indexOf("<"),
-            closeTag = openTag + input_string.substring(openTag).indexOf(">");
-        if (openTag == -1 || closeTag == -1) { break; }
+        let openTag = input_string.indexOf("<");
+        let closeTag = openTag + input_string.substring(openTag).indexOf(">");
+        
+        if (openTag == -1 || closeTag == -1) {
+            break;
+        }
         output += applyReplacements(input_string.substring(0, openTag + 1)) + input_string.substring(openTag + 1, closeTag);
         input_string = input_string.substring(closeTag);
         
-        if (overflow++ > 149) { console.error(); break; }
+        if (++overflow > 149) { console.error(); break; }
     }
     return (output + applyReplacements(input_string))
         .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
@@ -937,7 +931,9 @@ function applyReplacements(input_string) {
             .replaceAll(/(>|^| |\()"/g, "$1&ldquo;")
             .replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2")
             .replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1")
-            .replaceAll(/"/g, "&rdquo;");
+            .replaceAll(/"/g, "&rdquo;")
+            
+            .replaceAll(/&rsquo;(T|l)/g, "<span class=\"rsquo\">&rsquo;</span>$1");
     }
     /* dashes */
     input_string = input_string.replaceAll("---", "<span class='mdash'>&mdash;</span>")
@@ -945,39 +941,6 @@ function applyReplacements(input_string) {
     input_string = input_string.replace(/@([^\s\/]+)\./g, "<span class=\"text-$1\">").replace(/@[^\s]+\./g, "</span>");
     
     return input_string;
-}
-
-function wrapDigits(arg, targetClass) {
-    if (typeof arg != "string") {
-        arg.innerHTML = wrapDigits(arg.innerHTML, targetClass);
-    }
-    else {
-        let output = "";
-        if (!targetClass) {
-            targetClass = "digit";
-        }
-        
-        while (true) {
-            const openTag = arg.indexOf("<");
-            const closeTag = arg.indexOf(">");
-            if (openTag == -1 || closeTag == -1) { break; }
-            
-            let display_text = arg.substring(0, openTag);
-            let tag_and_attributes = arg.substring(openTag, closeTag + 1);
-            
-            output += display_text.replace(/(\d+)/g, `<span class="${targetClass}">$1</span>`);
-            output += tag_and_attributes;
-            
-            arg = arg.substring(closeTag + 1);
-        }
-        output += arg.replace(/(\d+)/g, `<span class="${targetClass}">$1</span>`);
-        return output;
-    }
-}
-
-function wrapElementType(rootElement, tagName, className) {
-    if (typeof rootElement == "string") { rootElement = document.getElementById("article") }
-    Array.from(rootElement.getElementsByTagName(tagName)).forEach(ele => wrapDigits(ele, className));
 }
 
 function tokenizeByWordChar(stringData) {

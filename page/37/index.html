@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Snow</title>
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+    <style>
+    html {
+        background-color: white;
+        overflow: hidden;
+    }
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+    #display {
+        background-color: #024;
+        width: 100%;
+        overflow: hidden;
+        min-height: 100vh;
+    }
+    .snowflake {
+        border-radius: 50%;
+        background-color: white;
+        position: absolute;
+    }
+    </style>
+</head>
+<body>
+
+<div id="display"></div>
+
+
+<script>
+    function rndInt(min, max) { return Math.floor(Math.random() * max) + min; }
+    const fps = 1000 / 60;
+    const snowflakes = [];
+    const baseFallRate = 6;
+    const snowflakeMinSize = 3;
+    const wind = 0.1;
+    const snowflakeMaxSize = 7;
+    const numberOfSnowflakes = 160;
+    const display = document.getElementById("display");
+
+    window.addEventListener("load", function() {
+        while (snowflakes.length < numberOfSnowflakes) {
+            snowflakes.push(new snowflake(rndInt(snowflakeMinSize, snowflakeMaxSize)))
+        }
+        setInterval(function() {
+            for (s of snowflakes) {
+                s.update()
+            }
+        }, fps);
+    })
+
+    class snowflake {
+        size;
+        obj;
+        fallSpeed;
+        constructor(size) {
+            this.size = size;
+            this.obj = display.appendChild(document.createElement("div"));
+            this.obj.className = "snowflake";
+            this.obj.style.width = this.size + "px";
+            this.obj.style.height = this.size + "px";
+            this.fallSpeed = baseFallRate + (this.size * 0.2);
+            this.init();
+        }
+        init() {
+            this.top = -1 * rndInt(this.size, window.innerHeight);
+            this.left = rndInt(0, window.innerWidth + this.size + (window.innerHeight * this.size * wind)) - this.size;
+            this.left -= window.innerHeight * this.size * wind;
+            this.obj.style.top = this.top + "px";
+            this.obj.style.left = this.left + "px";
+        }
+        reset() {
+            this.top = -(this.size);
+            this.left = rndInt(0, window.innerWidth + this.size + (window.innerHeight * this.size * wind)) - this.size;
+            this.left -= window.innerHeight * this.size * wind;
+            this.obj.style.top = this.top + "px";
+            this.obj.style.left = this.left + "px";
+        }
+        update() {
+            this.obj.style.top = this.top + "px";
+            this.obj.style.left = this.left + "px";
+            this.top += this.fallSpeed;
+            this.left += this.size * wind;
+            if (this.top > window.innerHeight + this.size || this.left > window.innerWidth + this.size) {
+                this.reset();
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+
