@@ -570,14 +570,19 @@ function interpreter(argValue) {
         /* ------------------------------------- code ------------------------------------- */
         if (chunk.startsWith("||codeblock")) {
             let lines = chunk.split("\n");
-            let syntaxClass = lines.shift().substring("||codeblock".length).trim();
-            let divClass = "codeblock";
-            if (syntaxClass) {
-                divClass += " " + syntaxClass;
-                lines = lines.map(line => syntaxHighlight(line, syntaxClass));
+            let syntaxClass = "", customKeywords = [];
+            let firstLine = lines.shift().substring("||codeblock".length).trim();
+            if (firstLine) {
+                let words = firstLine.split(" ");
+                syntaxClass = words.shift();
+                customKeywords = firstLine;
             }
             
-            return `<div class="${divClass}">${ lines.map(line => `<div>${ line }</div>`).join("") }</div>`;
+            if (syntaxClass) {
+                lines = lines.map(line => syntaxHighlight(line, syntaxClass, customKeywords));
+            }
+            
+            return `<div class="codeblock">${ lines.map(line => `<div>${ line }</div>`).join("") }</div>`;
         }
 
         chunk = chunk.replace(/`(.+?)`/g, (match, captured) => {
@@ -591,13 +596,13 @@ function interpreter(argValue) {
                 .replaceAll("*", "&ast;")
                 .replaceAll("\n", "<br>") }</code>`;
         });
-
+        
         let pStyle = [];
-
+        
         if (chunk.startsWith(".")) {
             chunk = chunk.slice(1);
-            pStyle.push("small");
-        } /*  first-paragraph = first that's not small */
+            pStyle.push("fine");
+        } /*  first-paragraph = first that's not fine */
         else if (firstParagraph) {
             pStyle.push("first-paragraph");
             firstParagraph = false;
@@ -615,26 +620,25 @@ function interpreter(argValue) {
         chunk = chunk.replace(/\[([^\]]*)[^\\]?\]\(([^\s]+?[^\\])\)/g, (match, displayText, address) => {
             address = address.replaceAll("\\)", ")");
             
-            let a;
+            let link;
             if (!address.startsWith("http")) {
                 if (displayText == "") {
-                    a = `<a href="${ address }>[internal]</a>`;
+                    link = `<a href="${ address }>[internal]</a>`;
                 }
                 else {
-                    a = `<a href=${ address }>${ displayText }</a>`
+                    link = `<a href=${ address }>${ displayText }</a>`
                 }
             }
             else {
                 if (displayText == "") {
-                    a = `<a href="${ address }" title="${ address }" class="autoref">[${ linkNum++ }]</span></a>`;
+                    link = `<a href="${ address }" title="${ address }" class="autoref">[${ linkNum++ }]</span></a>`;
                 }
                 else {
-                    a = `<a href="${ address }" title="${ address }">${ displayText }</a>`;
+                    link = `<a href="${ address }" title="${ address }">${ displayText }</a>`;
                 }
             }
             
-            linkNum += 1;
-            return a;
+            return link;
         });
         
         /* link to section on this page: */
@@ -742,7 +746,7 @@ function interpreter(argValue) {
                     return `<p class="attribution">${line}</p>`;
                 }
                 if (line.startsWith(".")) {
-                    return `<div class="small">${ line.substring(1) }</div>`;
+                    return `<div class="fine">${ line.substring(1) }</div>`;
                 }
                 return `<p>${line}</p>`;
             })
@@ -779,14 +783,14 @@ function interpreter(argValue) {
                 list += ` start="${startNumber}"`;
             }
             list += `>${lines.join("")}</${listTag}>`;
-            if (pStyle.includes("small")) {
-                list = `<div class="small">${ list }</div>`;
+            if (pStyle.includes("fine")) {
+                list = `<div class="fine">${ list }</div>`;
             }
             return list;
         }
-        
+
         if ( chunk.startsWith("-- ")) {
-            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ applyFormatting(li.substring(2).trim()) }</li>`).join("") }</ul>`;
+            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ applyFormatting(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`;
         }
         
         /* ----------------------------------- headings ----------------------------------- */
@@ -824,7 +828,7 @@ function interpreter(argValue) {
         
         chunk = applyFormatting(chunk);
         
-        if (pStyle.includes("small")) {
+        if (pStyle.includes("fine")) {
             chunk = chunk.replaceAll("\n", "<br>");
         }
         
@@ -845,7 +849,7 @@ function ageFromDate(argDate) {
     }
     const entryYear = parseInt(argDate.substring(0, 4));
     const entryMonth = parseInt(argDate.substring(4, 6));
-    const entryDay = parseInt(argDate.substring(6,8));
+    const entryDay = parseInt(argDate.substring(6, 8));
     if (entryYear < 999 || entryMonth > 12 || entryDay > 31) {
         console.error("date-format-error");
         return "";
@@ -917,8 +921,6 @@ function applyReplacements(input_string) {
         .replaceAll("\\", "&#92;")
         .replaceAll("\\^", "&Hat;");
     
-    /* colors: */
-
     /* curly quotes: */
     if (input_string.indexOf("'") != -1 || input_string.indexOf("\"") != -1) {
         // console.log(input_string)
@@ -944,8 +946,6 @@ function applyReplacements(input_string) {
 }
 
 function tokenizeByWordChar(stringData) {
-    let overflow_check = 0;
-    
     const result = [];
     while (stringData.length > 0) {
         let point = stringData.search( /[a-zA-Z0-9_$]/.test(stringData[0]) ? /[^a-zA-Z0-9_$]/ : /[a-zA-Z0-9_$]/ );
@@ -955,37 +955,40 @@ function tokenizeByWordChar(stringData) {
         }
         result.push(stringData.substring(0, point));
         stringData = stringData.substring(point);
-        
-        if (overflow_check++ > 99) break;
-            // prevent recursion while testing
     }
     return result;
 }
 
 function colorizeKeywords(stringInput, syntaxClass, customKeywords) {
     return tokenizeByWordChar(stringInput).map(word => {
+        console.log(word)
         if (KEYWORDS[syntaxClass] && KEYWORDS[syntaxClass].includes(word)) {
-            return `<span class="code-blue">${ word }</span>`;
+            return `<span class="code-keyword">${ word }</span>`;
         }
         else if (customKeywords && customKeywords.includes(word)) {
-            return `<span class="code-purple">${ word }</span>`;
+            return `<span class="code-cust-keyword">${ word }</span>`;
         }
         else if (/^\d+$/.test(word)) {
-            return `<span class="code-orange">${ word }</span>`;
+            return `<span class="code-number">${ word }</span>`;
         }
         return word;
     }).join("");
 }
 
 const KEYWORDS = {
-    cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int long mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq".split(" "),
+    cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq".split(" "),
     cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield".split(" "),
-    java: "abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while".split(" ")
+    java: "abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while".split(" "),
+    js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval".split(" ")
 };
 
-function syntaxHighlight(stringInput, syntaxClass) {
+function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     let output = "";
-    let overflow_check = 0;
+    let overflow = 0;
+    /* strings in code: */
+    stringInput = stringInput.replace(/"(.+?)"/g, "<span class=\"code-string\">\"$1\"</span>")
+    
+    /* this finds code keywords, while ignoring html tags: */
     while (true) {
         const openTag = stringInput.indexOf("<");
         const closeTag = stringInput.indexOf(">");
@@ -996,22 +999,23 @@ function syntaxHighlight(stringInput, syntaxClass) {
         let display_text = stringInput.substring(0, openTag);
         let tag_and_attributes = stringInput.substring(openTag, closeTag + 1);
 
-        output += colorizeKeywords(display_text, syntaxClass);
+        output += colorizeKeywords(display_text, syntaxClass, customKeywords);
         output += tag_and_attributes;
 
         stringInput = stringInput.substring(closeTag + 1);
-        if (overflow_check++ > 99) break;
-            // prevent recursion while testing
+        /* prevents recursion while testing */
+        if (overflow++ > 199) {
+            break;
+        }
     }
-    output += colorizeKeywords(stringInput, syntaxClass);
-
-    output = output.replace(/(\/\/.*)/, "<span class=\"code-commented\">$1</span>")
-        .replace(/(#.*)/, "<span class=\"code-macro\">$1</span>");
+    output += colorizeKeywords(stringInput, syntaxClass, customKeywords);
+    
+    /* line comment: */
+    output = output.replace(/(\/\/.*)/, "<span class=\"code-comment\">$1</span>")
+        .replace(/(#.*)/, "<span class=\"code-macro\">$1</span>")
 
     return output;
 }
-
-
 
 
 
