@@ -13,62 +13,62 @@ I coded this to make the snow that I use in some of my videos.
 
 [snow.html](snow.html)
 
-||codeblock js snowflake rndInt
+||codeblock js snowflake rndInt init reset update
 function rndInt(min, max) { return Math.floor(Math.random() * max) + min; }
 const windSpeed = 0.1;
 const baseFallSpeed = 6;
  
 window.addEventListener("load", function() {
-  const number_of_snowflakes = 160;
-  const snowflakeArray = [];
-  const sf_min_size = 3;
-  const sf_max_size = 7;
-  while (snowflakeArray.length < number_of_snowflakes) {
-    snowflakeArray.push(new snowflake(rndInt(sf_min_size, sf_max_size)))
-  }
-  setInterval(function() {
-    for (s of snowflakeArray) {
-      s.update()
+    const number_of_snowflakes = 160;
+    const snowflakeArray = [];
+    const sf_min_size = 3;
+    const sf_max_size = 7;
+    while (snowflakeArray.length < number_of_snowflakes) {
+        snowflakeArray.push(new snowflake(rndInt(sf_min_size, sf_max_size)))
     }
-  }, 1000 / 60);
+    setInterval(function() {
+        for (s of snowflakeArray) {
+            s.update()
+        }
+    }, 1000 / 60);
 })
  
 class snowflake {
-  size;
-  obj;
-  fallSpeed;
-  constructor(size) {
-    this.size = size;
-    this.obj = document.getElementById("display").appendChild(document.createElement("div"));
-    this.obj.className = "snowflake";
-    this.obj.style.width = this.size + "px";
-    this.obj.style.height = this.size + "px";
-    this.fallSpeed = baseFallSpeed + (this.size * 0.2);
-    this.init();
-  }
-  init() {
-    this.top = -1 * rndInt(this.size, window.innerHeight);
-    this.left = rndInt(0, window.innerWidth + this.size + (window.innerHeight * this.size * windSpeed)) - this.size;
-    this.left -= window.innerHeight * this.size * windSpeed;
-    this.obj.style.top = this.top + "px";
-    this.obj.style.left = this.left + "px";
-  }
-  reset() {
-    this.top = -(this.size);
-    this.left = rndInt(0, window.innerWidth + this.size + (window.innerHeight * this.size * windSpeed)) - this.size;
-    this.left -= window.innerHeight * this.size * windSpeed;
-    this.obj.style.top = this.top + "px";
-    this.obj.style.left = this.left + "px";
-  }
-  update() {
-    this.obj.style.top = this.top + "px";
-    this.obj.style.left = this.left + "px";
-    this.top += this.fallSpeed;
-    this.left += this.size * windSpeed;
-    if (this.top > window.innerHeight + this.size || this.left > window.innerWidth + this.size) {
-      this.reset();
+    size;
+    obj;
+    fallSpeed;
+    constructor(size) {
+        this.size = size;
+        this.obj = document.getElementById("display").appendChild(document.createElement("div"));
+        this.obj.className = "snowflake";
+        this.obj.style.width = this.size + "px";
+        this.obj.style.height = this.size + "px";
+        this.fallSpeed = baseFallSpeed + (this.size * 0.2);
+        this.init();
     }
-  }
+    init() {
+        this.top = -1 * rndInt(this.size, window.innerHeight);
+        this.left = rndInt(0, window.innerWidth + this.size + (window.innerHeight * this.size * windSpeed)) - this.size;
+        this.left -= window.innerHeight * this.size * windSpeed;
+        this.obj.style.top = this.top + "px";
+        this.obj.style.left = this.left + "px";
+    }
+    reset() {
+        this.top = -(this.size);
+        this.left = rndInt(0, window.innerWidth + this.size + (window.innerHeight * this.size * windSpeed)) - this.size;
+        this.left -= window.innerHeight * this.size * windSpeed;
+        this.obj.style.top = this.top + "px";
+        this.obj.style.left = this.left + "px";
+    }
+    update() {
+        this.obj.style.top = this.top + "px";
+        this.obj.style.left = this.left + "px";
+        this.top += this.fallSpeed;
+        this.left += this.size * windSpeed;
+        if (this.top > window.innerHeight + this.size || this.left > window.innerWidth + this.size) {
+            this.reset();
+        }
+    }
 }
 
 \<script src="../../assets/layout.js"></script>

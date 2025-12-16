@@ -576,8 +576,10 @@ function interpreter(argValue) {
             let firstLine = lines.shift().substring("||codeblock".length).trim();
             if (firstLine) {
                 let words = firstLine.split(" ");
+                console.log(words)
                 syntaxClass = words.shift();
-                customKeywords = firstLine;
+                console.log(words)
+                customKeywords = words;
             }
             
             if (syntaxClass) {
@@ -964,7 +966,6 @@ function tokenizeByWordChar(stringData) {
 
 function colorizeKeywords(stringInput, syntaxClass, customKeywords) {
     return tokenizeByWordChar(stringInput).map(word => {
-        console.log(word)
         if (KEYWORDS[syntaxClass] && KEYWORDS[syntaxClass].includes(word)) {
             return `<span class="code-keyword">${ word }</span>`;
         }

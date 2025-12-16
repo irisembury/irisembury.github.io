@@ -444,7 +444,7 @@
 
             #article code { background-color: var(--grey-e); vertical-align: baseline; line-height: 1; padding-inline: 2px; font-family: var(--ff-monospace); letter-spacing: var(--ls-code); font-size: var(--fs-smaller); white-space: pre-wrap; }
             #article code * { font-size: inherit !important; font-family: inherit !important; }
-            .codeblock { background-color: var(--grey-f); white-space: pre-wrap; font-family: var(--ff-monospace); padding: 8px 10px; line-height: var(--lh-codeblock); font-size: var(--fs-smaller); border-left: 2px solid var(--grey-a); }
+            .codeblock { background-color: var(--grey-f); white-space: pre-wrap; font-family: var(--ff-monospace); padding: 8px 10px; line-height: var(--lh-codeblock); font-size: var(--fs-smaller); border: 1px solid var(--grey-a); margin-top: 1.2em !important; }
                 .codeblock mark { background-color: var(--codeblock-mark); }
                 .codeblock .code-number { color: var(--c-code-orange); }
                 .codeblock .code-keyword { color: var(--c-code-blue); }
