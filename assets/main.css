@@ -111,7 +111,7 @@
         --fs-h3: 1.25em;
         --fs-h4: 1.05em;
         --fs-table: 15px;
-        --fs-lb-caption: 0.9375em;
+        --fs-lb-caption: 15.4px;
         --fs-cite: 0.85em;
         /* colors */
         --c-index-accent-1: #333;
@@ -517,7 +517,7 @@
                         .entry-description { margin-top: 7px; font-size: 15px; line-height: 1.4; }
                             .entry-description div + div { margin-top: 6px; }
 
-        .index-top-header { max-width: var(--main-width); margin: 0 auto -32px; padding: 0 var(--article-side-pad); background-color: var(--c3-bg); }
+        .index-top-header { max-width: var(--main-width); margin: 0 auto -26px; padding: 0 var(--article-side-pad); background-color: var(--c3-bg); }
         .index-banner-img { max-width: 100%; }
         .index-profile-img { width: 100px; height: 100px; border: 2px solid var(--grey-e); border-radius: 2px; }
         .index-header-left { margin: 1rem; position: relative; margin-top: -4rem; }
