@@ -489,7 +489,7 @@ function interpreter(argValue) {
         
         if (chunk.startsWith("||square-gallery")) {
             /* ||square-gallery gridHeight */
-            /* imgUrl | alt-text/title */
+            /* imgUrl | caption | hover text (alt/title) */
             const rows = chunk.split("\n");
             let homeRow = rows.shift().substring("||image-span".length).trim();
             const lines = chunk.split("\n").slice(1).map( line => {
@@ -498,15 +498,18 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 const imgUrl = "media/" + parts[0].trim();
-                let figCaption = stdFormat(parts[1].trim());
+                let caption = stdFormat(parts[1].trim());
                 let altText = stdFormat(parts[2].trim().replace(/"/g,"&quot;"));
-                if (figCaption) {
-                    figCaption = `<figcaption>${ figCaption }</figcaption>`;
+                if (!altText) {
+                    altText = caption;
+                }
+                if (caption) {
+                    caption = `<figcaption>${ caption }</figcaption>`;
                 }
                 
-                return `<figure><div class="center align-center"><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ figCaption }</figure>`;
+                return `<figure><div class="img-wrapper"><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
             });
-            return `<div class="square-gallery">${ lines.join("") }</div>`;
+            return `<div class="table-wrapper"><div class="square-gallery">${ lines.join("") }</div></div>`;
         }
         
         /* ------------------------------------ video ------------------------------------ */
@@ -904,8 +907,7 @@ function stdFormat(input_string) {
         if (++overflow > 149) { console.error(); break; }
     }
     return (output + auxFormat(input_string)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
-        .replace(/\*(.+?)\*/g, "<i>$1</i>")
-        .replace(/_(.+?)_/g, "<u>$1</u>")
+        .replace(/\*(.+?)\*/g, "<i>$1</i>");
 }
 
 function auxFormat(input_string) {
