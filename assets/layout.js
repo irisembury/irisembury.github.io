@@ -38,8 +38,7 @@ window.addEventListener("load", function() {
                             </tr>
                         </tbody>
                     </table>
-                    <hr>
-                    ${ index ? "" : `<div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
+                    ${ index ? "" : `<hr><div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
                     ${ HTML.classList.contains("toc") ? `<div class="menu-switch-right"><label for="show-toc">Show table of contents:</label><input type="checkbox" class="menu-checkbox" checked id="show-toc"></div>` : "" }
                     <hr>
                     <h3>Fonts override:</h3>
@@ -443,8 +442,8 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 const imgUrl = "media/" + parts[0].trim();
-                let figCaption = applyFormatting(parts[1].trim());
-                let altText = applyFormatting(parts[2].trim().replace(/"/g,"&quot;"));
+                let figCaption = stdFormat(parts[1].trim());
+                let altText = stdFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 if (figCaption && !altText) { altText = figCaption }
                 if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
                 
@@ -464,7 +463,7 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 let imgUrl = "media/" + parts[0].trim();
-                let altText = applyFormatting(parts[1].trim().replace(/"/g,"&quot;"));
+                let altText = stdFormat(parts[1].trim().replace(/"/g,"&quot;"));
                 return `<div><img style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
             });
             return `<div class="image-span align-center space-evenly">${ galleryFigures.join("") }</div>`;
@@ -481,8 +480,8 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 let imgUrl = "media/" + parts[0].trim();
-                let caption = applyFormatting(parts[1].trim());
-                let altText = applyFormatting(parts[2].trim().replace(/"/g,"&quot;"));
+                let caption = stdFormat(parts[1].trim());
+                let altText = stdFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 return `<figure><img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"><figcaption>${ caption }</figcaption></figure>`;
             });
             return `<div class="captioned-gallery">${ galleryFigures.join("") }</div>`;
@@ -499,8 +498,8 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 const imgUrl = "media/" + parts[0].trim();
-                let figCaption = applyFormatting(parts[1].trim());
-                let altText = applyFormatting(parts[2].trim().replace(/"/g,"&quot;"));
+                let figCaption = stdFormat(parts[1].trim());
+                let altText = stdFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 if (figCaption) {
                     figCaption = `<figcaption>${ figCaption }</figcaption>`;
                 }
@@ -665,11 +664,11 @@ function interpreter(argValue) {
                         </div>
                         <div>
                             <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromDate(entryBirthdate) + "</span>" }</div>
-                            <div class="entry-title">${ applyFormatting(entryTitle) }</div>
+                            <div class="entry-title">${ stdFormat(entryTitle) }</div>
                         </div>
                     </div>
                     <div>
-                        <div class="entry-description">${ applyFormatting(entryDescription) }</div>
+                        <div class="entry-description">${ stdFormat(entryDescription) }</div>
                     </div>
                     ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="media/${ entryIcon }"></div>` : "" }
                 </div>`;
@@ -692,7 +691,7 @@ function interpreter(argValue) {
                 let cells = rows[r].replace(/\\\|/g, "&verbar;").split("|");
                 for (let c = 0; c < cells.length; c += 1) {
                     let cellNum = c + 1;
-                    cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ applyFormatting(cells[c].trim()) }</td>`;
+                    cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ stdFormat(cells[c].trim()) }</td>`;
                     if (c + 1 > tableWidth) {
                         tableWidth = c + 1;
                     }
@@ -705,7 +704,7 @@ function interpreter(argValue) {
                 if (tableHead.length == 1) {
                     /* for giving the table a title ("||th List of releases") */
                     tableHead = tableHead[0];
-                    tableHead = `<thead><th class="toc-include" id="${ tableHead.replaceAll(" ", "_").replaceAll("*", "") }" colspan="${ tableWidth }">${ applyFormatting(tableHead) }</th></thead>`;
+                    tableHead = `<thead><th class="toc-include" id="${ tableHead.replaceAll(" ", "_").replaceAll("*", "") }" colspan="${ tableWidth }">${ stdFormat(tableHead) }</th></thead>`;
                 }
                 else {
                     /* for labelling columns ("||th Date | Name | Category") */
@@ -732,7 +731,7 @@ function interpreter(argValue) {
                 let cells = rows[i].split("|");
                 if (cells.length == 1) { cells.push(""); }
                 for (let j = 0; j < cells.length; j += 1) {
-                    cells[j] = `<div class="cell col-${ j + 1 } col-${ (j + 1) % 2 == 1 ? "odd" : "even" }">${ applyFormatting(cells[j]) }</div>`;
+                    cells[j] = `<div class="cell col-${ j + 1 } col-${ (j + 1) % 2 == 1 ? "odd" : "even" }">${ stdFormat(cells[j]) }</div>`;
                 }
                 rows[i] = `<div class="row row-${ i + 1 } row-${ (i + 1) % 2 == 1 ? "odd" : "even" }">${ cells.join("") }</div>`;
             }
@@ -751,7 +750,7 @@ function interpreter(argValue) {
                 return `<p>${line}</p>`;
             })
 
-            return `<blockquote>${ applyFormatting(lines.join("")) }</blockquote>`;
+            return `<blockquote>${ stdFormat(lines.join("")) }</blockquote>`;
         }
 
         /* ------------------------------------- lists ------------------------------------- */
@@ -776,7 +775,7 @@ function interpreter(argValue) {
                 else {
                     li_ += ` class="no-marker"`;
                 }
-                return li_ + `>${ applyFormatting(line) }</li>`;
+                return li_ + `>${ stdFormat(line) }</li>`;
             })
             let list = `<${listTag} class="auto-list"`;
             if (startNumber) {
@@ -790,7 +789,7 @@ function interpreter(argValue) {
         }
 
         if ( chunk.startsWith("-- ")) {
-            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ applyFormatting(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`;
+            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ stdFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`;
         }
         
         /* ----------------------------------- headings ----------------------------------- */
@@ -800,17 +799,17 @@ function interpreter(argValue) {
             const headingId = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replaceAll("*" ,"");
             
             if (headingTag == "h4") {
-                return `<h4 id="${ headingId }" class="heading">${ applyFormatting(chunk) }</h4>`;
+                return `<h4 id="${ headingId }" class="heading">${ stdFormat(chunk) }</h4>`;
             }
             if (headingTag == "h1" && firstHeading) {
                 firstHeading = false;
                 if (document.title == "") {
                     document.title = chunk;
                 }
-                return `<h1 id="${ headingId }" class="heading toc-include first-heading">${ applyFormatting(chunk) }</h1>`;
+                return `<h1 id="${ headingId }" class="heading toc-include first-heading">${ stdFormat(chunk) }</h1>`;
             }
             firstHeading = false;
-            return `<${ headingTag } id="${ headingId }" class="heading toc-include">${ applyFormatting(chunk) }</${ headingTag }>`;
+            return `<${ headingTag } id="${ headingId }" class="heading toc-include">${ stdFormat(chunk) }</${ headingTag }>`;
         }
 
         /* ----------------------------------- see also ----------------------------------- */
@@ -826,7 +825,7 @@ function interpreter(argValue) {
 
         /* ------------------------ finalizing for normal paragraphs ------------------------ */
         
-        chunk = applyFormatting(chunk);
+        chunk = stdFormat(chunk);
         
         if (pStyle.includes("fine")) {
             chunk = chunk.replaceAll("\n", "<br>");
@@ -870,7 +869,7 @@ function ageFromDate(argDate) {
     return age;
 }
 
-function applyFormatting(input_string) {
+function stdFormat(input_string) {
     input_string = input_string.trim();
     if (input_string == "") { return input_string; }
     let output = "";
@@ -888,8 +887,10 @@ function applyFormatting(input_string) {
                 "a b <"  "c"  "> d e"
             then we apply replacements to "a b <" and "> d e", but not "c", which is protected.
             
-            This lets the applyReplacements function see that "b" is not the end of the string
-            and "d" is not the start of the string.
+            This lets the auxFormat function see that "b" is not truly the end of
+            the string, and "d" is not truly the start of the string,
+            which would be the impression if it were instead tokenized as:
+                "a b" "<c>" "d e"
        */
         let openTag = input_string.indexOf("<");
         let closeTag = openTag + input_string.substring(openTag).indexOf(">");
@@ -897,17 +898,17 @@ function applyFormatting(input_string) {
         if (openTag == -1 || closeTag == -1) {
             break;
         }
-        output += applyReplacements(input_string.substring(0, openTag + 1)) + input_string.substring(openTag + 1, closeTag);
+        output += auxFormat(input_string.substring(0, openTag + 1)) + input_string.substring(openTag + 1, closeTag);
         input_string = input_string.substring(closeTag);
         
         if (++overflow > 149) { console.error(); break; }
     }
-    return (output + applyReplacements(input_string))
-        .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
-        .replace(/\*(.+?)\*/g, "<i>$1</i>");
+    return (output + auxFormat(input_string)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+        .replace(/\*(.+?)\*/g, "<i>$1</i>")
+        .replace(/_(.+?)_/g, "<u>$1</u>")
 }
 
-function applyReplacements(input_string) {
+function auxFormat(input_string) {
     if (input_string == "") { return input_string; }
     /* escaped symbols */
     input_string = input_string.replaceAll("\\*", "&ast;")
