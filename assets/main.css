@@ -134,7 +134,7 @@
         --grey-3: #333; /* main text */
         --grey-4: #444;
         --grey-5: #555; /* blockquote, figcaption */
-        --grey-7: #797979;
+        --grey-7: #727272;
         --grey-8: #808080;
         --grey-9: #909090;
         --grey-a: #aaa; /* borders, hr */
@@ -185,7 +185,7 @@
         --lh-blockquote: 1.625;
         --lh-short-list: 1.3;
         --lh-codeblock: 1.25;
-        --lh-figcaption: 1.2;
+        --lh-caption: 1.4;
         --lh-lb-caption: 1.5;
         /* letter-spacing */
         --ls-code: -0.3px;
@@ -476,7 +476,7 @@
                     .collapse-button-container .flat-button { margin: 8px 0; background-color: var(--c-white); border: 1px solid var(--grey-a); padding: 3px 8px 4px; }
                     .collapse-button-container .flat-button:hover { background-color: var(--grey-c); }
 
-            .yt-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--yt-gallery-grid), 1fr)); line-height: var(--lh-table); gap: 9px 14px; }
+            .yt-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--yt-gallery-grid), 1fr)); line-height: var(--lh-caption); gap: 9px 14px; }
                 .yt-gallery figure { margin: 0 auto; }
                     .yt-gallery img { width: 100%; object-fit: cover; aspect-ratio: 16 / 8.8; border: 1px solid var(--grey-a); box-sizing: border-box; }
                 .yt-title { padding: 5px 0; display: block; }
