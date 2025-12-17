@@ -369,7 +369,7 @@ function setLightbox(action) {
         lightbox.src = action.src;
         lightbox.alt = action.alt;
         HTML.classList.add("lightbox");
-        lbTopLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1) }</a>`;
+        lbTopLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
         if (action.alt == "") {
             lbCaption.innerHTML = "";
         } else {
@@ -442,8 +442,8 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 const imgUrl = "media/" + parts[0].trim();
-                let figCaption = stdFormat(parts[1].trim());
-                let altText = stdFormat(parts[2].trim().replace(/"/g,"&quot;"));
+                let figCaption = textFormat(parts[1].trim());
+                let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 if (figCaption && !altText) { altText = figCaption }
                 if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
                 
@@ -463,10 +463,10 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 let imgUrl = "media/" + parts[0].trim();
-                let altText = stdFormat(parts[1].trim().replace(/"/g,"&quot;"));
+                let altText = textFormat(parts[1].trim().replace(/"/g,"&quot;"));
                 return `<div><img style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
             });
-            return `<div class="image-span align-center space-evenly">${ galleryFigures.join("") }</div>`;
+            return `<div class="image-span">${ galleryFigures.join("") }</div>`;
         }
 
         if (chunk.startsWith("||captioned-gallery")) {
@@ -480,13 +480,13 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 let imgUrl = "media/" + parts[0].trim();
-                let caption = stdFormat(parts[1].trim());
-                let altText = stdFormat(parts[2].trim().replace(/"/g,"&quot;"));
+                let caption = textFormat(parts[1].trim());
+                let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 return `<figure><img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"><figcaption>${ caption }</figcaption></figure>`;
             });
             return `<div class="captioned-gallery">${ galleryFigures.join("") }</div>`;
         }
-        
+
         if (chunk.startsWith("||square-gallery")) {
             /* ||square-gallery gridHeight */
             /* imgUrl | caption | hover text (alt/title) */
@@ -498,8 +498,8 @@ function interpreter(argValue) {
                     parts.push("");
                 }
                 const imgUrl = "media/" + parts[0].trim();
-                let caption = stdFormat(parts[1].trim());
-                let altText = stdFormat(parts[2].trim().replace(/"/g,"&quot;"));
+                let caption = textFormat(parts[1].trim());
+                let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 if (!altText) {
                     altText = caption;
                 }
@@ -509,9 +509,9 @@ function interpreter(argValue) {
                 
                 return `<figure><div class="img-wrapper"><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
             });
-            return `<div class="table-wrapper"><div class="square-gallery">${ lines.join("") }</div></div>`;
+            return `<div class="square-gallery">${ lines.join("") }</div>`;
         }
-        
+
         /* ------------------------------------ video ------------------------------------ */
         if (chunk.startsWith("||video")) {
             let data = chunk.split("\n").slice(1)[0].split("|").map(c => c.trim());
@@ -583,7 +583,7 @@ function interpreter(argValue) {
             }
             
             if (syntaxClass) {
-                lines = lines.map(line => syntaxHighlight(line, syntaxClass, customKeywords));
+                lines = lines.map(line => syntaxHighlight(line, syntaxClass, customKeywords).replaceAll("\\\\", "&#92;").replaceAll("\\<","&lt;").replaceAll("\\>","&gt;"));
             }
             
             return `<div class="codeblock">${ lines.map(line => `<div>${ line }</div>`).join("") }</div>`;
@@ -606,22 +606,17 @@ function interpreter(argValue) {
         if (chunk.startsWith(".")) {
             chunk = chunk.slice(1);
             pStyle.push("fine");
-        } /*  first-paragraph = first that's not fine */
+        } /* .first-paragraph = first paragraph that is not .fine */
         else if (firstParagraph) {
             pStyle.push("first-paragraph");
             firstParagraph = false;
         }
         
-        if (chunk.startsWith("$")) {
-            chunk = chunk.slice(1);
-            pStyle.push("drop-cap");
-        }
-        
         /* ------------------------------------- links ------------------------------------- */
-        /*  \[(  [^\]]*  )[^\\]?\]\((  [^\s]+?[^\\]  )\)
+        /*  \[(  [^\]]*  )[^\\]?\]\(( .+?[^\\]  )\)
             [text to be displayed](https://irisembury.github.io/)
         */
-        chunk = chunk.replace(/\[([^\]]*)[^\\]?\]\(([^\s]+?[^\\])\)/g, (match, displayText, address) => {
+        chunk = chunk.replace(/\[([^\]]*)[^\\]?\]\((.+?[^\\])\)/g, (match, displayText, address) => {
             address = address.replaceAll("\\)", ")");
             
             let link;
@@ -668,12 +663,12 @@ function interpreter(argValue) {
                             <img onclick="setLightbox(this)" class="profile-grid-img" src="media/${ entryImageUrl }">
                         </div>
                         <div>
-                            <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromDate(entryBirthdate) + "</span>" }</div>
-                            <div class="entry-title">${ stdFormat(entryTitle) }</div>
+                            <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISODateString(entryBirthdate) + "</span>" }</div>
+                            <div class="entry-title">${ textFormat(entryTitle) }</div>
                         </div>
                     </div>
                     <div>
-                        <div class="entry-description">${ stdFormat(entryDescription) }</div>
+                        <div class="entry-description">${ textFormat(entryDescription) }</div>
                     </div>
                     ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="media/${ entryIcon }"></div>` : "" }
                 </div>`;
@@ -696,7 +691,7 @@ function interpreter(argValue) {
                 let cells = rows[r].replace(/\\\|/g, "&verbar;").split("|");
                 for (let c = 0; c < cells.length; c += 1) {
                     let cellNum = c + 1;
-                    cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ stdFormat(cells[c].trim()) }</td>`;
+                    cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ textFormat(cells[c].trim()) }</td>`;
                     if (c + 1 > tableWidth) {
                         tableWidth = c + 1;
                     }
@@ -709,7 +704,7 @@ function interpreter(argValue) {
                 if (tableHead.length == 1) {
                     /* for giving the table a title ("||th List of releases") */
                     tableHead = tableHead[0];
-                    tableHead = `<thead><th class="toc-include" id="${ tableHead.replaceAll(" ", "_").replaceAll("*", "") }" colspan="${ tableWidth }">${ stdFormat(tableHead) }</th></thead>`;
+                    tableHead = `<thead><th class="toc-include" id="${ tableHead.replaceAll(" ", "_").replaceAll("*", "") }" colspan="${ tableWidth }">${ textFormat(tableHead) }</th></thead>`;
                 }
                 else {
                     /* for labelling columns ("||th Date | Name | Category") */
@@ -736,7 +731,7 @@ function interpreter(argValue) {
                 let cells = rows[i].split("|");
                 if (cells.length == 1) { cells.push(""); }
                 for (let j = 0; j < cells.length; j += 1) {
-                    cells[j] = `<div class="cell col-${ j + 1 } col-${ (j + 1) % 2 == 1 ? "odd" : "even" }">${ stdFormat(cells[j]) }</div>`;
+                    cells[j] = `<div class="cell col-${ j + 1 } col-${ (j + 1) % 2 == 1 ? "odd" : "even" }">${ textFormat(cells[j]) }</div>`;
                 }
                 rows[i] = `<div class="row row-${ i + 1 } row-${ (i + 1) % 2 == 1 ? "odd" : "even" }">${ cells.join("") }</div>`;
             }
@@ -755,7 +750,7 @@ function interpreter(argValue) {
                 return `<p>${line}</p>`;
             })
 
-            return `<blockquote>${ stdFormat(lines.join("")) }</blockquote>`;
+            return `<blockquote>${ textFormat(lines.join("")) }</blockquote>`;
         }
 
         /* ------------------------------------- lists ------------------------------------- */
@@ -780,7 +775,7 @@ function interpreter(argValue) {
                 else {
                     li_ += ` class="no-marker"`;
                 }
-                return li_ + `>${ stdFormat(line) }</li>`;
+                return li_ + `>${ textFormat(line) }</li>`;
             })
             let list = `<${listTag} class="auto-list"`;
             if (startNumber) {
@@ -794,7 +789,7 @@ function interpreter(argValue) {
         }
 
         if ( chunk.startsWith("-- ")) {
-            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ stdFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`;
+            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`;
         }
         
         /* ----------------------------------- headings ----------------------------------- */
@@ -804,17 +799,17 @@ function interpreter(argValue) {
             const headingId = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replaceAll("*" ,"");
             
             if (headingTag == "h4") {
-                return `<h4 id="${ headingId }" class="heading">${ stdFormat(chunk) }</h4>`;
+                return `<h4 id="${ headingId }" class="heading">${ textFormat(chunk) }</h4>`;
             }
             if (headingTag == "h1" && firstHeading) {
                 firstHeading = false;
                 if (document.title == "") {
                     document.title = chunk;
                 }
-                return `<h1 id="${ headingId }" class="heading toc-include first-heading">${ stdFormat(chunk) }</h1>`;
+                return `<h1 id="${ headingId }" class="heading toc-include first-heading">${ textFormat(chunk) }</h1>`;
             }
             firstHeading = false;
-            return `<${ headingTag } id="${ headingId }" class="heading toc-include">${ stdFormat(chunk) }</${ headingTag }>`;
+            return `<${ headingTag } id="${ headingId }" class="heading toc-include">${ textFormat(chunk) }</${ headingTag }>`;
         }
 
         /* ----------------------------------- see also ----------------------------------- */
@@ -830,7 +825,7 @@ function interpreter(argValue) {
 
         /* ------------------------ finalizing for normal paragraphs ------------------------ */
         
-        chunk = stdFormat(chunk);
+        chunk = textFormat(chunk);
         
         if (pStyle.includes("fine")) {
             chunk = chunk.replaceAll("\n", "<br>");
@@ -845,15 +840,15 @@ function interpreter(argValue) {
     return input.join("");
 }
 
-function ageFromDate(argDate) {
+function ageFromISODateString(argDate) {
     /* assumes ISO format YYYY-MM-DD */
     argDate = argDate.replace(/\D/g, "");
     if (argDate.length < 8) {
         return argDate;
     }
-    const entryYear = parseInt(argDate.substring(0, 4));
+    const entryYear  = parseInt(argDate.substring(0, 4));
     const entryMonth = parseInt(argDate.substring(4, 6));
-    const entryDay = parseInt(argDate.substring(6, 8));
+    const entryDay   = parseInt(argDate.substring(6, 8));
     if (entryYear < 999 || entryMonth > 12 || entryDay > 31) {
         console.error("date-format-error");
         return "";
@@ -870,43 +865,44 @@ function ageFromDate(argDate) {
             age -= 1;
         }
     }
-    
     return age;
 }
 
-function stdFormat(input_string) {
+function textFormat(input_string) {
     input_string = input_string.trim();
     if (input_string == "") { return input_string; }
     let output = "";
     
     /* first: replacements that shouldn't affect inside of tags */
-    let left = 0;
-    let overflow = 0;
     while (true) {
-        /* 
-            This version makes curly-quote replacements easier by including
-            the triangle tags in the string we apply replacements to.
-            So:
-                "a b <c> d e"
-            becomes
-                "a b <"  "c"  "> d e"
-            then we apply replacements to "a b <" and "> d e", but not "c", which is protected.
-            
-            This lets the auxFormat function see that "b" is not truly the end of
-            the string, and "d" is not truly the start of the string,
-            which would be the impression if it were instead tokenized as:
-                "a b" "<c>" "d e"
-       */
         let openTag = input_string.indexOf("<");
         let closeTag = openTag + input_string.substring(openTag).indexOf(">");
         
         if (openTag == -1 || closeTag == -1) {
             break;
         }
+        /* 
+            This version makes curly-quote replacements easier by including
+            triangle tags in the string we then apply replacements to.
+            i.e. when given:
+                "a b <c> d e"
+            this creates:
+                "a b <"  "c"  "> d e"
+            Then we apply auxFormat to "a b <" and "> d e", but not "c", which is protected.
+            
+            This is useful because it allows auxFormat to see that "b" is not truly the
+            end of the string, and "d" is not truly the start of the string.
+            That would have been the impression if it were instead tokenized as:
+                "a b" "<c>" "d e"
+            
+            In practical terms this means a tag doesn't interrupt the quotes within the
+            same chunk, allowing you to quote bold, links, etc.
+       */
         output += auxFormat(input_string.substring(0, openTag + 1)) + input_string.substring(openTag + 1, closeTag);
         input_string = input_string.substring(closeTag);
-        
-        if (++overflow > 149) { console.error(); break; }
+        /*
+            If that functionality wasn't desired, you would
+        */
     }
     return (output + auxFormat(input_string)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
         .replace(/\*(.+?)\*/g, "<i>$1</i>");
@@ -982,7 +978,7 @@ function colorizeKeywords(stringInput, syntaxClass, customKeywords) {
 const KEYWORDS = {
     cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq".split(" "),
     cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield".split(" "),
-    java: "abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while".split(" "),
+    java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while".split(" "),
     js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval".split(" ")
 };
 

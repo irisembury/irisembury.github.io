@@ -17,25 +17,26 @@
         max-width: 900px;
         padding: 4px 7px;
         margin: 0 auto;
-        background-color: #edfeec;
+        background-color: var(--c-light-green-bg);
         border: 1px solid var(--grey-a);
-        font-size: var(--fs-small);
+        font-size: 0.95em;
         font-family: var(--ff-ui);
     }
-    .dark .info { background-color: #515d4f; border-color: #515d4f; }
-    .darker .info { background-color: #030b03; border-color: #0c130c; }
+    
+    
+    body {
+        --lh-article: 1.5;
+    }
     </style>
 </head>
 <body>
 # Data structures & algorithms
 
-These are notes I took back when I was studying software design. This was a class most people in my program found particularly difficult, so I wrote everything out very explicitly for the purpose of helping the people around me, and then at some point later I just threw it online as well.
-
-The code samples are usually in either C++ or C# because those are the languages I was working with at that time.
+The code samples are usually in C++ or C# because those are the languages I was working with at the time. The concepts are not language-specific.
 
 # Big-O notation
 
-Big-O notation is used to describe the time complexity of an algorithm---i.e., how many operations it may take in order to run to completion, as measured in relation to N, or the size of the data set. In the context of computer science, big-O notation usually refers to *worst-case time complexity*, but not necessarily so---the same notation *could* be used to describe average or best-case complexity. But for most algorithms, the theoretical worst-case is what we're interested in.
+Big-O notation describes the time complexity of an algorithm, i.e. how many operations it may take in order to run to completion, as measured in relation to N, or the size of the data set. This can be used to describe the worst-case, average, or best-case time complexity. The main one we generally care about is the worst-case.
 
 \<div class="info">
 
@@ -45,7 +46,7 @@ O stands for *order*, as the extent to which a function grows in relation to the
 
 Common big-O values and their meaning:
 
-||table this .col-1 { background: var(--c-pale-blue); white-space: nowrap; }
+||table this .col-1 { background: var(--c-light-blue-bg); white-space: nowrap; }
 O(1) | Runs the same number of operations no matter the size of the data (does not scale).
 O(N) | Runs once per N (linear scaling).
 O(N<sup>2</sup>) | Runs N operations N times. Consider a loop that runs for the length of the passed array (N), in which there is another loop that also runs for the length of the array (N). The number of operations will thus be (N)(N).<br>O(N3) would be three loops, and so on.
@@ -67,7 +68,7 @@ big-o-graph.png
 
 The big-O values of some common algorithms:
 
-||table this { margin-inline: auto; } this .col-1 { background: var(--c-pale-blue); }
+||table this { margin-inline: auto; } this .col-1 { background: var(--c-light-blue-bg); }
 bubble sort | O(N<sup>2</sup>)
 selection sort | O(N<sup>2</sup>)*
 insertion sort | O(N<sup>2</sup>)
@@ -93,19 +94,19 @@ It's possible in nearly every programming language to interact with our data at 
 
 These accept 2 values and return 1 value:
 
-||table this .col-1 { background:var(--c-pale-blue); }
+||table this .col-1 { background:var(--c-light-blue-bg); }
 `&` (AND) | Each bit of the result is a 1 only if **both** input values also had a 1 in that position.
 `\|` (OR) | Each bit of the result is a 1 if **either** of the input values had a 1 in that position.
 `^` (XOR) | Each bit of the result is a 1 if the input values have a **different** bit in that position.
 
 There's also a `NOT` operator (~), which accepts only 1 value:
 
-||table this .col-1 { background: var(--c-pale-blue); }
+||table this .col-1 { background: var(--c-light-blue-bg); }
 `~` (NOT) | Each bit of the result is a 1 only if the input value has a 0 in that position (it *inverses* the bits).
 
 Examples of each operator in action:
 
-||table this { margin-inline: auto; font-family: var(--ff-monospace); } this .col-1 { text-align: center; background: var(--c-pale-blue); }
+||table this { margin-inline: auto; font-family: var(--ff-monospace); } this .col-1 { text-align: center; background: var(--c-light-blue-bg); }
 (1110 & 0101) | = 0100
 (1010 \| 0111) | = 1111
 (1100 ^ 1010) | = 0110
@@ -126,7 +127,7 @@ This is because a signed number (like the default `int` data-type, a 32-bit sign
 
 This can be observed clearly by tracking the binary representation of an int as it crosses the zero line:
 
-||table this { margin-inline: auto; } this .col-1 { background: var(--c-pale-blue); text-align: center; }
+||table this { margin-inline: auto; } this .col-1 { background: var(--c-light-blue-bg); text-align: center; }
 2 | 0000000000000000000000000000<mark>0010</mark>
 1 | 0000000000000000000000000000<mark>0001</mark>
 0 | 0000000000000000000000000000<mark>0000</mark>
@@ -154,7 +155,7 @@ std::cout << (int)b;  // prints 240
 // C#:
 byte k = (byte)~(158 & 214);  // prints 105
 
-.The conversions are because std::cout tries to read uint8_t as char, and ~ in C# tries to cast to int.
+.I convert the output because std::cout tries to read uint8_t as char, and ~ in C# tries to cast to int.
 
 ## Bit-shifting
 
@@ -176,13 +177,13 @@ Shifting by multiple places is the same as doubling or halving that many times. 
 
 \<div class="align-center gap-15">
 
-||table this tr:nth-child(n+2) { font-family: var(--ff-monospace); } this .col-1 { background: var(--c-pale-blue); } this th:first-child { border-right: 1px dotted var(--grey-8); }
+||table this tr:nth-child(n+2) { font-family: var(--ff-monospace); } this .col-1 { background: var(--c-light-blue-bg); } this th:first-child { border-right: 1px dotted var(--grey-8); }
 ||th shifting by x places | is the same as multiplying
 << 1 | * 2
 << 2 | * 2<sup>2</sup> (i.e. \*2\*2)
 << 3 | * 2<sup>3</sup> (i.e. \*2\*2\*2)
 
-||table this tr:nth-child(n+2) { font-family: var(--ff-monospace); } this .col-1 { background: var(--c-pale-blue); } this th:first-child { border-right: 1px dotted var(--grey-8); }
+||table this tr:nth-child(n+2) { font-family: var(--ff-monospace); } this .col-1 { background: var(--c-light-blue-bg); } this th:first-child { border-right: 1px dotted var(--grey-8); }
 ||th shifting by x places | is the same as multiplying
 >> 1 | / 2
 >> 2 | / 2<sup>2</sup> (i.e. \*2\*2)
@@ -203,7 +204,7 @@ To get 20, you'd need to actually say `q = q << 2`;
 
 The two main search algorithms are simply linear or binary search. They both look through an array and return the index of the found item, or -1 if not found.
 
-||table this .col-1 { background:var(--c-pale-blue); }
+||table this .col-1 { background:var(--c-light-blue-bg); }
 ||th Terminology:
 key | the item the algorithm is searching for
 
@@ -253,11 +254,11 @@ For example, think about trying to find the value 32 in this array:
 
 \<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <b>32</b>, 44, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95</mark> ]</div>
 
-It's an odd-number array (23 items), so we'd split that in half (rounding the mid-point down) into 11 and 12 items. 32 is lower than the middle value, so we refocus around the left half.
+It's an odd-number array (23 items), so we'd split that in half (rounding the mid-point down) into 11 and 12 items. 32 is lower than the middle value (the 46), ergo we narrow down to the left half and run again.
 
 \<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
 
-Then 32 is higher than the middle value (23), so you refocus around the right half of *that* subarray.
+Then 32 is higher than the middle value (21), so you refocus around the right half of *that* subarray.
 
 \<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ 3, 5, 12, 15, 18, 21, <mark>26, 27, 30, <b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
 
@@ -271,7 +272,7 @@ This is an O(log n) algorithm. To search a 10,000,000-length array with linear s
 
 This section covers the following:
 
-||table this { margin-inline: auto; } this th { background: var(--c-pale-blue); } this tr:nth-child(n+4) .col-1 { border: none; } this td { padding-inline: 20px; }
+||table this { margin-inline: auto; } this th { background: var(--c-light-blue-bg); } this tr:nth-child(n+4) .col-1 { border: none; } this td { padding-inline: 20px; }
 ||th basic sorts | more advanced
 bubble sort | merge sort
 selection sort | quick sort
@@ -365,7 +366,7 @@ void insertionSort(int arr[], int len) {
 
 To keep an array sorted as new items are inserted, use a logic similar to insertion sort to move all other items forward until you get to the place where the new item would be inserted.
 
-||codeblock cpp
+||codeblock cpp SortedArray
 struct SortedArray {
     int* arr;
     int size, numItems;
@@ -653,7 +654,7 @@ void quickSort(int arr[], int left, int right) {
     }
 }
 
-It's popular now to use the last item for the pivot, but the original Hoare quicksort actually used the first item. I could modify the above code to use the first item like so:
+It's popular now to use the last item for the pivot, though the original Hoare quicksort used the first item. I could modify the above code to use the first item like so:
 
 ||codeblock cpp
 int partition(int arr[], int left, int right) {
@@ -937,7 +938,7 @@ The big-O value of radix sort is unusual. I've seen it described as O(kw), where
 Though a radix sort can outperform other sorts in some scenarios, its ideal use-cases were too specific to see widespread implementation and it wasn't included in many built-in libraries.
 
 ||codeblock cpp
-#include &lt;deque&gt;
+#include \<deque\>
 void radixSort(int arr[], int length, int width) {
     int base = 10;
     int index = 0;
@@ -1044,9 +1045,9 @@ There are some methods, like C#'s `CompareTo` and JavaScript's `localeCompare`, 
 
 These functions both ignore case, except when case is the only difference between the two strings, in which case they consider the lowercase version to come first (despite being lower in ASCII value).
 
-They also contain some logic to make special characters, like `]`, always precede letters, again going against their ASCII value, though for some reason they both order these special characters differently:
+They also contain some logic to make special characters, like `]`, always precede letters, again going against their ASCII value, though for some reason they both order these special characters differently.
 
-||table
+||table this .col-1 { background-color: var(--c-light-blue-bg) }
 sorted by ASCII | ` !"#$%&'()*+,-./123:;&lt;=&gt;?ABC[\]^_\`abc{\|}~`
 CompareTo | `'- !"#$%&()*,./:;?[\]^_\`{\|}~+&lt;=&gt;123aAbBcC`
 localeCompare | ` _-,;:!?.'"()[]{}*/\&#%\`^+&lt;=&gt;\|~$123aAbBcC`
@@ -1219,7 +1220,7 @@ A list can also be made **circular**, meaning the last node points back to the f
 ||image-span
 circular-linked-list.png|A circular doubly-linked list
 
-||table this .col-1 { background:var(--c-pale-blue); }
+||table this .col-1 { background:var(--c-light-blue-bg); }
 ||th Terminology:
 linked list | an allocation of data that's dynamically sized because it's not stored contiguously
 stack | a linked list that behaves as first-in, last-out
@@ -1227,7 +1228,7 @@ queue | a linked list that behaves as first-in, first-out
 
 #### Coding some linked lists
 
-||codeblock cpp
+||codeblock cpp Stack LinkNode
 class Stack {
 private:
     struct LinkNode {
@@ -1259,30 +1260,29 @@ public:
 
 If you want it to hold an object instead and repurpose the pop method to return the object of the node being removed (or null if the list is empty) instead of a boolean:
 
-||codeblock cpp
-class Thing { // example class
-};
+||codeblock cpp Banana Stack LinkNode
+class Banana { }; // example class, doesn't matter
  
 class Stack {
 private:
     struct LinkNode {
-        Thing* data;
+        Banana* data;
         LinkNode* next;
-        LinkNode(Thing* d, LinkNode* n) : data(d), next(n) { }
+        LinkNode(Banana* d, LinkNode* n) : data(d), next(n) { }
     };
     LinkNode* top;
 public:
     Stack() :top(0) { }
-    void push(Thing* value) {
+    void push(Banana* value) {
         // create new linknode whose .next is current top,
         // and set that as the new top
         LinkNode* n = new LinkNode(value, this->top);
         this->top = n;
     }
-    Thing* pop() {
+    Banana* pop() {
         if (!this->top) return 0; //empty
  
-        Thing* t = this->top->data;
+        Banana* t = this->top->data;
  
         LinkNode* n = this->top;
         this->top = this->top->next;
@@ -1301,21 +1301,20 @@ And of course, remember that you're responsible for deleting the pointer to the 
 
 Similar code, but pop is replaced with 'dequeue', which takes from the other side.
 
-||codeblock cpp
-class Thing { // example class
-};
+||codeblock cpp Banana Queue LinkNode
+class Banana { };
  
 class Queue {
 private:
     struct LinkNode {
-        Thing* data;
+        Banana* data;
         LinkNode* next;
-        LinkNode(Thing* d) : data(d), next(0) { }
+        LinkNode(Banana* d) : data(d), next(0) { }
     };
     LinkNode* front, * back;
 public:
     Queue() :front(0), back(0) { }
-    void enqueue(Thing* value) {
+    void enqueue(Banana* value) {
         LinkNode* n = new LinkNode(value);
  
         if (!this->back) {
@@ -1329,10 +1328,10 @@ public:
             this->back = n;
         }
     }
-    Thing* dequeue() {
+    Banana* dequeue() {
         if (!this->front) return 0; //empty
  
-        Thing* t = this->front->data;
+        Banana* t = this->front->data;
  
         LinkNode* n = this->front;
         this->front = this->front->next;
@@ -1367,31 +1366,31 @@ queue-enqueue.png|Adding a node to a queue
 ||image-float
 code-test-1.png
 
-||codeblock cpp
+||codeblock cpp Stack Banana
 int main()
 {
     Stack stack;
     int x[] = { 15, 48, 59, 26, 35, 68, 57, 24 };
     for (int i = 0; i < 8; i += 1) {
-        stack.push(new Thing(x[i]));
+        stack.push(new Banana(x[i]));
     }
  
     for (int i = 0; i < 8; i += 1) {
         auto t = stack.pop();
         std::cout << t->id << std::endl;
-        delete t; //delete the Thing object
+        delete t; //delete the Banana object
     }
 
 ||image-float
 code-test-1.png
 
-||codeblock cpp
+||codeblock cpp Queue
 int main()
 {
     Queue q;
     int x[] = { 15, 48, 59, 26, 35, 68, 57, 24 };
     for (int i = 0; i < 8; i += 1) {
-        q.enqueue(new Thing(x[i]));
+        q.enqueue(new Banana(x[i]));
     }
  
     for (int i = 0; i < 8; i += 1) {
@@ -1410,10 +1409,10 @@ If you change the entry node-pointer held by the list itself, all data in the li
 
 \</div>
 
-||codeblock cpp
+||codeblock cpp Stack
 class Stack {
 // a temporary solution for this demo:
-// just add a public method that returns the top node
+// just adding a public method that returns the top node
 public:
     LinkNode* getTop() { return this-> top; }
     //...
@@ -1425,7 +1424,7 @@ int main()
  
     int x[] = { 15, 48, 59, 26, 35, 68, 57, 24 };
     for (int i = 0; i < 8; i += 1) {
-        stack.push(new Thing(x[i]));
+        stack.push(new Banana(x[i]));
     }
  
     auto node = stack.getTop();
