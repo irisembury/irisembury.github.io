@@ -1,7 +1,16 @@
 "use strict"
 const HTML = document.documentElement;
 const leftRightArrowsIconSvg = `<svg style="transform:rotate(90deg)" aria-hidden="true" focusable="false" class="octicon octicon-arrow-switch" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>`;
-const fontOptions = `Arial, Consolas, Faculty Glyphic, Georgia, Lora, Open Sans, Roboto, Roboto Slab, Segoe UI, Trebuchet MS`.split(",").map(o => {o = o.trim(); return `<option value="${ o }">${ o }</option>`} );
+const fontOptions = `Arial
+Consolas
+Faculty Glyphic
+Georgia
+Lora
+Open Sans
+Roboto
+Roboto Slab
+Segoe UI
+Trebuchet MS`.split("\n").filter(f => f.length > 2).map(o => {o = o.trim(); return `<option value="${ o }">${ o }</option>`} );
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
@@ -434,6 +443,23 @@ function interpreter(argValue) {
         }
         
         /* ------------------------------------ images ------------------------------------ */
+        if (chunk.startsWith("||image-float-left")) {
+            /* imgUrl | caption | alt-text/title */
+            const lines = chunk.split("\n").slice(1).map( line => {
+                const parts = line.split("|");
+                while (parts.length < 3) {
+                    parts.push("");
+                }
+                const imgUrl = "media/" + parts[0].trim();
+                let figCaption = textFormat(parts[1].trim());
+                let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
+                if (figCaption && !altText) { altText = figCaption }
+                if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
+                
+                return `<figure><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
+            });
+            return `<div class="image-float left">${ lines.join("") }</div>`;
+        }
         if (chunk.startsWith("||image-float")) {
             /* imgUrl | caption | alt-text/title */
             const lines = chunk.split("\n").slice(1).map( line => {
@@ -469,7 +495,7 @@ function interpreter(argValue) {
             return `<div class="image-span">${ galleryFigures.join("") }</div>`;
         }
 
-        if (chunk.startsWith("||captioned-gallery")) {
+        if (chunk.startsWith("||gallery")) {
             /* ||image-span maxHeight */
             /* imgUrl | caption | alt-text/title */
             const rows = chunk.split("\n");
@@ -482,7 +508,12 @@ function interpreter(argValue) {
                 let imgUrl = "media/" + parts[0].trim();
                 let caption = textFormat(parts[1].trim());
                 let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
-                return `<figure><img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"><figcaption>${ caption }</figcaption></figure>`;
+                return `
+                <figure>
+                <img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
+                <figcaption>${ caption }</figcaption>
+                </figure>
+                `;
             });
             return `<div class="captioned-gallery">${ galleryFigures.join("") }</div>`;
         }
@@ -613,10 +644,10 @@ function interpreter(argValue) {
         }
         
         /* ------------------------------------- links ------------------------------------- */
-        /*  \[(  [^\]]*  )[^\\]?\]\(( .+?[^\\]  )\)
+        /*
             [text to be displayed](https://irisembury.github.io/)
         */
-        chunk = chunk.replace(/\[([^\]]*)[^\\]?\]\((.+?[^\\])\)/g, (match, displayText, address) => {
+        chunk = chunk.replace(/\[(.*?)\]\((.+?[^\\])\)/g, (match, displayText, address) => {
             address = address.replaceAll("\\)", ")");
             
             let link;
@@ -625,7 +656,7 @@ function interpreter(argValue) {
                     link = `<a href="${ address }>[internal]</a>`;
                 }
                 else {
-                    link = `<a href=${ address }>${ displayText }</a>`
+                    link = `<a href="${ address }">${ displayText }</a>`
                 }
             }
             else {
