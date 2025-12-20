@@ -24,7 +24,7 @@
 <body>
 ### Wordle helper
 
-This is a partial-cheater script for [Wordle](https://nytimes.com/games/wordle). This doesn't connect to a dictionary or help you find words. It just shows every logically possible combination of letters based on your input.
+This could help for things like [Wordle](https://nytimes.com/games/wordle). This doesn't connect to a dictionary or help you find words. It just shows every logically possible combination of letters based on your input.
 
 To record that 'K' has to be in the 3rd slot, write 'k3' in the required box, and likewise for the forbidden (yellow letters).
 
@@ -37,27 +37,27 @@ Required: | <input id="required">
 \<div id="display"></div>
 
 
-<script src="../../assets/layout.js"></script>
+\<script src="../../assets/layout.js"></script>
 <script>
-const wordLength = 5;
-const rFilter = new RegExp("[^a-z" + (wordLength > 9 ? 0 : 1) + "-" + wordLength + " ]", "g");
-
-let letters = [];
-let forbidden = [];
-let required = [];
-
-function foo(word, letter) {
-    let out = [];
-    for (let i = 0; i < wordLength; i += 1) {
-        if (word[i] == "." && !forbidden[i].includes(letter)) {
-            let temp = word.slice(0, i) + letter + word.slice(i + 1)
-            out.push(temp);
+    const wordLength = 5;
+    const rFilter = new RegExp("[^a-z" + (wordLength > 9 ? 0 : 1) + "-" + wordLength + " ]", "g");
+    
+    let letters = [];
+    let forbidden = [];
+    let required = [];
+    
+    function foo(word, letter) {
+        let out = [];
+        for (let i = 0; i < wordLength; i += 1) {
+            if (word[i] == "." && !forbidden[i].includes(letter)) {
+                let temp = word.slice(0, i) + letter + word.slice(i + 1)
+                out.push(temp);
+            }
         }
+        return out;
     }
-    return out;
-}
-
-function runScript() {
+    
+    function runScript() {
         required = [];
         forbidden = [];
         while (forbidden.length < wordLength) {
@@ -69,24 +69,20 @@ function runScript() {
         
         letters = document.getElementById("letters").value.toLowerCase().replace(/[^a-z]/g, "").substring(0, wordLength).split("");
         console.log("Letters input: " + letters.join(" "))
-
+        
         let ftemp = document.getElementById("forbidden").value.toLowerCase().replace(rFilter, "").split(" ");
-        console.log(ftemp)
         ftemp.forEach(letterNumPair => {
             if (letterNumPair.length != 2) {
                 return;
             }
-            console.log(letterNumPair)
             let letter = letterNumPair[0];
             let num = parseInt(letterNumPair[1]) - 1;
             if (!forbidden[num].includes(letter)) {
                 forbidden[num].push(letter);
             }
         })
-        //console.log(forbidden)
-
-        document.getElementById("required").value
-        .toLowerCase().replace(rFilter, "").split(" ").map(letterNumPair => {
+        
+        document.getElementById("required").value.toLowerCase().replace(rFilter, "").split(" ").map(letterNumPair => {
             if (letterNumPair.length != 2) {
                 return;
             }
@@ -94,7 +90,7 @@ function runScript() {
             let num = parseInt(letterNumPair[1]) - 1;
             if (!required[num].includes(letter)) {
                 if (required[num] != "") {
-                    console.error("Error");
+                    console.error();
                 }
                 required[num] = letter;
             }
@@ -110,16 +106,13 @@ function runScript() {
             }
         }
         document.getElementById("display").innerHTML = results.map(w => `<code>${ w }</code>` ).join("");
-}
-
-window.addEventListener("load", function() {
-    document.getElementById("run-helper").addEventListener("click", runScript);
-    document.getElementById("letters").addEventListener("keydown", function(e) { if (e.key == "Enter") { runScript(); } })
-    document.getElementById("forbidden").addEventListener("keydown", function(e) { if (e.key == "Enter") { runScript(); } })
-    document.getElementById("required").addEventListener("keydown", function(e) { if (e.key == "Enter") { runScript(); } })
-})
-
-
-
+    }
+    
+    window.addEventListener("load", function() {
+        document.getElementById("run-helper").addEventListener("click", runScript);
+        document.getElementById("letters").addEventListener("keydown", function(e) { if (e.key == "Enter") { runScript(); } })
+        document.getElementById("forbidden").addEventListener("keydown", function(e) { if (e.key == "Enter") { runScript(); } })
+        document.getElementById("required").addEventListener("keydown", function(e) { if (e.key == "Enter") { runScript(); } })
+    })
 </script>
 </body></html>

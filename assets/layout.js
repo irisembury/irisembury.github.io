@@ -5,7 +5,9 @@ const fontOptions = `Arial
 Consolas
 Faculty Glyphic
 Georgia
+Inter
 Lora
+Merriweather
 Open Sans
 Roboto
 Roboto Slab
@@ -16,117 +18,75 @@ window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
     const indexSecondary = document.getElementById("index-secondary") != null;
     const pathToRoot = index ? "" : "../../";
+    document.head.innerHTML += "<link rel=\"stylesheet\" href=\"" + pathToRoot + "assets/fonts.css\">";
     
     document.body.innerHTML =
-    `<nav class="nav-wrapper no-select">
-        <div class="main-nav stretch space-between">
-            <div class="align-center">
-                <div class="page-name-display text-select"><div><a href="${ pathToRoot }index.html">Index</a> &#47; ${ document.title || "This page" }</div></div>
-            </div>
-            <div class="align-center">
-                ${ index ? "" : `<a id="to-top-button">Jump to Top</a>` }
-                <a class="hamburger icon"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 6H20 M4 12H20 M4 18H20" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            </div>
-        </div>
+    `<nav class="main-nav no-select">
+        <span><div class="page-name-display text-select"><a href="${ pathToRoot }index.html">Index</a> &#47; ${ document.title || "This page" }</div></span>
+        ${ index ? "" : `<span class="hide-at-top"><span style="height: 9px; border-left: 1px solid currentcolor; display: inline-block;"></span></span> <a class="to-top-button hide-at-top">Jump to Top</a>` }
+        <a style="margin-left:auto" class="hamburger icon"><svg class="Xy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></a>
     </nav>
-    <div class="menu-line center">
-        <div class="menu-aligner">
-            <div class="menu hidden">
-                <div class="menu-inner">
-                    <h3>Display preferences:</h3>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Theme:</td>
-                                <td>
-                                    <select class="menu-select" id="brightness-select">
-                                        <option value="light">Light</option>
-                                        <option value="dark">Dark</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    ${ index ? "" : `<hr><div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
-                    ${ HTML.classList.contains("toc") ? `<div class="menu-switch-right"><label for="show-toc">Show table of contents:</label><input type="checkbox" class="menu-checkbox" checked id="show-toc"></div>` : "" }
-                    <hr>
-                    <h3>Fonts override:</h3>
-                    <table id="fonts">
-                        <tbody>
-                            <tr>
-                                <td>Headings:</td>
-                                <td>
-                                    <select class="menu-select" id="heading-font-select">
-                                    ${ fontOptions }
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Body:</td>
-                                <td>
-                                    <select class="menu-select" id="body-font-select">
-                                    ${ fontOptions }
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tables:</td>
-                                <td>
-                                    <select class="menu-select" id="table-font-select">
-                                    ${ fontOptions }
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="menu-switch-right"><span class="pseudo-link" onclick="menuRestoreDefaults()">restore defaults</span></div>
-                    <hr>
-                    <span style="color:var(--grey-5)">These options are saved in session storage, not cookies, meaning they&rsquo;re cleared automatically when you close your browser.</span>
-                </div>
-            </div>
-        </div>
+    <div class="menu hidden">
+        <h3>Display preferences:</h3>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Theme:</td>
+                    <td>
+                        <select class="menu-select" id="brightness-select">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        ${ index ? "" : `<hr><div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
+        ${ HTML.classList.contains("toc-included") ? `<div class="menu-switch-right"><label for="show-toc">Show table of contents:</label><input type="checkbox" class="menu-checkbox" checked id="show-toc"></div>` : "" }
+        <hr>
+        <h3>Fonts override:</h3>
+        <table id="fonts">
+            <tbody>
+                <tr>
+                    <td>Headings:</td>
+                    <td><select class="menu-select" id="heading-font-select">
+                        ${ fontOptions }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Body:</td>
+                    <td><select class="menu-select" id="body-font-select">
+                        ${ fontOptions }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tables:</td>
+                    <td><select class="menu-select" id="table-font-select">
+                        ${ fontOptions }
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="menu-switch-right"><span class="pseudo-link" onclick="menuRestoreDefaults()">restore defaults</span></div>
+        <hr>
+        <span style="color:var(--grey-5)">These options are saved in session storage, not cookies, meaning they&rsquo;re cleared automatically when you close your browser.</span>
     </div>
-    ${ index || indexSecondary ? `
-        <div class="index-top-header">
-            <img class="index-banner-img" src="${ pathToRoot }assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg">
-            ${
-                index ? `<div style="display:flex; justify-content:space-between;">
-                    <div class="index-header-left">
-                        <div>
-                            <img width="100" height="100" src="assets/grandchamp.png" class="index-profile-img">
-                        </div>
-                        <div class="index-name-container">
-                            <div><span class="index-title">Iris <span>Embury</span></span></div>
-                        </div>
-                    </div>
-                    <div class="index-header-right">
-                        <a class="index-links" title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><svg title="Bluesky"" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 57" width="18" height="18"><path fill="var(--c-bluesky)" d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805ZM50.127 3.805C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745Z"></path></svg> Bluesky</a>
-                        <a class="index-links" title="Tumblr" href="https://irisembury.tumblr.com/"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg> Tumblr</a>
-                        <a class="index-links" title="Discord" href="https://discord.gg/fGdV7x5dk2"><svg title="Discord" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16"><path fill="var(--c-discord)" d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/></svg> Discord</a>
-                        <a class="index-links" title="Substack" href="https://irisembury.substack.com"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg> Substack</a>
-                        <a class="index-links" title="Twitter" href="https://x.com/irisembury"><svg title="Twitter/X" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="-1 -1 25 25"><path fill="var(--c-twitter)" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg> Twitter</a>
-                    </div>
-                </div>`
-                :""
-            }
-        </div>
-    ` : ""
-    }
     <div class="c1">
-        ${ HTML.classList.contains("toc") ? `<div class="toc-wrapper"><nav id="table-of-contents"></nav></div>` : "" }
+        ${ HTML.classList.contains("toc-included") ? `<nav id="toc"></nav>` : "<div></div>" }
         <div class="c2">
             <div class="c3">
                 <div id="article">${ document.body.innerHTML }</div>
-                <div id="article-footer">
-                    ${ index ? "" : `<div><a href="../../index.html">Link back to index</a></div>` }
-                </div>
+                <div id="page-footer">${ index ? "" : `<div><a href="../../index.html">Link back to index</a></div>` }</div>
             </div>
         </div>
     </div>
     <div class="lb-container">
-        <div id="lightbox-top-left"></div>
-        <div class="lightbox-wrapper"><img id="lightbox"></div>
-        <div class="lightbox-bottom-panel"><div id="lightbox-caption"></div></div>
+        <div id="lb-top-left"></div>
+        <div class="lb-wrapper"><img id="lightbox"></div>
+        <div class="lb-bottom-panel"><div id="lb-caption"></div></div>
     </div>
     <style id="--custom-style"></style>`;
 
@@ -136,7 +96,7 @@ window.addEventListener("load", function() {
     const article_ = document.getElementById("article");
     interpreter(article_);
     
-    document.querySelector(".lightbox-wrapper").addEventListener("click", () => {
+    document.querySelector(".lb-wrapper").addEventListener("click", () => {
         setLightbox("close")
     })
     
@@ -215,25 +175,25 @@ window.addEventListener("load", function() {
         });
     }
     /* ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- ---- */
-    if (HTML.classList.contains("toc")) {
+    if (HTML.classList.contains("toc-included")) {
         document.getElementById("show-toc").addEventListener("change", function() {
             if (this.checked) {
-                HTML.classList.add("toc");
+                HTML.classList.add("toc-included");
                 window.addEventListener("resize", tocWidthCheck);
                 window.addEventListener("scroll", tocHighlightUpdateAttempt);
             } else {
-                HTML.classList.remove("toc");
+                HTML.classList.remove("toc-included");
                 window.removeEventListener("resize", tocWidthCheck);
                 window.removeEventListener("scroll", tocHighlightUpdateAttempt);
             }
         });
-        const toc = document.getElementById("table-of-contents");
+        const toc = document.getElementById("toc");
         const headings = Array.from(document.getElementById("article").getElementsByClassName("toc-include"));
-        toc.innerHTML = `<div class="toc-row"><a onclick="scrollToTop()" style="cursor: pointer;">(Top)</a><svg id="toc-x-button" width="15" height="15" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 16 L60 60 M60 16 L16 60" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/></svg></div>` + headings.slice(1).map ( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
+        toc.innerHTML = `<div class="toc-row"><a onclick="scrollToTop()" style="cursor: pointer;">(Top)</a></div>` + headings.slice(1).map ( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
         
         const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
         let lastHeading = -1;
-
+        
         let canTocHighlightUpdate = true;
         function tocHighlightUpdateAttempt() {
             if (!canTocHighlightUpdate) { return; }
@@ -284,26 +244,6 @@ window.addEventListener("load", function() {
             lastHeading = currentHeading;
         }
         
-        let canTocWidthCheck = true;
-        function tocWidthCheck() {
-            if (!canTocWidthCheck) {
-                return;
-            }
-            canTocWidthCheck = false;
-            setTimeout(() => {
-                canTocWidthCheck = true;
-                HTML.classList.toggle("toc", window.innerWidth > 850);
-            }, 333);
-            HTML.classList.toggle("toc", window.innerWidth > 850);
-        }
-        window.addEventListener("resize", tocWidthCheck);
-        window.addEventListener("scroll", tocHighlightUpdateAttempt);
-        
-        setTimeout(() => {
-            tocWidthCheck();
-            tocHighlightUpdateAttempt();
-        }, 100);
-        
         /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- */
         let canTocFadeCheck = true;
         function tocFadeCheck() {
@@ -318,18 +258,11 @@ window.addEventListener("load", function() {
         }
         toc.addEventListener("scroll", tocFadeCheck);
         toc.addEventListener("resize", tocFadeCheck);
-        
-        document.getElementById("toc-x-button").addEventListener("click", () => {
-            document.getElementById("show-toc").checked = false;
-            HTML.classList.remove("toc");
-            window.removeEventListener("resize", tocWidthCheck);
-            window.removeEventListener("scroll", tocHighlightUpdateAttempt);
-        });
     }
     /* ---- ---- ---- ---- ---- /table of contents ---- ---- ---- ---- ---- ---- ---- */
 
     if (!document.getElementById("index")) {
-        document.getElementById("to-top-button").addEventListener("click", scrollToTop);
+        document.querySelector(".to-top-button").addEventListener("click", scrollToTop);
     }
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- */
     const mainNav = document.querySelector(".main-nav");
@@ -358,7 +291,7 @@ window.addEventListener("load", function() {
 function scrollToTop() {
     window.scrollTo({ behavior: "instant", top: 0 });
     history.replaceState(null, "", window.location.pathname + window.location.search);
-    let toc = document.getElementById("table-of-contents");
+    let toc = document.getElementById("toc");
     if (toc) {
         toc.scrollTo({ behavior: "instant", top: 0 });
     }
@@ -370,14 +303,14 @@ function setLightbox(action) {
     if (action == "close") {
         lightbox.src = "";
         lightbox.alt = "";
-        HTML.classList.remove("lightbox");
+        HTML.classList.remove("lb-enabled");
     }
     else {
-        let lbTopLeft = document.getElementById("lightbox-top-left");
-        let lbCaption = document.getElementById("lightbox-caption");
+        let lbTopLeft = document.getElementById("lb-top-left");
+        let lbCaption = document.getElementById("lb-caption");
         lightbox.src = action.src;
         lightbox.alt = action.alt;
-        HTML.classList.add("lightbox");
+        HTML.classList.add("lb-enabled");
         lbTopLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
         if (action.alt == "") {
             lbCaption.innerHTML = "";
@@ -450,7 +383,7 @@ function interpreter(argValue) {
                 while (parts.length < 3) {
                     parts.push("");
                 }
-                const imgUrl = "media/" + parts[0].trim();
+                const imgUrl = parts[0].trim();
                 let figCaption = textFormat(parts[1].trim());
                 let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 if (figCaption && !altText) { altText = figCaption }
@@ -467,7 +400,7 @@ function interpreter(argValue) {
                 while (parts.length < 3) {
                     parts.push("");
                 }
-                const imgUrl = "media/" + parts[0].trim();
+                const imgUrl = parts[0].trim();
                 let figCaption = textFormat(parts[1].trim());
                 let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 if (figCaption && !altText) { altText = figCaption }
@@ -488,7 +421,7 @@ function interpreter(argValue) {
                 while (parts.length < 2) {
                     parts.push("");
                 }
-                let imgUrl = "media/" + parts[0].trim();
+                let imgUrl = parts[0].trim();
                 let altText = textFormat(parts[1].trim().replace(/"/g,"&quot;"));
                 return `<div><img style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
             });
@@ -505,7 +438,7 @@ function interpreter(argValue) {
                 while (parts.length < 3) {
                     parts.push("");
                 }
-                let imgUrl = "media/" + parts[0].trim();
+                let imgUrl = parts[0].trim();
                 let caption = textFormat(parts[1].trim());
                 let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 return `
@@ -528,7 +461,7 @@ function interpreter(argValue) {
                 while (parts.length < 3) {
                     parts.push("");
                 }
-                const imgUrl = "media/" + parts[0].trim();
+                const imgUrl = parts[0].trim();
                 let caption = textFormat(parts[1].trim());
                 let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
                 if (!altText) {
@@ -553,7 +486,7 @@ function interpreter(argValue) {
             }
             let fileType = fileUrl.substring(dot + 1);
             let maxHeight = (data.length == 2) ? data[1] : 300;
-            return `<div class="auto-video"><video controls height="${maxHeight}"><source src="media/${fileUrl}" type="video/${fileType}"></video></div>`;
+            return `<div class="auto-video"><video controls height="${maxHeight}"><source src="${fileUrl}" type="video/${fileType}"></video></div>`;
         }
 
         if (chunk.startsWith("||yt-gallery")) {
@@ -675,7 +608,7 @@ function interpreter(argValue) {
         chunk = chunk.replace(/\[\[(.+?)\]\]/g, (match, displayText) => {
             return `<a title="Jump to section" href="#${ displayText.replaceAll(" ", "_") }">${ displayText }</a>`
         });
-        
+
         if (chunk.startsWith("||profile-grid")) {
             let data = chunk.split("\n").slice(1).filter(c => c.length > 3).map(row => {
                 let rowData = row.replaceAll("\\|","&verbar;").split("|").map(c => c.trim());
@@ -686,12 +619,11 @@ function interpreter(argValue) {
                 let entryTitle = rowData[3];
                 let entryDescription = rowData[4].split(" - ").map(p => "<div>" + p + "</div>").join("");
                 let entryIcon = rowData[5];
-                
-                return `
-                <div class="grid-entry">
+
+                return `<div class="grid-entry">
                     <div class="gap-10 align-center">
                         <div>
-                            <img onclick="setLightbox(this)" class="profile-grid-img" src="media/${ entryImageUrl }">
+                            <img onclick="setLightbox(this)" class="profile-grid-img" src="${ entryImageUrl }">
                         </div>
                         <div>
                             <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISODateString(entryBirthdate) + "</span>" }</div>
@@ -701,7 +633,7 @@ function interpreter(argValue) {
                     <div>
                         <div class="entry-description">${ textFormat(entryDescription) }</div>
                     </div>
-                    ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="media/${ entryIcon }"></div>` : "" }
+                    ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="${ entryIcon }"></div>` : "" }
                 </div>`;
             })
             return `<div class="profile-grid">${ data.join("") }</div>`;
@@ -829,23 +761,12 @@ function interpreter(argValue) {
             chunk = chunk.slice(chunk.indexOf(" ") + 1);
             const headingId = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replaceAll("*" ,"");
             
-            if (headingTag == "h4") {
-                return `<h4 id="${ headingId }" class="heading">${ textFormat(chunk) }</h4>`;
-            }
-            if (headingTag == "h1" && firstHeading) {
-                firstHeading = false;
-                if (document.title == "") {
-                    document.title = chunk;
-                }
-                return `<h1 id="${ headingId }" class="heading toc-include first-heading">${ textFormat(chunk) }</h1>`;
-            }
-            firstHeading = false;
             return `<${ headingTag } id="${ headingId }" class="heading toc-include">${ textFormat(chunk) }</${ headingTag }>`;
         }
 
         /* ----------------------------------- see also ----------------------------------- */
         if (chunk.startsWith("||see-also")) {
-            document.getElementById("article-footer").appendChild(document.createElement("div")).innerHTML = "<div>The content on this page was also posted in other places:</div>" + chunk.split("\n").slice(1)
+            document.getElementById("page-footer").appendChild(document.createElement("div")).innerHTML = "<div>The content on this page was also posted in other places:</div>" + chunk.split("\n").slice(1)
                 .map( line => {
                     const url = line .replace(/substack\|(\w+)/, "https://irisembury.substack.com/p/$1")
                         .replace(/tumblr\|(\d+)/, "https://irisembury.tumblr.com/post/$1");

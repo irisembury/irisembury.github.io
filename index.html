@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Iris Embury</title>
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
+        .c3 {
+            padding-top: 0;
+        }
         #article h3 {
             color: var(--grey-7) !important;
             text-underline-offset: 8px;
@@ -33,48 +35,68 @@
         .rows .row:hover {
             border-color: var(--grey-c) !important;
         }
+        .yt-date { display: none; }
+
+        .index-plugs a {
+            border: 1px solid var(--grey-c);
+            background: linear-gradient(var(--c3-bg) 45%, var(--grey-f) 65%);
+            border-radius: 3px;
+            padding: 4px 12px 4px 9px;
+            display: inline-block;
+            text-decoration: none !important;
+        }
+        .dark .index-plugs a {
+            background: linear-gradient(var(--grey-f) 44%, var(--c3-bg) 66%);
+            border-color: #373737;
+        }
+        .index-plugs a + a {
+            margin-left: 1px;
+        }
+        .index-plugs a svg {
+            vertical-align: -4px;
+            margin-right: 1px;
+        }
+        .index-plugs a:hover {
+            border-color: var(--grey-a);
+        }
+
+        .blog-name { line-height: 1; margin-left:2px; font-family:Constantia,Georgia,serif; font-size:30px; }
+            .blog-name span { margin-left: -6px; color: #6a68ca; }
+            .dark .blog-name span { margin-left: -0.1em; color: #6c65a4; }
     </style>
 </head>
 <body>
+
+||image-span
+assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg
+
+\
+<div style="line-height: var(--lh-ui); font-family: var(--ff-ui); font-size: var(--fs-ui); margin:8px 1rem; display:flex; justify-content:space-between;">
+<div>
+    <div><img width="100" height="100" src="assets/grandchamp.png" style="margin-top:-64px; width:100px; height:100px; border:2px solid var(--grey-e); border-radius:2px;"></div>
+    <div style="margin-top: 8px;"><span class="blog-name">Iris <span>Embury</span></span></div>
+</div>
+<div class="index-plugs">
+    <a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><svg title="Bluesky"" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 57" width="18" height="18"><path fill="var(--c-bluesky)" d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805ZM50.127 3.805C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745Z"></path></svg> Bluesky</a>
+    <a title="Tumblr" href="https://irisembury.tumblr.com/"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg> Tumblr</a>
+    <a title="Discord" href="https://discord.gg/fGdV7x5dk2"><svg title="Discord" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16"><path fill="var(--c-discord)" d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/></svg> Discord</a>
+    <a title="Substack" href="https://irisembury.substack.com"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg> Substack</a>
+    <a title="Twitter" href="https://x.com/irisembury"><svg title="Twitter/X" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="-1 -1 25 25"><path fill="var(--c-twitter)" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg> Twitter</a>
+</div>
+</div>
 
 ---
 
 ### Recent uploads
 
 ||yt-gallery sort4
-it's ok guys we don't have to fix them | NSajyW3l_vE | 2025-12-15
+The sources of derangement | NQPbvAdfsMY | 2025-12-19
+We don't have to fix them | NSajyW3l_vE | 2025-12-15
 In the fight for democracy, be wary of the far left | 7mKdVYVdqKs | 2025-12-10
 What even is therapy? | -lboA4v0Dvg | 2025-12-09
 Why do people say "ax" instead of ask? | c2StWa6z1zE | 2025-11-30
 today I learned how Danish people make numbers | nHdDW8ydjjc |2025-11-28
 Immigration | 6MEkIZQFV6w | 2025-11-23
-Marjorie Taylor Greene | Ak2DnmW6Vlg | 2025-11-21
-What is prejudice? | BzahVdIEYpA | 2025-11-03
-Notes on India | Pz0Oq1rb14E | 2025-10-24
-Notes on Saudi Arabia | 9RhaYU21Qag | 2025-10-17
-Jon Stewart is part of the problem | yYF2n0PDDRE | 2025-10-11
-The internet's latest over-reaction \| Riyadh Comedy Festival | XXXisl9wOC0 | 2025-10-08
-Ilhan Omar makes waves after Charlie Kirk shooting | JDseBrbtp6E | 2025-10-04
-The path of normalization | TYoe1jxBYPY | 2025-09-19
-Why do people like Trump? | tcF0f-Dtgic | 2025-09-14
-My thoughts after the Charlie Kirk assassination | AjPF8pGv37U | 2025-09-12
-How to fix America in a few simple steps | iFHmA32NZAs | 2025-08-22
-Unpacking lies about Ilhan Omar | zgE4L-e9yg0 | 2025-09-03
-What just happened? A recap of all Trump news from Jan 20 to July 4 | n355Q15CX8g | 2025-08-18
-The problems with Pierre Poilievre | BZ-ztjpRchE | 2025-07-11
-The default politician is a normal white guy | GDjIBEq16zY | 2025-03-29
-Do I pass? \| Transsexual diaries | tCh_wJz9M-E | 2025-03-20
-What is with Trump and Russia? | G-sLZaP7oOA | 2025-03-18
-Reflections on Pride 2025 (in Toronto) | PL3u9OOGxew | 2025-06-05
-I don't like fireworks | tzJEv4jjKHM | 2025-06-23
-Rorschach tests | K3A1g1274Kc | 2025-08-20
-Are trans people more likely to be sex offenders? | ZKglpuBen-w | 2025-07-12
-Are trans people delusional? | o_t7xQJSYHk | 2025-06-28
-Trans fetishism & politics | vk57rvM1zWo | 2025-04-02
-Sex, gender, & transsexuals | Hgh3r7gJoWU | 2025-05-29
-Lies people still believe \| Donald Trump, Elizabeth Warren, Hillary Clinton | LPQD6sxlWOs | 2025-04-09
-Bernie Sanders and the military industrial complex | yt6O0OMdIT0 | 2025-03-22
-Types of masculinity | lOQSqMhjwZY | 2025-06-12
 
 ---
 
@@ -104,7 +126,7 @@ Types of masculinity | lOQSqMhjwZY | 2025-06-12
 [Sex, gender, & transsexuals](page/4/index.html) | 2024-11-19
 [Fetishism & politics](page/13/index.html) | 2024-11-14
 [Types of masculinity](page/12/index.html) | 2024-11-08
-[My anime reviews](page/11/index.html) | 2024-11-02
+[Anime reviews](page/11/index.html) | 2024-11-02
 [Poor things (2023 film)](page/2/index.html) | 2024-10-31
 [The trans prison stats argument](page/9/index.html) | 2024-10-19
 
@@ -116,7 +138,7 @@ Types of masculinity | lOQSqMhjwZY | 2025-06-12
 [Bluesky user directory](page/8/index.html)
 [Public record](page/25/index.html)
 [5-letter thing](page/17/index.html)
-[Artwork I often use](page/21/index.html)
+[The artwork I often use](page/21/index.html)
 [List of all movies I've seen](page/5/index.html)
 [Soundboard](page/27/index.html)
 [Discord bot custom commands](page/35/index.html)

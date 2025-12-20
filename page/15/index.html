@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="toc" lang="en">
+<html class="toc-included" lang="en">
 <head>
     <title>Data structures & algorithms</title>
     <link rel="stylesheet" href="../../assets/main.css">
@@ -64,7 +64,7 @@ As the purpose of big-O is to *briefly summarize* how an algorithm *scales* with
 Quick visualization of common big-O values:
 
 ||image-span
-big-o-graph.png
+media/big-o-graph.png
 
 The big-O values of some common algorithms:
 
@@ -285,7 +285,7 @@ The last few algorithms covered (radix, shell, and heap) were practically made o
 ## Selection sort
 
 ||image-float
-selection-sort.png|selection sort visualization
+media/selection-sort.png|selection sort visualization
 
 This is arguably the simplest sort algorithm. Look through the array to find the smallest element. Swap it into the first index. Then find the next smallest. Swap it into the second index. And so on, until the array is sorted.
 
@@ -310,7 +310,7 @@ void selectionSort(int[] arr, int len) {
 ## Bubble sort
 
 ||image-float
-bubble-sort.png|bubble sort visualization
+media/bubble-sort.png|bubble sort visualization
 
 This inefficient sort method sweeps through the array and swaps each pair of items that are out of order, i.e. if the item on the left should come first. By doing this repeatedly, everything eventually falls into place.
 
@@ -343,7 +343,7 @@ In this algorithm, each item is shifted rightward while it's greater than the it
 To visualize this, many people suggest imagining the array is split into two parts, divided at the iterator: the left side is effectively an ordered subarray, into which we're inserting the items from the right---hence the name.
 
 ||image-float
-insertion-sort.png|insertion sort visualization
+media/insertion-sort.png|insertion sort visualization
 
 ||codeblock cpp
 void insertionSort(int arr[], int len) {
@@ -453,7 +453,7 @@ This recursively splits an array in half until the resulting halves are only one
 But there's no actual splitting or merging. That's all conceptual. We're really just defining the bounds of a bunch of imaginary subarrays, like in an insertion sort, or the bounds of a binary search.
 
 ||image-span
-merge-sort.png|Merge sort visualization|Merge sort visualization
+media/merge-sort.png|Merge sort visualization|Merge sort visualization
 
 This runs faster than insertion sort and has a complexity of O(N<sup>2</sup>). However, it uses some extra memory, because it allocates a parallel array in which to log the sorted data until it's complete.
 
@@ -521,12 +521,12 @@ void mergeSort(int arr[], int len) {
 The merge call is what's happening in each sorting step in the process diagram:
 
 ||image-span
-merge-sort-expl-1.png
+media/merge-sort-expl-1.png
 
 For any given splitUp instance, the first splitUp call, including all further recursion that occurs inside it, must finish before the second one even begins. This means in the process diagram, the entire left side reaches the end before the entire right side even begins.
 
 ||image-span
-merge-sort-expl-2.png
+media/merge-sort-expl-2.png
 
 This can be manually tracked by printing the array inside the merge function. Half-way through the algorithm, the left side has been sorted while the right side is still the same as it was at the very start.
 
@@ -551,17 +551,17 @@ In the lines after the one highlighted, you can track as it sorts the right side
 The way this algorithm runs is less linear than some visualizations can make it appear, as it doesn't create the 'sorted' array from left to right in the way most other algorithms do, but flows down the left side until the selection only has one item, like so:
 
 ||image-span
-merge-sort-expl-3.png
+media/merge-sort-expl-3.png
 
 Then it snaps back to the previous split call that still had other children and continues from there:
 
 ||image-span
-merge-sort-expl-4.png
+media/merge-sort-expl-4.png
 
 A full roadmap of the actual function calls to bring us from the initial array state to the sorted array at the end would thus look like this:
 
 ||image-span
-merge-sort-expl-5.png
+media/merge-sort-expl-5.png
 
 ## Quick sort
 
@@ -577,12 +577,12 @@ There's been many quick sort variations over the years and the code to implement
 A popular approach to implement the concept in teaching material is the Lomuto partition scheme. It simply uses a for-loop to scan the array left to right, and when it finds a value greater than the pivot it pushes that value to the left side. It's not the most optimized method, but it was used because of how easy it is to follow.
 
 ||image-span
-quicksort-lomuto.png|A visualization of the Lomuto quicksort scheme
+media/quicksort-lomuto.png|A visualization of the Lomuto quicksort scheme
 
 The original quicksort described by Tony Hoare used a more complex but ultimately superior method that runs two iterators through the array in opposite directions. They pause when they find a value that doesn't belong on their side (i.e. if the left value is greater than the pivot or the right value is less than it), and when they're both paused their values are swapped. This repeats until the iterators collide, at which point partitioning is done.
 
 ||image-span
-quicksort-hoare.png|A visualization of the Hoare quicksort scheme
+media/quicksort-hoare.png|A visualization of the Hoare quicksort scheme
 
 ||codeblock cpp
 // instead of writing this out each time just assume I have this:
@@ -687,24 +687,24 @@ What are the implications of this?
 The popular way to visualize a partition step shows the pivot being moved between partitions:
 
 ||image-span
-qsort-step-1.png
+media/qsort-step-1.png
 
 But here, that's not really what's happening. The array is only being *mostly* partitioned, except for the pivot value and any of its duplicates, which temporarily appear out of place (until they're sorted by the subsequent, recursive partition calls).
 
 What the code would actually do is this:
 
 ||image-span
-qsort-step-2.png
+media/qsort-step-2.png
 
 That could make it seem like we're partitioning around pivot+1, or that the rule changed to placing any item less than or equal to the pivot on the left---but not quite, as any additional instances of the pivot value would always be swapped to end up opposite the side they started on.
 
 ||image-span
-qsort-step-3.png
+media/qsort-step-3.png
 
 It works out in the end because any instance of the pivot value that ends up on the left will be the highest value in that section and thus be pushed to the right when it's partitioned (and vice versa).
 
 ||image-span
-qsort-step-4.png
+media/qsort-step-4.png
 
 A modified version that does include the final swap:
 
@@ -1164,7 +1164,7 @@ This calculation is done for us by the standard bracket notation, `arr[i]`. The 
 A linked list, by contrast, is a **noncontiguous** reservation in memory. The items aren't right next to each other, so we can't get from one to the next by adding to our pointer's memory location. Instead, each item is wrapped in a container that holds a pointer to the next item in the list (and possibly to the previous item as well). This container is called a **node**, and a linked list is really just an object that holds and manages a chain of nodes.
 
 ||image-span
-linked-list-vs-array.png|An attempt at conceptualizing the difference between arrays and a linked list
+media/linked-list-vs-array.png|An attempt at conceptualizing the difference between arrays and a linked list
 
 A linked list is like a book that says "to continue the story, go to x page and carry on" at the end of each page, while an array is just like a normal book where you always turn to the next page.
 
@@ -1179,7 +1179,7 @@ Linked lists are often just preferred whenever random access doesn't matter, but
 We conceptualize lists as being **stacks** or **queues**. These are called *abstract data types*, which can be a confusing term for programmers because they're neither abstract (as in a base class that you can't substantiate before extending it) nor an actual data type (at least, not usually). It's another way of design a **design pattern**---or mostly broadly, you could just call it a concept.
 
 ||image-span
-stack-vs-queue.png|A linked list that's organized as a stack vs. a queue
+media/stack-vs-queue.png|A linked list that's organized as a stack vs. a queue
 
 A **stack** is like setting items on top of each other in a literal stack of paper. When you add a new item to the list, you place it on top. And when you want to remove an item from the list, you take it from the top as well. We refer to this access point as the **top**, because that name fits with the metaphor.
 
@@ -1205,7 +1205,7 @@ In both cases, the word 'linked' is an adjective describing 'list', whereas 'sin
 \</div>
 
 ||image-span
-singly-doubly-linked.png|A visualization of singly- and doubly-linked lists.
+media/singly-doubly-linked.png|A visualization of singly- and doubly-linked lists.
 
 Although the directions are only conceptual, the convention is to always name the pointer 'next' for a singly-linked list. The name 'previous' should be reserved for doubly-linked lists.
 
@@ -1218,7 +1218,7 @@ Linked lists can also be made **double-ended**, meaning they have two "entry poi
 A list can also be made **circular**, meaning the last node points back to the first, instead of just pointing to null (and vice versa for in a doubly-linked list).
 
 ||image-span
-circular-linked-list.png|A circular doubly-linked list
+media/circular-linked-list.png|A circular doubly-linked list
 
 ||table this .col-1 { background:var(--c-light-blue-bg); }
 ||th Terminology:
@@ -1356,15 +1356,15 @@ In a queue, the root node's `.next` starts null. Then when you add a second node
 So `next` always means pointing away from your access point (top in a stack, front in a queue). And in a stack, `next` leads away from the root node, whereas in a queue `next` goes towards it.
 
 ||captioned-gallery
-stack-structure.png|A stack structure with four nodes
-stack-push.png|Adding a node to a stack
-stack-structure.png|A stack structure with four nodes
-queue-enqueue.png|Adding a node to a queue
+media/stack-structure.png|A stack structure with four nodes
+media/stack-push.png|Adding a node to a stack
+media/stack-structure.png|A stack structure with four nodes
+media/queue-enqueue.png|Adding a node to a queue
 
 #### Testing some code
 
 ||image-float
-code-test-1.png
+media/code-test-1.png
 
 ||codeblock cpp Stack Banana
 int main()
@@ -1382,7 +1382,7 @@ int main()
     }
 
 ||image-float
-code-test-1.png
+media/code-test-1.png
 
 ||codeblock cpp Queue
 int main()
@@ -1436,7 +1436,7 @@ int main()
 }
 
 ||image-span
-code-test-1.png
+media/code-test-1.png
 
 Same printout as before, but this time the list is still intact afterwards.
 
