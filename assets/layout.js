@@ -1,22 +1,10 @@
 "use strict"
 const HTML = document.documentElement;
 const leftRightArrowsIconSvg = `<svg style="transform:rotate(90deg)" aria-hidden="true" focusable="false" class="octicon octicon-arrow-switch" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>`;
-const fontOptions = `Arial
-Consolas
-Faculty Glyphic
-Georgia
-Inter
-Lora
-Merriweather
-Open Sans
-Roboto
-Roboto Slab
-Segoe UI
-Trebuchet MS`.split("\n").filter(f => f.length > 2).map(o => {o = o.trim(); return `<option value="${ o }">${ o }</option>`} );
+const fontOptions = "Georgia, Lora, Roboto, Trebuchet MS".split(",").map(o => o.trim()).filter(o => o.length > 2).map(o => `<option value="${ o }">${ o }</option>` );
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
-    const indexSecondary = document.getElementById("index-secondary") != null;
     const pathToRoot = index ? "" : "../../";
     document.head.innerHTML += "<link rel=\"stylesheet\" href=\"" + pathToRoot + "assets/fonts.css\">";
     
@@ -24,8 +12,15 @@ window.addEventListener("load", function() {
     `<nav class="main-nav no-select">
         <span><div class="page-name-display text-select"><a href="${ pathToRoot }index.html">Index</a> &#47; ${ document.title || "This page" }</div></span>
         ${ index ? "" : `<span class="hide-at-top"><span style="height: 9px; border-left: 1px solid currentcolor; display: inline-block;"></span></span> <a class="to-top-button hide-at-top">Jump to Top</a>` }
-        <a style="margin-left:auto" class="hamburger icon"><svg class="Xy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></a>
+        <a style="margin-left:auto" class="gear-icon icon"><svg class="Xy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></a>
     </nav>
+    <div class="c1">
+        <div class="c3">
+            <div id="article">${ document.body.innerHTML }</div>
+            <div id="page-footer">${ index ? "" : `<div><a href="../../index.html">Link back to index (front page)</a></div>` }</div>
+        </div>
+        ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
+    </div>
     <div class="menu hidden">
         <h3>Display preferences:</h3>
         <table>
@@ -41,28 +36,25 @@ window.addEventListener("load", function() {
                 </tr>
             </tbody>
         </table>
-        ${ index ? "" : `<hr><div class="menu-switch-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
-        ${ HTML.classList.contains("toc-included") ? `<div class="menu-switch-right"><label for="show-toc">Show table of contents:</label><input type="checkbox" class="menu-checkbox" checked id="show-toc"></div>` : "" }
+        ${ index ? "" : `<hr><div class="menu-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
+        ${ HTML.classList.contains("include-toc") ? `<div class="menu-right"><label for="show-toc">Show table of contents:</label><input type="checkbox" class="menu-checkbox" checked id="show-toc"></div>` : "" }
         <hr>
         <h3>Fonts override:</h3>
         <table id="fonts">
             <tbody>
-                <tr>
-                    <td>Headings:</td>
+                <tr><td>Headings:</td>
                     <td><select class="menu-select" id="heading-font-select">
                         ${ fontOptions }
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td>Body:</td>
+                <tr><td>Body:</td>
                     <td><select class="menu-select" id="body-font-select">
                         ${ fontOptions }
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td>Tables:</td>
+                <tr><td>Tables:</td>
                     <td><select class="menu-select" id="table-font-select">
                         ${ fontOptions }
                         </select>
@@ -70,25 +62,16 @@ window.addEventListener("load", function() {
                 </tr>
             </tbody>
         </table>
-        <div class="menu-switch-right"><span class="pseudo-link" onclick="menuRestoreDefaults()">restore defaults</span></div>
+        <div class="menu-right"><span class="pseudo-link" onclick="menuRestoreDefaults()">restore defaults</span></div>
         <hr>
-        <span style="color:var(--grey-5)">These options are saved in session storage, not cookies, meaning they&rsquo;re cleared automatically when you close your browser.</span>
-    </div>
-    <div class="c1">
-        ${ HTML.classList.contains("toc-included") ? `<nav id="toc"></nav>` : "<div></div>" }
-        <div class="c2">
-            <div class="c3">
-                <div id="article">${ document.body.innerHTML }</div>
-                <div id="page-footer">${ index ? "" : `<div><a href="../../index.html">Link back to index</a></div>` }</div>
-            </div>
-        </div>
+        <span class="menu-bottom">These options are saved in session storage, not cookies, meaning they&rsquo;re cleared automatically when you close your browser.</span>
     </div>
     <div class="lb-container">
         <div id="lb-top-left"></div>
         <div class="lb-wrapper"><img id="lightbox"></div>
         <div class="lb-bottom-panel"><div id="lb-caption"></div></div>
     </div>
-    <style id="--custom-style"></style>`;
+    <style id="user-styles"></style>`;
 
     HTML.classList.add("layout");
     Array.from(document.getElementById("fonts").getElementsByTagName("option")).forEach(o => o.style.fontFamily = `"${ o.value }",system-ui` );
@@ -100,28 +83,28 @@ window.addEventListener("load", function() {
         setLightbox("close")
     })
     
-    Array.from(document.getElementsByClassName("ie-expand")).forEach(e => {
-        e.classList.add("collapsed")
-        e.title = "Click to expand this section";
+    Array.from(document.getElementsByClassName("quote-expand")).forEach(quoteExpandElement => {
+        quoteExpandElement.classList.add("collapsed")
+        quoteExpandElement.title = "Click to expand";
         
-        e.addEventListener("click", function() {
+        quoteExpandElement.addEventListener("click", function() {
             this.classList.remove("collapsed");
-            e.title = "";
+            quoteExpandElement.title = "";
         })
-        let b = e.appendChild(document.createElement("div"));
-        b.innerHTML = `<div class="collapse-button-container"><input type="button" class="flat-button" value="minimize this"></div>`;
-        b.querySelector(".flat-button").addEventListener("click", function(f) {
-            e.classList.add("collapsed");
-            e.title = "Click to expand this section";
-            f.stopPropagation();
-            if (e.getBoundingClientRect().top + window.scrollY < pageYOffset) {
-                e.scrollIntoView({ behavior: "smooth" });
+        let btnContainer = quoteExpandElement.appendChild(document.createElement("div"));
+        btnContainer.innerHTML = `<div class="collapse-button-container"><input type="button" class="flat-button" value="minimize this"></div>`;
+        btnContainer.querySelector(".flat-button").addEventListener("click", function(click) {
+            quoteExpandElement.classList.add("collapsed");
+            quoteExpandElement.title = "Click to expand";
+            click.stopPropagation();
+            if (quoteExpandElement.getBoundingClientRect().top + window.scrollY < pageYOffset) {
+                quoteExpandElement.scrollIntoView({ behavior: "smooth" });
             }
         })
     })
     
     /* ---------------------- setting up menu: ---------------------- */
-    const hamburger = document.querySelector(".hamburger");
+    const gearIcon = document.querySelector(".gear-icon");
     const menu = document.querySelector(".menu");
     
     function menuToggle(option) {
@@ -132,9 +115,9 @@ window.addEventListener("load", function() {
             menu.classList.toggle("hidden", !menu.classList.contains("hidden"));
         }
     }
-    hamburger.addEventListener("click", menuToggle);
+    gearIcon.addEventListener("click", menuToggle);
     window.addEventListener("click", function(e) {
-        if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+        if (!menu.contains(e.target) && !gearIcon.contains(e.target)) {
             menuToggle("close");
         }
     })
@@ -175,21 +158,19 @@ window.addEventListener("load", function() {
         });
     }
     /* ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- ---- */
-    if (HTML.classList.contains("toc-included")) {
+    if (HTML.classList.contains("include-toc")) {
         document.getElementById("show-toc").addEventListener("change", function() {
             if (this.checked) {
-                HTML.classList.add("toc-included");
-                window.addEventListener("resize", tocWidthCheck);
+                HTML.classList.add("include-toc");
                 window.addEventListener("scroll", tocHighlightUpdateAttempt);
             } else {
-                HTML.classList.remove("toc-included");
-                window.removeEventListener("resize", tocWidthCheck);
+                HTML.classList.remove("include-toc");
                 window.removeEventListener("scroll", tocHighlightUpdateAttempt);
             }
         });
         const toc = document.getElementById("toc");
-        const headings = Array.from(document.getElementById("article").getElementsByClassName("toc-include"));
-        toc.innerHTML = `<div class="toc-row"><a onclick="scrollToTop()" style="cursor: pointer;">(Top)</a></div>` + headings.slice(1).map ( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
+        const headings = Array.from(document.getElementById("article").getElementsByClassName("--for-toc"));
+        toc.innerHTML = `<h3>Table of contents</h3><div class="toc-row"><a onclick="scrollToTop()" style="cursor: pointer;">(Top)</a></div>` + headings.slice(1).map ( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
         
         const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
         let lastHeading = -1;
@@ -256,8 +237,12 @@ window.addEventListener("load", function() {
                 toc.classList.toggle("hide-mask", (toc.scrollTop + 30 > toc.scrollHeight - toc.offsetHeight));
             }
         }
-        toc.addEventListener("scroll", tocFadeCheck);
         toc.addEventListener("resize", tocFadeCheck);
+        toc.addEventListener("scroll", tocFadeCheck);
+        window.addEventListener("scroll", tocHighlightUpdateAttempt);
+        setTimeout(() => {
+            tocHighlightUpdateAttempt();
+        }, 100);
     }
     /* ---- ---- ---- ---- ---- /table of contents ---- ---- ---- ---- ---- ---- ---- */
 
@@ -328,7 +313,6 @@ function setBrightness(setValue) {
     localStorage.setItem("brightness", brightness);
     document.getElementById("brightness-select").value = brightness;
 }
-function fontName(x) { if (x == "Georgia") return "\"--GPN\",\"Georgia\",sans-serif"; return x; }
 function updateFonts() {
     let headingFont = localStorage.getItem("headingFont") || "Lora";
     let bodyFont = localStorage.getItem("bodyFont") || "Georgia";
@@ -336,7 +320,7 @@ function updateFonts() {
     document.getElementById("heading-font-select").value = headingFont;
     document.getElementById("body-font-select").value = bodyFont;
     document.getElementById("table-font-select").value = tableFont;
-    document.getElementById("--custom-style").innerHTML = ` body {
+    document.getElementById("user-styles").innerHTML = `body {
         --ff-heading: ${ headingFont=="Georgia" ? "Georgia Pro,Georgia":headingFont },sans-serif;
         --ff-article: ${ bodyFont=="Georgia" ? "Georgia Pro Digits,Georgia":bodyFont },sans-serif;
         --ff-table: ${ tableFont=="Georgia" ? "Georgia Pro Digits,Georgia":tableFont },sans-serif;
@@ -540,9 +524,7 @@ function interpreter(argValue) {
             let firstLine = lines.shift().substring("||codeblock".length).trim();
             if (firstLine) {
                 let words = firstLine.split(" ");
-                console.log(words)
                 syntaxClass = words.shift();
-                console.log(words)
                 customKeywords = words;
             }
             
@@ -580,7 +562,7 @@ function interpreter(argValue) {
         /*
             [text to be displayed](https://irisembury.github.io/)
         */
-        chunk = chunk.replace(/\[(.*?)\]\((.+?[^\\])\)/g, (match, displayText, address) => {
+        chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, address) => {
             address = address.replaceAll("\\)", ")");
             
             let link;
@@ -643,10 +625,6 @@ function interpreter(argValue) {
         if (chunk.startsWith("||table")) {
             let rows = chunk.split("\n");
             let firstRow = rows.shift().substring("||table".length).trim();
-            let tableHead = "";
-            if (rows[0].startsWith("||th")) {
-                tableHead = rows.shift().substring("||th".length).trim();
-            }
             /* make tbody cells */
             let tableWidth = 1;
             for (let r = 0; r < rows.length; r += 1) {
@@ -661,26 +639,13 @@ function interpreter(argValue) {
                 }
                 rows[r] = `<tr class="row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</tr>`;
             }
-            /* if thead was included, construct it here: */
-            if (tableHead) {
-                tableHead = tableHead.replace(/\\\|/g, "&verbar;").split("|");
-                if (tableHead.length == 1) {
-                    /* for giving the table a title ("||th List of releases") */
-                    tableHead = tableHead[0];
-                    tableHead = `<thead><th class="toc-include" id="${ tableHead.replaceAll(" ", "_").replaceAll("*", "") }" colspan="${ tableWidth }">${ textFormat(tableHead) }</th></thead>`;
-                }
-                else {
-                    /* for labelling columns ("||th Date | Name | Category") */
-                    tableHead = `<thead>${ tableHead.map(c => `<th class="cell">${ c }</th>`).join("") }</thead>`;
-                }
-            }
             /* if ||table declaration had styling included: */
             let customTableStyle = "";
             if (firstRow.replace(/\s/g, "").length > 1) {
                 customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-table-"+tableNum).replace(/;/g, " !important;") }</style>`;
             }
 
-            let table = `${ customTableStyle }<div class="table-wrapper"><table class="auto-table auto-table-${ tableNum }">${ tableHead }<tbody>${ rows.join("") }</tbody></table></div>`;
+            let table = `${ customTableStyle }<div class="table-wrapper"><table class="auto-table auto-table-${ tableNum }"><tbody>${ rows.join("") }</tbody></table></div>`;
             tableNum += 1;
 
             return table;
@@ -757,11 +722,14 @@ function interpreter(argValue) {
         
         /* ----------------------------------- headings ----------------------------------- */
         if (/^\#{1,4} /.test(chunk)) {
-            const headingTag = "h" + chunk.indexOf(" ");
-            chunk = chunk.slice(chunk.indexOf(" ") + 1);
-            const headingId = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replaceAll("*" ,"");
-            
-            return `<${ headingTag } id="${ headingId }" class="heading toc-include">${ textFormat(chunk) }</${ headingTag }>`;
+            const hType = chunk.indexOf(" ");
+            const hTag = "h" + hType;
+            chunk = chunk.slice(hType + 1);
+            const headingId = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g ,"");
+
+            const hClass = hType < 4 ? "article-heading --for-toc" : "article-heading";
+            const heading = `<${ hTag } id="${ headingId }" class="${ hClass }">${ textFormat(chunk) }</${ hTag }>`;
+            return heading;
         }
 
         /* ----------------------------------- see also ----------------------------------- */

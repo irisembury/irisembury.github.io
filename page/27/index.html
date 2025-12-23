@@ -11,6 +11,7 @@
         gap: 5px 5px;
         font-size: 14px;
         font-family: var(--ff-ui);
+        margin: 0.5em;
     }
     .sb-btn {
         display: flex;
@@ -40,21 +41,19 @@
         cursor: pointer;
         border: 1px solid var(--grey-a);
         padding: 2px 8px;
-        background-color: var(--c-pale-red);
         font-size: 14px;
+        background-color: var(--c-light-red-bg);
+        color: var(--grey-5);
     }
         .stop-btn:hover {
-            background-color: var(--grey-e);
-            border-color: var(--grey-8);
             cursor: pointer;
         }
     </style>
 </head>
 <body>
+# Soundboard
 
-Soundboard
-
-\<div class="flex-end stick-below-nav"><span class="stop-btn no-select" onclick="stopSounds()">❌ Stop all sounds (esc)</span>
+\<div class="flex-end stick-below-nav"><span class="stop-btn no-select" onclick="stopSounds()">❌ Stop all sounds (escape key)</span>
 </div>
 
 \<div id="soundboard">

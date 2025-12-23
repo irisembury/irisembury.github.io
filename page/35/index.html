@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="include-toc">
 <head>
     <title></title>
     <link rel="stylesheet" href="../../assets/main.css">
@@ -15,15 +15,15 @@
 <body>
 # Discord bot custom commands
 
+I've tried all the common Discord moderation bots. **YAGPDB**, a name that came from **Y**et **A**nother **G**eneral **P**urpose **D**iscord **B**ot, ended up being my favourite. **Dyno** is great too if you want a general-purpose one, and is what I'd recommend for most people. They both do everything I want, and they both let you write custom commands. Dyno's is easier to learn. Yag is trickier, but lets you do a lot more once you figure it out.
+
 # YAGPDB
 
 [https://yagpdb.xyz/](https://yagpdb.xyz/)
 
-I've tried all the common Discord moderation bots, and YAGPDB, for **Y**et **A**nother **G**eneral **P**urpose **D**iscord **B**ot, ended up being my favourite. Dyno is also a great general-purpose one, and perhaps what I'd recommend for most people. They both let you write custom commands, and Dyno's is fairly easy to learn, whereas Yag is a lot trickier to figure out but lets you do a lot more.
+These are the custom commands I use on our server:
 
-Here's the custom commands I use on our server.
-
-### Mod ping listener
+## Mod ping listener
 
 Trigger type: Contains | Trigger: <@&1226674474427088947> (fill in the role ID of your target role)
 
@@ -54,7 +54,7 @@ This creates a log entry when users on the server ping the @mod role.
     {{ sendMessage $alert_channel (print "```" $report_message_contents $report_meta "```" $report_link ) }}
 {{ end }}
 
-### Vetting handler
+## Vetting handler
 
 Trigger type: Regex. | Trigger: leave this field blank, causing it to trigger on all messages
 
@@ -89,7 +89,7 @@ I also set up a second channel called #vetting-log that logs what people enter i
     {{ deleteMessage nil $x 4 }}
 {{ end }}
 
-### Echo
+## Echo
 
 Trigger type: Command (mention/cmd prefix) | Trigger: echo
 

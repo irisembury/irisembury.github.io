@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="toc-included" lang="en">
+<html class="include-toc" lang="en">
 <head>
     <title>Data structures & algorithms</title>
     <link rel="stylesheet" href="../../assets/main.css">
@@ -20,7 +20,8 @@
         background-color: var(--c-light-green-bg);
         border: 1px solid var(--grey-a);
         font-size: 0.95em;
-        font-family: var(--ff-ui);
+        font-family: var(--ff-table);
+        color: var(--grey-5);
     }
     
     
@@ -177,14 +178,14 @@ Shifting by multiple places is the same as doubling or halving that many times. 
 
 \<div class="align-center gap-15">
 
-||table this tr:nth-child(n+2) { font-family: var(--ff-monospace); } this .col-1 { background: var(--c-light-blue-bg); } this th:first-child { border-right: 1px dotted var(--grey-8); }
-||th shifting by x places | is the same as multiplying
+||table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
+shifting by x places | is the same as multiplying
 << 1 | * 2
 << 2 | * 2<sup>2</sup> (i.e. \*2\*2)
 << 3 | * 2<sup>3</sup> (i.e. \*2\*2\*2)
 
-||table this tr:nth-child(n+2) { font-family: var(--ff-monospace); } this .col-1 { background: var(--c-light-blue-bg); } this th:first-child { border-right: 1px dotted var(--grey-8); }
-||th shifting by x places | is the same as multiplying
+||table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
+shifting by x places | is the same as multiplying
 >> 1 | / 2
 >> 2 | / 2<sup>2</sup> (i.e. \*2\*2)
 >> 3 | / 2<sup>3</sup> (i.e. \*2\*2\*2)
@@ -204,8 +205,9 @@ To get 20, you'd need to actually say `q = q << 2`;
 
 The two main search algorithms are simply linear or binary search. They both look through an array and return the index of the found item, or -1 if not found.
 
-||table this .col-1 { background:var(--c-light-blue-bg); }
-||th Terminology:
+#### Terminology:
+
+||table
 key | the item the algorithm is searching for
 
 ## Linear search
@@ -272,8 +274,8 @@ This is an O(log n) algorithm. To search a 10,000,000-length array with linear s
 
 This section covers the following:
 
-||table this { margin-inline: auto; } this th { background: var(--c-light-blue-bg); } this tr:nth-child(n+4) .col-1 { border: none; } this td { padding-inline: 20px; }
-||th basic sorts | more advanced
+||table this .row-1 { font-weight: 700; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+5) .col-1 { border: none; } this td { padding-inline: 20px; } this { margin-inline: auto; }
+basic sorts | more advanced
 bubble sort | merge sort
 selection sort | quick sort
 insertion sort | radix sort
@@ -912,19 +914,23 @@ This is an interesting algorithm that sorts values without ever directly compari
 
 To be sure, you'll probably never use this. I'm just including it for fun.
 
-Let's take this example array and throw it into a bucket based on the rightmost digit:<br>51, 45, 9, 37, 48, 72, 19, 16, 7, 88, 92, 12, 30, 36, 3, 42, 96, 25
+Let's take this example array and throw it into a bucket based on the rightmost digit:
+<br>
+51, 45, 9, 37, 48, 72, 19, 16, 7, 88, 92, 12, 30, 36, 3, 42, 96, 25
 
-||table this { margin-inline: auto; } this td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
-||th 0|1|2|3|4|5|6|7|8|9
+||table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+0|1|2|3|4|5|6|7|8|9
 30|51|72|3||45|16|37|48|9
 ||92|||25|36|7|88|19
 ||12|||||||96
 ||42
 
-Then you just grab those numbers in order, and repeat for the next column (leftward):<br>30, 51, 72, 92, 12, 42, 3, 45, 25, 16, 36, 37, 7, 48, 88, 9, 19, 96
+Then you just grab those numbers in order, and repeat for the next column (leftward):
+<br>
+30, 51, 72, 92, 12, 42, 3, 45, 25, 16, 36, 37, 7, 48, 88, 9, 19, 96
 
-||table this { margin-inline: auto; } this td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
-||th 0_|1_|2_|3_|4_|5_|6_|7_|8_|9_
+||table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+0_|1_|2_|3_|4_|5_|6_|7_|8_|9_
 3|12|25|30|42|51||72|88|92
 7|16||36|45|||||96
 9|19||37|48|||||
@@ -1220,8 +1226,9 @@ A list can also be made **circular**, meaning the last node points back to the f
 ||image-span
 media/circular-linked-list.png|A circular doubly-linked list
 
+### Terminology
+
 ||table this .col-1 { background:var(--c-light-blue-bg); }
-||th Terminology:
 linked list | an allocation of data that's dynamically sized because it's not stored contiguously
 stack | a linked list that behaves as first-in, last-out
 queue | a linked list that behaves as first-in, first-out
