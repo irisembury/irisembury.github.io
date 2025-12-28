@@ -204,11 +204,10 @@
     .pseudo-link { cursor: pointer; }
     .fade-out { opacity: 0; transition: opacity 0.7s 0.4s !important; }
 
-    .flat-button { cursor: pointer; padding: 5px 7px 5px; background-color: var(--c-white); vertical-align: middle; color: var(--grey-5); border: 1px solid var(--grey-c); line-height: 1; }
+    .flat-button { cursor: pointer; padding: 5px 7px 5px; background-color: var(--c-white); display: flex; align-items: center; gap: 4px; vertical-align: middle; color: var(--grey-5); border: 1px solid var(--grey-c); line-height: 1; }
     .flat-button, .flat-button *, .flat-button a { text-decoration: none !important; }
     .flat-button:hover { border-color: var(--grey-a); background-color: var(--grey-f); }
     .flat-button:active { outline: 1px solid var(--link-color); }
-    .flat-button svg { vertical-align: text-bottom; }
 
     html:not(.layout) body { margin: 2em 5em; min-height: unset; white-space: preserve-breaks; font-family: sans-serif; font-size: 16px; line-height: 1.5; }
     html:not(.layout) .menu-line,
@@ -261,7 +260,9 @@
     @media (hover: none) and (pointer: coarse) {
         body {
             --main-width: 100%;
-            --fs-ui: 24px !important;
+        }
+        html {
+            font-size: 24px !important;
         }
     }
 
