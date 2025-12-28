@@ -31,17 +31,16 @@
         --ff-lb-top-left: Trebuchet MS, Nirmala UI, Segoe UI, system-ui, sans-serif;
         --ff-lb-caption: Roboto, sans-serif;
         /* font-size */
-        --fs-ui: 14px; /* nav and menu */
-        --fs-article: 15.4px;
-        --fs-blockquote: 15px;
-        --fs-table: 14.7px;
-        --fs-smaller: 14px;
+        --fs-ui: 14px; /* root font-size, inherited by nav and menu */
+        --fs-article: 1.1rem;
+        --fs-blockquote: 1.075rem;
+        --fs-table: 1.05rem;
+        --fs-smaller: 1rem;
         --fs-top-heading: 2.5em;
         --fs-h1: 2em;
         --fs-h2: 1.5em;
         --fs-h3: 1.25em;
         --fs-h4: 1.0625em;
-        --fs-lb-caption: 15.4px;
         --fs-cite: 0.85em;
         /* colors */
         --page-bg: #f8f8f8;
@@ -182,12 +181,6 @@
     mark { background-color: var(--c-pale-yellow); color: inherit; }
     input, select { font-family: var(--ff-ui); }
 
-    .flat-button { cursor: pointer; padding: 5px 7px 5px; background-color: var(--c-white); vertical-align: middle; color: var(--grey-5); border: 1px solid var(--grey-c); line-height: 1; }
-    .flat-button, .flat-button *, .flat-button a { text-decoration: none !important; }
-    .flat-button:hover { border-color: var(--grey-a); background-color: var(--grey-f); }
-    .flat-button:active { outline: 1px solid var(--link-color); }
-    .flat-button svg { vertical-align: text-bottom; }
-
     html ::selection { background-color: var(--selection-bg); color: var(--selection-color); }
     a:target { background-color: #dfe9ff; }
     .no-select { user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
@@ -210,6 +203,12 @@
     .align-stretch { display: flex; align-items: stretch; }
     .pseudo-link { cursor: pointer; }
     .fade-out { opacity: 0; transition: opacity 0.7s 0.4s !important; }
+
+    .flat-button { cursor: pointer; padding: 5px 7px 5px; background-color: var(--c-white); vertical-align: middle; color: var(--grey-5); border: 1px solid var(--grey-c); line-height: 1; }
+    .flat-button, .flat-button *, .flat-button a { text-decoration: none !important; }
+    .flat-button:hover { border-color: var(--grey-a); background-color: var(--grey-f); }
+    .flat-button:active { outline: 1px solid var(--link-color); }
+    .flat-button svg { vertical-align: text-bottom; }
 
     html:not(.layout) body { margin: 2em 5em; min-height: unset; white-space: preserve-breaks; font-family: sans-serif; font-size: 16px; line-height: 1.5; }
     html:not(.layout) .menu-line,
@@ -259,9 +258,16 @@
     .include-toc .c1 { display: grid; grid-template-columns: var(--col-a) var(--col-b) var(--col-c); }
             .c3 { max-width: var(--main-width); margin: 0 auto; padding: var(--page-top-padding) var(--article-side-pad) 80px; background-color: var(--c3-bg); grid-column: 2; }
 
-            @media screen and (max-width: 1050px) {
-                #toc { display: none; }
-            }
+    @media (hover: none) and (pointer: coarse) {
+        body {
+            --main-width: 480px;
+            --ff-ui: 18px;
+        }
+    }
+
+    @media (max-width: 1050px) {
+        #toc { display: none; }
+    }
 
                 #toc {
                     grid-column: 1;
@@ -431,7 +437,7 @@
             #lightbox { object-fit: contain; max-width: 100%; max-height: 100%; }
 
         .lb-bottom-panel { background-color: black; display: flex; justify-content: center; align-items: center; }
-            #lb-caption { padding: 20px; margin: 0 auto; font-family: var(--ff-lb-caption); font-size: var(--fs-lb-caption); max-width: var(--main-width); line-height: var(--lh-caption); }
+            #lb-caption { padding: 20px; margin: 0 auto; font-family: var(--ff-lb-caption); font-size: 1.1rem; max-width: var(--main-width); line-height: var(--lh-caption); }
 
     .page-bottom { height: var(--page-bottom-height); }
 
