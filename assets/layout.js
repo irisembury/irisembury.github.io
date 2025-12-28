@@ -1,7 +1,10 @@
 "use strict"
 const HTML = document.documentElement;
 const leftRightArrowsIconSvg = `<svg style="transform:rotate(90deg)" aria-hidden="true" focusable="false" class="octicon octicon-arrow-switch" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>`;
-const fontOptions = "Georgia, Lora, Roboto, Trebuchet MS".split(",").map(o => o.trim()).filter(o => o.length > 2).map(o => `<option value="${ o }">${ o }</option>` );
+const fontOptions = "Georgia,Lora,Roboto,Roboto Slab,Segoe UI,Trebuchet MS".split(",").map(o => `<option value="${ o }">${ o }</option>` );
+
+
+
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
@@ -17,7 +20,7 @@ window.addEventListener("load", function() {
     <div class="c1">
         <div class="c3">
             <div id="article">${ document.body.innerHTML }</div>
-            <div id="page-footer">${ index ? "" : `<div><a href="../../index.html">Link back to index (front page)</a></div>` }</div>
+            <div id="page-footer">${ index ? "" : `<div><a href="../../index.html">Link back to index (front page)</a></div>` }<div>Everything on this domain (irisembury.github.io) is my personal work (except for some images where otherwise stated). I have no association with any other person or organization.</div><div>I consider the code and styling that builds this page open source. I don't care about</div><div>For general inquiry or requests you can contact irisembury@gmail.com</div></div>
         </div>
         ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
     </div>
@@ -42,24 +45,26 @@ window.addEventListener("load", function() {
         <h3>Fonts override:</h3>
         <table id="fonts">
             <tbody>
-                <tr><td>Headings:</td>
-                    <td><select class="menu-select" id="heading-font-select">
-                        ${ fontOptions }
-                        </select>
-                    </td>
-                </tr>
-                <tr><td>Body:</td>
-                    <td><select class="menu-select" id="body-font-select">
-                        ${ fontOptions }
-                        </select>
-                    </td>
-                </tr>
-                <tr><td>Tables:</td>
-                    <td><select class="menu-select" id="table-font-select">
-                        ${ fontOptions }
-                        </select>
-                    </td>
-                </tr>
+                <tr><td>Headings:</td><td><select class="menu-select" id="heading-font-select">
+                    <option value="Georgia Pro">Georgia Pro</option>
+                    <option value="Lora">Lora</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Roboto Slab">Roboto Slab</option>
+                    <option value="Segoe UI">Segoe UI</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                </select></td></tr>
+                <tr><td>Body:</td><td><select class="menu-select" id="body-font-select">
+                    <option value="Georgia">Georgia Pro</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Roboto Slab">Roboto Slab</option>
+                    <option value="Segoe UI">Segoe UI</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                </select></td></tr>
+                <tr><td>Tables:</td><td><select class="menu-select" id="table-font-select">
+                    <option value="Roboto">Roboto</option>
+                    <option value="Segoe UI">Segoe UI</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                </select></td></tr>
             </tbody>
         </table>
         <div class="menu-right"><span class="pseudo-link" onclick="menuRestoreDefaults()">restore defaults</span></div>
