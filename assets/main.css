@@ -260,8 +260,8 @@
 
     @media (hover: none) and (pointer: coarse) {
         body {
-            --main-width: 480px;
-            --ff-ui: 18px;
+            --main-width: unset;
+            --ff-ui: 24px;
         }
     }
 
