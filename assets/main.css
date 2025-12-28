@@ -261,7 +261,7 @@
     @media (hover: none) and (pointer: coarse) {
         body {
             --main-width: 100%;
-            --fs-ui: 24px;
+            --fs-ui: 24px !important;
         }
     }
 
