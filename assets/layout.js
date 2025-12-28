@@ -20,7 +20,7 @@ window.addEventListener("load", function() {
     <div class="c1">
         <div class="c3">
             <div id="article">${ document.body.innerHTML }</div>
-            <div id="page-footer">${ index ? "" : `<div><a href="../../index.html">Link back to index (front page)</a></div>` }<div>Everything on this domain (irisembury.github.io) is my personal work (except for some images where otherwise stated). I have no association with any other person or organization.</div><div>I consider the code and styling that builds this page open source. I don't care about</div><div>For general inquiry or requests you can contact irisembury@gmail.com</div></div>
+            <div id="page-footer">${ index ? "" : `<div><a href="../../index.html">Link back to index (front page)</a></div>` }<div>Everything on this domain (irisembury.github.io) is my personal work (except for some images where otherwise stated). I have no association with any other person or organization.</div></div>
         </div>
         ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
     </div>
@@ -739,7 +739,7 @@ function interpreter(argValue) {
 
         /* ----------------------------------- see also ----------------------------------- */
         if (chunk.startsWith("||see-also")) {
-            document.getElementById("page-footer").appendChild(document.createElement("div")).innerHTML = "<div>The content on this page was also posted in other places:</div>" + chunk.split("\n").slice(1)
+            document.getElementById("page-footer").appendChild(document.createElement("div")).innerHTML = "<div>The specific content on this page was also posted in these other places:</div>" + chunk.split("\n").slice(1)
                 .map( line => {
                     const url = line .replace(/substack\|(\w+)/, "https://irisembury.substack.com/p/$1")
                         .replace(/tumblr\|(\d+)/, "https://irisembury.tumblr.com/post/$1");
