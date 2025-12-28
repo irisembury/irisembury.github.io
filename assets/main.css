@@ -260,7 +260,7 @@
 
     @media (hover: none) and (pointer: coarse) {
         body {
-            --main-width: unset;
+            --main-width: 100%;
             --ff-ui: 24px;
         }
     }
