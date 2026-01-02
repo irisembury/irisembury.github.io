@@ -100,11 +100,11 @@ window.addEventListener("load", function() {
         </div>
     </div>
     <div class="c1">
+        <nav id="toc" class="sidebar"></nav>
         <div class="c3">
             <div id="article">${ document.body.innerHTML }</div>
             <div id="page-footer">${ index ? "" : `<div class="footer-back-to-index"><a href="../../index.html">&larr; Link back to index (front page)</a></div>` }<div>This repo domain (irisembury.github.io) is used to host my writing and opinions. I have no association with any other person or organization. For serious inquiries you can contact me at irisembury@gmail.com.</div></div>
         </div>
-        <nav id="toc" class="sidebar"></nav>
     </div>
     <div class="lb-container">
         <div id="lb-top-left"></div>
