@@ -11,7 +11,7 @@
 <body>
 # News
 
-\<div style="text-align: right"><button onclick="reverseOrder()" class="flat-button"><span class="align-center gap-4" style="vertical-align: 2px">reverse order @leftRightArrows@</span></button></div>
+<div style="text-align: right"><button onclick="reverseOrder()" class="flat-button"><span class="align-center gap-4" style="vertical-align: 2px">reverse order @leftRightArrows@</span></button></div>
 
 ||table
 2025-01-16 | Various companies---Meta, Google, Goldman Sachs, Boeing, Microsoft, Amazon, and others---have together donated $170 million to Trump's inaugural fund.[](https://www.cbc.ca/news/business/corporate-donors-trump-inauguration-1.7430028)
@@ -197,10 +197,8 @@ function reverseOrder() {
 }
 window.addEventListener("load", function() {
     reverseOrder();
-    
     let btn = document.getElementById("article").querySelector(".flat-button");
-    btn.innerHTML = btn.innerHTML.replace("@leftRightArrows@", leftRightArrowsIconSvg);
-    
+    btn.innerHTML = btn.innerHTML.replace("@leftRightArrows@", `<svg style="transform:rotate(90deg)" aria-hidden="true" focusable="false" class="octicon octicon-arrow-switch" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>`);
 });
 </script>
 </body></html>

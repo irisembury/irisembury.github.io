@@ -4,10 +4,6 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-        body {
-            --page-top-padding: 0;
-        }
-
         .index-top {
             line-height: var(--lh-ui);
             font-family: var(--ff-ui);
@@ -19,12 +15,11 @@
         }
             /* left */
                 .theme-image { margin-top: -64px; width: 100px; height: 100px; border: 2px solid var(--grey-e); border-radius: 2px; }
-                .repo-name { line-height: 1; margin-left: 2px; font-family: "Times New Roman", "Times", serif; font-size: 2rem; margin-top: 8px; }
-                    .repo-name span:nth-child(1) { margin-right: -6px; }
+                .repo-name { line-height: 1; margin-left: 2px; font-size: 2rem; margin-top: 5px; font-weight: 400; }
+                    .repo-name span:nth-child(1) { color: var(--grey-3); margin-right: -0.22em; }
                     .repo-name span:nth-child(2) { color: #6a68ca; }
-                    .dark .repo-name span:nth-child(2) { margin-left: -0.1em; color: #6c65a4; }
+                    .dark .repo-name span:nth-child(2) { color: #6c63b5; }
             /* right */
-                .plug-button svg { vertical-align: -4px; margin-right: 1px; }
                 .repo-about { color: var(--grey-5); margin-top: 0.5em; max-width: 326px; }
                     .repo-about p + p { margin-top: 0.25em; }
 
@@ -34,28 +29,27 @@
             font-weight: inherit !important;
             line-height: inherit !important;
             font-size: inherit !important;
-            letter-spacing: 0.5px !important;
+            letter-spacing: 0.3px !important;
             margin-top: 1em;
             font-family: var(--ff-table);
         }
 
         .yt-date { display: none; }
 
-        .rows .row { padding-inline: 6px !important; margin-inline: -6px !important; border: 1px solid transparent !important; color: var(--grey-9) !important; }
-            .rows .row:hover {
-                border-color: var(--grey-c) !important;
-            }
-            .rows .row:hover .col-2 {
-                color: var(--grey-5) !important;
-            }
+        .auto-rows .row { padding: 4px 7px 3px; margin: 0 -8px; border: 1px solid transparent; }
+        .auto-rows .row .col-3 { color: var(--grey-9); }
+        .auto-rows .row:hover { border-color: var(--grey-c); }
+        .auto-rows .row:hover .col-3 { color: var(--grey-5); }
+
+        .dots-line { flex: 1; margin: 2px 6px 0px 5px; height: 1px; background: repeating-linear-gradient(to right, var(--grey-c) 0, var(--grey-a) 2px, transparent 1px, transparent 7px ); }
     </style>
 </head>
 <body>
 
-||image-span
-assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg
+<div style="margin-top: calc(0px - var(--page-top-pad)) !important;">
+    <div style="background-image: url(assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; aspect-ratio: 4 / 1;"></div>
+</div>
 
-\
 <div class="index-top">
     <div>
         <div><img width="100" height="100" src="assets/grandchamp.png" class="theme-image"></div>
@@ -86,50 +80,26 @@ Immigration | 6MEkIZQFV6w | 2025-11-23
 
 ---
 
-### Text files
+### Text pages
 
-||rows
-[Snow generator](page/37/index.html) | 2025-12-15
-[Derangement](page/38/index.html) | 2025-12-12
-[Stay the trenches](page/39/index.html) | 2025-12-12
-[Public figure quotes record](page/25/index.html) | 2025-11-19
-[5-letter word maker thing](page/17/index.html) | 2025-11-19
-[Immigration](page/33/index.html) | 2025-11-06
-[Prejudice](page/32/index.html) | 2025-10-30
-[India](page/30/index.html) | 2025-10-24
-[Liberalism, not extremism](page/29/index.html) | 2025-09-19
-[The path of normalization](page/28/index.html) | 2025-09-08
-[Lies about Ilhan Omar](page/16/index.html) | 2025-08-25
-[Israel--Palestine](page/3/index.html) | 2025-07-27
-[Pierre Poilievre](page/6/index.html) | 2025-03-15
-[Trump and Russia](page/26/index.html) | 2025-03-06
-[Why get bottom surgery?](page/24/index.html) | 2025-02-09
-[Fundamentals of politics](page/10/index.html) | 2025-01-30
-[Elon Musk and the Nazi Salute](page/23/index.html) | 2025-01-24
-[What is therapy?](page/36/index.html) | 2025-01-09
-[Enduring falsehoods (Elizabeth Warren and Hillary Clinton)](page/22/index.html) | 2024-12-19
-[Mark Robinson](page/20/index.html) | 2024-12-15
-[The standard relationship model](page/19/index.html) | 2024-12-08
-[Why do people like Trump?](page/18/index.html) | 2024-12-03
-[The default politician is a white guy with a normal name](page/14/index.html) | 2024-11-26
-[Sex, gender, &amp; transsexuals](page/4/index.html) | 2024-11-19
-[Fetishism &amp; politics](page/13/index.html) | 2024-11-14
-[Types of masculinity](page/12/index.html) | 2024-11-08
-[Anime reviews](page/11/index.html) | 2024-11-02
-[Poor things (2023 film)](page/2/index.html) | 2024-10-31
-[The trans prison stats argument](page/9/index.html) | 2024-10-19
+<div id="index"></div>
 
 ---
 
-||rows
-[List of all movies I've seen](page/5/index.html)
-[Resources](page/8/index.html)
+### A few other things
 
-\<div id="index"></div>
+||rows
+[list of every movie I've ever seen](page/5/index.html)
+[artwork I often use](page/21/index.html)
+[soundboard](page/27/index.html)
+[discord bot custom commands](page/35/index.html)
+[snow generator](page/37/index.html)
+[5-letter word maker thing](page/17/index.html)
+
 <script src="assets/layout.js"></script>
 <script>
 window.addEventListener("load", function() {
-    document.querySelector(".yt-gallery").parentNode.innerHTML += `<div style="display:flex;justify-content:flex-end;margin-top:0.5em;"><a class="flat-button" href="page/7/index.html">All videos directory</a></div>`;
+    document.querySelector(".yt-gallery").parentNode.innerHTML += `<div class="flex-end"><a style="margin:1em 7px 0" href="page/7/index.html">All videos directory &rarr;</a></div>`;
 })
 </script>
 </body></html>

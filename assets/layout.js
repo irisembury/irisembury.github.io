@@ -1,42 +1,72 @@
 "use strict"
 const HTML = document.documentElement;
-const leftRightArrowsIconSvg = `<svg style="transform:rotate(90deg)" aria-hidden="true" focusable="false" class="octicon octicon-arrow-switch" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;"><path d="M5.22 14.78a.75.75 0 0 0 1.06-1.06L4.56 12h8.69a.75.75 0 0 0 0-1.5H4.56l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3a.75.75 0 0 0 0 1.06l3 3Zm5.56-6.5a.75.75 0 1 1-1.06-1.06l1.72-1.72H2.75a.75.75 0 0 1 0-1.5h8.69L9.72 2.28a.75.75 0 0 1 1.06-1.06l3 3a.75.75 0 0 1 0 1.06l-3 3Z"></path></svg>`;
+
+let pageData = `
+Nick Shirley and Somali daycares | 41 | 2026-01-02
+Why do people hate Reddit so much? | 40 | 2025-12-30
+Stay the trenches | 39 | 2025-12-17
+Derangement | 38 | 2025-12-12
+Thoughts on immigration | 33 | 2025-11-06
+What is prejudice? | 32 | 2025-10-30
+About India | 30 | 2025-10-24
+Liberalism, not extremism | 29 | 2025-09-19
+The path of normalization | 28 | 2025-09-08
+Lies about Ilhan Omar | 16 | 2025-08-25
+Notes on Israel–Palestine | 3 | 2025-07-27
+The lies of Pierre Poilievre | 6 | 2025-03-15
+Trump and Russia | 26 | 2025-03-06
+Why get bottom surgery? | 24 | 2025-02-09
+Fundamentals of politics | 10 | 2025-01-30
+Elon Musk and the Nazi Salute | 23 | 2025-01-24
+What is therapy? | 36 | 2025-01-09
+Enduring falsehoods (Elizabeth Warren and Hillary Clinton) | 22 | 2024-12-19
+Mark Robinson | 20 | 2024-12-15
+The standard relationship model | 19 | 2024-12-08
+Why do people like Trump? | 18 | 2024-12-03
+The default politician is a white guy with a normal name | 14 | 2024-11-26
+Sex, gender, &amp; transsexuals | 4 | 2024-11-19
+Fetishism &amp; politics | 13 | 2024-11-14
+Types of masculinity | 12 | 2024-11-08
+Anime reviews | 11 | 2024-11-02
+Poor things (2023 film) | 2 | 2024-10-31
+The trans prison stats argument | 9 | 2024-10-19
+`.split("\n").map(line => {
+    const entry = line.replace("\\|", "|").split("|").map(c => c.trim());
+    return (entry.length != 3) ? "" : { title: entry[0], page: entry[1], date: entry[2] }
+} ).filter(entry => entry != "");
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
     const pathToRoot = index ? "" : "../../";
     document.head.innerHTML += `<link rel="stylesheet" href="${ pathToRoot }assets/fonts.css">`;
-    
-    document.body.innerHTML =
-    `<nav class="main-nav no-select">
-        <span><div class="page-name-display text-select"><a href="${ pathToRoot }index.html">Index</a> &#47; ${ document.title || "This page" }</div></span>
-        ${ index ? "" : `<span class="hide-at-top"><span style="height: 9px; border-left: 1px solid currentcolor; display: inline-block;"></span></span> <a class="to-top-button hide-at-top">Jump to Top</a>` }
-        <a style="margin-left:auto" class="gear-icon icon"><svg class="Xy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></a>
+
+    document.body.innerHTML = `<nav id="navbar" class="no-select">
+        <div class="text-select"><a href="${ pathToRoot }index.html">Home</a> &#707; <span id="page-name-display">${ document.title || "This page" }</span></div>
+        <a id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></a>
     </nav>
-    <div class="c1">
-        <div class="c3">
-            <div id="article">${ document.body.innerHTML }</div>
-            <div id="page-footer">${ index ? "" : `<div><a href="../../index.html">Link back to index (front page)</a></div>` }<div>Everything on this domain (irisembury.github.io) is my personal work (except for some images where otherwise stated). I have no association with any other person or organization.</div></div>
-        </div>
-        ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
-    </div>
-    <div class="menu hidden">
+    <div id="menu" class="hidden">
         <h3>Display preferences:</h3>
-        <table>
-            <tbody>
-                <tr>
-                    <td>Theme:</td>
-                    <td>
-                        <select class="menu-select" id="brightness-select">
-                            <option value="light">Light</option>
-                            <option value="dark">Dark</option>
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        ${ index ? "" : `<hr><div class="menu-right"><label class="no-select" for="page-full-width">Full page width:</label><input type="checkbox" class="menu-checkbox" id="page-full-width"></div>` }
-        ${ HTML.classList.contains("include-toc") ? `<div class="menu-right"><label for="show-toc">Show table of contents:</label><input type="checkbox" class="menu-checkbox" checked id="show-toc"></div>` : "" }
+        <table><tbody><tr><td>Theme:</td><td>
+            <select class="menu-select" id="brightness-select">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </td></tr></tbody></table>
+        <hr>
+        <div class="menu-options">
+            <div class="full-width-option">
+                <label class="no-select" for="page-full-width">Page full width</label>
+                <input type="checkbox" class="menu-checkbox" id="page-full-width">
+            </div>
+            <div class="hide-toc-option">
+                <label class="no-select" for="hide-toc">Hide table of contents</label>
+                <input type="checkbox" class="menu-checkbox" id="hide-toc">
+            </div>
+            <div class="book-text-option">
+                <label class="no-select" for="book">Indent and justify</label>
+                <input type="checkbox" class="menu-checkbox" checked id="book">
+            </div>
+        </div>
         <hr>
         <h3>Fonts override:</h3>
         <table id="fonts">
@@ -50,7 +80,7 @@ window.addEventListener("load", function() {
                     <option value="Trebuchet MS">Trebuchet MS</option>
                 </select></td></tr>
                 <tr><td>Body:</td><td><select class="menu-select" id="body-font-select">
-                    <option value="Georgia">Georgia Pro</option>
+                    <option value="Georgia">Georgia</option>
                     <option value="Roboto">Roboto</option>
                     <option value="Roboto Slab">Roboto Slab</option>
                     <option value="Segoe UI">Segoe UI</option>
@@ -63,9 +93,18 @@ window.addEventListener("load", function() {
                 </select></td></tr>
             </tbody>
         </table>
-        <div class="menu-right"><span class="pseudo-link" onclick="menuRestoreDefaults()">restore defaults</span></div>
+        <div class="flex-end align-center"><span style="cursor: pointer; color: var(--grey-8);" onclick="menuRestoreDefaults()" title="restore font defaults">restore defaults</span></div>
         <hr>
-        <span class="menu-bottom">These options are saved in session storage, not cookies, meaning they&rsquo;re cleared automatically when you close your browser.</span>
+        <div class="menu-bottom">
+            <p>These options are saved in session storage, not cookies, meaning they&rsquo;re cleared automatically when you close your browser.</p>
+        </div>
+    </div>
+    <div class="c1">
+        <div class="c3">
+            <div id="article">${ document.body.innerHTML }</div>
+            <div id="page-footer">${ index ? "" : `<div class="footer-back-to-index"><a href="../../index.html">&larr; Link back to index (front page)</a></div>` }<div>This repo domain (irisembury.github.io) is used to host my writing and opinions. I have no association with any other person or organization. For serious inquiries you can contact me at irisembury@gmail.com.</div></div>
+        </div>
+        <nav id="toc" class="sidebar"></nav>
     </div>
     <div class="lb-container">
         <div id="lb-top-left"></div>
@@ -73,21 +112,114 @@ window.addEventListener("load", function() {
         <div class="lb-bottom-panel"><div id="lb-caption"></div></div>
     </div>
     <style id="user-styles"></style>`;
+    
+    interpreter(document.getElementById("article"));
+
+    if (index) {        
+        document.getElementById("index").innerHTML = `<div class="table-wrapper">
+            <div class="auto-rows">${
+                pageData.map(entry => `<div class="row">
+                        <div class="cell col-1"><a href="${ pathToRoot }page/${ entry.page }/index.html">${ entry.title }</a></div>
+                        <div class="cell col-2 dots-line"></div>
+                        <div class="cell col-3">${ entry.date }</div>
+                    </div>` ).join("")
+        }</div>`;
+    }
 
     HTML.classList.add("layout");
     Array.from(document.getElementById("fonts").getElementsByTagName("option")).forEach(o => o.style.fontFamily = `"${ o.value }",system-ui` );
-    
-    const article_ = document.getElementById("article");
-    interpreter(article_);
     
     document.querySelector(".lb-wrapper").addEventListener("click", () => {
         setLightbox("close")
     })
     
+    /* ---- ---- ---- ---- ---- ---- ---- menu: ---- ---- ---- ---- ---- ---- ---- */
+    
+    const gearIcon = document.getElementById("gear");
+    const menu = document.getElementById("menu");
+    function menuToggle(option) {
+        if (option == "close" || option == "open") {
+            menu.classList.toggle("hidden", option == "close");
+        }
+        else {
+            menu.classList.toggle("hidden", !menu.classList.contains("hidden"));
+        }
+    }
+    gearIcon.addEventListener("click", menuToggle);
+    window.addEventListener("click", function(e) {
+        if (!menu.contains(e.target) && !gearIcon.contains(e.target)) {
+            menuToggle("close");
+        }
+    })
+    window.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+            menuToggle("close");
+            setLightbox("close");
+        }
+    })
+
+    /* ---- ---- ---- ---- ---- ---- ---- menu items: ---- ---- ---- ---- ---- ---- ---- */
+    setBrightness();
+    document.getElementById("brightness-select").addEventListener("change", function() {
+        setBrightness(this.value);
+    });
+    
+    updateFonts();
+    document.getElementById("heading-font-select").addEventListener("change", function() {
+        localStorage.setItem("headingFont", this.value);
+        updateFonts();
+    });
+    document.getElementById("body-font-select").addEventListener("change", function() {
+        localStorage.setItem("bodyFont", this.value);
+        updateFonts();
+    });
+    document.getElementById("table-font-select").addEventListener("change", function() {
+        localStorage.setItem("tableFont", this.value);
+        updateFonts();
+    });
+    
+    if (localStorage.getItem("book") == "true") {
+        HTML.classList.add("book");
+        document.getElementById("book").checked = true;
+    } else {
+        document.getElementById("book").checked = false;
+    }
+    document.getElementById("book").addEventListener("change", function() {
+        localStorage.setItem("book", this.checked);
+        HTML.classList.toggle("book", this.checked);
+    });
+    
+    /*
+        function setBrightness(setValue) {
+            let brightness = setValue || localStorage.getItem("brightness") || "light";
+            HTML.classList.remove(...Array.from(document.getElementById("brightness-select").children).map(o => o.value).filter(o => o != brightness));
+            HTML.classList.add(brightness);
+            localStorage.setItem("brightness", brightness);
+            document.getElementById("brightness-select").value = brightness;
+        }
+    */
+    if (!index) {
+        if (localStorage.getItem(window.location.href + "-full-width") == "true") {
+            HTML.classList.add("full-width");
+            document.getElementById("page-full-width").checked = true;
+        }
+        document.getElementById("page-full-width").addEventListener("change", function() {
+            HTML.classList.toggle("full-width", this.checked);
+            localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
+        });
+    }
+    
+    if (document.title == "") {
+        document.title = "Iris Embury";
+    } else if (!document.title.endsWith("Iris Embury")) {
+        document.title += " | Iris Embury";
+    }
+    
+    /* ---- ---- ---- ---- ---- ---- ---- quote expand element ---- ---- ---- ---- ---- ---- ---- ---- ---- */
+    
     Array.from(document.getElementsByClassName("quote-expand")).forEach(quoteExpandElement => {
         quoteExpandElement.classList.add("collapsed")
         quoteExpandElement.title = "Click to expand";
-        
         quoteExpandElement.addEventListener("click", function() {
             this.classList.remove("collapsed");
             quoteExpandElement.title = "";
@@ -104,77 +236,28 @@ window.addEventListener("load", function() {
         })
     })
     
-    /* ---------------------- setting up menu: ---------------------- */
-    const gearIcon = document.querySelector(".gear-icon");
-    const menu = document.querySelector(".menu");
-    
-    function menuToggle(option) {
-        if (option == "close" || option == "open") {
-            menu.classList.toggle("hidden", option == "close");
-        }
-        else {
-            menu.classList.toggle("hidden", !menu.classList.contains("hidden"));
-        }
-    }
-    gearIcon.addEventListener("click", menuToggle);
-    window.addEventListener("click", function(e) {
-        if (!menu.contains(e.target) && !gearIcon.contains(e.target)) {
-            menuToggle("close");
-        }
-    })
-    
-    window.addEventListener("keydown", function(e) {
-        if (e.key === "Escape") {
-            menuToggle("close");
-            setLightbox("close");
-        }
-    })
-
-    /* ---- ---- ---- ---- ---- ---- ---- set-up for menu items: ---- ---- ---- ---- ---- ---- ---- */
-    setBrightness();
-    document.getElementById("brightness-select").addEventListener("change", function() {
-        setBrightness(this.value);
-    });
-    updateFonts();
-    document.getElementById("heading-font-select").addEventListener("change", function() {
-        localStorage.setItem("headingFont", this.value);
-        updateFonts();
-    });
-    document.getElementById("body-font-select").addEventListener("change", function() {
-        localStorage.setItem("bodyFont", this.value);
-        updateFonts();
-    });
-    document.getElementById("table-font-select").addEventListener("change", function() {
-        localStorage.setItem("tableFont", this.value);
-        updateFonts();
-    });
-    if (!index && localStorage.getItem(window.location.href + "-full-width") == "true") {
-        HTML.classList.add("full-width");
-        document.getElementById("page-full-width").checked = true;
-    }
-    if (!index) {
-        document.getElementById("page-full-width").addEventListener("change", function() {
-            HTML.classList.toggle("full-width", this.checked);
-            localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
-        });
-    }
     /* ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- ---- */
-    if (HTML.classList.contains("include-toc")) {
-        document.getElementById("show-toc").addEventListener("change", function() {
+    
+    if (!HTML.classList.contains("include-toc")) {
+        let toc = document.getElementById("toc");
+        if (toc != null) {
+            toc.parentNode.removeChild(toc);
+        }
+    }
+    else {
+        HTML.style.setProperty("--main-width", "824px");
+        document.getElementById("hide-toc").addEventListener("change", function() {
             if (this.checked) {
-                HTML.classList.add("include-toc");
-                window.addEventListener("scroll", tocHighlightUpdateAttempt);
-            } else {
                 HTML.classList.remove("include-toc");
                 window.removeEventListener("scroll", tocHighlightUpdateAttempt);
+            } else {
+                HTML.classList.add("include-toc");
+                window.addEventListener("scroll", tocHighlightUpdateAttempt);
             }
         });
         const toc = document.getElementById("toc");
         const headings = Array.from(document.getElementById("article").getElementsByClassName("--for-toc"));
-        toc.innerHTML = `<h3>Table of contents</h3><div class="toc-row"><a onclick="scrollToTop()" style="cursor: pointer;">(Top)</a></div>` + headings.slice(1).map ( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
-        
-        const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-        let lastHeading = -1;
+        toc.innerHTML = `<div class="nav-row title">Table of contents</div>` + headings.map ( heading => `<div class="nav-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
         
         let canTocHighlightUpdate = true;
         function tocHighlightUpdateAttempt() {
@@ -186,6 +269,8 @@ window.addEventListener("load", function() {
             }, 500);
             tocHighlightUpdate();
         }
+        const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+        let lastHeading = -1;
         function tocHighlightUpdate() {
             let currentHeading = -1;
             for (let i = 0; i < headings.length; i += 1) {
@@ -193,9 +278,6 @@ window.addEventListener("load", function() {
                 if (pageYOffset < elementDistanceFromPageTop - (0.4 * window.innerHeight)) {
                     break;
                 }
-                // if (pageYOffset < headings[i].offsetTop - (0.4 * window.innerHeight)) {
-                    // break;
-                // }
                 currentHeading = i;
             }
             if (currentHeading != lastHeading) {
@@ -245,33 +327,6 @@ window.addEventListener("load", function() {
             tocHighlightUpdateAttempt();
         }, 100);
     }
-    /* ---- ---- ---- ---- ---- /table of contents ---- ---- ---- ---- ---- ---- ---- */
-
-    if (!document.getElementById("index")) {
-        document.querySelector(".to-top-button").addEventListener("click", scrollToTop);
-    }
-    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- */
-    const mainNav = document.querySelector(".main-nav");
-    let canNavStickyCheck = true;
-    function navStickyCheck() {
-        if (canNavStickyCheck) {
-            canNavStickyCheck = false;
-            setTimeout(() => {
-                canNavStickyCheck = true;
-                mainNav.classList.toggle("sticky-active", pageYOffset > 180);
-            }, 333);
-            mainNav.classList.toggle("sticky-active", pageYOffset > 180);
-        }
-    }
-    navStickyCheck();
-    window.addEventListener("scroll", navStickyCheck);
-    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- */
-
-    if (document.title == "") {
-        document.title = "Iris Embury";
-    } else if (!document.title.endsWith("Iris Embury")) {
-        document.title += " | Iris Embury";
-    }
 })
 
 function scrollToTop() {
@@ -281,7 +336,6 @@ function scrollToTop() {
     if (toc) {
         toc.scrollTo({ behavior: "instant", top: 0 });
     }
-    
 }
 
 function setLightbox(action) {
@@ -322,10 +376,10 @@ function updateFonts() {
     document.getElementById("body-font-select").value = bodyFont;
     document.getElementById("table-font-select").value = tableFont;
     document.getElementById("user-styles").innerHTML = `body {
-        --ff-heading: ${ headingFont=="Georgia" ? "Georgia Pro,Georgia":headingFont },sans-serif;
+        --ff-heading: ${ headingFont=="Georgia Pro" ? "Georgia Pro,Georgia":headingFont },sans-serif;
         --ff-article: ${ bodyFont=="Georgia" ? "Georgia Pro Digits,Georgia":bodyFont },sans-serif;
         --ff-table: ${ tableFont=="Georgia" ? "Georgia Pro Digits,Georgia":tableFont },sans-serif;
-        ${ headingFont=="Georgia" ? "--fw-h1: 600; --fw-h2: 600;" :"" }
+        ${ (headingFont=="Georgia Pro"||headingFont=="Georgia") ? "--fw-h1: 600; --fw-h2: 600;" :"" }
     }`;
 }
 function menuRestoreDefaults() {
@@ -334,7 +388,311 @@ function menuRestoreDefaults() {
     localStorage.setItem("tableFont", "Roboto");
     updateFonts();
 }
-/* ------------------------------- main interpreter for article content ------------------------------- */
+function imageFloat(chunk, direction) {
+    /* imgUrl | caption | alt-text/title */
+    const lines = chunk.split("\n").slice(1).map( line => {
+        const parts = line.split("|");
+        while (parts.length < 3) {
+            parts.push("");
+        }
+        const imgUrl = parts[0].trim();
+        let figCaption = textFormat(parts[1].trim());
+        let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
+        if (figCaption && !altText) { altText = figCaption }
+        if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
+        
+        return `<figure><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
+    });
+    return `<div class="image-float auto-image-container ${direction}">${ lines.join("") }</div>`;
+}
+function imageSpan(chunk) {
+    /* ||image-span maxHeight */
+    /* imgUrl | alt-text/title */
+    const rows = chunk.split("\n");
+    let homeRow = rows.shift().substring("||image-span".length).trim();
+    const galleryFigures = rows.map( line => {
+        const parts = line.split("|");
+        while (parts.length < 2) {
+            parts.push("");
+        }
+        let imgUrl = parts[0].trim();
+        let altText = textFormat(parts[1].trim().replace(/"/g,"&quot;"));
+        return `<div><img style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
+    });
+    return `<div class="image-span auto-image-container">${ galleryFigures.join("") }</div>`;
+}
+function gallery(chunk) {
+    /* ||image-span maxHeight */
+    /* imgUrl | caption | alt-text/title */
+    const rows = chunk.split("\n");
+    let homeRow = rows.shift().substring("||gallery".length).trim();
+    let galleryFigures = rows.map( line => {
+        const parts = line.split("|");
+        while (parts.length < 3) {
+            parts.push("");
+        }
+        let imgUrl = parts[0].trim();
+        let caption = textFormat(parts[1].trim());
+        let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
+        return `
+        <figure>
+        <img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
+        <figcaption>${ caption }</figcaption>
+        </figure>
+        `;
+    });
+    return `<div class="captioned-gallery auto-image-container">${ galleryFigures.join("") }</div>`;
+}
+function squareGallery(chunk) {
+    /* ||square-gallery gridHeight */
+    /* imgUrl | caption | hover text (alt/title) */
+    const rows = chunk.split("\n");
+    let homeRow = rows.shift().substring("||image-span".length).trim();
+    const lines = chunk.split("\n").slice(1).map( line => {
+        const parts = line.split("|");
+        while (parts.length < 3) {
+            parts.push("");
+        }
+        const imgUrl = parts[0].trim();
+        let caption = textFormat(parts[1].trim());
+        let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
+        if (!altText) {
+            altText = caption;
+        }
+        if (caption) {
+            caption = `<figcaption>${ caption }</figcaption>`;
+        }
+        
+        return `<figure><div class="img-wrapper"><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
+    });
+    return `<div class="square-gallery auto-image-container">${ lines.join("") }</div>`;
+}
+function autoVideo(chunk) {
+    let data = chunk.split("\n").slice(1)[0].split("|").map(c => c.trim());
+    let fileUrl = data[0];
+    let dot = fileUrl.indexOf(".");
+    if (dot == -1) {
+        return;
+    }
+    let fileType = fileUrl.substring(dot + 1);
+    let maxHeight = (data.length == 2) ? data[1] : 300;
+    return `<div class="auto-video"><video controls height="${maxHeight}"><source src="${fileUrl}" type="video/${fileType}"></video></div>`;
+}
+function ytGallery(chunk) {
+    let rows = chunk.split("\n");
+    let galleryInfo = rows.shift().substring("||yt-gallery".length);
+    let sortInput = galleryInfo.includes("sort");
+    rows = rows.map(row => {
+        row = row.replace(/\\\|/g, "&verbar;").split("|").map(d => d.trim());
+        while (row.length < 3) {
+            row.push("");
+        }
+        return row;
+    });
+    if (sortInput) {
+        rows.sort((a, b) => {
+            a = parseInt(a[2].replace(/\D/g, "")) || 0;
+            b =parseInt(b[2].replace(/\D/g, "")) || 0;
+            return b - a;
+        });
+    }
+    let numToInclude = parseInt(galleryInfo.replace(/\D/g, "")) || rows.length;
+    rows = rows.slice(0, numToInclude).map( row => {
+        let title = row[0];
+        let videoCode = row[1];
+        let date = row[2];
+
+        while (videoCode.charAt(videoCode.length - 1) == "/") {
+            videoCode = videoCode.substring(0, videoCode.length - 1);
+        }
+        videoCode = videoCode.split("/").slice(-1);
+
+        let videoUrl = `https://www.youtube.com/watch?v=${ videoCode }`;
+        let thumbUrl = `https://i.ytimg.com/vi/${ videoCode }/hqdefault.jpg`;
+
+        let videoLink = `<a href="${ videoUrl }"><img src="${ thumbUrl }"></a>`;
+
+        return `<figure>
+            <div>${ videoLink }</div>
+            <figcaption><span class="yt-title"><a href="${ videoUrl }">${ title }</a></span> <span class="yt-date">${ date }</span></figcaption>
+        </figure>`;
+    });
+    return `<div class="table-wrapper"><div class="yt-gallery">${ rows.join("") }</div></div>`;
+}
+function codeblock(chunk) {
+    let lines = chunk.split("\n");
+    let syntaxClass = "", customKeywords = [];
+    let firstLine = lines.shift().substring("||codeblock".length).trim();
+    if (firstLine) {
+        let words = firstLine.split(" ");
+        syntaxClass = words.shift();
+        customKeywords = words;
+    }
+    
+    if (syntaxClass) {
+        lines = lines.map(line => syntaxHighlight(line, syntaxClass, customKeywords).replaceAll("\\\\", "&#92;").replaceAll("\\<","&lt;").replaceAll("\\>","&gt;"));
+    }
+    
+    return `<div class="codeblock">${ lines.map(line => `<div>${ line }</div>`).join("") }</div>`;
+}
+function codeReplace(match, captured) {
+    return `<code>${ captured.replaceAll("\"", "&quot;").replaceAll("'", "&apos;").replaceAll("-", "&hyphen;").replaceAll("(", "&lpar;").replaceAll(")", "&rpar;").replaceAll("[", "&lbrack;").replaceAll("]", "&rbrack;").replaceAll("*", "&ast;").replaceAll("\n", "<br>") }</code>`;
+}
+function profileGrid(chunk) {
+    let data = chunk.split("\n").slice(1).filter(c => c.length > 3).map(row => {
+        let rowData = row.replaceAll("\\|","&verbar;").split("|").map(c => c.trim());
+        while (rowData.length < 6) { rowData.push(""); }
+        let entryImageUrl = rowData[0];
+        let entryName = rowData[1];
+        let entryBirthdate = rowData[2];
+        let entryTitle = rowData[3];
+        let entryDescription = rowData[4].split(" - ").map(p => "<div>" + p + "</div>").join("");
+        let entryIcon = rowData[5];
+
+        return `<div class="grid-entry">
+            <div class="gap-10 align-center">
+                <div>
+                    <img onclick="setLightbox(this)" class="profile-grid-img" src="${ entryImageUrl }">
+                </div>
+                <div>
+                    <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISODateString(entryBirthdate) + "</span>" }</div>
+                    <div class="entry-title">${ textFormat(entryTitle) }</div>
+                </div>
+            </div>
+            <div>
+                <div class="entry-description">${ textFormat(entryDescription) }</div>
+            </div>
+            ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="${ entryIcon }"></div>` : "" }
+        </div>`;
+    })
+    return `<div class="profile-grid">${ data.join("") }</div>`;
+}
+function autoTable(chunk) {
+    let rows = chunk.split("\n");
+    let firstRow = rows.shift().substring("||table".length).trim();
+    /* make tbody cells */
+    let tableWidth = 1;
+    for (let r = 0; r < rows.length; r += 1) {
+        let rowNum = r + 1;
+        let cells = rows[r].replaceAll("\\|", "&verbar;").split("|");
+        for (let c = 0; c < cells.length; c += 1) {
+            let cellNum = c + 1;
+            cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ textFormat(cells[c].trim()) }</td>`;
+            if (c + 1 > tableWidth) {
+                tableWidth = c + 1;
+            }
+        }
+        rows[r] = `<tr class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</tr>`;
+    }
+    /* if ||table declaration had styling included: */
+    let customTableStyle = "";
+    if (firstRow.replace(/\s/g, "").length > 1) {
+        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-table-"+tableNum).replace(/;/g, " !important;") }</style>`;
+    }
+    let table = `${ customTableStyle }<div class="table-wrapper"><table class="auto-table auto-table-${ tableNum }"><tbody>${ rows.join("") }</tbody></table></div>`;
+    tableNum += 1;
+    return table;
+}
+function autoRows(chunk) {
+    //let rows = chunk.split("\n").slice(1).map( line => line.replaceAll("\\|","&verbar;").split("|").map(cell => `<div>${ cell }</div>`).join("") );
+    let rows = chunk.split("\n");
+    let firstRow = rows.shift().substring("||table".length).trim();
+    /* make tbody cells */
+    let colWidth = 1;
+    for (let r = 0; r < rows.length; r += 1) {
+        let rowNum = r + 1;
+        let cells = rows[r].replaceAll("\\|", "&verbar;").split("|");
+        for (let c = 0; c < cells.length; c += 1) {
+            let cellNum = c + 1;
+            cells[c] = `<div class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ textFormat(cells[c].trim()) }</div>`;
+            if (c + 1 > colWidth) {
+                colWidth = c + 1;
+            }
+        }
+        rows[r] = `<div class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</div>`;
+    }
+    /* if ||rows declaration had styling included: */
+    let customTableStyle = "";
+    if (firstRow.replace(/\s/g, "").length > 1) {
+        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-rows-"+tableNum).replace(/;/g, " !important;") }</style>`;
+    }
+    let table = `${ customTableStyle }<div class="table-wrapper"><div class="auto-rows auto-rows-${ tableNum }">${ rows.join("") }</div></div>`;
+    tableNum += 1;
+    return table;
+}
+function indent(chunk) {
+    const lines = chunk.split("\n").slice(1).map( line => {
+        if (line.startsWith("---")) {
+            return `<p class="attribution">${line}</p>`;
+        }
+        if (line.startsWith(".")) {
+            return `<div class="fine">${ line.substring(1) }</div>`;
+        }
+        return `<p>${line}</p>`;
+    })
+
+    return `<blockquote>${ textFormat(lines.join("")) }</blockquote>`;
+}
+function autoList(chunk, fine) {
+    const listTag = chunk.startsWith("* ") ? "ul" : "ol";
+    let startNumber = "";
+    if (listTag == "ol") {
+        startNumber = chunk.slice(0, chunk.indexOf(" ") - 1);
+    }
+    const lines = chunk.split("\n").map( line => {
+        let li_ = "<li";
+
+        if (line.startsWith("* ")) {
+            line = line.substring(1).trim();
+        }
+        else if (/^\d+\. /.test(line)) {
+            li_ += ` value="${line.slice(0, line.indexOf(" ") - 1)}"`;
+            line = line.slice(line.indexOf(" ")).trim();
+        }
+        else {
+            li_ += ` class="no-marker"`;
+        }
+        return li_ + `>${ textFormat(line) }</li>`;
+    })
+    let list = `<${listTag} class="auto-list"`;
+    if (startNumber) {
+        list += ` start="${startNumber}"`;
+    }
+    list += `>${lines.join("")}</${listTag}>`;
+    if (fine) {
+        list = `<div class="fine">${ list }</div>`;
+    }
+    return list;
+}
+function autoHeading(chunk) {
+    const tag = "h" + chunk.indexOf(" ");
+    chunk = chunk.slice(chunk.indexOf(" ") + 1);
+    const id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g ,"");
+    chunk = textFormat(chunk);
+    if (tag == "h1" && document.title == "") {
+        document.title = chunk;
+        document.getElementById("page-name-display").innerHTML = chunk;
+    }
+    if (tag == "h1" || tag == "h2" || tag == "h3") {
+        return `<${ tag } id="${ id }" class="article-heading --for-toc">${ chunk }</${ tag }>`;
+    }
+    return `<h4 id="${ id }" class="article-heading">${ chunk }</h4>`;
+}
+function seeAlso(chunk) {
+    chunk = chunk.split("\n").slice(1).map(e => {
+        e = e.split("|");
+        if (e[0] == "substack") {
+            return `<a style="display:flex;align-items:center;gap:5px;color:var(--grey-8);" title="This was also posted on Substack" href="https://irisembury.substack.com/${ e[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg></a>`
+        }
+        if (e[0] == "tumblr") {
+            return `<a style="display:flex;align-items:center;gap:5px;color:var(--grey-8);" title="This was also posted on Tumblr" href="https://irisembury.tumblr.com/${ e[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg></a>`
+        }
+    }).join("");
+    document.getElementById("article").parentNode.insertBefore(document.createElement("div"),document.getElementById("article")).innerHTML = `<div style="margin-top:-24px;transform:translateY(3px);" class="flex-end gap-em">${ chunk }</div>`;
+    return;
+}
+/* ------------------------------- main interpreter for #article content ------------------------------- */
+var tableNum = 1, linkNum = 1;
 function interpreter(argValue) {
     if (argValue instanceof Node) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
@@ -344,220 +702,24 @@ function interpreter(argValue) {
         .replace(/\r/g, "") /* for safety, probably no effect */
         .trim()
         .split("\n\n");
-
-    let tableNum = 1;
-    let galleryNum = 1;
-    let linkNum = 1;
-    let firstParagraph = true;
-    let firstHeading = true;
     
     input = input.map( chunk => {
-    
-        if (chunk.startsWith("\\")) {
-            return chunk.slice(1);
-        }
-        if (chunk == "---") {
-            return "<hr>";
-        }
-        
-        /* ------------------------------------ images ------------------------------------ */
-        if (chunk.startsWith("||image-float-left")) {
-            /* imgUrl | caption | alt-text/title */
-            const lines = chunk.split("\n").slice(1).map( line => {
-                const parts = line.split("|");
-                while (parts.length < 3) {
-                    parts.push("");
-                }
-                const imgUrl = parts[0].trim();
-                let figCaption = textFormat(parts[1].trim());
-                let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
-                if (figCaption && !altText) { altText = figCaption }
-                if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
-                
-                return `<figure><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
-            });
-            return `<div class="image-float left">${ lines.join("") }</div>`;
-        }
-        if (chunk.startsWith("||image-float")) {
-            /* imgUrl | caption | alt-text/title */
-            const lines = chunk.split("\n").slice(1).map( line => {
-                const parts = line.split("|");
-                while (parts.length < 3) {
-                    parts.push("");
-                }
-                const imgUrl = parts[0].trim();
-                let figCaption = textFormat(parts[1].trim());
-                let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
-                if (figCaption && !altText) { altText = figCaption }
-                if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
-                
-                return `<figure><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
-            });
-            return `<div class="image-float">${ lines.join("") }</div>`;
-        }
-
-        if (chunk.startsWith("||image-span")) {
-            /* ||image-span maxHeight */
-            /* imgUrl | alt-text/title */
-            const rows = chunk.split("\n");
-            let homeRow = rows.shift().substring("||image-span".length).trim();
-            const galleryFigures = rows.map( line => {
-                const parts = line.split("|");
-                while (parts.length < 2) {
-                    parts.push("");
-                }
-                let imgUrl = parts[0].trim();
-                let altText = textFormat(parts[1].trim().replace(/"/g,"&quot;"));
-                return `<div><img style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
-            });
-            return `<div class="image-span">${ galleryFigures.join("") }</div>`;
-        }
-
-        if (chunk.startsWith("||gallery")) {
-            /* ||image-span maxHeight */
-            /* imgUrl | caption | alt-text/title */
-            const rows = chunk.split("\n");
-            let homeRow = rows.shift().substring("||gallery".length).trim();
-            let galleryFigures = rows.map( line => {
-                const parts = line.split("|");
-                while (parts.length < 3) {
-                    parts.push("");
-                }
-                let imgUrl = parts[0].trim();
-                let caption = textFormat(parts[1].trim());
-                let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
-                return `
-                <figure>
-                <img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
-                <figcaption>${ caption }</figcaption>
-                </figure>
-                `;
-            });
-            return `<div class="captioned-gallery">${ galleryFigures.join("") }</div>`;
-        }
-
-        if (chunk.startsWith("||square-gallery")) {
-            /* ||square-gallery gridHeight */
-            /* imgUrl | caption | hover text (alt/title) */
-            const rows = chunk.split("\n");
-            let homeRow = rows.shift().substring("||image-span".length).trim();
-            const lines = chunk.split("\n").slice(1).map( line => {
-                const parts = line.split("|");
-                while (parts.length < 3) {
-                    parts.push("");
-                }
-                const imgUrl = parts[0].trim();
-                let caption = textFormat(parts[1].trim());
-                let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
-                if (!altText) {
-                    altText = caption;
-                }
-                if (caption) {
-                    caption = `<figcaption>${ caption }</figcaption>`;
-                }
-                
-                return `<figure><div class="img-wrapper"><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
-            });
-            return `<div class="square-gallery">${ lines.join("") }</div>`;
-        }
-
-        /* ------------------------------------ video ------------------------------------ */
-        if (chunk.startsWith("||video")) {
-            let data = chunk.split("\n").slice(1)[0].split("|").map(c => c.trim());
-            let fileUrl = data[0];
-            let dot = fileUrl.indexOf(".");
-            if (dot == -1) {
-                return;
-            }
-            let fileType = fileUrl.substring(dot + 1);
-            let maxHeight = (data.length == 2) ? data[1] : 300;
-            return `<div class="auto-video"><video controls height="${maxHeight}"><source src="${fileUrl}" type="video/${fileType}"></video></div>`;
-        }
-
-        if (chunk.startsWith("||yt-gallery")) {
-            let rows = chunk.split("\n");
-            let galleryInfo = rows.shift().substring("||yt-gallery".length);
-            let sortInput = galleryInfo.includes("sort");
-            rows = rows.map(row => {
-                row = row.replace(/\\\|/g, "&verbar;").split("|").map(d => d.trim());
-                while (row.length < 3) {
-                    row.push("");
-                }
-                return row;
-            });
-            if (sortInput) {
-                rows.sort((a, b) => {
-                    a = parseInt(a[2].replace(/\D/g, "")) || 0;
-                    b =parseInt(b[2].replace(/\D/g, "")) || 0;
-                    return b - a;
-                });
-            }
-            let numToInclude = parseInt(galleryInfo.replace(/\D/g, "")) || rows.length;
-            rows = rows.slice(0, numToInclude).map( row => {
-                let title = row[0];
-                let videoCode = row[1];
-                let date = row[2];
-
-                while (videoCode.charAt(videoCode.length - 1) == "/") {
-                    videoCode = videoCode.substring(0, videoCode.length - 1);
-                }
-                videoCode = videoCode.split("/").slice(-1);
-
-                let videoUrl = `https://www.youtube.com/watch?v=${ videoCode }`;
-                let thumbUrl = `https://i.ytimg.com/vi/${ videoCode }/hqdefault.jpg`;
-
-                let videoLink = `<a href="${ videoUrl }"><img src="${ thumbUrl }"></a>`;
-
-                return `<figure>
-                    <div>${ videoLink }</div>
-                    <figcaption><span class="yt-title"><a href="${ videoUrl }">${ title }</a></span> <span class="yt-date">${ date }</span></figcaption>
-                </figure>`;
-            });
-            return `<div class="table-wrapper"><div class="yt-gallery">${ rows.join("") }</div></div>`;
-        }
-
+        if (chunk.startsWith("<")) { return chunk; }
+        if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
+        if (chunk == "---") { return "<hr>"; }
+        if (chunk.startsWith("||image-float-left")) { return imageFloat(chunk, "left"); }
+        if (chunk.startsWith("||image-float")) { return imageFloat(chunk, "right"); }
+        if (chunk.startsWith("||image-span")) { return imageSpan(chunk); }
+        if (chunk.startsWith("||gallery")) { return gallery(chunk); }
+        if (chunk.startsWith("||square-gallery")) { return squareGallery(chunk); }
+        if (chunk.startsWith("||video")) { return autoVideo(chunk); }
+        if (chunk.startsWith("||yt-gallery")) { return ytGallery(chunk); }
         chunk = chunk.replaceAll("\\`", "&#96;");
-
-        /* ------------------------------------- code ------------------------------------- */
-        if (chunk.startsWith("||codeblock")) {
-            let lines = chunk.split("\n");
-            let syntaxClass = "", customKeywords = [];
-            let firstLine = lines.shift().substring("||codeblock".length).trim();
-            if (firstLine) {
-                let words = firstLine.split(" ");
-                syntaxClass = words.shift();
-                customKeywords = words;
-            }
-            
-            if (syntaxClass) {
-                lines = lines.map(line => syntaxHighlight(line, syntaxClass, customKeywords).replaceAll("\\\\", "&#92;").replaceAll("\\<","&lt;").replaceAll("\\>","&gt;"));
-            }
-            
-            return `<div class="codeblock">${ lines.map(line => `<div>${ line }</div>`).join("") }</div>`;
-        }
-
-        chunk = chunk.replace(/`(.+?)`/g, (match, captured) => {
-            return `<code>${ captured.replaceAll("\"", "&quot;")
-                .replaceAll("'", "&apos;")
-                .replaceAll("-", "&hyphen;")
-                .replaceAll("(", "&lpar;")
-                .replaceAll(")", "&rpar;")
-                .replaceAll("[", "&lbrack;")
-                .replaceAll("]", "&rbrack;")
-                .replaceAll("*", "&ast;")
-                .replaceAll("\n", "<br>") }</code>`;
-        });
+        if (chunk.startsWith("||codeblock")) { return codeblock(chunk) ; }
+        chunk = chunk.replace(/`(.+?)`/g, codeReplace);
         
-        let pStyle = [];
-        
-        if (chunk.startsWith(".")) {
-            chunk = chunk.slice(1);
-            pStyle.push("fine");
-        } /* .first-paragraph = first paragraph that is not .fine */
-        else if (firstParagraph) {
-            pStyle.push("first-paragraph");
-            firstParagraph = false;
-        }
+        let fine = chunk.startsWith(".");
+        if (fine) { chunk = chunk.slice(1).trimStart(); }
         
         /* ------------------------------------- links ------------------------------------- */
         /*
@@ -565,199 +727,30 @@ function interpreter(argValue) {
         */
         chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, address) => {
             address = address.replaceAll("\\)", ")");
-            
+            let title = address.startsWith("http") ? `title="${address}"` : "";
             let link;
-            if (!address.startsWith("http")) {
-                if (displayText == "") {
-                    link = `<a href="${ address }>[internal]</a>`;
-                }
-                else {
-                    link = `<a href="${ address }">${ displayText }</a>`
-                }
-            }
-            else {
-                if (displayText == "") {
-                    link = `<a href="${ address }" title="${ address }" class="autoref">[${ linkNum++ }]</span></a>`;
-                }
-                else {
-                    link = `<a href="${ address }" title="${ address }">${ displayText }</a>`;
-                }
-            }
-            
+            if (displayText == "") { link = `<a href="${ address }" title="${ address }" class="autoref">[${ linkNum }]</span></a>`; }
+            else { link = `<a href="${ address }" ${ title }>${ displayText }</a>`; }
+            linkNum += 1;
             return link;
         });
-        
-        /* link to section on this page: */
-        chunk = chunk.replace(/\[\[(.+?)\]\]/g, (match, displayText) => {
-            return `<a title="Jump to section" href="#${ displayText.replaceAll(" ", "_") }">${ displayText }</a>`
-        });
+        chunk = chunk.replace(/\[\[(.+?)\]\]/g, (match, displayText) => { return `<a title="Jump to section" href="#${ displayText.replaceAll(" ", "_") }">${ displayText }</a>` });
 
-        if (chunk.startsWith("||profile-grid")) {
-            let data = chunk.split("\n").slice(1).filter(c => c.length > 3).map(row => {
-                let rowData = row.replaceAll("\\|","&verbar;").split("|").map(c => c.trim());
-                while (rowData.length < 6) { rowData.push(""); }
-                let entryImageUrl = rowData[0];
-                let entryName = rowData[1];
-                let entryBirthdate = rowData[2];
-                let entryTitle = rowData[3];
-                let entryDescription = rowData[4].split(" - ").map(p => "<div>" + p + "</div>").join("");
-                let entryIcon = rowData[5];
+        if (chunk.startsWith("||profile-grid")) { return profileGrid(chunk); }
+        if (chunk.startsWith("||table")) { return autoTable(chunk); }
+        if (chunk.startsWith("||rows")) { return autoRows(chunk); }
+        if (chunk.startsWith("||indent")) { return indent(chunk); }
+        if ( chunk.startsWith("* ") || /^\d+\. /.test(chunk) ) { return autoList(chunk, fine); }
+        if ( chunk.startsWith("-- ")) { return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`; }
+        if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
+        if (chunk.startsWith("||see-also")) { seeAlso(chunk); return ""; }
 
-                return `<div class="grid-entry">
-                    <div class="gap-10 align-center">
-                        <div>
-                            <img onclick="setLightbox(this)" class="profile-grid-img" src="${ entryImageUrl }">
-                        </div>
-                        <div>
-                            <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISODateString(entryBirthdate) + "</span>" }</div>
-                            <div class="entry-title">${ textFormat(entryTitle) }</div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="entry-description">${ textFormat(entryDescription) }</div>
-                    </div>
-                    ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="${ entryIcon }"></div>` : "" }
-                </div>`;
-            })
-            return `<div class="profile-grid">${ data.join("") }</div>`;
-        }
-
-        /* ------------------------------------- table ------------------------------------- */
-        if (chunk.startsWith("||table")) {
-            let rows = chunk.split("\n");
-            let firstRow = rows.shift().substring("||table".length).trim();
-            /* make tbody cells */
-            let tableWidth = 1;
-            for (let r = 0; r < rows.length; r += 1) {
-                let rowNum = r + 1;
-                let cells = rows[r].replace(/\\\|/g, "&verbar;").split("|");
-                for (let c = 0; c < cells.length; c += 1) {
-                    let cellNum = c + 1;
-                    cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ textFormat(cells[c].trim()) }</td>`;
-                    if (c + 1 > tableWidth) {
-                        tableWidth = c + 1;
-                    }
-                }
-                rows[r] = `<tr class="row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</tr>`;
-            }
-            /* if ||table declaration had styling included: */
-            let customTableStyle = "";
-            if (firstRow.replace(/\s/g, "").length > 1) {
-                customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-table-"+tableNum).replace(/;/g, " !important;") }</style>`;
-            }
-
-            let table = `${ customTableStyle }<div class="table-wrapper"><table class="auto-table auto-table-${ tableNum }"><tbody>${ rows.join("") }</tbody></table></div>`;
-            tableNum += 1;
-
-            return table;
-        }
-
-        /* -------- technically not a table -------- */
-        if (chunk.startsWith("||rows")) {
-            let rows = chunk.split("\n").slice(1);
-            for (let i = 0; i < rows.length; i += 1) {
-                rows[i] = rows[i].replace(/\\\|/g, "&verbar;");
-                let cells = rows[i].split("|");
-                if (cells.length == 1) { cells.push(""); }
-                for (let j = 0; j < cells.length; j += 1) {
-                    cells[j] = `<div class="cell col-${ j + 1 } col-${ (j + 1) % 2 == 1 ? "odd" : "even" }">${ textFormat(cells[j]) }</div>`;
-                }
-                rows[i] = `<div class="row row-${ i + 1 } row-${ (i + 1) % 2 == 1 ? "odd" : "even" }">${ cells.join("") }</div>`;
-            }
-            return `<div class="table-wrapper"><div class="rows auto-table-${ tableNum++ }">${ rows.join("") }</div></div>`;
-        }
-
-        /* ---------------------------------- blockquote ---------------------------------- */
-        if (chunk.startsWith("||indent")) {
-            const lines = chunk.split("\n").slice(1).map( line => {
-                if (line.startsWith("---")) {
-                    return `<p class="attribution">${line}</p>`;
-                }
-                if (line.startsWith(".")) {
-                    return `<div class="fine">${ line.substring(1) }</div>`;
-                }
-                return `<p>${line}</p>`;
-            })
-
-            return `<blockquote>${ textFormat(lines.join("")) }</blockquote>`;
-        }
-
-        /* ------------------------------------- lists ------------------------------------- */
-        /* Not a perfect handler but whatever it'll do. */
-        if ( chunk.startsWith("* ") || /^\d+\. /.test(chunk) ) {
-            
-            const listTag = chunk.startsWith("* ") ? "ul" : "ol";
-            let startNumber = "";
-            if (listTag == "ol") {
-                startNumber = chunk.slice(0, chunk.indexOf(" ") - 1);
-            }
-            const lines = chunk.split("\n").map( line => {
-                let li_ = "<li";
-
-                if (line.startsWith("* ")) {
-                    line = line.substring(1).trim();
-                }
-                else if (/^\d+\. /.test(line)) {
-                    li_ += ` value="${line.slice(0, line.indexOf(" ") - 1)}"`;
-                    line = line.slice(line.indexOf(" ")).trim();
-                }
-                else {
-                    li_ += ` class="no-marker"`;
-                }
-                return li_ + `>${ textFormat(line) }</li>`;
-            })
-            let list = `<${listTag} class="auto-list"`;
-            if (startNumber) {
-                list += ` start="${startNumber}"`;
-            }
-            list += `>${lines.join("")}</${listTag}>`;
-            if (pStyle.includes("fine")) {
-                list = `<div class="fine">${ list }</div>`;
-            }
-            return list;
-        }
-
-        if ( chunk.startsWith("-- ")) {
-            return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`;
-        }
-        
-        /* ----------------------------------- headings ----------------------------------- */
-        if (/^\#{1,4} /.test(chunk)) {
-            const hType = chunk.indexOf(" ");
-            const hTag = "h" + hType;
-            chunk = chunk.slice(hType + 1);
-            const headingId = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g ,"");
-
-            const hClass = hType < 4 ? "article-heading --for-toc" : "article-heading";
-            const heading = `<${ hTag } id="${ headingId }" class="${ hClass }">${ textFormat(chunk) }</${ hTag }>`;
-            return heading;
-        }
-
-        /* ----------------------------------- see also ----------------------------------- */
-        if (chunk.startsWith("||see-also")) {
-            document.getElementById("page-footer").appendChild(document.createElement("div")).innerHTML = "<div>The specific content on this page was also posted in these other places:</div>" + chunk.split("\n").slice(1)
-                .map( line => {
-                    const url = line .replace(/substack\|(\w+)/, "https://irisembury.substack.com/p/$1")
-                        .replace(/tumblr\|(\d+)/, "https://irisembury.tumblr.com/post/$1");
-                    return `<div><a href="${ url }" target="_blank">${ url }</a></div>`;
-                }).join("");
-            return;
-        }
-
-        /* ------------------------ finalizing for normal paragraphs ------------------------ */
-        
         chunk = textFormat(chunk);
-        
-        if (pStyle.includes("fine")) {
-            chunk = chunk.replaceAll("\n", "<br>");
-        }
-        
-        if (pStyle.length > 0) {
-            return `<p class="${ pStyle.join(' ') }">${ chunk }</p>`;
+        if (fine) {
+            return `<div class="fine">${ chunk.replaceAll("\n", "<br>") }</div>`;
         }
         return `<p>${ chunk }</p>`;
     })
-    
     return input.join("");
 }
 
@@ -937,8 +930,4 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
 
     return output;
 }
-
-
-
-
 

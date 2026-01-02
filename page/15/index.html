@@ -6,12 +6,6 @@
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <style>
     .auto-table .cell { border: 1px solid var(--grey-a); }
-    .auto-table code { background-color: transparent !important; }
-    
-    sub, sub *,
-    sup, sup * {
-        font-family: sans-serif, var(--ff-ui) !important;
-    }
     
     .info {
         max-width: 900px;
@@ -21,9 +15,7 @@
         border: 1px solid var(--grey-a);
         font-size: 0.95em;
         font-family: var(--ff-table);
-        color: var(--grey-5);
     }
-    
     
     body {
         --lh-article: 1.5;
@@ -39,11 +31,11 @@ The code samples are usually in C++ or C# because those are the languages I was 
 
 Big-O notation describes the time complexity of an algorithm, i.e. how many operations it may take in order to run to completion, as measured in relation to N, or the size of the data set. This can be used to describe the worst-case, average, or best-case time complexity. The main one we generally care about is the worst-case.
 
-\<div class="info">
+<div class="info">
 
 O stands for *order*, as the extent to which a function grows in relation to the size of its input used to be called the order of that function. N just stands for number, which isn't always capitalized.
 
-\</div>
+</div>
 
 Common big-O values and their meaning:
 
@@ -56,11 +48,11 @@ O(n log n) | This does LOG<sub>2</sub>N operations N times. The simplest case wo
 O(2<sup>N</sup>) | The inverse of O(LOG<sub>2</sub>N). The number of operations grows exponentially as N increases. This is horrible but can happen with recursion. A function that determines fibonacci numbers, a common example of a recursive function, runs at O(2<sup>N</sup>).
 O(N!) | A nightmare.
 
-\<div class="info">
+<div class="info">
 
 As the purpose of big-O is to *briefly summarize* how an algorithm *scales* with increases to N, anything other than the most significant term (i.e. the thing that increases the fastest as N increases) can be omitted. For example, an algorithm with an order of N<sub>3</sub> + 70N<sup>2</sup> + 50 is reduced simply to O(N<sup>3</sup>).
 
-\</div>
+</div>
 
 Quick visualization of common big-O values:
 
@@ -95,14 +87,14 @@ It's possible in nearly every programming language to interact with our data at 
 
 These accept 2 values and return 1 value:
 
-||table this .col-1 { background:var(--c-light-blue-bg); }
-`&` (AND) | Each bit of the result is a 1 only if **both** input values also had a 1 in that position.
+||table this .col-1 { background:var(--c-light-blue-bg); } this code { background-color: transparent; }
+`&amp;` (AND) | Each bit of the result is a 1 only if **both** input values also had a 1 in that position.
 `\|` (OR) | Each bit of the result is a 1 if **either** of the input values had a 1 in that position.
 `^` (XOR) | Each bit of the result is a 1 if the input values have a **different** bit in that position.
 
 There's also a `NOT` operator (~), which accepts only 1 value:
 
-||table this .col-1 { background: var(--c-light-blue-bg); }
+||table this .col-1 { background: var(--c-light-blue-bg); } this code { background-color: transparent; }
 `~` (NOT) | Each bit of the result is a 1 only if the input value has a 0 in that position (it *inverses* the bits).
 
 Examples of each operator in action:
@@ -176,7 +168,7 @@ The long story short is that shifting to the left will double the value of a num
 
 Shifting by multiple places is the same as doubling or halving that many times. This means a shift is the same as dividing or multiplying by 2 to the power of the places shifted by.
 
-\<div class="align-center gap-15">
+<div class="align-center gap-15">
 
 ||table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
 shifting by x places | is the same as multiplying
@@ -190,7 +182,7 @@ shifting by x places | is the same as multiplying
 >> 2 | / 2<sup>2</sup> (i.e. \*2\*2)
 >> 3 | / 2<sup>3</sup> (i.e. \*2\*2\*2)
 
-\</div>
+</div>
 
 Note that the bitshift operator doesn't automatically change the original value.
 
@@ -254,17 +246,17 @@ If the key is less than the middle item, then logically it could only be in the 
 
 For example, think about trying to find the value 32 in this array:
 
-\<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <b>32</b>, 44, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95</mark> ]</div>
+<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <b>32</b>, 44, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95</mark> ]</div>
 
 It's an odd-number array (23 items), so we'd split that in half (rounding the mid-point down) into 11 and 12 items. 32 is lower than the middle value (the 46), ergo we narrow down to the left half and run again.
 
-\<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
+<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
 
 Then 32 is higher than the middle value (21), so you refocus around the right half of *that* subarray.
 
-\<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ 3, 5, 12, 15, 18, 21, <mark>26, 27, 30, <b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
+<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ 3, 5, 12, 15, 18, 21, <mark>26, 27, 30, <b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
 
-\<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ 3, 5, 12, 15, 18, 21, 26, 27, 30, <mark><b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
+<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ 3, 5, 12, 15, 18, 21, 26, 27, 30, <mark><b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
 
 This logically repeats until either your mid-point value matches your key, or (in the worst case scenario) you only have one item remaining in the array (which is the only way to verify if your key is absent from the array).
 
@@ -1204,11 +1196,11 @@ These terms could've been any of their logical equivalents. "Last in, first out"
 
 The other major distinction to consider is whether the nodes are **singly-linked**, meaning each node holds just one pointer (to the next item), or **doubly-linked**, meaning the nodes hold two pointers (to both the next and previous nodes), allowing two-way traversal. This often isn't needed, though, so you'll commonly just be using singly-linked lists, and that's what a lot of material focuses on.
 
-\<div class="info">
+<div class="info">
 
 In both cases, the word 'linked' is an adjective describing 'list', whereas 'singly' and 'doubly' are adverbs describing how the list is linked. I see some students refer to a "singly-linked linked list", but this is redundant. We can just say "singly-linked list".
 
-\</div>
+</div>
 
 ||image-span
 media/singly-doubly-linked.png|A visualization of singly- and doubly-linked lists.
@@ -1410,11 +1402,11 @@ int main()
 
 One way to go through the items of a list is to pop or dequeue them all, but sometimes you want to search through a list without doing that. Take a pointer to the starting node and move it forward by reässigning it to its own `next` property until it comes back null.
 
-\<div class="info">
+<div class="info">
 
 If you change the entry node-pointer held by the list itself, all data in the list is effectively lost.
 
-\</div>
+</div>
 
 ||codeblock cpp Stack
 class Stack {
@@ -1449,7 +1441,7 @@ Same printout as before, but this time the list is still intact afterwards.
 
 
 
-\<script src="../../assets/layout.js"></script>
+<script src="../../assets/layout.js"></script>
 </body></html>
 
 
