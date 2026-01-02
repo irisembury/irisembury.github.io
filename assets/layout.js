@@ -114,6 +114,7 @@ window.addEventListener("load", function() {
     <style id="user-styles"></style>`;
     
     interpreter(document.getElementById("article"));
+    // <nav id="left" class="sidebar">${ pageData.map(entry => `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.page }/index.html">${ entry.title }</a></div>`).join("") }</nav>
 
     if (index) {        
         document.getElementById("index").innerHTML = `<div class="table-wrapper">
