@@ -2,7 +2,7 @@
 const HTML = document.documentElement;
 
 let pageData = `
-Nick Shirley and Somali daycares | 41 | 2026-01-02
+Nick Shirley and Somali day cares | 41 | 2026-01-02
 Why do people hate Reddit so much? | 40 | 2025-12-30
 Stay the trenches | 39 | 2025-12-17
 Derangement | 38 | 2025-12-12
@@ -40,11 +40,30 @@ window.addEventListener("load", function() {
     const pathToRoot = index ? "" : "../../";
     document.head.innerHTML += `<link rel="stylesheet" href="${ pathToRoot }assets/fonts.css">`;
 
-    document.body.innerHTML = `<nav id="navbar" class="no-select">
-        <div class="text-select align-center"><svg id="hamburger" class="hidden" width="28" height="28" viewBox="0 0 28 28" fill="currentcolor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.473 8.15263H23.5266C24.0643 8.15263 24.5 7.6777 24.5 7.09194C24.5 6.50618 24.0643 6.03174 23.5266 6.03174H4.473C3.93531 6.03174 3.5 6.50618 3.5 7.09194C3.5 7.6777 3.93531 8.15263 4.473 8.15263ZM19.0765 12.9327H4.25706C3.83886 12.9327 3.50028 13.4076 3.50028 13.9934C3.50028 14.5791 3.83886 15.0536 4.25706 15.0536H19.0765C19.4947 15.0536 19.8336 14.5791 19.8336 13.9934C19.8336 13.4076 19.4947 12.9327 19.0765 12.9327ZM4.47328 19.8337H23.5268C24.0645 19.8337 24.5003 20.3086 24.5003 20.8944C24.5003 21.4802 24.0645 21.9546 23.5268 21.9546H4.47328C3.9356 21.9546 3.50028 21.4802 3.50028 20.8944C3.50028 20.3086 3.9356 19.8337 4.47328 19.8337Z"></path></svg> <a href="${ pathToRoot }index.html">Home</a> &verbar; <span id="page-name-display">${ document.title || "This page" }</span></div>
-        <a id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></a>
+    document.body.innerHTML = `<nav id="navbar">
+        <div class="align-center gap-8">
+            <div id="hamburger" class="icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
+            <div><a href="${ pathToRoot }index.html">Home</a> &verbar; <span id="page-name-display">${ document.title || "This page" }</span></div>
+        </div>
+        <div id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
     </nav>
-    <div id="menu" class="hidden">
+    <nav id="left" class="closed">
+        <div class="plugs">
+            <div class="nav-row page-title">Links</div>
+                <div class="nav-row"><a href="https://youtube.com/@irisembury"><svg title="YouTube" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30"><path  fill="var(--c-youtube)" d="M29.2 8.6c-.3-1.6-1.6-2.8-3.2-3C23 5.2 15 5.2 15 5.2s-8 0-11 .4c-1.6.2-2.9 1.4-3.2 3C.4 11.6.4 15 .4 15s0 3.4 .4 6.4c.3 1.6 1.6 2.8 3.2 3C7 24.8 15 24.8 15 24.8s8 0 11-.4c1.6-.2 2.9-1.4 3.2-3 .4-3 .4-6.4 .4-6.4s0-3.4-.4-6.4z"/><path fill="var(--c-youtube-white)" d="M12 19.2V10.8l7.8 4.2-7.8 4.2z"/></svg>YouTube</a></div>
+                <div class="nav-row"><a href="https://bsky.app/profile/irisembury.bsky.social"><svg title="Bluesky" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 57" width="18" height="18"><path fill="var(--c-bluesky)" d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805ZM50.127 3.805C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745Z"></path></svg>Bluesky</a></div>
+                <div class="nav-row"><a href="https://irisembury.tumblr.com/"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg>Tumblr</a></div>
+                <div class="nav-row"><a href="https://x.com/irisembury"><svg title="Twitter/X" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="-1 -1 25 25"><path fill="var(--c-twitter)" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>Twitter/X</a></div>
+                <div class="nav-row"><a href="https://irisembury.substack.com/"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg>Substack</a></div>
+                <div class="nav-row"><a href="https://discord.gg/fGdV7x5dk2"><svg title="Discord" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16"><path fill="var(--c-discord)" d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/></svg>Invite to my Discord</a></div>
+        </div>
+        <div class="page-links">
+            <div class="nav-row page-title">Latest pages uploaded</div>
+                ${ pageData.map(entry => `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.page }/index.html">${ entry.title }</a></div>`).join("") }
+        </div>
+    </nav>
+    <div class="dark-screen"></div>
+    <div id="right" class="closed">
         <h3>Display preferences:</h3>
         <table><tbody><tr><td>Theme:</td><td>
             <select class="menu-select" id="brightness-select">
@@ -55,15 +74,15 @@ window.addEventListener("load", function() {
         <hr>
         <div class="menu-options">
             <div class="full-width-option">
-                <label class="no-select" for="page-full-width">Page full width</label>
+                <label for="page-full-width">Page full width</label>
                 <input type="checkbox" class="menu-checkbox" id="page-full-width">
             </div>
             <div class="hide-toc-option">
-                <label class="no-select" for="hide-toc">Hide table of contents</label>
+                <label for="hide-toc">Hide table of contents</label>
                 <input type="checkbox" class="menu-checkbox" id="hide-toc">
             </div>
             <div class="book-text-option">
-                <label class="no-select" for="book">Indent and justify</label>
+                <label for="book">Indent and justify</label>
                 <input type="checkbox" class="menu-checkbox" checked id="book">
             </div>
         </div>
@@ -100,10 +119,10 @@ window.addEventListener("load", function() {
         </div>
     </div>
     <div class="c1">
-        <nav id="toc" class="sidebar"></nav>
+        <nav id="toc"></nav>
         <div class="c3">
             <div id="article">${ document.body.innerHTML }</div>
-            <div id="page-footer">${ index ? "" : `<div class="footer-back-to-index"><a href="../../index.html">&larr; Link back to index (front page)</a></div>` }<div>This repo domain (irisembury.github.io) is used to host my writing and opinions. I have no association with any other person or organization. For serious inquiries you can contact me at irisembury@gmail.com.</div></div>
+            <div id="page-footer">${ index ? "" : `<div class="footer-back-to-index"><a href="../../index.html">Link back to index (front page)</a></div>` }<div>This repo domain (irisembury.github.io) is used to host my writing and opinions. I have no association with any other person or organization. For serious inquiries you can contact me at irisembury@gmail.com.</div></div>
         </div>
     </div>
     <div class="lb-container">
@@ -134,32 +153,53 @@ window.addEventListener("load", function() {
         setLightbox("close")
     })
     
-    /* ---- ---- ---- ---- ---- ---- ---- menu: ---- ---- ---- ---- ---- ---- ---- */
+    /* ---- ---- ---- ---- ---- ---- ---- gearMenu ---- ---- ---- ---- ---- ---- ---- */
     
     const gearIcon = document.getElementById("gear");
-    const menu = document.getElementById("menu");
-    function menuToggle(option) {
+    const gearMenu = document.getElementById("right");
+    function gearMenuToggle(option) {
         if (option == "close" || option == "open") {
-            menu.classList.toggle("hidden", option == "close");
+            gearMenu.classList.toggle("closed", option == "close");
         }
         else {
-            menu.classList.toggle("hidden", !menu.classList.contains("hidden"));
+            gearMenu.classList.toggle("closed", !gearMenu.classList.contains("closed"));
         }
     }
-    gearIcon.addEventListener("click", menuToggle);
+    gearIcon.addEventListener("click", gearMenuToggle);
+    
+    /* ---- ---- ---- ---- ---- ---- ---- hamburgerMenu ---- ---- ---- ---- ---- ---- ---- */
+    
+    const hamburgerIcon = document.getElementById("hamburger");
+    const hamburgerMenu = document.getElementById("left");
+    function hamburgerMenuToggle(option) {
+        if (option == "close" || option == "open") {
+            hamburgerMenu.classList.toggle("closed", option == "close");
+        }
+        else {
+            hamburgerMenu.classList.toggle("closed", !hamburgerMenu.classList.contains("closed"));
+        }
+    }
+    hamburgerIcon.addEventListener("click", hamburgerMenuToggle);
+    
+    /* ---- ---- ---- ---- ---- hamburger & gear close conditions ---- ---- ---- ---- ---- */
+    
     window.addEventListener("click", function(e) {
-        if (!menu.contains(e.target) && !gearIcon.contains(e.target)) {
-            menuToggle("close");
+        if (!gearMenu.contains(e.target) && !gearIcon.contains(e.target)) {
+            gearMenuToggle("close");
+        }
+        if (!hamburgerMenu.contains(e.target) && !hamburgerIcon.contains(e.target)) {
+            hamburgerMenuToggle("close");
         }
     })
     window.addEventListener("keydown", function(e) {
         if (e.key === "Escape") {
-            menuToggle("close");
+            hamburgerMenuToggle("close");
+            gearMenuToggle("close");
             setLightbox("close");
         }
     })
-
-    /* ---- ---- ---- ---- ---- ---- ---- menu items: ---- ---- ---- ---- ---- ---- ---- */
+    
+    /* ---- ---- ---- ---- ---- ---- ---- gear menu items: ---- ---- ---- ---- ---- ---- ---- */
     setBrightness();
     document.getElementById("brightness-select").addEventListener("change", function() {
         setBrightness(this.value);
@@ -190,15 +230,6 @@ window.addEventListener("load", function() {
         HTML.classList.toggle("book", this.checked);
     });
     
-    /*
-        function setBrightness(setValue) {
-            let brightness = setValue || localStorage.getItem("brightness") || "light";
-            HTML.classList.remove(...Array.from(document.getElementById("brightness-select").children).map(o => o.value).filter(o => o != brightness));
-            HTML.classList.add(brightness);
-            localStorage.setItem("brightness", brightness);
-            document.getElementById("brightness-select").value = brightness;
-        }
-    */
     if (!index) {
         if (localStorage.getItem(window.location.href + "-full-width") == "true") {
             HTML.classList.add("full-width");
@@ -258,7 +289,8 @@ window.addEventListener("load", function() {
         });
         const toc = document.getElementById("toc");
         const headings = Array.from(document.getElementById("article").getElementsByClassName("--for-toc"));
-        toc.innerHTML = `<div class="nav-row title">Table of contents</div>` + headings.map ( heading => `<div class="nav-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
+        toc.innerHTML = `<div class="toc-row title">Table of contents</div>` + headings.map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
+        toc.scrollTo({ behaviour: "instant", top: 0 });
         
         let canTocHighlightUpdate = true;
         function tocHighlightUpdateAttempt() {
@@ -308,25 +340,6 @@ window.addEventListener("load", function() {
             }
             lastHeading = currentHeading;
         }
-        
-        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- */
-        let canTocFadeCheck = true;
-        function tocFadeCheck() {
-            if (canTocFadeCheck) {
-                canTocFadeCheck = false;
-                setTimeout(() => {
-                    canTocFadeCheck = true;
-                    toc.classList.toggle("hide-mask", (toc.scrollTop + 30 > toc.scrollHeight - toc.offsetHeight));
-                }, 250);
-                toc.classList.toggle("hide-mask", (toc.scrollTop + 30 > toc.scrollHeight - toc.offsetHeight));
-            }
-        }
-        toc.addEventListener("resize", tocFadeCheck);
-        toc.addEventListener("scroll", tocFadeCheck);
-        window.addEventListener("scroll", tocHighlightUpdateAttempt);
-        setTimeout(() => {
-            tocHighlightUpdateAttempt();
-        }, 100);
     }
 })
 
@@ -683,7 +696,7 @@ function seeAlso(chunk) {
     chunk = chunk.split("\n").slice(1).map(e => {
         e = e.split("|");
         if (e[0] == "substack") {
-            return `<a style="display:flex;align-items:center;gap:5px;color:var(--grey-8);" title="This was also posted on Substack" href="https://irisembury.substack.com/${ e[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg></a>`
+            return `<a style="display:flex;align-items:center;gap:5px;color:var(--grey-8);" title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ e[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg></a>`
         }
         if (e[0] == "tumblr") {
             return `<a style="display:flex;align-items:center;gap:5px;color:var(--grey-8);" title="This was also posted on Tumblr" href="https://irisembury.tumblr.com/${ e[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg></a>`
