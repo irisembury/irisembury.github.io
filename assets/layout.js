@@ -83,7 +83,7 @@ window.addEventListener("load", function() {
             </div>
             <div class="book-text-option">
                 <label for="book">Indent and justify</label>
-                <input type="checkbox" class="menu-checkbox" checked id="book">
+                <input type="checkbox" class="menu-checkbox" id="book">
             </div>
         </div>
         <hr>
