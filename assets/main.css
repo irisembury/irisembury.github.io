@@ -273,7 +273,7 @@
     .full-width .main-container { max-width: unset; }
     .full-width #article { max-width: unset; }
 
-        .see-also { margin-top: -24px; display: flex; justify-content: flex-end; gap: 1em; }
+        .see-also { display: flex; justify-content: flex-end; gap: 1em; }
             .see-also a { display: flex; align-items: center; gap: 5px; color: var(--grey-8); }
 
         .main-container { grid-column: 2; max-width: var(--main-width); margin: 0 auto; padding: var(--page-top-pad) var(--article-side-pad) 80px; background-color: var(--c3-bg); }
