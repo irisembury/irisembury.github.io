@@ -19,7 +19,7 @@ Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
 Political philosophy | conservatism | 2025-01-30
 Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
 What is therapy? | what-is-therapy | 2025-01-09
-Enduring falsehoods (about Elizabeth Warren and Hillary Clinton) | enduring-falsehoods | 2024-12-19
+Enduring falsehoods (Elizabeth Warren and Hillary Clinton) | enduring-falsehoods | 2024-12-19
 Mark Robinson | mark-robinson | 2024-12-15
 The standard relationship model | standard-relationship-model | 2024-12-08
 The Trump appeal | the-trump-appeal | 2024-12-03
@@ -89,12 +89,14 @@ function updateFonts() {
     document.getElementById("heading-font-select").value = headingFont;
     document.getElementById("body-font-select").value = bodyFont;
     document.getElementById("table-font-select").value = tableFont;
-    document.getElementById("user-styles").innerHTML = `body {
-        --ff-heading: ${ headingFont=="Georgia Pro" ? "Georgia Pro,Georgia":headingFont },sans-serif;
-        --ff-article: ${ bodyFont=="Georgia" ? "Georgia Pro Digits,Georgia":bodyFont },sans-serif;
-        --ff-table: ${ tableFont=="Georgia" ? "Georgia Pro Digits,Georgia":tableFont },sans-serif;
-        ${ (headingFont=="Georgia Pro"||headingFont=="Georgia") ? "--fw-h1: 600; --fw-h2: 600;" :"" }
-    }`;
+    HTML.style.setProperty("--fw-h1", headingFont=="Georgia Pro" ? "600" : "700" );
+    HTML.style.setProperty("--fw-h2", headingFont=="Georgia Pro" ? "600" : "700" );
+    if (headingFont=="Georgia Pro") { headingFont = "Georgia Pro,Georgia"; }
+    if (bodyFont=="Georgia") { bodyFont = "Georgia Pro Digits,Georgia"; }
+    if (tableFont=="Georgia") { tableFont = "Georgia Pro Digits,Georgia"; }
+    HTML.style.setProperty("--ff-heading", headingFont+",Lora,sans-serif");
+    HTML.style.setProperty("--ff-article", bodyFont+",Georgia Pro Digits,Georgia,sans-serif");
+    HTML.style.setProperty("--ff-table", tableFont+",Roboto,sans-serif");
 }
 
 function menuRestoreDefaults() {
@@ -154,8 +156,8 @@ function gallery(chunk) {
         let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
         return `
         <figure>
-        <img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
-        <figcaption>${ caption }</figcaption>
+            <img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
+            <figcaption>${ caption }</figcaption>
         </figure>
         `;
     });
@@ -203,19 +205,21 @@ function ytGallery(chunk) {
     let rows = chunk.split("\n");
     let galleryInfo = rows.shift().substring("||yt-gallery".length);
     let sortInput = galleryInfo.includes("sort");
-    rows = rows.map(row => {
-        row = row.replace(/\\\|/g, "&verbar;").split("|").map(d => d.trim());
-        while (row.length < 3) {
-            row.push("");
+    rows = rows.map(
+        row => {
+            row = row.replace(/\\\|/g, "&verbar;").split("|").map(d => d.trim());
+            while (row.length < 3) {
+                row.push("");
+            }
+            return row;
         }
-        return row;
-    });
+    );
     if (sortInput) {
         rows.sort((a, b) => {
             a = parseInt(a[2].replace(/\D/g, "")) || 0;
-            b =parseInt(b[2].replace(/\D/g, "")) || 0;
+            b = parseInt(b[2].replace(/\D/g, "")) || 0;
             return b - a;
-        });
+        })
     }
     let numToInclude = parseInt(galleryInfo.replace(/\D/g, "")) || rows.length;
     rows = rows.slice(0, numToInclude).map( row => {
@@ -441,6 +445,7 @@ function interpreter(argValue) {
         if (chunk.startsWith("<")) { return chunk; }
         if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
         if (chunk == "---") { return "<hr>"; }
+        if (chunk.startsWith("||subtitle")) { return `<h2 class="subtitle">${ textFormat( chunk.split("\n").slice(1).join(" ") ) }</h2>`; }
         if (chunk.startsWith("||image-float-left")) { return imageFloat(chunk, "left"); }
         if (chunk.startsWith("||image-float")) { return imageFloat(chunk, "right"); }
         if (chunk.startsWith("||image-span")) { return imageSpan(chunk); }
@@ -475,15 +480,15 @@ function interpreter(argValue) {
         if (chunk.startsWith("||rows")) { return autoRows(chunk); }
         if (chunk.startsWith("||indent")) { return indent(chunk); }
         if ( chunk.startsWith("* ") || /^\d+\. /.test(chunk) ) { return autoList(chunk, fine); }
-        if ( chunk.startsWith("-- ")) { return `<ul class="auto-list short">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`; }
+        if ( chunk.startsWith("-- ")) { return `<ul class="auto-list">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`; }
         if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
         if (chunk.startsWith("||see-also")) { return seeAlso(chunk); }
 
-        chunk = textFormat(chunk);
+        chunk = `<p>${ textFormat(chunk) }</p>`;
         if (fine) {
             return `<div class="fine">${ chunk.replaceAll("\n", "<br>") }</div>`;
         }
-        return `<p>${ chunk }</p>`;
+        return chunk;
     })
     return input.join("");
 }
@@ -675,7 +680,10 @@ window.addEventListener("load", function() {
             <div id="hamburger" class="icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
             <div>${index?`<span>Iris Embury</span>`:`<a href="${pathToRoot}index.html">Iris Embury</a>`}${ index ? "" : " &verbar; <span title=\"This page\" id=\"page-name-display\">" + document.title + "</span>"}</div>
         </div>
-        <div id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
+        <div class="align-center gap-8">
+             ${ index ? "" : `<a class="jump-to-top no-select" onclick="scrollToTop()">Jump to Top</a>` }
+            <div id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
+        </div>
     </nav>
     <nav id="left" class="closed">
         <div class="nav-row page-title">Links</div>
@@ -704,8 +712,8 @@ window.addEventListener("load", function() {
                 <input type="checkbox" class="menu-checkbox" id="page-full-width">
             </div>
             <div class="hide-toc-option">
-                <label for="hide-toc">Hide table of contents</label>
-                <input type="checkbox" class="menu-checkbox" id="hide-toc">
+                <label for="hide-toc-checkbox">Hide table of contents</label>
+                <input type="checkbox" class="menu-checkbox" id="hide-toc-checkbox">
             </div>
             <div class="book-text-option">
                 <label for="book">Indent and justify</label>
@@ -748,7 +756,10 @@ window.addEventListener("load", function() {
         ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
         <div class="main-container">
             <div id="article">${ document.body.innerHTML }</div>
-            <div id="page-footer">${ index ? "" : `<div class="footer-back-to-index"><a href="../../index.html">Link back to index (front page)</a></div>` }<div>This repo domain (irisembury.github.io) is used to host my writing and opinions. I have no association with any other person or organization. For serious inquiries you can contact me at irisembury@gmail.com.</div></div>
+            <div id="page-footer">
+                ${ index ? "" : `<div class="footer-back-to-index"><a href="../../index.html">Link back to index (front page)</a></div>` }
+                <div>This repo domain (irisembury.github.io) is used to host my writing and opinions. I have no association with any other person or organization. For serious inquiries you can contact me at irisembury@gmail.com.</div>
+            </div>
         </div>
     </div>
     <div class="lb-container">
@@ -756,13 +767,12 @@ window.addEventListener("load", function() {
         <div class="lb-wrapper"><img id="lightbox"></div>
         <div class="lb-bottom-panel"><div id="lb-caption"></div></div>
     </div>
-    <style id="user-styles"></style>`;
-    
+    <style id="pref-styles"></style>`;
+
     interpreter(document.getElementById("article"));
     // <nav id="left" class="sidebar">${ pageData.map(entry => `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>`).join("") }</nav>
 
     if (index) {
-        HTML.style.setProperty("--main-width", "748px");
         document.getElementById("index").innerHTML = `<div class="table-wrapper">
             <div class="auto-rows">${
                 pageData.map(entry => `<div class="row">
@@ -775,10 +785,27 @@ window.addEventListener("load", function() {
 
     HTML.classList.add("layout");
     Array.from(document.getElementById("fonts").getElementsByTagName("option")).forEach(o => o.style.fontFamily = `"${ o.value }",system-ui` );
-    
+
     document.querySelector(".lb-wrapper").addEventListener("click", () => {
         setLightbox("close")
     })
+
+    const navbar = document.getElementById("navbar");
+    let canNavCheck = true;
+    function navCheck() {
+        if (!canNavCheck) { return; }
+        canNavCheck = false;
+        setTimeout(
+            function() {
+                canNavCheck = true;
+                navbar.classList.toggle("sticky-active", pageYOffset > 180);
+            },
+            500
+        )
+        navbar.classList.toggle("sticky-active", pageYOffset > 180);
+    }
+    navCheck();
+    window.addEventListener("scroll", navCheck);
 
     /* ---- ---- ---- ---- ---- ---- ---- gearMenu ---- ---- ---- ---- ---- ---- ---- */
 
@@ -903,33 +930,47 @@ window.addEventListener("load", function() {
             }
         })
     })
-    
+
     /* ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- ---- */
-    
+
     if (!HTML.classList.contains("include-toc")) {
         let toc = document.getElementById("toc");
         if (toc != null) {
             toc.parentNode.removeChild(toc);
         }
     }
-    else {
-        document.getElementById("hide-toc").addEventListener("change", function() {
+
+    if (HTML.classList.contains("include-toc")) {
+        
+        const hideTocCheckbox = document.getElementById("hide-toc-checkbox");
+        if (!hideTocCheckbox.checked) {
+            window.addEventListener("scroll", tocHighlightUpdateAttempt)
+        }
+        hideTocCheckbox.addEventListener("change", function() {
+            HTML.classList.toggle("include-toc", this.checked);
             if (this.checked) {
-                HTML.classList.remove("include-toc");
-                window.removeEventListener("scroll", tocHighlightUpdateAttempt);
-            } else {
-                HTML.classList.add("include-toc");
                 window.addEventListener("scroll", tocHighlightUpdateAttempt);
+            } else {
+                window.removeEventListener("scroll", tocHighlightUpdateAttempt);
             }
         });
-        const toc = document.getElementById("toc");
+
         const headings = Array.from(document.getElementById("article").getElementsByClassName("--for-toc"));
-        toc.innerHTML = `<div class="toc-row title">Table of contents</div>` + headings.map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join("");
-        toc.scrollTo({ behaviour: "instant", top: 0 });
-        
+        const toc = document.getElementById("toc");
+        toc.innerHTML = '<div class="toc-title">Table of contents</div>' + headings.map(
+            heading =>
+                `<div class="toc-row ${heading.tagName.toLowerCase()}"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
+        ).join("");
+        toc.scrollTo({ behavior: "instant", top: 0 })
+        const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+        rowsInToc[0].innerHTML = '<a class="pseudo-link" onclick="scrollToTop()">(Top)</a>';
+
         let canTocHighlightUpdate = true;
         function tocHighlightUpdateAttempt() {
-            if (!canTocHighlightUpdate) { return; }
+            if (!canTocHighlightUpdate) {
+                return;
+            }
+            console.log("tick: tocHighlightUpdateAttempt")
             canTocHighlightUpdate = false;
             setTimeout(() => {
                 canTocHighlightUpdate = true;
@@ -937,16 +978,16 @@ window.addEventListener("load", function() {
             }, 500);
             tocHighlightUpdate();
         }
-        const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
         let lastHeading = -1;
+        
         function tocHighlightUpdate() {
             let currentHeading = -1;
-            for (let i = 0; i < headings.length; i += 1) {
-                let elementDistanceFromPageTop = window.scrollY + headings[i].getBoundingClientRect().top;
+            for (let heading = 0; heading < headings.length; heading += 1) {
+                let elementDistanceFromPageTop = window.scrollY + headings[heading].getBoundingClientRect().top;
                 if (pageYOffset < elementDistanceFromPageTop - (0.4 * window.innerHeight)) {
                     break;
                 }
-                currentHeading = i;
+                currentHeading = heading;
             }
             if (currentHeading != lastHeading) {
                 rowsInToc.forEach( (row, n) => {
@@ -959,14 +1000,6 @@ window.addEventListener("load", function() {
                                 { top: row.offsetTop + row.offsetHeight - toc.clientHeight + 20, behavior: "smooth" }
                             );
                         }
-                        /* To make it also scroll up: */
-                        /*
-                        else if (rRect.top < tRect.top) {
-                            toc.scrollTo(
-                                { top: row.offsetTop, behavior: "smooth" }
-                            );
-                        }
-                        */
                     }
                     else {
                         row.classList.remove("active-heading");
@@ -975,5 +1008,8 @@ window.addEventListener("load", function() {
             }
             lastHeading = currentHeading;
         }
+        
     }
 })
+
+
