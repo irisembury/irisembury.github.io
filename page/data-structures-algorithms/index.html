@@ -39,7 +39,7 @@ O stands for *order*, as the extent to which a function grows in relation to the
 
 Common big-O values and their meaning:
 
-||table this .col-1 { background: var(--c-light-blue-bg); white-space: nowrap; }
+!table this .col-1 { background: var(--c-light-blue-bg); white-space: nowrap; }
 O(1) | Runs the same number of operations no matter the size of the data (does not scale).
 O(N) | Runs once per N (linear scaling).
 O(N<sup>2</sup>) | Runs N operations N times. Consider a loop that runs for the length of the passed array (N), in which there is another loop that also runs for the length of the array (N). The number of operations will thus be (N)(N).<br>O(N3) would be three loops, and so on.
@@ -56,12 +56,12 @@ As the purpose of big-O is to *briefly summarize* how an algorithm *scales* with
 
 Quick visualization of common big-O values:
 
-||image-span
+!image-span
 media/big-o-graph.png
 
 The big-O values of some common algorithms:
 
-||table this { margin-inline: auto; } this .col-1 { background: var(--c-light-blue-bg); }
+!table this { margin-inline: auto; } this .col-1 { background: var(--c-light-blue-bg); }
 bubble sort | O(N<sup>2</sup>)
 selection sort | O(N<sup>2</sup>)*
 insertion sort | O(N<sup>2</sup>)
@@ -87,19 +87,19 @@ It's possible in nearly every programming language to interact with our data at 
 
 These accept 2 values and return 1 value:
 
-||table this .col-1 { background:var(--c-light-blue-bg); } this code { background-color: transparent; }
+!table this .col-1 { background:var(--c-light-blue-bg); } this code { background-color: transparent; }
 `&amp;` (AND) | Each bit of the result is a 1 only if **both** input values also had a 1 in that position.
 `\|` (OR) | Each bit of the result is a 1 if **either** of the input values had a 1 in that position.
 `^` (XOR) | Each bit of the result is a 1 if the input values have a **different** bit in that position.
 
 There's also a `NOT` operator (~), which accepts only 1 value:
 
-||table this .col-1 { background: var(--c-light-blue-bg); } this code { background-color: transparent; }
+!table this .col-1 { background: var(--c-light-blue-bg); } this code { background-color: transparent; }
 `~` (NOT) | Each bit of the result is a 1 only if the input value has a 0 in that position (it *inverses* the bits).
 
 Examples of each operator in action:
 
-||table this { margin-inline: auto; font-family: var(--ff-monospace); } this .col-1 { text-align: center; background: var(--c-light-blue-bg); }
+!table this { margin-inline: auto; font-family: var(--ff-monospace); } this .col-1 { text-align: center; background: var(--c-light-blue-bg); }
 (1110 & 0101) | = 0100
 (1010 \| 0111) | = 1111
 (1100 ^ 1010) | = 0110
@@ -107,7 +107,7 @@ Examples of each operator in action:
 
 #### More about the NOT operator:
 
-||codeblock cpp
+!codeblock cpp
 int a = 10 | 7;
 int b = ~a;
 
@@ -120,7 +120,7 @@ This is because a signed number (like the default `int` data-type, a 32-bit sign
 
 This can be observed clearly by tracking the binary representation of an int as it crosses the zero line:
 
-||table this { margin-inline: auto; } this .col-1 { background: var(--c-light-blue-bg); text-align: center; }
+!table this { margin-inline: auto; } this .col-1 { background: var(--c-light-blue-bg); text-align: center; }
 2 | 0000000000000000000000000000<mark>0010</mark>
 1 | 0000000000000000000000000000<mark>0001</mark>
 0 | 0000000000000000000000000000<mark>0000</mark>
@@ -130,7 +130,7 @@ This can be observed clearly by tracking the binary representation of an int as 
 
 Try an unsigned int instead:
 
-||codeblock cpp
+!codeblock cpp
 unsigned int a = 10 | 7;
 unsigned int b = ~a;
 
@@ -140,7 +140,7 @@ The `~` operator flips all those digits and returns `111111111111111111111111111
 
 Try a smaller data-type, like `uint8_t` in C++ or `byte` in C#:
 
-||codeblock cpp
+!codeblock cpp
 // C++:
 uint8_t a = 10 | 7;
 uint8_t b = ~a;
@@ -152,31 +152,31 @@ byte k = (byte)~(158 & 214);  // prints 105
 
 ## Bit-shifting
 
-||codeblock cpp
+!codeblock cpp
 int q = 7 >> 1;
 int k = q << 2;
 
-||image-float
-left-bitshift-example.png|a left bitshift|a left bitshift
+!image-float
+media/left-bitshift-example.png|a left bitshift (before and after)|a left bitshift
 
 These operators return a number with their bits shifted in the direction specified, by the places specified.
 
 The long story short is that shifting to the left will double the value of a number while shifting to the right halves it (and rounds down odd number results, because the last bit just falls off).
 
-||table this { text-align: center; width: 100%; } this td:nth-child(2n) { vertical-align: middle; } this span { color: var(--c-blue); }
+!table this { text-align: center; width: 100%; } this td:nth-child(2n) { vertical-align: middle; } this span { color: var(--c-blue); }
 <span>94</span><br>01011110 | >> | <span>47</span><br>00101111 | >> | <span>23</span><br>00010111
 
 Shifting by multiple places is the same as doubling or halving that many times. This means a shift is the same as dividing or multiplying by 2 to the power of the places shifted by.
 
 <div class="align-center gap-15">
 
-||table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
+!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
 shifting by x places | is the same as multiplying
 << 1 | * 2
 << 2 | * 2<sup>2</sup> (i.e. \*2\*2)
 << 3 | * 2<sup>3</sup> (i.e. \*2\*2\*2)
 
-||table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
+!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
 shifting by x places | is the same as multiplying
 >> 1 | / 2
 >> 2 | / 2<sup>2</sup> (i.e. \*2\*2)
@@ -186,7 +186,7 @@ shifting by x places | is the same as multiplying
 
 Note that the bitshift operator doesn't automatically change the original value.
 
-||codeblock cpp
+!codeblock cpp
 int q = 5;
 q << 2;
 print(q); // prints 5
@@ -199,14 +199,14 @@ The two main search algorithms are simply linear or binary search. They both loo
 
 #### Terminology:
 
-||table
+!table
 key | the item the algorithm is searching for
 
 ## Linear search
 
 This is what we're forced to use if the data isn't sorted. Just check each item one by one. It's rudimentary, but at least it's only O(N). It could be worse.
 
-||codeblock cpp
+!codeblock cpp
 int linearSearch(int[] arr, int leng, int key) {
     for (int i = 0; i < leng; i += 1) {
         if (arr[i] == key) {
@@ -222,7 +222,7 @@ If the array is sorted, we can use the superior binary search. This narrows down
 
 It's called binary search because we repeatedly split the array in half (conceptually) while trying to find the target value.
 
-||codeblock cpp
+!codeblock cpp
 int binarySearch(int[] arr, int len, int key) {
     int low = 0, high = len - 1;
  
@@ -266,7 +266,7 @@ This is an O(log n) algorithm. To search a 10,000,000-length array with linear s
 
 This section covers the following:
 
-||table this .row-1 { font-weight: 700; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+5) .col-1 { border: none; } this td { padding-inline: 20px; } this { margin-inline: auto; }
+!table this .row-1 { font-weight: 700; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+5) .col-1 { border: none; } this td { padding-inline: 20px; } this { margin-inline: auto; }
 basic sorts | more advanced
 bubble sort | merge sort
 selection sort | quick sort
@@ -278,12 +278,12 @@ The last few algorithms covered (radix, shell, and heap) were practically made o
 
 ## Selection sort
 
-||image-float
+!image-float
 media/selection-sort.png|selection sort visualization
 
 This is arguably the simplest sort algorithm. Look through the array to find the smallest element. Swap it into the first index. Then find the next smallest. Swap it into the second index. And so on, until the array is sorted.
 
-||codeblock cpp
+!codeblock cpp
 void selectionSort(int[] arr, int len) {
     for (int i = 0; i < len - 1; i += 1) {
         int lowest = i; // start with first item in unsorted section
@@ -303,14 +303,14 @@ void selectionSort(int[] arr, int len) {
 
 ## Bubble sort
 
-||image-float
+!image-float
 media/bubble-sort.png|bubble sort visualization
 
 This inefficient sort method sweeps through the array and swaps each pair of items that are out of order, i.e. if the item on the left should come first. By doing this repeatedly, everything eventually falls into place.
 
 The loop could just go to the length of the array, but it's possible for it to finish early, so some implementations will keep a count of the number of swaps and break early if it's ever zero.
 
-||codeblock cpp
+!codeblock cpp
 void bubbleSort(int[] arr, int len) {
     for (int i = 0; i < len - 1; i += 1) {
         int count = 0;
@@ -336,10 +336,10 @@ In this algorithm, each item is shifted rightward while it's greater than the it
 
 To visualize this, many people suggest imagining the array is split into two parts, divided at the iterator: the left side is effectively an ordered subarray, into which we're inserting the items from the right---hence the name.
 
-||image-float
+!image-float
 media/insertion-sort.png|insertion sort visualization
 
-||codeblock cpp
+!codeblock cpp
 void insertionSort(int arr[], int len) {
     for (int i = 1; i < len; i += 1) {
         int key = arr[i]; // hold this
@@ -360,7 +360,7 @@ void insertionSort(int arr[], int len) {
 
 To keep an array sorted as new items are inserted, use a logic similar to insertion sort to move all other items forward until you get to the place where the new item would be inserted.
 
-||codeblock cpp SortedArray
+!codeblock cpp SortedArray
 struct SortedArray {
     int* arr;
     int size, numItems;
@@ -392,7 +392,7 @@ To merge two arrays together that are already sorted, you would iterate through 
 
 So, this would do:
 
-||codeblock cpp
+!codeblock cpp
 int* mergeArrays(int a[], int a_length, int b[], int b_length) {
     int* result = new int[a_length + b_length];
     int index = 0; // keeps track of result insertion
@@ -428,7 +428,7 @@ int* mergeArrays(int a[], int a_length, int b[], int b_length) {
 
 Want to condense this?
 
-||codeblock cpp
+!codeblock cpp
 int* mergeArrays(int a[], int a_length, int b[], int b_length) {
     int* result = new int[a_length + b_length];
     int index = 0, i = 0, k = 0;
@@ -446,7 +446,7 @@ This recursively splits an array in half until the resulting halves are only one
 
 But there's no actual splitting or merging. That's all conceptual. We're really just defining the bounds of a bunch of imaginary subarrays, like in an insertion sort, or the bounds of a binary search.
 
-||image-span
+!image-span
 media/merge-sort.png|Merge sort visualization|Merge sort visualization
 
 This runs faster than insertion sort and has a complexity of O(N<sup>2</sup>). However, it uses some extra memory, because it allocates a parallel array in which to log the sorted data until it's complete.
@@ -461,7 +461,7 @@ The easiest implementation is using recursion, splitting the process into three 
 
 In many implementations, what I'm here calling splitUp is instead an overloaded function also called MergeSort. I'm just giving it a more descriptive name to make the process clearer.
 
-||codeblock cpp
+!codeblock cpp
 void merge(int arr[], int tmpArr[], int left, int mid, int right) {
     int i = left;  // left-side iterator
     int j = mid + 1; // and right-side
@@ -514,19 +514,19 @@ void mergeSort(int arr[], int len) {
 
 The merge call is what's happening in each sorting step in the process diagram:
 
-||image-span
+!image-span
 media/merge-sort-expl-1.png
 
 For any given splitUp instance, the first splitUp call, including all further recursion that occurs inside it, must finish before the second one even begins. This means in the process diagram, the entire left side reaches the end before the entire right side even begins.
 
-||image-span
+!image-span
 media/merge-sort-expl-2.png
 
 This can be manually tracked by printing the array inside the merge function. Half-way through the algorithm, the left side has been sorted while the right side is still the same as it was at the very start.
 
 Starting array: [ 21, 4, 32, 7, 13, 25, 19, 32, 9, 4, 15, 17, 5 ]
 
-||codeblock
+!codeblock
 Merge: 4, 21, 32, 7, 13, 25, 19, 32, 9, 4, 15, 17, 5
 Merge: 4, 21, 7, 32, 13, 25, 19, 32, 9, 4, 15, 17, 5
 Merge: 4, 7, 21, 32, 13, 25, 19, 32, 9, 4, 15, 17, 5
@@ -544,17 +544,17 @@ In the lines after the one highlighted, you can track as it sorts the right side
 
 The way this algorithm runs is less linear than some visualizations can make it appear, as it doesn't create the 'sorted' array from left to right in the way most other algorithms do, but flows down the left side until the selection only has one item, like so:
 
-||image-span
+!image-span
 media/merge-sort-expl-3.png
 
 Then it snaps back to the previous split call that still had other children and continues from there:
 
-||image-span
+!image-span
 media/merge-sort-expl-4.png
 
 A full roadmap of the actual function calls to bring us from the initial array state to the sorted array at the end would thus look like this:
 
-||image-span
+!image-span
 media/merge-sort-expl-5.png
 
 ## Quick sort
@@ -570,15 +570,15 @@ There's been many quick sort variations over the years and the code to implement
 
 A popular approach to implement the concept in teaching material is the Lomuto partition scheme. It simply uses a for-loop to scan the array left to right, and when it finds a value greater than the pivot it pushes that value to the left side. It's not the most optimized method, but it was used because of how easy it is to follow.
 
-||image-span
+!image-span
 media/quicksort-lomuto.png|A visualization of the Lomuto quicksort scheme
 
 The original quicksort described by Tony Hoare used a more complex but ultimately superior method that runs two iterators through the array in opposite directions. They pause when they find a value that doesn't belong on their side (i.e. if the left value is greater than the pivot or the right value is less than it), and when they're both paused their values are swapped. This repeats until the iterators collide, at which point partitioning is done.
 
-||image-span
+!image-span
 media/quicksort-hoare.png|A visualization of the Hoare quicksort scheme
 
-||codeblock cpp
+!codeblock cpp
 // instead of writing this out each time just assume I have this:
 void swap( int arr[], int x, int y ) {
     int tmp = arr[x];
@@ -586,7 +586,7 @@ void swap( int arr[], int x, int y ) {
     arr[y] = tmp;
 }
 
-||codeblock cpp
+!codeblock cpp
 // Lomuto version:
 int partition(int arr[], int left, int right) {
     int pivot = array[right];
@@ -616,7 +616,7 @@ void quickSort(int arr[], int len) {
     quickSort(arr, 0, len - 1);
 }
 
-||codeblock cpp
+!codeblock cpp
 // Hoare version:
 int partition(int arr[], int left, int right) {
     int pivot = array[right];
@@ -650,7 +650,7 @@ void quickSort(int arr[], int left, int right) {
 
 It's popular now to use the last item for the pivot, though the original Hoare quicksort used the first item. I could modify the above code to use the first item like so:
 
-||codeblock cpp
+!codeblock cpp
 int partition(int arr[], int left, int right) {
 <mark>    int pivot = array[left];</mark>
  
@@ -680,29 +680,29 @@ What are the implications of this?
 
 The popular way to visualize a partition step shows the pivot being moved between partitions:
 
-||image-span
+!image-span
 media/qsort-step-1.png
 
 But here, that's not really what's happening. The array is only being *mostly* partitioned, except for the pivot value and any of its duplicates, which temporarily appear out of place (until they're sorted by the subsequent, recursive partition calls).
 
 What the code would actually do is this:
 
-||image-span
+!image-span
 media/qsort-step-2.png
 
 That could make it seem like we're partitioning around pivot+1, or that the rule changed to placing any item less than or equal to the pivot on the left---but not quite, as any additional instances of the pivot value would always be swapped to end up opposite the side they started on.
 
-||image-span
+!image-span
 media/qsort-step-3.png
 
 It works out in the end because any instance of the pivot value that ends up on the left will be the highest value in that section and thus be pushed to the right when it's partitioned (and vice versa).
 
-||image-span
+!image-span
 media/qsort-step-4.png
 
 A modified version that does include the final swap:
 
-||codeblock cpp
+!codeblock cpp
 int partition(int arr[], int left, int right) {
     int pivot = right--;
     // This pivot variable takes the index of the last item, not its value.
@@ -748,7 +748,7 @@ The ideal pivot value is, of course, one that just so happens to belong in the m
 * The simplest solution is to take the middle index as the pivot. In a quicksort that normally takes the first item, you can accomplish that simply by changing the pivot variable assignment from your left value to the middle position, i.e. (left + right) / 2. For a version that uses the last item, we could (left + right + 1) / 2 for the same effect.
 * A computer scientist named Robert Sedgewick later proposed the strategy of using the middle of three items from the array, which came to be known as taking the median of three. It could just be three random items, but the easiest indices to access are the left, right, and middle---and if we're already comparing these items to determine which is the middle value, then we may as well sort them in place while we're at it.
 
-||codeblock cpp
+!codeblock cpp
 // taking the middle index:
 int partition(int arr[], int left, int right) {
     int pivot = array[ (left + right) / 2 ];
@@ -775,7 +775,7 @@ void quickSort(int arr[], int len) {
     quickSort(arr, 0, len - 1);
 }
 
-||codeblock cpp
+!codeblock cpp
 // median of three version:
 int takeMedian(int arr[], int left, int right) {
     int mid = (left + right) / 2;
@@ -816,7 +816,7 @@ This means once `quickSort` calls the range (0, 1), as it must do eventually, th
 
 You could also just increment `left` and decrement `right` once that condition is reached, skipping over a small bit of unnecessary work. The fix that requires the least change from the previous code would be adding a line that moves the iterators inward one step after the `takeMedian` call, like this:
 
-||codeblock cpp
+!codeblock cpp
 int partition(int arr[], int left, int right) {
     int pivot = takeMedian(arr, left, right);
 <mark>    left += 1; right -= 1;</mark>
@@ -835,7 +835,7 @@ This is literally the same as what a `do while` loop does, though.
 
 A different solution was to rework the function to return right instead of left, but that requires also changing the ranges that are passed in the `quickSort` function.
 
-||codeblock cpp
+!codeblock cpp
 int partition(int arr[], int left, int right) {
     int pivot = takeMedian(arr, left, right);
  
@@ -875,7 +875,7 @@ So a quicksort can be made even more efficient if it defers to an insertion sort
 
 The ideal cutoff surely varies, but in my testing a good value seemed to be around 30 items.
 
-||codeblock cpp
+!codeblock cpp
 void insertionForQsort(int arr[], int left, int right) {
     for (int i = left; i < right + 1; i += 1) {
         int key = arr[i], j = i;
@@ -906,11 +906,11 @@ This is an interesting algorithm that sorts values without ever directly compari
 
 To be sure, you'll probably never use this. I'm just including it for fun.
 
-Let's take this example array and throw it into a bucket based on the rightmost digit:
+Let's take this example array and throw each number into a bucket based on its rightmost digit:
 <br>
 51, 45, 9, 37, 48, 72, 19, 16, 7, 88, 92, 12, 30, 36, 3, 42, 96, 25
 
-||table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+!table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
 0|1|2|3|4|5|6|7|8|9
 30|51|72|3||45|16|37|48|9
 ||92|||25|36|7|88|19
@@ -921,8 +921,8 @@ Then you just grab those numbers in order, and repeat for the next column (leftw
 <br>
 30, 51, 72, 92, 12, 42, 3, 45, 25, 16, 36, 37, 7, 48, 88, 9, 19, 96
 
-||table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
-0_|1_|2_|3_|4_|5_|6_|7_|8_|9_
+!table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+0_ | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90
 3|12|25|30|42|51||72|88|92
 7|16||36|45|||||96
 9|19||37|48|||||
@@ -935,7 +935,7 @@ The big-O value of radix sort is unusual. I've seen it described as O(kw), where
 
 Though a radix sort can outperform other sorts in some scenarios, its ideal use-cases were too specific to see widespread implementation and it wasn't included in many built-in libraries.
 
-||codeblock cpp
+!codeblock cpp
 #include \<deque\>
 void radixSort(int arr[], int length, int width) {
     int base = 10;
@@ -970,7 +970,7 @@ In simple implementations, the gap value is often set to be half the array size.
 
 In any case, the gap is gradually decreased until it reaches 1, at which point what results is identical to a regular insertion sort. It's the steps before this, while the gap is larger, that it gains an advantage over insertion sort.
 
-||codeblock cpp
+!codeblock cpp
 void shellSort(int arr[], int len) {
     int gap = 1;
     while (gap <= len / 3) gap = gap * 3 + 1;
@@ -1002,7 +1002,7 @@ Sorting by pure ASCII value creates a pseudo-alphabetization, like ABCDabcd. If 
 
 Practically every language has some kind of built-in string comparison function for you:
 
-||table this .col-1 { background: var(--grey-e); }
+!table this .col-1 { background: var(--c-light-blue-bg); }
 C | `strcomp(string1, string2)`
 Java | `string1.compareTo(string2)`
 C++ | `string1.compare(string2)`
@@ -1014,7 +1014,7 @@ Ruby | `string1 <=> string2`
 
 In most cases, the return value is an integer, which indicates the relationship between string1 and string2:
 
-||table
+!table
 0 | strings are identical
 -1 | string1 comes first
 1 | string2 comes first
@@ -1026,7 +1026,7 @@ Exceptions:
 
 Here's some code to recreate the logic of C++'s string compare:
 
-||codeblock cpp
+!codeblock cpp
 public static int stringCompare(std::string a, std::string b)
 {
     if (a == b) return 0;
@@ -1045,14 +1045,14 @@ These functions both ignore case, except when case is the only difference betwee
 
 They also contain some logic to make special characters, like `]`, always precede letters, again going against their ASCII value, though for some reason they both order these special characters differently.
 
-||table this .col-1 { background-color: var(--c-light-blue-bg) }
+!table this .col-1 { background-color: var(--c-light-blue-bg) }
 sorted by ASCII | ` !"#$%&'()*+,-./123:;&lt;=&gt;?ABC[\]^_\`abc{\|}~`
 CompareTo | `'- !"#$%&()*,./:;?[\]^_\`{\|}~+&lt;=&gt;123aAbBcC`
 localeCompare | ` _-,;:!?.'"()[]{}*/\&#%\`^+&lt;=&gt;\|~$123aAbBcC`
 
 Here, I'll try to recreate the StringCompare from C# (without the symbol handling):
 
-||codeblock cs
+!codeblock cs
 public static int StringCompare(string a, string b) {
     if (a == b) return 0; // strings are identical
  
@@ -1090,7 +1090,7 @@ Just use any sorting algorithm, but use the string comparison method to compare 
 
 An example using Java and insertion sort:
 
-||codeblock java
+!codeblock java
 void stringSort(String[] arr) {
     for (int i = 1; i < arr.length; i += 1)
     {
@@ -1118,7 +1118,7 @@ This means: saving the results of an operation so that future code that wants th
 
 Consider this:
 
-||codeblock java
+!codeblock java
 // did this in Java for some reason
 static int (int n) {
     if (n < 2) return n;
@@ -1135,7 +1135,7 @@ That's what a memoization table does: it logs the results of the function, allow
 
 Memoization refers to the loose concept of storing returned values for future use, not to any specific implementation. This code is one way we could implement it for the fibonacci function above:
 
-||codeblock cpp
+!codeblock cpp
 static int fibMemoized(int n, int[] memoTable) {
     if (n < 2) return n;
     // is this value already in the table?
@@ -1161,7 +1161,7 @@ This calculation is done for us by the standard bracket notation, `arr[i]`. The 
 
 A linked list, by contrast, is a **noncontiguous** reservation in memory. The items aren't right next to each other, so we can't get from one to the next by adding to our pointer's memory location. Instead, each item is wrapped in a container that holds a pointer to the next item in the list (and possibly to the previous item as well). This container is called a **node**, and a linked list is really just an object that holds and manages a chain of nodes.
 
-||image-span
+!image-span
 media/linked-list-vs-array.png|An attempt at conceptualizing the difference between arrays and a linked list
 
 A linked list is like a book that says "to continue the story, go to x page and carry on" at the end of each page, while an array is just like a normal book where you always turn to the next page.
@@ -1176,7 +1176,7 @@ Linked lists are often just preferred whenever random access doesn't matter, but
 
 We conceptualize lists as being **stacks** or **queues**. These are called *abstract data types*, which can be a confusing term for programmers because they're neither abstract (as in a base class that you can't substantiate before extending it) nor an actual data type (at least, not usually). It's another way of design a **design pattern**---or mostly broadly, you could just call it a concept.
 
-||image-span
+!image-span
 media/stack-vs-queue.png|A linked list that's organized as a stack vs. a queue
 
 A **stack** is like setting items on top of each other in a literal stack of paper. When you add a new item to the list, you place it on top. And when you want to remove an item from the list, you take it from the top as well. We refer to this access point as the **top**, because that name fits with the metaphor.
@@ -1202,7 +1202,7 @@ In both cases, the word 'linked' is an adjective describing 'list', whereas 'sin
 
 </div>
 
-||image-span
+!image-span
 media/singly-doubly-linked.png|A visualization of singly- and doubly-linked lists.
 
 Although the directions are only conceptual, the convention is to always name the pointer 'next' for a singly-linked list. The name 'previous' should be reserved for doubly-linked lists.
@@ -1215,19 +1215,19 @@ Linked lists can also be made **double-ended**, meaning they have two "entry poi
 
 A list can also be made **circular**, meaning the last node points back to the first, instead of just pointing to null (and vice versa for in a doubly-linked list).
 
-||image-span
+!image-span
 media/circular-linked-list.png|A circular doubly-linked list
 
 ### Terminology
 
-||table this .col-1 { background:var(--c-light-blue-bg); }
+!table this .col-1 { background:var(--c-light-blue-bg); }
 linked list | an allocation of data that's dynamically sized because it's not stored contiguously
 stack | a linked list that behaves as first-in, last-out
 queue | a linked list that behaves as first-in, first-out
 
 #### Coding some linked lists
 
-||codeblock cpp Stack LinkNode
+!codeblock cpp Stack LinkNode
 class Stack {
 private:
     struct LinkNode {
@@ -1259,7 +1259,7 @@ public:
 
 If you want it to hold an object instead and repurpose the pop method to return the object of the node being removed (or null if the list is empty) instead of a boolean:
 
-||codeblock cpp Banana Stack LinkNode
+!codeblock cpp Banana Stack LinkNode
 class Banana { }; // example class, doesn't matter
  
 class Stack {
@@ -1300,7 +1300,7 @@ And of course, remember that you're responsible for deleting the pointer to the 
 
 Similar code, but pop is replaced with 'dequeue', which takes from the other side.
 
-||codeblock cpp Banana Queue LinkNode
+!codeblock cpp Banana Queue LinkNode
 class Banana { };
  
 class Queue {
@@ -1354,7 +1354,7 @@ In a queue, the root node's `.next` starts null. Then when you add a second node
 
 So `next` always means pointing away from your access point (top in a stack, front in a queue). And in a stack, `next` leads away from the root node, whereas in a queue `next` goes towards it.
 
-||captioned-gallery
+!captioned-gallery
 media/stack-structure.png|A stack structure with four nodes
 media/stack-push.png|Adding a node to a stack
 media/stack-structure.png|A stack structure with four nodes
@@ -1362,10 +1362,10 @@ media/queue-enqueue.png|Adding a node to a queue
 
 #### Testing some code
 
-||image-float
+!image-float
 media/code-test-1.png
 
-||codeblock cpp Stack Banana
+!codeblock cpp Stack Banana
 int main()
 {
     Stack stack;
@@ -1380,10 +1380,10 @@ int main()
         delete t; //delete the Banana object
     }
 
-||image-float
+!image-float
 media/code-test-1.png
 
-||codeblock cpp Queue
+!codeblock cpp Queue
 int main()
 {
     Queue q;
@@ -1408,7 +1408,7 @@ If you change the entry node-pointer held by the list itself, all data in the li
 
 </div>
 
-||codeblock cpp Stack
+!codeblock cpp Stack
 class Stack {
 // a temporary solution for this demo:
 // just adding a public method that returns the top node
@@ -1434,7 +1434,7 @@ int main()
     }
 }
 
-||image-span
+!image-span
 media/code-test-1.png
 
 Same printout as before, but this time the list is still intact afterwards.

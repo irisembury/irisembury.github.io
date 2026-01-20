@@ -35,18 +35,18 @@ const windSpeed = 0.1;
 const baseFallSpeed = 6;
 
 window.addEventListener("load", function() {
-  const number_of_snowflakes = 160;
-  const snowflakeArray = [];
-  const sf_min_size = 3;
-  const sf_max_size = 7;
-  while (snowflakeArray.length < number_of_snowflakes) {
-    snowflakeArray.push(new snowflake(rndInt(sf_min_size, sf_max_size)))
-  }
-  setInterval(function() {
-    for (s of snowflakeArray) {
-      s.update()
+    const number_of_snowflakes = 160;
+    const snowflakeArray = [];
+    const sf_min_size = 3;
+    const sf_max_size = 7;
+    while (snowflakeArray.length < number_of_snowflakes) {
+        snowflakeArray.push(new snowflake(rndInt(sf_min_size, sf_max_size)))
     }
-  }, 1000 / 60);
+    setInterval(function() {
+        for (const sf of snowflakeArray) {
+            sf.update()
+        }
+    }, 1000 / 60);
 })
 
 class snowflake {

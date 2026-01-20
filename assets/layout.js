@@ -3,12 +3,12 @@ const HTML = document.documentElement;
 
 let pageData = `
 Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
-Why do people hate Reddit so much? | why-do-people-hate-reddit | 2025-12-30
+Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30
 Stay the trenches | stay-the-trenches | 2025-12-17
 Derangement | derangement | 2025-12-12
 Thoughts on immigration | immigration | 2025-11-06
 What is prejudice? | what-is-prejudice | 2025-10-30
-Learn about India | learn-about-india | 2025-10-24
+Learn about India | india | 2025-10-24
 Liberalism, not extremism | liberalism-not-extremism | 2025-09-19
 The path of normalization | the-path-of-normalization | 2025-09-08
 Lies about Ilhan Omar | ilhan-omar | 2025-08-25
@@ -27,8 +27,6 @@ The default politician | the-default-politician | 2024-11-26
 Sex, gender, &amp; transsexuals | sex-gender-transsexuals | 2024-11-19
 Fetishism &amp; politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
-Anime reviews | anime-reviews | 2024-11-02
-Poor things (2023 film) | poor-things | 2024-10-31
 The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
 `.split("\n").filter(
     line => line.trim().split("|").length == 3
@@ -59,7 +57,7 @@ function scrollToTop() {
 }
 
 function setLightbox(action) {
-    let lightbox = document.getElementById("lightbox");
+    let lightbox = document.querySelector(".lightbox");
     if (action == "close") {
         lightbox.src = "";
         lightbox.alt = "";
@@ -69,8 +67,8 @@ function setLightbox(action) {
         lightbox.src = action.src;
         lightbox.alt = action.alt;
         HTML.classList.add("lb-enabled");
-        document.getElementById("lb-top-left").innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
-        document.getElementById("lb-caption").innerHTML = action.alt=="" ? "" : action.alt;
+        document.querySelector(".lb-top-left").innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+        document.querySelector(".lb-caption").innerHTML = action.alt=="" ? "" : action.alt;
     }
 }
 
@@ -81,28 +79,61 @@ function setBrightness(setValue) {
     localStorage.setItem("brightness", brightness);
     document.getElementById("brightness-select").value = brightness;
 }
+function setFontSize(setValue) {
+    let fontSize = setValue || localStorage.getItem("font-size") || "text-small";
+    HTML.classList.remove(...Array.from(document.getElementById("font-size-select").children).map(o => o.value).filter(o => o != fontSize));
+    HTML.classList.add(fontSize);
+    localStorage.setItem("font-size", fontSize);
+    document.getElementById("font-size-select").value = fontSize;
+}
 
 function updateFonts() {
-    let headingFont = localStorage.getItem("headingFont") || "Lora";
-    let bodyFont = localStorage.getItem("bodyFont") || "Georgia";
-    let tableFont = localStorage.getItem("tableFont") || "Roboto";
+    let headingFont = localStorage.getItem("headingFont") || defaultHeadingFont;
+    let bodyFont = localStorage.getItem("bodyFont") || defaultBodyFont;
+    let tableFont = localStorage.getItem("tableFont") || defaultTableFont;
+
     document.getElementById("heading-font-select").value = headingFont;
     document.getElementById("body-font-select").value = bodyFont;
     document.getElementById("table-font-select").value = tableFont;
-    HTML.style.setProperty("--fw-h1", headingFont=="Georgia Pro" ? "600" : "700" );
-    HTML.style.setProperty("--fw-h2", headingFont=="Georgia Pro" ? "600" : "700" );
-    if (headingFont=="Georgia Pro") { headingFont = "Georgia Pro,Georgia"; }
-    if (bodyFont=="Georgia") { bodyFont = "Georgia Pro Digits,Georgia"; }
-    if (tableFont=="Georgia") { tableFont = "Georgia Pro Digits,Georgia"; }
-    HTML.style.setProperty("--ff-heading", headingFont+",Lora,sans-serif");
-    HTML.style.setProperty("--ff-article", bodyFont+",Georgia Pro Digits,Georgia,sans-serif");
-    HTML.style.setProperty("--ff-table", tableFont+",Roboto,sans-serif");
+
+    let styleText = "";
+
+    if (headingFont != defaultHeadingFont) {
+        if (headingFont == "Georgia") {
+            styleText += ` --fw-h1: 600; --fw-h2: 600;`
+            headingFont = "Georgia Pro";
+        }
+        styleText += ` --ff-heading: ${ headingFont },sans-serif;`;
+    }
+    if (bodyFont == "Georgia") {
+        bodyFont = "Georgia Pro Digits, Georgia";
+    }
+    if (tableFont == "Georgia") {
+        tableFont = "Georgia Pro Digits, Georgia";
+    }
+
+    if (bodyFont != defaultBodyFont) {
+        styleText += ` --ff-article: ${ bodyFont },sans-serif;`;
+    }
+    if (tableFont != defaultTableFont) {
+        styleText += ` --ff-table: ${ tableFont },sans-serif;`;
+    }
+
+    if (styleText != "") {
+        styleText = `body { ${ styleText } }`
+    }
+
+    document.getElementById("pref-styles").innerHTML = styleText;
 }
 
+const defaultHeadingFont = "Lora";
+const defaultBodyFont    = "Georgia";
+const defaultTableFont   = "Roboto";
+
 function menuRestoreDefaults() {
-    localStorage.setItem("headingFont", "Lora");
-    localStorage.setItem("bodyFont", "Georgia");
-    localStorage.setItem("tableFont", "Roboto");
+    localStorage.setItem("headingFont", defaultHeadingFont);
+    localStorage.setItem("bodyFont", defaultBodyFont);
+    localStorage.setItem("tableFont", defaultTableFont);
     updateFonts();
 }
 
@@ -121,7 +152,7 @@ function imageFloat(chunk, direction) {
         
         return `<figure><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
     });
-    return `<div class="image-float auto-image-container ${direction}">${ lines.join("") }</div>`;
+    return `<div class="image-float ${direction}">${ lines.join("") }</div>`;
 }
 
 function imageSpan(chunk) {
@@ -138,7 +169,7 @@ function imageSpan(chunk) {
         let altText = textFormat(parts[1].trim().replace(/"/g,"&quot;"));
         return `<div><img style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
     });
-    return `<div class="image-span auto-image-container">${ galleryFigures.join("") }</div>`;
+    return `<div class="image-span">${ galleryFigures.join("") }</div>`;
 }
 
 function gallery(chunk) {
@@ -161,7 +192,7 @@ function gallery(chunk) {
         </figure>
         `;
     });
-    return `<div class="captioned-gallery auto-image-container">${ galleryFigures.join("") }</div>`;
+    return `<div class="captioned-gallery">${ galleryFigures.join("") }</div>`;
 }
 
 function squareGallery(chunk) {
@@ -186,7 +217,7 @@ function squareGallery(chunk) {
         
         return `<figure><div class="img-wrapper"><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
     });
-    return `<div class="square-gallery auto-image-container">${ lines.join("") }</div>`;
+    return `<div class="square-gallery">${ lines.join("") }</div>`;
 }
 
 function autoVideo(chunk) {
@@ -395,40 +426,92 @@ function autoList(chunk, fine) {
     return list;
 }
 
+function articleMeta(chunk) {
+    chunk = chunk.split("\n").slice(1);
+    
+    const meta = { title: "", subtitle: "", date: "", seeAlso: [] }
+    
+    for (let line of chunk) {
+        line = line.split(":").map(c => c.trim());
+        if (line.length != 2) {
+            continue;
+        }
+        line[0] = line[0].toLowerCase();
+        
+        if (line[0] == "title") {
+            line[1] = line[1].replaceAll("---", "—").replaceAll("--", "–");
+            meta.title = textFormat(line[1]);
+            document.title = line[1];
+            document.querySelector(".page-name-display").innerHTML = line[1];
+        }
+        else if (line[0] == "subtitle") {
+            meta.subtitle = textFormat(line[1]);
+        }
+        else if (line[0] == "date") {
+            meta.date = line[1];
+        }
+        else if (line[0] == "see-also") {
+            line[1] = line[1].toLowerCase();
+            const seeAlso = line[1].split("|").map(c => c.trim());
+            if (seeAlso[0] == "tumblr") {
+                meta.seeAlso.push(`<a title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/${ seeAlso[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg> read on Tumblr</a>`);
+            }
+            else if (seeAlso[0] == "substack") {
+                meta.seeAlso.push(`<a title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ seeAlso[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg> read on Substack</a>`);
+            }
+        }
+    }
+    
+    if (meta.seeAlso.length >= 2) {
+        meta.seeAlso.sort().reverse();
+    }
+    const articleTop = document.querySelector(".article-top");
+    
+    if (meta.title != "") {
+        const articleTitle = articleTop.querySelector(".article-title");
+        if (articleTitle != null) {
+            articleTitle.innerHTML = meta.title;
+        } else {
+            articleTop.insertAdjacentHTML("beforeend", `<h1 class="article-title">${ meta.title }</h1>`);
+        }
+    }
+    if (meta.subtitle != "") {
+        const articlesubTitle = articleTop.querySelector(".article-subtitle");
+        if (articlesubTitle != null) {
+            articlesubTitle.innerHTML = meta.subtitle;
+        } else {
+            articleTop.insertAdjacentHTML("beforeend", `<h2 class="article-subtitle">${ meta.subtitle }</h2>`)
+        }
+    }
+    if (meta.date != "") {
+        const articleDate = articleTop.querySelector(".article-date");
+        if (articleDate != null) {
+            articleDate.innerHTML = meta.date;
+        } else {
+            articleTop.insertAdjacentHTML("beforeend", `<div class="article-date">${ meta.date }</div>`)
+        }
+    }
+    if (meta.seeAlso != "") {
+        const articleSeeAlso = articleTop.querySelector(".article-see-also");
+        if (articleSeeAlso != null) {
+            articleSeeAlso.innerHTML = meta.seeAlso;
+        } else {
+            articleTop.insertAdjacentHTML("beforeend", `<div class="article-see-also">${ meta.seeAlso.join("") }</div>`)
+        }
+    }
+}
+
 function autoHeading(chunk) {
     const tag = "h" + chunk.indexOf(" ");
     chunk = chunk.slice(chunk.indexOf(" ") + 1);
     const id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g ,"");
     chunk = textFormat(chunk);
-    if (tag == "h1" && document.title == "") {
-        document.title = chunk;
-        document.getElementById("page-name-display").innerHTML = chunk;
-    }
     if (tag == "h1" || tag == "h2" || tag == "h3") {
-        return `<${ tag } id="${ id }" class="article-heading --for-toc">${ chunk }</${ tag }>`;
+        return `<${ tag } id="${ id }" class="auto-heading --for-toc">${ chunk }</${ tag }>`;
     }
-    return `<h4 id="${ id }" class="article-heading">${ chunk }</h4>`;
+    return `<h4 id="${ id }" class="auto-heading">${ chunk }</h4>`;
 }
 
-function seeAlso(chunk) {
-    const article = document.getElementById("article");
-    const node = document.createElement("div");
-    node.className = "see-also";
-    article.parentNode.appendChild(node)
-    
-    chunk = chunk.split("\n").slice(1);
-    chunk.forEach(line => {
-        line = line.split("|");
-        if (line[0] == "substack") {
-            node.insertAdjacentHTML("beforeend", '<a title="This was also posted on Substack" href="https://substack.com/"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg></a>');
-            console.log(node)
-        }
-        else if (line[0] == "tumblr") {
-            node.insertAdjacentHTML("afterbegin", '<a title="This was also posted on Tumblr" href="https://tumblr.com/"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg></a>');
-        }
-    })
-    return "";
-}
 /* ------------------------------- main interpreter for #article content ------------------------------- */
 var tableNum = 1, linkNum = 1;
 function interpreter(argValue) {
@@ -440,21 +523,22 @@ function interpreter(argValue) {
         .replace(/\r/g, "") /* for safety, probably no effect */
         .trim()
         .split("\n\n");
-    
-    input = input.map( chunk => {
+
+    input = input.map(
+      chunk => {
         if (chunk.startsWith("<")) { return chunk; }
         if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
         if (chunk == "---") { return "<hr>"; }
-        if (chunk.startsWith("||subtitle")) { return `<h2 class="subtitle">${ textFormat( chunk.split("\n").slice(1).join(" ") ) }</h2>`; }
-        if (chunk.startsWith("||image-float-left")) { return imageFloat(chunk, "left"); }
-        if (chunk.startsWith("||image-float")) { return imageFloat(chunk, "right"); }
-        if (chunk.startsWith("||image-span")) { return imageSpan(chunk); }
-        if (chunk.startsWith("||gallery")) { return gallery(chunk); }
-        if (chunk.startsWith("||square-gallery")) { return squareGallery(chunk); }
-        if (chunk.startsWith("||video")) { return autoVideo(chunk); }
-        if (chunk.startsWith("||yt-gallery")) { return ytGallery(chunk); }
+        if (chunk.startsWith("!meta")) { articleMeta(chunk); return ""; }
+        if (chunk.startsWith("!image-float-left")) { return imageFloat(chunk, "left"); }
+        if (chunk.startsWith("!image-float")) { return imageFloat(chunk, "right"); }
+        if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
+        if (chunk.startsWith("!gallery")) { return gallery(chunk); }
+        if (chunk.startsWith("!square-gallery")) { return squareGallery(chunk); }
+        if (chunk.startsWith("!video")) { return autoVideo(chunk); }
+        if (chunk.startsWith("!yt-gallery")) { return ytGallery(chunk); }
         chunk = chunk.replaceAll("\\`", "&#96;");
-        if (chunk.startsWith("||codeblock")) { return codeblock(chunk) ; }
+        if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
         
         let fine = chunk.startsWith(".");
@@ -464,29 +548,38 @@ function interpreter(argValue) {
         /*
             [text to be displayed](https://irisembury.github.io/)
         */
-        chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, address) => {
-            address = address.replaceAll("\\)", ")");
-            let title = address.startsWith("http") ? `title="${address}"` : "";
-            let link;
-            if (displayText == "") { link = `<a href="${ address }" title="${ address }" class="autoref">[${ linkNum }]</span></a>`; }
-            else { link = `<a href="${ address }" ${ title }>${ displayText }</a>`; }
+        chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkAddress) => {
+            linkAddress = linkAddress.replaceAll("\\)", ")");
+            let link = `<a href="${ linkAddress }"`;
+            let linkClass = "";
+            
+            if (linkAddress.startsWith("http")) {
+                if (displayText == "") { linkClass = "autoref external"; }
+                else { linkClass = "external"; }
+            }
+            else if (displayText == "") { linkClass = "autoref"; }
+
+            if (linkAddress.startsWith("http")) { link += ` title="${ linkAddress }"`; }
+            if (linkClass != "") { link += ` class="${ linkClass }">`; }
+            else { link += ">"; }
+
+            if (displayText == "") { link += `[${ linkNum }]</a>`; }
+            else { link += displayText + "</a>"; }
             linkNum += 1;
             return link;
         });
-        chunk = chunk.replace(/\[\[(.+?)\]\]/g, (match, displayText) => { return `<a title="Jump to section" href="#${ displayText.replaceAll(" ", "_") }">${ displayText }</a>` });
 
-        if (chunk.startsWith("||profile-grid")) { return profileGrid(chunk); }
-        if (chunk.startsWith("||table")) { return autoTable(chunk); }
-        if (chunk.startsWith("||rows")) { return autoRows(chunk); }
-        if (chunk.startsWith("||indent")) { return indent(chunk); }
+        if (chunk.startsWith("!profile-grid")) { return profileGrid(chunk); }
+        if (chunk.startsWith("!table")) { return autoTable(chunk); }
+        if (chunk.startsWith("!rows")) { return autoRows(chunk); }
+        if (chunk.startsWith("!indent")) { return indent(chunk); }
         if ( chunk.startsWith("* ") || /^\d+\. /.test(chunk) ) { return autoList(chunk, fine); }
         if ( chunk.startsWith("-- ")) { return `<ul class="auto-list">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`; }
         if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
-        if (chunk.startsWith("||see-also")) { return seeAlso(chunk); }
 
         chunk = `<p>${ textFormat(chunk) }</p>`;
         if (fine) {
-            return `<div class="fine">${ chunk.replaceAll("\n", "<br>") }</div>`;
+            return `<div class="fine">${ chunk }</div>`;
         }
         return chunk;
     })
@@ -670,15 +763,17 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 
+const allFonts = "Arial,Lexend,Lora,Times New Roman,Georgia,Noto Sans JP,Inter,Open Sans,Faculty Glyphic,Roboto Slab,Roboto,Segoe UI,Trebuchet MS".split(",").map(o => `<option value="${o}">${o}</option>`).sort();
+
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
     const pathToRoot = index ? "" : "../../";
-    document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${ pathToRoot }assets/fonts.css">`);
+    document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
 
     document.body.innerHTML = `<nav id="navbar">
         <div class="align-center gap-8">
-            <div id="hamburger" class="icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
-            <div>${index?`<span>Iris Embury</span>`:`<a href="${pathToRoot}index.html">Iris Embury</a>`}${ index ? "" : " &verbar; <span title=\"This page\" id=\"page-name-display\">" + document.title + "</span>"}</div>
+            <div class="hamburger icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
+            <div>${index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : ' &verbar; <span title="This page" class="page-name-display">' + document.title + "</span>" }</div>
         </div>
         <div class="align-center gap-8">
              ${ index ? "" : `<a class="jump-to-top no-select" onclick="scrollToTop()">Jump to Top</a>` }
@@ -696,7 +791,7 @@ window.addEventListener("load", function() {
         <div class="nav-row page-title">Latest pages uploaded</div>
         ${ pageData.map(entry => `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>`).join("") }
     </nav>
-    <div class="dark-screen"></div>
+    <div class="screen"></div>
     <div id="right" class="closed">
         <h3>Display preferences:</h3>
         <table><tbody><tr><td>Theme:</td><td>
@@ -704,20 +799,26 @@ window.addEventListener("load", function() {
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
             </select>
+        </td></tr><tr><td>Font size:</td><td>
+            <select class="menu-select" id="font-size-select">
+                <option value="text-small">Small</option>
+                <option value="text-medium">Medium</option>
+                <option value="text-large">Larger</option>
+            </select>
         </td></tr></tbody></table>
         <hr>
         <div class="menu-options">
-            <div class="full-width-option">
-                <label for="page-full-width">Page full width</label>
+            <div>
+                <label for="page-full-width">Span full page width</label>
                 <input type="checkbox" class="menu-checkbox" id="page-full-width">
             </div>
-            <div class="hide-toc-option">
-                <label for="hide-toc-checkbox">Hide table of contents</label>
+            <div>
+                <label for="hide-toc-checkbox" style="cursor: help" title="Site-wide preference. Not all pages have a ToC.">Hide table of contents</label>
                 <input type="checkbox" class="menu-checkbox" id="hide-toc-checkbox">
             </div>
-            <div class="book-text-option">
-                <label for="book">Indent and justify</label>
-                <input type="checkbox" class="menu-checkbox" id="book">
+            <div>
+                <label for="indent-justify-checkbox">Indent and justify</label>
+                <input type="checkbox" class="menu-checkbox" id="indent-justify-checkbox">
             </div>
         </div>
         <hr>
@@ -725,24 +826,13 @@ window.addEventListener("load", function() {
         <table id="fonts">
             <tbody>
                 <tr><td>Headings:</td><td><select class="menu-select" id="heading-font-select">
-                    <option value="Georgia Pro">Georgia Pro</option>
-                    <option value="Lora">Lora</option>
-                    <option value="Roboto">Roboto</option>
-                    <option value="Roboto Slab">Roboto Slab</option>
-                    <option value="Segoe UI">Segoe UI</option>
-                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    ${ allFonts }
                 </select></td></tr>
                 <tr><td>Body:</td><td><select class="menu-select" id="body-font-select">
-                    <option value="Georgia">Georgia</option>
-                    <option value="Roboto">Roboto</option>
-                    <option value="Roboto Slab">Roboto Slab</option>
-                    <option value="Segoe UI">Segoe UI</option>
-                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    ${ allFonts }
                 </select></td></tr>
                 <tr><td>Tables:</td><td><select class="menu-select" id="table-font-select">
-                    <option value="Roboto">Roboto</option>
-                    <option value="Segoe UI">Segoe UI</option>
-                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    ${ allFonts }
                 </select></td></tr>
             </tbody>
         </table>
@@ -755,31 +845,33 @@ window.addEventListener("load", function() {
     <div class="page-grid">
         ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
         <div class="main-container">
-            <div id="article">${ document.body.innerHTML }</div>
-            <div id="page-footer">
+            <div class="article-top"></div>
+            <div class="article">
+                ${ document.body.innerHTML }
+            </div>
+            <div class="article-footer">
                 ${ index ? "" : `<div class="footer-back-to-index"><a href="../../index.html">Link back to index (front page)</a></div>` }
-                <div>This repo domain (irisembury.github.io) is used to host my writing and opinions. I have no association with any other person or organization. For serious inquiries you can contact me at irisembury@gmail.com.</div>
             </div>
         </div>
     </div>
     <div class="lb-container">
-        <div id="lb-top-left"></div>
-        <div class="lb-wrapper"><img id="lightbox"></div>
-        <div class="lb-bottom-panel"><div id="lb-caption"></div></div>
+        <div class="lb-top-left"></div>
+        <div class="lb-wrapper"><img class="lightbox"></div>
+        <div class="lb-bottom-panel"><div class="lb-caption"></div></div>
     </div>
     <style id="pref-styles"></style>`;
 
-    interpreter(document.getElementById("article"));
-    // <nav id="left" class="sidebar">${ pageData.map(entry => `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>`).join("") }</nav>
+    const ARTICLE = document.querySelector(".article");
+    interpreter(ARTICLE);
 
     if (index) {
         document.getElementById("index").innerHTML = `<div class="table-wrapper">
             <div class="auto-rows">${
-                pageData.map(entry => `<div class="row">
-                        <div class="cell col-1"><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
-                        <div class="cell col-2 dots-line"></div>
-                        <div class="cell col-3">${ entry.date }</div>
-                    </div>` ).join("")
+            pageData.map(entry => `<div class="row">
+                <div class="cell col-1"><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
+                <div class="cell col-2 dots-line"></div>
+                <div class="cell col-3">${ entry.date }</div>
+            </div>` ).join("")
         }</div>`;
     }
 
@@ -793,7 +885,9 @@ window.addEventListener("load", function() {
     const navbar = document.getElementById("navbar");
     let canNavCheck = true;
     function navCheck() {
-        if (!canNavCheck) { return; }
+        if (!canNavCheck) {
+            return;
+        }
         canNavCheck = false;
         setTimeout(
             function() {
@@ -822,8 +916,10 @@ window.addEventListener("load", function() {
     gearIcon.addEventListener("click", gearMenuToggle);
 
     /* ---- ---- ---- ---- ---- ---- ---- hamburgerMenu ---- ---- ---- ---- ---- ---- ---- */
-
-    const hamburgerIcon = document.getElementById("hamburger");
+    /*
+        connect elements, enable toggles for click handler
+    */
+    const hamburgerIcon = document.querySelector(".hamburger");
     const hamburgerMenu = document.getElementById("left");
     function hamburgerMenuToggle(option) {
         if (option == "close" || option == "open") {
@@ -862,12 +958,17 @@ window.addEventListener("load", function() {
         }
     })
 
-    /* ---- ---- ---- ---- ---- ---- ---- gear menu items: ---- ---- ---- ---- ---- ---- ---- */
+    /* ---- ---- ---- ---- ---- ---- items inside gear menu ---- ---- ---- ---- ---- ---- */
+
     setBrightness();
     document.getElementById("brightness-select").addEventListener("change", function() {
         setBrightness(this.value);
     });
-    
+    setFontSize();
+    document.getElementById("font-size-select").addEventListener("change", function() {
+        setFontSize(this.value);
+    });
+
     updateFonts();
     document.getElementById("heading-font-select").addEventListener("change", function() {
         localStorage.setItem("headingFont", this.value);
@@ -881,18 +982,19 @@ window.addEventListener("load", function() {
         localStorage.setItem("tableFont", this.value);
         updateFonts();
     });
-    
-    if (localStorage.getItem("book") == "true") {
-        HTML.classList.add("book");
-        document.getElementById("book").checked = true;
+
+    if (localStorage.getItem("indent-justify") == "true") {
+        HTML.classList.add("indent-justify");
+        document.getElementById("indent-justify-checkbox").checked = true;
     } else {
-        document.getElementById("book").checked = false;
+        document.getElementById("indent-justify-checkbox").checked = false;
     }
-    document.getElementById("book").addEventListener("change", function() {
-        localStorage.setItem("book", this.checked);
-        HTML.classList.toggle("book", this.checked);
+    document.getElementById("indent-justify-checkbox").addEventListener("change", function() {
+        localStorage.setItem("indent-justify", this.checked);
+        HTML.classList.toggle("indent-justify", this.checked);
     });
     
+    /* other options are site-wide, this one is page-specific: */
     if (!index) {
         if (localStorage.getItem(window.location.href + "-full-width") == "true") {
             HTML.classList.add("full-width");
@@ -910,7 +1012,7 @@ window.addEventListener("load", function() {
         document.title += " | Iris Embury";
     }
     
-    /* ---- ---- ---- ---- ---- ---- ---- quote expand element ---- ---- ---- ---- ---- ---- ---- ---- ---- */
+    /* ---- ---- ---- ---- ---- ---- quote expand element ---- ---- ---- ---- ---- ---- ---- ---- */
     
     Array.from(document.getElementsByClassName("quote-expand")).forEach(quoteExpandElement => {
         quoteExpandElement.classList.add("collapsed")
@@ -931,7 +1033,7 @@ window.addEventListener("load", function() {
         })
     })
 
-    /* ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- ---- */
+    /* ---- ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- */
 
     if (!HTML.classList.contains("include-toc")) {
         let toc = document.getElementById("toc");
@@ -941,21 +1043,20 @@ window.addEventListener("load", function() {
     }
 
     if (HTML.classList.contains("include-toc")) {
-        
         const hideTocCheckbox = document.getElementById("hide-toc-checkbox");
         if (!hideTocCheckbox.checked) {
             window.addEventListener("scroll", tocHighlightUpdateAttempt)
         }
         hideTocCheckbox.addEventListener("change", function() {
-            HTML.classList.toggle("include-toc", this.checked);
-            if (this.checked) {
+            HTML.classList.toggle("include-toc", !this.checked);
+            if (!this.checked) {
                 window.addEventListener("scroll", tocHighlightUpdateAttempt);
             } else {
                 window.removeEventListener("scroll", tocHighlightUpdateAttempt);
             }
         });
 
-        const headings = Array.from(document.getElementById("article").getElementsByClassName("--for-toc"));
+        const headings = Array.from(ARTICLE.getElementsByClassName("--for-toc"));
         const toc = document.getElementById("toc");
         toc.innerHTML = '<div class="toc-title">Table of contents</div>' + headings.map(
             heading =>
@@ -963,6 +1064,7 @@ window.addEventListener("load", function() {
         ).join("");
         toc.scrollTo({ behavior: "instant", top: 0 })
         const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+        rowsInToc[0].className = "toc-row";
         rowsInToc[0].innerHTML = '<a class="pseudo-link" onclick="scrollToTop()">(Top)</a>';
 
         let canTocHighlightUpdate = true;
@@ -998,7 +1100,12 @@ window.addEventListener("load", function() {
                         if (rRect.bottom + 20 > tRect.bottom) {
                             toc.scrollTo(
                                 { top: row.offsetTop + row.offsetHeight - toc.clientHeight + 20, behavior: "smooth" }
-                            );
+                            )
+                        }
+                        else if (rRect.top < tRect.top) {
+                            toc.scrollTo(
+                                { top: row.offsetTop - 4, behavior: "smooth" }
+                            )
                         }
                     }
                     else {

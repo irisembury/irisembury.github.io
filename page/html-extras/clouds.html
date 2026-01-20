@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        overflow: hidden;
+        background-color: #567;
+    }
+    .cloud {
+        z-index: -1;
+        position: absolute;
+        border-radius: 100px;
+        background-color: #eee;
+        box-shadow: 5px 5px #0001;
+    }
+    .cloud-bump {
+        background-color: white;
+        position: inherit;
+        border-radius: 50%;
+    }
+	</style>
+</head>
+<body>
+    <script>
+    function rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) ) + min;
+    }
+	class Cloud {
+		constructor(x, y, w, h) {
+			this.x = x; this.y = y; this.w = w; this.h = h;
+			this.obj = document.body.appendChild(document.createElement('div'));
+			this.obj.className    = 'cloud';
+			this.obj.style.width  = this.w +'px';
+			this.obj.style.height = this.h +'px';
+			this.obj.style.top    = this.y +'px';
+			this.obj.style.left   = this.x +'px';
+			this.makeBump(10 / 35, 1 / 7, 6 / 35);
+			this.makeBump(17 / 35, 8 / 35, 13 / 35);
+		}
+		makeBump(w_ratio, t_ratio, l_ratio) {
+			let bump = this.obj.appendChild(document.createElement('div'));
+			bump.className = 'cloud-bump';
+			bump.style.height = bump.style.width = (this.w * w_ratio) +'px';
+			bump.style.top = (-this.w * t_ratio) +'px';
+			bump.style.left = (this.w * l_ratio) +'px';
+		}
+		move() {
+			this.x += -1;
+			this.obj.style.left = this.x +'px';
+			if (this.x < -this.w) {
+				this.x = window.innerWidth;
+			}
+		}
+	}
+    window.addEventListener("load", function() {
+		const clouds = [];
+		const numClouds = rand(12, 30);
+        for (let i = 0 ; i < numClouds; i += 1) {
+            const cWidth = rand(200, 500);
+            const cHeight = Math.floor(cWidth * (12/35));
+            const cTop = rand(-cHeight, window.innerHeight);
+            const cLeft = rand(-cWidth, window.innerWidth);
+            clouds.push(
+                new Cloud(cLeft, cTop, cWidth, cHeight)
+            );
+        }
+		function moveClouds() {
+			for (const i of clouds) {
+                i.move()
+            }
+		}
+        
+        setInterval(
+            moveClouds,
+            1000 / 3
+        )
+    }
+	</script>
+</body>
+</html>
+
+

@@ -1,0 +1,311 @@
+<!doctype html>
+<html>
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+	<style>
+	    
+    * { margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    
+    header {
+        width: 100%;
+        background-color: #111111;
+        padding: 12px;
+        box-sizing: border-box;
+    }
+    main {
+        text-align: center;
+        padding: 12px;
+    }
+    main > section {
+        background-color: #FFFFFF;
+        margin: 12px auto;
+        padding: 12px;
+		display: inline-block;
+        border: 1px solid black;
+        height: 100%;
+    }
+    table {
+        margin: auto;
+        display: none;
+        border-spacing: 4px;
+    }
+    .gameTile {
+		box-sizing: border-box;
+        padding: 5px;
+		cursor: pointer;
+        color: #fff;
+        font-weight: bold;
+        font-family: courier;
+        user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+    }
+    .gameTile:hover {
+        background-image: linear-gradient(#fff3, transparent);
+		border: 1px solid black;
+    }
+    
+    .topInstructions {
+        border: 1px solid black;
+        background-color: white;
+        color: #333333;
+        margin: 5px auto;
+        padding: 10px 16px 7px;
+        font-family: courier;
+        font-weight: 700;
+        max-width: 50%;
+    }
+	
+	</style>
+</head>
+<body>
+<main>
+    <div class="topInstructions">Goal: Put all tiles in order (1, 2, 3, 4, 5...)</div>
+    <br>
+    <section>
+        <table id="gameBoard"></table>
+        
+        <div style="font-family:Roboto,sans-serif; text-align:left; padding:5px; margin-top:16px;">
+            <label>Last move: </label><span id="lastMove"></span>
+            <span style="float: right"><label>Moves: </label><span id="moveCount">0</span></span>
+            <div style="text-align:center;">Time: <span id="timeDisplay">0</span></div>
+            <div style="text-align:right; margin-top:1em">
+                <select id="board-select" style="font-family:system-ui; padding:0.25rem;">
+                    <option value="1">board 1</option>
+                    <option value="2">board 2</option>
+                    <option value="3">board 3</option>
+                    <option value="4">board 4</option>
+                    <option value="5">random (not guaranteed to be possible)</option>
+                </select>
+            </div>
+        </div>
+    </section>
+</main>
+<script>
+	function rand(min, max) { return Math.floor(Math.random() * (max - min + 1) ) + min; }
+	let g = {
+		width: 5,
+		numMoves : 0,
+		canMove : true,
+		blankId : -1,
+		gameTiles : null,
+		board : document.getElementById('gameBoard')
+	}
+	let stopwatch = {
+		running : false,
+		interval : null,
+		counter : 0,
+		clear : function() {
+			clearInterval(stopwatch.interval),
+			stopwatch.running = false,
+			stopwatch.counter = 0
+		},
+		convert : function(n) {
+			let seconds = n;
+			let minutes = Math.floor(seconds / 60);
+			seconds = seconds - (minutes * 60);
+			
+			if (minutes == 0) return seconds + "s";
+			return minutes + "m:" + seconds + "s";
+		},
+		start : function () {
+			stopwatch.running = true;
+			stopwatch.counter = false;
+			stopwatch.interval = setInterval( function () {
+				stopwatch.counter += 1;
+				document.getElementById('timeDisplay').innerHTML = stopwatch.convert(stopwatch.counter);
+			}, 1000);
+		},
+		stop : function() {
+			stopwatch.running = false;
+			clearInterval(stopwatch.interval);
+			return stopwatch.convert(stopwatch.counter);
+		}
+	}
+    function colorize(x) {
+        if (g.gameTiles[x].innerHTML == "") {
+            g.gameTiles[x].style.backgroundColor = '#DDDDDD';
+        } else {
+            let c = Math.floor(parseInt(g.gameTiles[x].innerHTML) * (255 / (g.width * g.width)));
+            g.gameTiles[x].style.backgroundColor = `rgb(${c}, ${0}, ${255 - c})`;
+        }
+    }
+    function initSwap(x, y) {
+        let temp = g.gameTiles[x].innerHTML;
+        g.gameTiles[x].innerHTML = g.gameTiles[y].innerHTML;
+        g.gameTiles[y].innerHTML = temp;
+        colorize(x);
+        colorize(y);
+    }
+    
+    function moveTile(e) {
+        let tile = e.target;
+        if (!validateMove(tile)) return;
+		
+		if (!stopwatch.running) stopwatch.start();
+        
+		document.getElementById('moveCount').innerHTML = ++g.numMoves;
+		document.getElementById('lastMove').innerHTML = `${tile.id} to ${g.blankId}`;
+        
+        g.gameTiles[g.blankId].innerHTML = tile.innerHTML;
+        tile.innerHTML = "";
+        
+        colorize(tile.id);
+        colorize(g.blankId);
+        
+        g.blankId = tile.id;
+        
+        if (g.blankId == g.width * g.width)
+            checkIfWin();
+    }
+    
+    function validateMove(e) {
+        if (!g.canMove) return false;
+        let tileId = e.id;
+        if (tileId == g.blankId) return false;
+        
+        g.blankId = parseInt(g.blankId);
+        
+        if (tileId == g.blankId - g.width || tileId == g.blankId + g.width) {
+            //target block directly up/down from blank
+            return true;
+        }
+        else {
+            if (g.blankId % g.width == 1) {
+                //blank is on left
+                if (tileId == g.blankId + 1)
+                    return true;
+            }
+            else if (g.blankId % g.width == 0) {
+                //blank is on right
+                if (tileId == g.blankId - 1)
+                    return true;
+            }
+            else {
+                //blank is in the middle
+                if (tileId == g.blankId + 1 || tileId == g.blankId - 1)
+                    return true;
+            }
+            //true else: invalid move attempt?: no action
+        }
+        return false;
+    }
+    
+    function checkIfWin() {
+        let mistake = false;
+        for (let i = 1; i < (g.width * g.width); i += 1) {
+            if (g.gameTiles[i].innerHTML != i) {
+                mistake = true;
+                break;
+            }
+        }
+        if (!mistake) {
+            g.canMove = false;
+            alert(`Victory!\n\nNumber of moves: ${g.numMoves}.\n\nTime taken: ${stopwatch.stop()}.\n\nRefresh page to retry.`);
+        }
+    }
+    
+    function scrambleBoard(x) {
+        switch (x) {
+			case 1:
+				initSwap(3, 23);
+				initSwap(1, 3);
+				break;
+			case 2:
+				initSwap(12, 22);
+				initSwap(5, 16);
+				initSwap(20, 14);
+				initSwap(15, 8);
+				initSwap(4, 11);
+				initSwap(1, 19);
+				initSwap(19, 17);
+				initSwap(24, 2);
+				break;
+			case 3:
+				initSwap(5, 2);
+				initSwap(17, 24);
+				initSwap(1, 8);
+				initSwap(5, 16);
+				initSwap(3, 16);
+				initSwap(18, 20);
+				initSwap(5, 16);
+				initSwap(15, 8);
+				initSwap(4, 11);
+				initSwap(1, 19);
+				initSwap(19, 17);
+				initSwap(24, 2);
+				break;
+			case 4:
+				initSwap(23, 2);
+				initSwap(22, 3);
+				initSwap(21, 4);
+				initSwap(20, 5);
+				initSwap(19, 6);
+				initSwap(18, 7);
+				initSwap(17, 8);
+				initSwap(15, 9);
+				initSwap(14, 10);
+				initSwap(13, 11);
+				initSwap(16, 15);
+				initSwap(2, 3);
+				break;
+			default:
+				randomizeBoard();
+        }
+    }
+    function randomizeBoard() {
+        for (let i = 0; i < 15; i += 1) {
+			let a = rand(1, (g.width * g.width) - 1);
+			let b = rand(1, (g.width * g.width) - 1);
+			initSwap(a, b);
+		}
+    }
+	
+	function sizeBoard() {
+		let tileCss = document.getElementById('tileCss');
+		if (!tileCss) {
+			tileCss = document.body.appendChild(document.createElement('div'));
+		}
+		let tileSize = window.innerHeight - 255;
+		tileSize = tileSize / g.width;
+		if (tileSize > 120) { tileSize = 120; }
+		tileCss.innerHTML = "<style>.gameTile { width: "+tileSize+"px; height: "+tileSize+"px }</style>";
+	}
+	
+    function init(boardOption) {
+        g.blankId = g.width * g.width;
+        g.gameTiles = new Array(g.width * g.width + 1);
+		sizeBoard();
+		
+        let c = 1;
+        for (let i = 0; i < g.width; i += 1) {
+            let row = g.board.appendChild(document.createElement('tr'));
+            for (let j = 0; j < g.width; j += 1) {
+                g.gameTiles[c] = row.appendChild(document.createElement('td'));
+                g.gameTiles[c].className = 'gameTile';
+                g.gameTiles[c].id = c;
+                g.gameTiles[c].innerHTML = c;
+                g.gameTiles[c].addEventListener('click', moveTile);
+                colorize(c++);
+            }
+        }
+        g.gameTiles[g.blankId].innerHTML = "";
+        colorize(g.blankId);
+        
+        scrambleBoard(boardOption);
+        g.board.style.display = 'unset'; //unhide
+    }
+    
+    window.addEventListener("load", function() {
+        init(1);
+        
+        document.getElementById("board-select").addEventListener("change", function() {
+            g.board.innerHTML = "";
+            document.getElementById('timeDisplay').innerHTML = "";
+            stopwatch.clear();
+            init(this.value)
+        })
+    })
+	</script>
+</body>
+</html>

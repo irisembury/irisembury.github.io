@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="include-toc">
 <head>
-    <title></title>
     <link rel="stylesheet" href="../../assets/main.css">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <style>
@@ -13,7 +12,8 @@
     </style>
 </head>
 <body>
-# Discord bot custom commands
+!meta
+    title : Discord bot custom commands
 
 I've tried all the common Discord moderation bots. **YAGPDB**, a name that came from **Y**et **A**nother **G**eneral **P**urpose **D**iscord **B**ot, ended up being my favourite. **Dyno** is great too if you want a general-purpose one, and is what I'd recommend for most people. They both do everything I want, and they both let you write custom commands. Dyno's is easier to learn. Yag is trickier, but lets you do a lot more once you figure it out.
 
@@ -29,7 +29,7 @@ Trigger type: Contains | Trigger: <@&1226674474427088947> (fill in the role ID o
 
 This creates a log entry when users on the server ping the @mod role.
 
-||codeblock
+!codeblock
 {{ $alert_channel := 1447459949645926452 }} {{ $line_start    := "\n " }}
 {{ $report_meta   := (print .Message.Author "|" .Message.Author.ID ":" ) }}
 {{ $report_link   := (print "[Jump to ping message](<https://discord.com/channels/840691574232580106/" .Message.ChannelID "/" .Message.ID ">)" ) }}
@@ -62,7 +62,7 @@ This is what we use for the vetting channel. There's a role, @vetting, which lim
 
 I also set up a second channel called #vetting-log that logs what people enter into the channel so we can view what's happening later. A portion of the function is just making that work.
 
-||codeblock
+!codeblock
 {{ deleteTrigger 0 }}
 {{ $log_channel := 1447470006748053597 }}
 {{ $vetting_answer := reReplace "`" .Message.Content "'" }}
@@ -95,7 +95,7 @@ Trigger type: Command (mention/cmd prefix) | Trigger: echo
 
 If you want YAGPDB to say something in order to use it for pins or anything, this is how to do that.
 
-||codeblock
+!codeblock
 {{ deleteTrigger }}
 {{ $args := parseArgs 1 "Requires at least 1 argument." (carg "string" "messagePassed") }}
 {{ sendMessage nil (print ($args.Get 0) ) }}
@@ -108,7 +108,7 @@ I tried all the levelling bots I could find a few years ago and this one seemed 
 
 Here's what I set up:
 
-||codeblock
+!codeblock
 /config-server set
  ╰╴ Muted XP:    Yes
  ╰╴ Deafened XP: No
