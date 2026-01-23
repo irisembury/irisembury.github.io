@@ -8,7 +8,7 @@ Stay the trenches | stay-the-trenches | 2025-12-17
 Derangement | derangement | 2025-12-12
 Thoughts on immigration | immigration | 2025-11-06
 What is prejudice? | what-is-prejudice | 2025-10-30
-Learn about India | india | 2025-10-24
+India | india | 2025-10-24
 Liberalism, not extremism | liberalism-not-extremism | 2025-09-19
 The path of normalization | the-path-of-normalization | 2025-09-08
 Lies about Ilhan Omar | ilhan-omar | 2025-08-25
@@ -29,17 +29,21 @@ Fetishism &amp; politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
 The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
 `.split("\n").filter(
-    line => line.trim().split("|").length == 3
+    line => line.length > 3
 ).map(
-    line => {
-        line = line.replace("\\|", "|").split("|").map(c => c.trim());
-        return {
-            title: line[0],
-            url:   line[1],
-            date:  line[2]
+    entry => {
+        entry = entry.replaceAll("\\|", "&verbar;").split("|").map(c=>c.trim());
+        while (entry.length < 4) {
+            entry.push("");
         }
+        return {
+            title:   entry[0],
+            url:     entry[1],
+            date:    entry[2]
+        };
     }
-)
+);
+
 
 function scrollToTop() {
     window.scrollTo({
@@ -79,8 +83,9 @@ function setBrightness(setValue) {
     localStorage.setItem("brightness", brightness);
     document.getElementById("brightness-select").value = brightness;
 }
+
 function setFontSize(setValue) {
-    let fontSize = setValue || localStorage.getItem("font-size") || "text-small";
+    let fontSize = setValue || localStorage.getItem("font-size") || "text-normal";
     HTML.classList.remove(...Array.from(document.getElementById("font-size-select").children).map(o => o.value).filter(o => o != fontSize));
     HTML.classList.add(fontSize);
     localStorage.setItem("font-size", fontSize);
@@ -122,7 +127,7 @@ function updateFonts() {
     if (styleText != "") {
         styleText = `body { ${ styleText } }`
     }
-
+    
     document.getElementById("pref-styles").innerHTML = styleText;
 }
 
@@ -156,10 +161,10 @@ function imageFloat(chunk, direction) {
 }
 
 function imageSpan(chunk) {
-    /* ||image-span maxHeight */
+    /* !image-span maxHeight */
     /* imgUrl | alt-text/title */
     const rows = chunk.split("\n");
-    let homeRow = rows.shift().substring("||image-span".length).trim();
+    let homeRow = rows.shift().substring("!image-span".length).trim();
     const galleryFigures = rows.map( line => {
         const parts = line.split("|");
         while (parts.length < 2) {
@@ -173,10 +178,10 @@ function imageSpan(chunk) {
 }
 
 function gallery(chunk) {
-    /* ||image-span maxHeight */
+    /* !image-span maxHeight */
     /* imgUrl | caption | alt-text/title */
     const rows = chunk.split("\n");
-    let homeRow = rows.shift().substring("||gallery".length).trim();
+    let homeRow = rows.shift().substring("!gallery".length).trim();
     let galleryFigures = rows.map( line => {
         const parts = line.split("|");
         while (parts.length < 3) {
@@ -328,26 +333,23 @@ function profileGrid(chunk) {
 }
 
 function autoTable(chunk) {
-    let rows = chunk.split("\n");
-    let firstRow = rows.shift().substring("||table".length).trim();
+    chunk = chunk.replace(/\n +/g, " ");
+    const rows = chunk.split("\n");
+    let firstRow = rows.shift().substring("!table".length).trim();
     /* make tbody cells */
-    let tableWidth = 1;
     for (let r = 0; r < rows.length; r += 1) {
         let rowNum = r + 1;
         let cells = rows[r].replaceAll("\\|", "&verbar;").split("|");
         for (let c = 0; c < cells.length; c += 1) {
             let cellNum = c + 1;
-            cells[c] = `<td class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ textFormat(cells[c].trim()) }</td>`;
-            if (c + 1 > tableWidth) {
-                tableWidth = c + 1;
-            }
+            cells[c] = `<td class="cell col-${ cellNum + " col-" + (cellNum % 2 == 1 ? "odd" : "even") }">${ textFormat(cells[c].trim()) }</td>`;
         }
         rows[r] = `<tr class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</tr>`;
     }
-    /* if ||table declaration had styling included: */
+    /* if !table declaration had styling included: */
     let customTableStyle = "";
     if (firstRow.replace(/\s/g, "").length > 1) {
-        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-table-"+tableNum).replace(/;/g, " !important;") }</style>`;
+        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-table-" + tableNum).replace(/;/g, " !important;") }</style>`;
     }
     let table = `${ customTableStyle }<div class="table-wrapper"><table class="auto-table auto-table-${ tableNum }"><tbody>${ rows.join("") }</tbody></table></div>`;
     tableNum += 1;
@@ -356,7 +358,7 @@ function autoTable(chunk) {
 
 function autoRows(chunk) {
     let rows = chunk.split("\n");
-    let firstRow = rows.shift().substring("||table".length).trim();
+    let firstRow = rows.shift().substring("!rows".length).trim();
     /* make tbody cells */
     let colWidth = 1;
     for (let r = 0; r < rows.length; r += 1) {
@@ -454,10 +456,10 @@ function articleMeta(chunk) {
             line[1] = line[1].toLowerCase();
             const seeAlso = line[1].split("|").map(c => c.trim());
             if (seeAlso[0] == "tumblr") {
-                meta.seeAlso.push(`<a title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/${ seeAlso[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg> read on Tumblr</a>`);
+                meta.seeAlso.push(`<a title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/${ seeAlso[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>Tumblr</span></a>`);
             }
             else if (seeAlso[0] == "substack") {
-                meta.seeAlso.push(`<a title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ seeAlso[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg> read on Substack</a>`);
+                meta.seeAlso.push(`<a title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ seeAlso[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>Substack</span></a>`);
             }
         }
     }
@@ -471,32 +473,40 @@ function articleMeta(chunk) {
         const articleTitle = articleTop.querySelector(".article-title");
         if (articleTitle != null) {
             articleTitle.innerHTML = meta.title;
-        } else {
-            articleTop.insertAdjacentHTML("beforeend", `<h1 class="article-title">${ meta.title }</h1>`);
+        }
+        else {
+            articleTop.insertAdjacentHTML("beforeend", '<h1 class="article-title">'+ meta.title +'</h1>');
         }
     }
     if (meta.subtitle != "") {
         const articlesubTitle = articleTop.querySelector(".article-subtitle");
         if (articlesubTitle != null) {
             articlesubTitle.innerHTML = meta.subtitle;
-        } else {
-            articleTop.insertAdjacentHTML("beforeend", `<h2 class="article-subtitle">${ meta.subtitle }</h2>`)
+        }
+        else {
+            articleTop.insertAdjacentHTML("beforeend", '<h2 class="article-subtitle">'+ meta.subtitle +'</h2>')
         }
     }
     if (meta.date != "") {
         const articleDate = articleTop.querySelector(".article-date");
+        let dateElement;
+        if (/^\d{4}-\d{2}-\d{2}$/.test(meta.date)) {
+            
+        }
         if (articleDate != null) {
-            articleDate.innerHTML = meta.date;
-        } else {
-            articleTop.insertAdjacentHTML("beforeend", `<div class="article-date">${ meta.date }</div>`)
+            articleDate.innerHTML = `<time datetime="${ meta.date }">${ meta.date }</time>`;
+        }
+        else {
+            articleTop.insertAdjacentHTML("beforeend", '<div class="article-date">'+ meta.date +'</div>')
         }
     }
     if (meta.seeAlso != "") {
         const articleSeeAlso = articleTop.querySelector(".article-see-also");
         if (articleSeeAlso != null) {
             articleSeeAlso.innerHTML = meta.seeAlso;
-        } else {
-            articleTop.insertAdjacentHTML("beforeend", `<div class="article-see-also">${ meta.seeAlso.join("") }</div>`)
+        }
+        else {
+            articleTop.insertAdjacentHTML("beforeend", '<div class="article-see-also">'+ meta.seeAlso.join("") +'</div>')
         }
     }
 }
@@ -681,8 +691,6 @@ function auxFormat(input_string) {
             .replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2")
             .replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1")
             .replaceAll(/"/g, "&rdquo;")
-            
-            .replaceAll(/&rsquo;(T|l)/g, "<span class=\"rsquo\">&rsquo;</span>$1");
     }
     /* dashes */
     input_string = input_string.replaceAll("---", "<span class='mdash'>&mdash;</span>")
@@ -763,7 +771,7 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 
-const allFonts = "Arial,Lexend,Lora,Times New Roman,Georgia,Noto Sans JP,Inter,Open Sans,Faculty Glyphic,Roboto Slab,Roboto,Segoe UI,Trebuchet MS".split(",").map(o => `<option value="${o}">${o}</option>`).sort();
+const allFonts = "Consolas,Verdana,Cambria,Arial,Calibri,Lexend,Lora,Times New Roman,Georgia,Noto Sans JP,Inter,Open Sans,Faculty Glyphic,Roboto Slab,Roboto,Segoe UI,Trebuchet MS".split(",").map(o => `<option value="${o}">${o}</option>`).sort();
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
@@ -773,14 +781,14 @@ window.addEventListener("load", function() {
     document.body.innerHTML = `<nav id="navbar">
         <div class="align-center gap-8">
             <div class="hamburger icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
-            <div>${index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : ' &verbar; <span title="This page" class="page-name-display">' + document.title + "</span>" }</div>
+            <div class="gap-5">${ index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : ' &verbar; <div title="This page" class="page-name-display">' + document.title + "</div>" }</div>
         </div>
         <div class="align-center gap-8">
              ${ index ? "" : `<a class="jump-to-top no-select" onclick="scrollToTop()">Jump to Top</a>` }
-            <div id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
+            <div class="gear icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
         </div>
     </nav>
-    <nav id="left" class="closed">
+    <nav class="left-panel closed">
         <div class="nav-row page-title">Links</div>
         <div class="nav-row"><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA"><svg title="YouTube" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30"><path  fill="var(--c-youtube)" d="M29.2 8.6c-.3-1.6-1.6-2.8-3.2-3C23 5.2 15 5.2 15 5.2s-8 0-11 .4c-1.6.2-2.9 1.4-3.2 3C.4 11.6.4 15 .4 15s0 3.4 .4 6.4c.3 1.6 1.6 2.8 3.2 3C7 24.8 15 24.8 15 24.8s8 0 11-.4c1.6-.2 2.9-1.4 3.2-3 .4-3 .4-6.4 .4-6.4s0-3.4-.4-6.4z"/><path fill="var(--c-youtube-white)" d="M12 19.2V10.8l7.8 4.2-7.8 4.2z"/></svg>YouTube</a></div>
         <div class="nav-row"><a href="https://bsky.app/profile/irisembury.bsky.social"><svg title="Bluesky" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 57" width="18" height="18"><path fill="var(--c-bluesky)" d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805ZM50.127 3.805C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745Z"></path></svg>Bluesky</a></div>
@@ -792,7 +800,7 @@ window.addEventListener("load", function() {
         ${ pageData.map(entry => `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>`).join("") }
     </nav>
     <div class="screen"></div>
-    <div id="right" class="closed">
+    <div class="right-panel closed">
         <h3>Display preferences:</h3>
         <table><tbody><tr><td>Theme:</td><td>
             <select class="menu-select" id="brightness-select">
@@ -802,18 +810,18 @@ window.addEventListener("load", function() {
         </td></tr><tr><td>Font size:</td><td>
             <select class="menu-select" id="font-size-select">
                 <option value="text-small">Small</option>
-                <option value="text-medium">Medium</option>
+                <option value="text-normal">Medium</option>
                 <option value="text-large">Larger</option>
             </select>
         </td></tr></tbody></table>
         <hr>
         <div class="menu-options">
             <div>
-                <label for="page-full-width">Span full page width</label>
+                <label for="page-full-width">Span page width</label>
                 <input type="checkbox" class="menu-checkbox" id="page-full-width">
             </div>
             <div>
-                <label for="hide-toc-checkbox" style="cursor: help" title="Site-wide preference. Not all pages have a ToC.">Hide table of contents</label>
+                <label for="hide-toc-checkbox"${ HTML.classList.contains("include-toc")? "": `style="cursor: help" title="This page doesn't have a table of contents to display, but you can still change the side-wide preference."` }>Hide table of contents</label>
                 <input type="checkbox" class="menu-checkbox" id="hide-toc-checkbox">
             </div>
             <div>
@@ -861,16 +869,14 @@ window.addEventListener("load", function() {
     </div>
     <style id="pref-styles"></style>`;
 
-    const ARTICLE = document.querySelector(".article");
-    interpreter(ARTICLE);
+    interpreter(document.querySelector(".article"));
 
     if (index) {
         document.getElementById("index").innerHTML = `<div class="table-wrapper">
-            <div class="auto-rows">${
+            <div>${
             pageData.map(entry => `<div class="row">
-                <div class="cell col-1"><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
-                <div class="cell col-2 dots-line"></div>
-                <div class="cell col-3">${ entry.date }</div>
+                <div><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
+                <div>${ entry.date }</div>
             </div>` ).join("")
         }</div>`;
     }
@@ -902,9 +908,8 @@ window.addEventListener("load", function() {
     window.addEventListener("scroll", navCheck);
 
     /* ---- ---- ---- ---- ---- ---- ---- gearMenu ---- ---- ---- ---- ---- ---- ---- */
-
-    const gearIcon = document.getElementById("gear");
-    const gearMenu = document.getElementById("right");
+    const gearIcon = document.querySelector(".gear");
+    const gearMenu = document.querySelector(".right-panel");
     function gearMenuToggle(option) {
         if (option == "close" || option == "open") {
             gearMenu.classList.toggle("closed", option == "close");
@@ -920,7 +925,7 @@ window.addEventListener("load", function() {
         connect elements, enable toggles for click handler
     */
     const hamburgerIcon = document.querySelector(".hamburger");
-    const hamburgerMenu = document.getElementById("left");
+    const hamburgerMenu = document.querySelector(".left-panel");
     function hamburgerMenuToggle(option) {
         if (option == "close" || option == "open") {
             hamburgerMenu.classList.toggle("closed", option == "close");
@@ -964,7 +969,9 @@ window.addEventListener("load", function() {
     document.getElementById("brightness-select").addEventListener("change", function() {
         setBrightness(this.value);
     });
-    setFontSize();
+    if (!HTML.classList.contains("text-small") && !HTML.classList.contains("text-large")) {
+        setFontSize();
+    }
     document.getElementById("font-size-select").addEventListener("change", function() {
         setFontSize(this.value);
     });
@@ -1013,34 +1020,50 @@ window.addEventListener("load", function() {
     }
     
     /* ---- ---- ---- ---- ---- ---- quote expand element ---- ---- ---- ---- ---- ---- ---- ---- */
-    
-    Array.from(document.getElementsByClassName("quote-expand")).forEach(quoteExpandElement => {
-        quoteExpandElement.classList.add("collapsed")
-        quoteExpandElement.title = "Click to expand";
-        quoteExpandElement.addEventListener("click", function() {
-            this.classList.remove("collapsed");
-            quoteExpandElement.title = "";
-        })
-        let btnContainer = quoteExpandElement.appendChild(document.createElement("div"));
-        btnContainer.innerHTML = `<div class="collapse-button-container"><input type="button" class="flat-button" value="minimize this"></div>`;
-        btnContainer.querySelector(".flat-button").addEventListener("click", function(click) {
-            quoteExpandElement.classList.add("collapsed");
-            quoteExpandElement.title = "Click to expand";
+    Array.from(document.getElementsByClassName("expando")).forEach(expando => {
+        expando.innerHTML = '<span class="expando-triangle no-select"></span>' + expando.innerHTML.split("<br>").map(o => `<p>${ o }</p>`).join("") + '<span class="expando-collapse-button no-select">[ collapse ▲ ]</span>';
+        const triangle = expando.querySelector(".expando-triangle");
+        function expandoToggle(click) {
             click.stopPropagation();
-            if (quoteExpandElement.getBoundingClientRect().top + window.scrollY < pageYOffset) {
-                quoteExpandElement.scrollIntoView({ behavior: "smooth" });
+            // expanding:
+            if (expando.classList.contains("collapsed")) {
+                expando.classList.remove("collapsed");
+                expando.removeAttribute("title");
+                triangle.innerHTML = "[▲]";
+            }
+            // collapsing:
+            else {
+                expando.classList.add("collapsed");
+                expando.title = "Click to expand";
+                triangle.innerHTML = "[▼]";
+            }
+        }
+        triangle.addEventListener("click", expandoToggle);
+        if (expando.classList.contains("collapsed")) {
+            expando.title = "Click to expand";
+            triangle.innerHTML = "[▼]";
+        }
+        else {
+            triangle.innerHTML = "[▲]";
+        }
+        expando.addEventListener("click", function(click) {
+            expando.classList.remove("collapsed");
+            expando.removeAttribute("title");
+            triangle.innerHTML = "[▲]";
+        })
+        const bottomButton = expando.querySelector(".expando-collapse-button");
+        bottomButton.addEventListener("click", function(click) {
+            click.stopPropagation();
+            expando.classList.add("collapsed");
+            expando.title = "Click to expand";
+            triangle.innerHTML = "[▼]";
+            if (expando.getBoundingClientRect().top + window.scrollY < pageYOffset) {
+                expando.scrollIntoView({ behavior: "smooth" });
             }
         })
     })
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- */
-
-    if (!HTML.classList.contains("include-toc")) {
-        let toc = document.getElementById("toc");
-        if (toc != null) {
-            toc.parentNode.removeChild(toc);
-        }
-    }
 
     if (HTML.classList.contains("include-toc")) {
         const hideTocCheckbox = document.getElementById("hide-toc-checkbox");
@@ -1056,7 +1079,7 @@ window.addEventListener("load", function() {
             }
         });
 
-        const headings = Array.from(ARTICLE.getElementsByClassName("--for-toc"));
+        const headings = Array.from(document.querySelector(".article").getElementsByClassName("--for-toc"));
         const toc = document.getElementById("toc");
         toc.innerHTML = '<div class="toc-title">Table of contents</div>' + headings.map(
             heading =>
@@ -1115,7 +1138,12 @@ window.addEventListener("load", function() {
             }
             lastHeading = currentHeading;
         }
-        
+    }
+    else {
+        let toc = document.getElementById("toc");
+        if (toc != null) {
+            toc.parentNode.removeChild(toc);
+        }
     }
 })
 
