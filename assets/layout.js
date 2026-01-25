@@ -1,7 +1,49 @@
 "use strict"
 const HTML = document.documentElement;
 
-let pageData = `
+const videoData = `give yourself credit | mM5fcuJnfZQ | 2026-01-23
+Potential issues with our elections | 509Q_HUp8CE | 2026-01-19
+Why is Reddit so hated? | jPVl5cfVP1k | 2026-01-13
+thoughts and plans | _zePgOyNPt4 | 2026-01-06
+trying to use a camera | iLR3pd8hmVY  | 2026-01-06
+Nick Shirley has farty pants | aQcGUiISQQk | 2026-01-05
+Looking at the recent Somali day care video | Btuz_P5WcyY | 2026-01-03
+Unfortunately, we should keep using bad social media | vDFmEAb2S4A | 2025-12-22
+The issues that break people's minds | NQPbvAdfsMY | 2025-12-19
+it's ok guys we don't have to fix them | NSajyW3l_vE | 2025-12-15
+In the fight for democracy, be wary of the far left | 7mKdVYVdqKs | 2025-12-10
+What even is therapy? | -lboA4v0Dvg | 2025-12-09
+Why do people say "ax" instead of ask? | c2StWa6z1zE | 2025-11-30
+today I learned how Danish people make numbers | nHdDW8ydjjc |2025-11-28
+Immigration | 6MEkIZQFV6w | 2025-11-23
+Marjorie Taylor Greene | Ak2DnmW6Vlg | 2025-11-21
+What is prejudice? | BzahVdIEYpA | 2025-11-03
+Notes on India | Pz0Oq1rb14E | 2025-10-24
+Notes on Saudi Arabia | 9RhaYU21Qag | 2025-10-17
+Jon Stewart is part of the problem | yYF2n0PDDRE | 2025-10-11
+The internet's latest over-reaction \\| Riyadh Comedy Festival | XXXisl9wOC0 | 2025-10-08
+Ilhan Omar makes waves after Charlie Kirk shooting | JDseBrbtp6E | 2025-10-04
+The path of normalization | TYoe1jxBYPY | 2025-09-19
+Why do people like Trump? | tcF0f-Dtgic | 2025-09-14
+My thoughts after the Charlie Kirk assassination | AjPF8pGv37U | 2025-09-12
+How to fix America in a few simple steps | iFHmA32NZAs | 2025-08-22
+Unpacking lies about Ilhan Omar | zgE4L-e9yg0 | 2025-09-03
+What just happened? A recap of all Trump news from Jan 20 to July 4 | n355Q15CX8g | 2025-08-18
+The problems with Pierre Poilievre | BZ-ztjpRchE | 2025-07-11
+The default politician is a normal white guy | GDjIBEq16zY | 2025-03-29
+What is with Trump and Russia? | G-sLZaP7oOA | 2025-03-18
+Reflections on Pride 2025 (in Toronto) | PL3u9OOGxew | 2025-06-05
+I don't like fireworks | tzJEv4jjKHM | 2025-06-23
+Rorschach tests | K3A1g1274Kc | 2025-08-20
+Are trans people more likely to be sex offenders? | ZKglpuBen-w | 2025-07-12
+Are trans people delusional? | o_t7xQJSYHk | 2025-06-28
+Trans fetishism & politics | vk57rvM1zWo | 2025-04-02
+Sex, gender, & transsexuals | Hgh3r7gJoWU | 2025-05-29
+Lies people still believe (Elizabeth Warren, Hillary Clinton) | LPQD6sxlWOs | 2025-04-09
+Bernie Sanders and the military industrial complex | yt6O0OMdIT0 | 2025-03-22
+Types of masculinity | lOQSqMhjwZY | 2025-06-12`;
+
+const pageData = `Give yourself credit | give-yourself-credit | 2026-01-23
 Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
 Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30
 Stay the trenches | stay-the-trenches | 2025-12-17
@@ -29,21 +71,18 @@ Fetishism &amp; politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
 The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
 `.split("\n").filter(
-    line => line.length > 3
+    entry => entry.length > 3
 ).map(
     entry => {
-        entry = entry.replaceAll("\\|", "&verbar;").split("|").map(c=>c.trim());
-        while (entry.length < 4) {
-            entry.push("");
-        }
+        entry = entry.replaceAll("\\|","&verbar;").split("|").map( c => c.trim() );
+        while (entry.length < 3) { entry.push("") }
         return {
-            title:   entry[0],
-            url:     entry[1],
-            date:    entry[2]
-        };
+            title: entry[0],
+            url:   entry[1],
+            date:  entry[2]
+        }
     }
 );
-
 
 function scrollToTop() {
     window.scrollTo({
@@ -82,14 +121,6 @@ function setBrightness(setValue) {
     HTML.classList.add(brightness);
     localStorage.setItem("brightness", brightness);
     document.getElementById("brightness-select").value = brightness;
-}
-
-function setFontSize(setValue) {
-    let fontSize = setValue || localStorage.getItem("font-size") || "text-normal";
-    HTML.classList.remove(...Array.from(document.getElementById("font-size-select").children).map(o => o.value).filter(o => o != fontSize));
-    HTML.classList.add(fontSize);
-    localStorage.setItem("font-size", fontSize);
-    document.getElementById("font-size-select").value = fontSize;
 }
 
 function updateFonts() {
@@ -201,10 +232,10 @@ function gallery(chunk) {
 }
 
 function squareGallery(chunk) {
-    /* ||square-gallery gridHeight */
+    /* !square-gallery gridHeight */
     /* imgUrl | caption | hover text (alt/title) */
     const rows = chunk.split("\n");
-    let homeRow = rows.shift().substring("||image-span".length).trim();
+    let homeRow = rows.shift().substring("!image-span".length).trim();
     const lines = chunk.split("\n").slice(1).map( line => {
         const parts = line.split("|");
         while (parts.length < 3) {
@@ -234,16 +265,18 @@ function autoVideo(chunk) {
     }
     let fileType = fileUrl.substring(dot + 1);
     let maxHeight = (data.length == 2) ? data[1] : 300;
-    return `<div class="auto-video"><video controls height="${maxHeight}"><source src="${fileUrl}" type="video/${fileType}"></video></div>`;
+    return `<div class="auto-video"><video controls height="${ maxHeight }"><source src="${ fileUrl }" type="video/${ fileType }"></video></div>`;
 }
 
 function ytGallery(chunk) {
     let rows = chunk.split("\n");
-    let galleryInfo = rows.shift().substring("||yt-gallery".length);
-    let sortInput = galleryInfo.includes("sort");
+    let gInfo = rows.shift().substring("!yt-gallery".length);
+    let sortInput = gInfo.includes("sort");
     rows = rows.map(
         row => {
-            row = row.replace(/\\\|/g, "&verbar;").split("|").map(d => d.trim());
+            row = row.replace(/\\\|/g, "&verbar;").split("|").map(
+                c => c.trim()
+            );
             while (row.length < 3) {
                 row.push("");
             }
@@ -257,7 +290,7 @@ function ytGallery(chunk) {
             return b - a;
         })
     }
-    let numToInclude = parseInt(galleryInfo.replace(/\D/g, "")) || rows.length;
+    let numToInclude = parseInt(gInfo.replace(/\D/g, "")) || rows.length;
     rows = rows.slice(0, numToInclude).map( row => {
         let title = row[0];
         let videoCode = row[1];
@@ -284,7 +317,7 @@ function ytGallery(chunk) {
 function codeblock(chunk) {
     let lines = chunk.split("\n");
     let syntaxClass = "", customKeywords = [];
-    let firstLine = lines.shift().substring("||codeblock".length).trim();
+    let firstLine = lines.shift().substring("!codeblock".length).trim();
     if (firstLine) {
         let words = firstLine.split(" ");
         syntaxClass = words.shift();
@@ -319,7 +352,7 @@ function profileGrid(chunk) {
                     <img onclick="setLightbox(this)" class="profile-grid-img" src="${ entryImageUrl }">
                 </div>
                 <div>
-                    <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISODateString(entryBirthdate) + "</span>" }</div>
+                    <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISO(entryBirthdate) + "</span>" }</div>
                     <div class="entry-title">${ textFormat(entryTitle) }</div>
                 </div>
             </div>
@@ -373,7 +406,7 @@ function autoRows(chunk) {
         }
         rows[r] = `<div class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</div>`;
     }
-    /* if ||rows declaration had styling included: */
+    /* if !rows declaration had styling included: */
     let customTableStyle = "";
     if (firstRow.replace(/\s/g, "").length > 1) {
         customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-rows-"+tableNum).replace(/;/g, " !important;") }</style>`;
@@ -449,8 +482,11 @@ function articleMeta(chunk) {
         else if (line[0] == "subtitle") {
             meta.subtitle = textFormat(line[1]);
         }
+        else if (line[0] == "last-updated") {
+            meta.date = 'Last updated ' + isoFormat(line[1]);
+        }
         else if (line[0] == "date") {
-            meta.date = line[1];
+            meta.date = isoFormat(line[1]);
         }
         else if (line[0] == "see-also") {
             line[1] = line[1].toLowerCase();
@@ -489,12 +525,8 @@ function articleMeta(chunk) {
     }
     if (meta.date != "") {
         const articleDate = articleTop.querySelector(".article-date");
-        let dateElement;
-        if (/^\d{4}-\d{2}-\d{2}$/.test(meta.date)) {
-            
-        }
         if (articleDate != null) {
-            articleDate.innerHTML = `<time datetime="${ meta.date }">${ meta.date }</time>`;
+            articleDate.innerHTML = meta.date;
         }
         else {
             articleTop.insertAdjacentHTML("beforeend", '<div class="article-date">'+ meta.date +'</div>')
@@ -511,6 +543,17 @@ function articleMeta(chunk) {
     }
 }
 
+function isoFormat(datestring) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(datestring)) {
+        const iso = datestring;
+        const [y, m, d] = iso.split("-").map(Number);
+        let fdate = new Date(y, m - 1, d);
+        fdate = new Intl.DateTimeFormat(undefined,{ year: "numeric", month:"long", day:"numeric"}).format(fdate);
+        datestring = '<time title="Date written (ISO: '+ iso +')" datetime="'+ iso +'">'+ fdate +'</time>';
+    }
+    return datestring;
+}
+
 function autoHeading(chunk) {
     const tag = "h" + chunk.indexOf(" ");
     chunk = chunk.slice(chunk.indexOf(" ") + 1);
@@ -523,7 +566,9 @@ function autoHeading(chunk) {
 }
 
 /* ------------------------------- main interpreter for #article content ------------------------------- */
-var tableNum = 1, linkNum = 1;
+var tableNum = 1;
+var linkNum = 1;
+var contentLinks = [];
 function interpreter(argValue) {
     if (argValue instanceof Node) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
@@ -535,68 +580,84 @@ function interpreter(argValue) {
         .split("\n\n");
 
     input = input.map(
-      chunk => {
-        if (chunk.startsWith("<")) { return chunk; }
-        if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
-        if (chunk == "---") { return "<hr>"; }
-        if (chunk.startsWith("!meta")) { articleMeta(chunk); return ""; }
-        if (chunk.startsWith("!image-float-left")) { return imageFloat(chunk, "left"); }
-        if (chunk.startsWith("!image-float")) { return imageFloat(chunk, "right"); }
-        if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
-        if (chunk.startsWith("!gallery")) { return gallery(chunk); }
-        if (chunk.startsWith("!square-gallery")) { return squareGallery(chunk); }
-        if (chunk.startsWith("!video")) { return autoVideo(chunk); }
-        if (chunk.startsWith("!yt-gallery")) { return ytGallery(chunk); }
-        chunk = chunk.replaceAll("\\`", "&#96;");
-        if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
-        chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-        
-        let fine = chunk.startsWith(".");
-        if (fine) { chunk = chunk.slice(1).trimStart(); }
-        
-        /* ------------------------------------- links ------------------------------------- */
-        /*
-            [text to be displayed](https://irisembury.github.io/)
-        */
-        chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkAddress) => {
-            linkAddress = linkAddress.replaceAll("\\)", ")");
-            let link = `<a href="${ linkAddress }"`;
-            let linkClass = "";
+        chunk => {
+            if (chunk.startsWith("<")) { return chunk; }
+            if (chunk == "---") { return "<hr>"; }
+            if (chunk.startsWith("!meta")) { articleMeta(chunk); return ""; }
+            if (chunk.startsWith("!image-float-left")) { return imageFloat(chunk, "left"); }
+            if (chunk.startsWith("!image-float")) { return imageFloat(chunk, "right"); }
+            if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
+            if (chunk.startsWith("!gallery")) { return gallery(chunk); }
+            if (chunk.startsWith("!square-gallery")) { return squareGallery(chunk); }
+            if (chunk.startsWith("!video")) { return autoVideo(chunk); }
+            if (chunk.startsWith("!yt-gallery")) { return ytGallery(chunk); }
+            chunk = chunk.replaceAll("\\`", "&#96;");
+            if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
+            chunk = chunk.replace(/`(.+?)`/g, codeReplace);
             
-            if (linkAddress.startsWith("http")) {
-                if (displayText == "") { linkClass = "autoref external"; }
-                else { linkClass = "external"; }
+            let cfine = false;
+            if (chunk.startsWith(".")) {
+                chunk = chunk.slice(1).trimStart();
+                cfine = true;
             }
-            else if (displayText == "") { linkClass = "autoref"; }
+            let cinfo = false;
+            if (chunk.startsWith("!info")) {
+                chunk = chunk.substring(chunk.indexOf("\n"));
+                cinfo = true;
+            }
+            
+            /* ------------------------------------- links ------------------------------------- */
+            /*
+                [text to be displayed](https://irisembury.github.io/)
+            */
+            chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkAddress) => {
+                linkAddress = linkAddress.replaceAll("\\)", ")");
+                
+                let linkIndex = contentLinks.indexOf(linkAddress);
+                if (linkIndex == -1) {
+                    linkIndex = contentLinks.push(linkAddress);
+                }
+                
+                if (linkAddress.startsWith("http")) {
+                    if (displayText == "") {
+                        return `<a href="${ linkAddress }" class="autoref" title="${ linkAddress }">[${ linkIndex }]</a>`;
+                    }
+                    else {
+                        return `<a href="${ linkAddress }" title="${ linkAddress }">${ displayText }</a><sup class="inline-link-index no-select">${ linkIndex }</sup>`;
+                    }
+                }
+                else {
+                    if (displayText == "") {
+                        return `<a href="${ linkAddress }" class="autoref">[${ linkIndex }]</a>`;
+                    }
+                    else {
+                        return `<a href="${ linkAddress }">${ displayText }</a><sup class="inline-link-index no-select">${ linkIndex }</sup>`;
+                    }
+                }
+            });
 
-            if (linkAddress.startsWith("http")) { link += ` title="${ linkAddress }"`; }
-            if (linkClass != "") { link += ` class="${ linkClass }">`; }
-            else { link += ">"; }
+            if (chunk.startsWith("!profile-grid")) { return profileGrid(chunk); }
+            if (chunk.startsWith("!table")) { return autoTable(chunk); }
+            if (chunk.startsWith("!rows")) { return autoRows(chunk); }
+            if (chunk.startsWith("!indent")) { return indent(chunk); }
+            if ( chunk.startsWith("* ") || /^\d+\. /.test(chunk) ) { return autoList(chunk, cfine); }
+            if ( chunk.startsWith("-- ")) { return `<ul class="auto-list">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`; }
+            if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
 
-            if (displayText == "") { link += `[${ linkNum }]</a>`; }
-            else { link += displayText + "</a>"; }
-            linkNum += 1;
-            return link;
-        });
-
-        if (chunk.startsWith("!profile-grid")) { return profileGrid(chunk); }
-        if (chunk.startsWith("!table")) { return autoTable(chunk); }
-        if (chunk.startsWith("!rows")) { return autoRows(chunk); }
-        if (chunk.startsWith("!indent")) { return indent(chunk); }
-        if ( chunk.startsWith("* ") || /^\d+\. /.test(chunk) ) { return autoList(chunk, fine); }
-        if ( chunk.startsWith("-- ")) { return `<ul class="auto-list">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`; }
-        if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
-
-        chunk = `<p>${ textFormat(chunk) }</p>`;
-        if (fine) {
-            return `<div class="fine">${ chunk }</div>`;
+            chunk = `<p>${ textFormat(chunk) }</p>`;
+            if (cfine) {
+                return `<div class="fine">${ chunk }</div>`;
+            }
+            else if (cinfo) {
+                return `<div class="info">${ chunk }</div>`;
+            }
+            return chunk;
         }
-        return chunk;
-    })
+    )
     return input.join("");
 }
 
-function ageFromISODateString(argDate) {
+function ageFromISO(argDate) {
     /* assumes ISO format YYYY-MM-DD */
     argDate = argDate.replace(/\D/g, "");
     if (argDate.length < 8) {
@@ -680,7 +741,6 @@ function auxFormat(input_string) {
     
     /* curly quotes: */
     if (input_string.indexOf("'") != -1 || input_string.indexOf("\"") != -1) {
-        // console.log(input_string)
         input_string = input_string
             .replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1") /* like for saying '95 to indicate a year */
             .replaceAll(/(>|^| |\()'/g, "$1&lsquo;")
@@ -802,18 +862,19 @@ window.addEventListener("load", function() {
     <div class="screen"></div>
     <div class="right-panel closed">
         <h3>Display preferences:</h3>
-        <table><tbody><tr><td>Theme:</td><td>
-            <select class="menu-select" id="brightness-select">
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-            </select>
-        </td></tr><tr><td>Font size:</td><td>
-            <select class="menu-select" id="font-size-select">
-                <option value="text-small">Small</option>
-                <option value="text-normal">Medium</option>
-                <option value="text-large">Larger</option>
-            </select>
-        </td></tr></tbody></table>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Theme:</td>
+                    <td>
+                        <select class="menu-select" id="brightness-select">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <hr>
         <div class="menu-options">
             <div>
@@ -821,7 +882,7 @@ window.addEventListener("load", function() {
                 <input type="checkbox" class="menu-checkbox" id="page-full-width">
             </div>
             <div>
-                <label for="hide-toc-checkbox"${ HTML.classList.contains("include-toc")? "": `style="cursor: help" title="This page doesn't have a table of contents to display, but you can still change the side-wide preference."` }>Hide table of contents</label>
+                <label for="hide-toc-checkbox"${ HTML.classList.contains("include-toc") ?"" :' style="cursor:help" title="This page has no TOC, but you can change the site-wide preference"' }>Hide table of contents</label>
                 <input type="checkbox" class="menu-checkbox" id="hide-toc-checkbox">
             </div>
             <div>
@@ -870,15 +931,30 @@ window.addEventListener("load", function() {
     <style id="pref-styles"></style>`;
 
     interpreter(document.querySelector(".article"));
-
+    
     if (index) {
-        document.getElementById("index").innerHTML = `<div class="table-wrapper">
-            <div>${
-            pageData.map(entry => `<div class="row">
-                <div><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
-                <div>${ entry.date }</div>
-            </div>` ).join("")
-        }</div>`;
+        let idata = pageData.map(
+            entry => {
+                let link_ = '<a href="page/'+ entry.url +'/index.html">'+ entry.title +'</a>';
+                return `<div class="row">
+                    <div>${ link_ }</div>
+                    <div class="date">${ entry.date }</div>
+                </div>`;
+            }
+        )
+        document.getElementById("index").innerHTML = '<div class="table-wrapper"><div class="auto-rows">'+ idata.join("") +'</div></div>';
+    }
+    else {
+        let citelist = `<div><table class="citelist">${ contentLinks.map((x,n) => `<tr><td>${ n+1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join('') }</table></div>`;
+        document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
+    }
+    const videoIndex = document.getElementById("videos-index");
+    if (videoIndex != null) {
+        videoIndex.innerHTML = ytGallery("!yt-gallery sort 4 \n" + videoData);
+    }
+    const allVideoIndex = document.getElementById("all-videos-index");
+    if (allVideoIndex != null) {
+        allVideoIndex.innerHTML = ytGallery("!yt-gallery\n" + videoData);
     }
 
     HTML.classList.add("layout");
@@ -969,13 +1045,7 @@ window.addEventListener("load", function() {
     document.getElementById("brightness-select").addEventListener("change", function() {
         setBrightness(this.value);
     });
-    if (!HTML.classList.contains("text-small") && !HTML.classList.contains("text-large")) {
-        setFontSize();
-    }
-    document.getElementById("font-size-select").addEventListener("change", function() {
-        setFontSize(this.value);
-    });
-
+    
     updateFonts();
     document.getElementById("heading-font-select").addEventListener("change", function() {
         localStorage.setItem("headingFont", this.value);
@@ -1095,7 +1165,6 @@ window.addEventListener("load", function() {
             if (!canTocHighlightUpdate) {
                 return;
             }
-            console.log("tick: tocHighlightUpdateAttempt")
             canTocHighlightUpdate = false;
             setTimeout(() => {
                 canTocHighlightUpdate = true;
