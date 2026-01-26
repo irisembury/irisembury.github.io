@@ -59,7 +59,7 @@ The lies of Pierre Poilievre | pierre-poilievre | 2025-03-15
 Trump and Russia | trump-and-russia | 2025-03-06
 Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
 Political philosophy | conservatism | 2025-01-30
-Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
+Elon Musk and \\| the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
 What is therapy? | what-is-therapy | 2025-01-09
 Enduring falsehoods (Elizabeth Warren and Hillary Clinton) | enduring-falsehoods | 2024-12-19
 Mark Robinson | mark-robinson | 2024-12-15
@@ -69,20 +69,7 @@ The default politician | the-default-politician | 2024-11-26
 Sex, gender, &amp; transsexuals | sex-gender-transsexuals | 2024-11-19
 Fetishism &amp; politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
-The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
-`.split("\n").filter(
-    entry => entry.length > 3
-).map(
-    entry => {
-        entry = entry.replaceAll("\\|","&verbar;").split("|").map( c => c.trim() );
-        while (entry.length < 3) { entry.push("") }
-        return {
-            title: entry[0],
-            url:   entry[1],
-            date:  entry[2]
-        }
-    }
-);
+The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`
 
 function scrollToTop() {
     window.scrollTo({
@@ -186,7 +173,7 @@ function imageFloat(chunk, direction) {
         if (figCaption && !altText) { altText = figCaption }
         if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
         
-        return `<figure><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
+        return `<figure><img loading="lazy" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
     });
     return `<div class="image-float ${direction}">${ lines.join("") }</div>`;
 }
@@ -203,7 +190,7 @@ function imageSpan(chunk) {
         }
         let imgUrl = parts[0].trim();
         let altText = textFormat(parts[1].trim().replace(/"/g,"&quot;"));
-        return `<div><img style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
+        return `<div><img loading="lazy" style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
     });
     return `<div class="image-span">${ galleryFigures.join("") }</div>`;
 }
@@ -223,7 +210,7 @@ function gallery(chunk) {
         let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
         return `
         <figure>
-            <img style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
+            <img loading="lazy" style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
             <figcaption>${ caption }</figcaption>
         </figure>
         `;
@@ -251,7 +238,7 @@ function squareGallery(chunk) {
             caption = `<figcaption>${ caption }</figcaption>`;
         }
         
-        return `<figure><div class="img-wrapper"><img onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
+        return `<figure><div class="img-wrapper"><img loading="lazy" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
     });
     return `<div class="square-gallery">${ lines.join("") }</div>`;
 }
@@ -304,11 +291,11 @@ function ytGallery(chunk) {
         let videoUrl = `https://www.youtube.com/watch?v=${ videoCode }`;
         let thumbUrl = `https://i.ytimg.com/vi/${ videoCode }/hqdefault.jpg`;
 
-        let videoLink = `<a href="${ videoUrl }"><img src="${ thumbUrl }"></a>`;
+        let videoThumb = `<a style="min-width:100%" href="${ videoUrl }"><img loading="lazy" src="${ thumbUrl }"></a>`;
 
         return `<figure>
-            <div>${ videoLink }</div>
-            <figcaption><span class="yt-title"><a href="${ videoUrl }">${ title }</a></span> <span class="yt-date">${ date }</span></figcaption>
+            <div>${ videoThumb }</div>
+            <figcaption><div class="yt-title"><a href="${ videoUrl }">${ title }</a></div> <div class="yt-date">${ date }</div></figcaption>
         </figure>`;
     });
     return `<div class="table-wrapper"><div class="yt-gallery">${ rows.join("") }</div></div>`;
@@ -349,7 +336,7 @@ function profileGrid(chunk) {
         return `<div class="grid-entry">
             <div class="gap-10 align-center">
                 <div>
-                    <img onclick="setLightbox(this)" class="profile-grid-img" src="${ entryImageUrl }">
+                    <img loading="lazy" onclick="setLightbox(this)" class="profile-grid-img" src="${ entryImageUrl }">
                 </div>
                 <div>
                     <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISO(entryBirthdate) + "</span>" }</div>
@@ -359,7 +346,6 @@ function profileGrid(chunk) {
             <div>
                 <div class="entry-description">${ textFormat(entryDescription) }</div>
             </div>
-            ${ entryIcon != "" ? `<div style="float:right" title="belongs in jail"><img width="20" height="20" src="${ entryIcon }"></div>` : "" }
         </div>`;
     })
     return `<div class="profile-grid">${ data.join("") }</div>`;
@@ -850,14 +836,33 @@ window.addEventListener("load", function() {
     </nav>
     <nav class="left-panel closed">
         <div class="nav-row page-title">Links</div>
-        <div class="nav-row"><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA"><svg title="YouTube" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30"><path  fill="var(--c-youtube)" d="M29.2 8.6c-.3-1.6-1.6-2.8-3.2-3C23 5.2 15 5.2 15 5.2s-8 0-11 .4c-1.6.2-2.9 1.4-3.2 3C.4 11.6.4 15 .4 15s0 3.4 .4 6.4c.3 1.6 1.6 2.8 3.2 3C7 24.8 15 24.8 15 24.8s8 0 11-.4c1.6-.2 2.9-1.4 3.2-3 .4-3 .4-6.4 .4-6.4s0-3.4-.4-6.4z"/><path fill="var(--c-youtube-white)" d="M12 19.2V10.8l7.8 4.2-7.8 4.2z"/></svg>YouTube</a></div>
+        <div class="nav-row"><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA"><svg title="YouTube" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 30 30"><path  fill="var(--c-youtube-red)" d="M29.2 8.6c-.3-1.6-1.6-2.8-3.2-3C23 5.2 15 5.2 15 5.2s-8 0-11 .4c-1.6.2-2.9 1.4-3.2 3C.4 11.6.4 15 .4 15s0 3.4 .4 6.4c.3 1.6 1.6 2.8 3.2 3C7 24.8 15 24.8 15 24.8s8 0 11-.4c1.6-.2 2.9-1.4 3.2-3 .4-3 .4-6.4 .4-6.4s0-3.4-.4-6.4z"/><path fill="var(--c-youtube-white)" d="M12 19.2V10.8l7.8 4.2-7.8 4.2z"/></svg>YouTube</a></div>
         <div class="nav-row"><a href="https://bsky.app/profile/irisembury.bsky.social"><svg title="Bluesky" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 57" width="18" height="18"><path fill="var(--c-bluesky)" d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805ZM50.127 3.805C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745Z"></path></svg>Bluesky</a></div>
         <div class="nav-row"><a href="https://irisembury.tumblr.com/"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg>Tumblr</a></div>
         <div class="nav-row"><a href="https://x.com/irisembury"><svg title="Twitter/X" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="-1 -1 25 25"><path fill="var(--c-twitter)" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>Twitter/X</a></div>
         <div class="nav-row"><a href="https://irisembury.substack.com/"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg>Substack</a></div>
         <div class="nav-row"><a href="https://discord.gg/fGdV7x5dk2"><svg title="Discord" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16"><path fill="var(--c-discord)" d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/></svg>Invite to my Discord</a></div>
         <div class="nav-row page-title">Latest pages uploaded</div>
-        ${ pageData.map(entry => `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>`).join("") }
+        ${
+            pageData.split("\n").filter(
+                entry => entry.length > 2
+            ).map(
+                entry => {
+                    entry = entry.replaceAll("\\|","&verbar;").split("|").map(
+                        c => c.trim()
+                    );
+                    while (entry.length < 3) {
+                        entry.push("");
+                    }
+                    entry = {
+                        title: entry[0],
+                        url:   entry[1],
+                        date:  entry[2]
+                    }
+                    return `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>`;
+                }
+            )
+        }
     </nav>
     <div class="screen"></div>
     <div class="right-panel closed">
@@ -931,27 +936,34 @@ window.addEventListener("load", function() {
     <style id="pref-styles"></style>`;
 
     interpreter(document.querySelector(".article"));
-    
+
+    /* ---- irisembury.github.io (front page) ---- */
     if (index) {
-        let idata = pageData.map(
+        let pdata = pageData.split("\n").filter(
+            entry => entry.length > 2
+        ).map(
             entry => {
-                let link_ = '<a href="page/'+ entry.url +'/index.html">'+ entry.title +'</a>';
-                return `<div class="row">
-                    <div>${ link_ }</div>
-                    <div class="date">${ entry.date }</div>
-                </div>`;
+                console.log(entry)
+                entry = entry.replaceAll("\\|", "&verbar;").split("|").map( c => c.trim() );
+                while (entry.length < 3) {
+                    entry.push("");
+                }
+                /* entry[0] = title, entry[1] = url, entry[2] = date */
+                return `<a href="page/${ pathToRoot + entry[1] }/index.html">${ entry[0] }</a>|<span class="date">${ entry[2] }</span>`;
             }
-        )
-        document.getElementById("index").innerHTML = '<div class="table-wrapper"><div class="auto-rows">'+ idata.join("") +'</div></div>';
+        ).join("\n");
+        document.getElementById("index").innerHTML = autoRows("!rows\n" + pdata);
     }
     else {
-        let citelist = `<div><table class="citelist">${ contentLinks.map((x,n) => `<tr><td>${ n+1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join('') }</table></div>`;
+        /* no citelist for front page */
+        let citelist = `<div><table class="citelist">${ contentLinks.map((x, n) => `<tr><td>${ n+1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join('') }</table></div>`;
         document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
     }
     const videoIndex = document.getElementById("videos-index");
     if (videoIndex != null) {
-        videoIndex.innerHTML = ytGallery("!yt-gallery sort 4 \n" + videoData);
+        videoIndex.innerHTML = ytGallery("!yt-gallery sort 5 \n" + videoData);
     }
+    /* ---- irisembury.github.io/videos ---- */
     const allVideoIndex = document.getElementById("all-videos-index");
     if (allVideoIndex != null) {
         allVideoIndex.innerHTML = ytGallery("!yt-gallery\n" + videoData);
