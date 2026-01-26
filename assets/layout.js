@@ -959,9 +959,10 @@ window.addEventListener("load", function() {
         let citelist = `<div><table class="citelist">${ contentLinks.map((x, n) => `<tr><td>${ n+1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join('') }</table></div>`;
         document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
     }
-    const videoIndex = document.getElementById("videos-index");
-    if (videoIndex != null) {
-        videoIndex.innerHTML = ytGallery("!yt-gallery sort 5 \n" + videoData);
+    const videosIndex = document.getElementById("videos-index");
+    if (videosIndex != null) {
+        let lnum = videosIndex.className.replace(/\D/g,"") || 3;
+        videosIndex.innerHTML = ytGallery("!yt-gallery sort"+ lnum +" \n" + videoData);
     }
     /* ---- irisembury.github.io/videos ---- */
     const allVideoIndex = document.getElementById("all-videos-index");
