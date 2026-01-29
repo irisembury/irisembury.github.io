@@ -409,12 +409,12 @@ function autoList(list, isFine) {
     list = list.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
-            li = li.substring(initpad);
+            li = textFormat(li.substring(initpad));
             const indent = Math.floor(initpad * 0.25);
             const liType = /^[\*\-] /.test(li) ?"ul" :(/^\d+\. /.test(li) ?"ol" :"none");
             const listType = (liType =="ol") ?"ol" :"ul";
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
-            li = liType =="none" ?li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
+            li = (liType) =="none" ?li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
             li = " ".repeat(indent * 4 + 2) + ( liType =="none" ?"<li class=\"no-marker\">" :"<li>") + li + "</li>\n";
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
@@ -427,9 +427,7 @@ function autoList(list, isFine) {
             return li;
         }
     ).join("") + closeTags.join("");
-    if (isFine) {
-        return `<div class="fine">${ list }</div>`;
-    }
+    if (isFine) { list = '<div class="fine">'+ list +'</div>'; }
     return list;
 }
 
@@ -529,6 +527,8 @@ function articleMeta(chunk) {
             articleTop.insertAdjacentHTML("beforeend", '<div class="article-see-also">'+ meta.seeAlso.join("") +'</div>')
         }
     }
+    
+    articleTop.classList.toggle("hidden", articleTop.children.length == 0);
 }
 
 function isoFormat(datestring) {
@@ -864,7 +864,7 @@ window.addEventListener("load", function() {
                     }
                     return `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>`;
                 }
-            )
+            ).join("")
         }
     </nav>
     <div class="screen"></div>
@@ -922,7 +922,7 @@ window.addEventListener("load", function() {
     <div class="page-grid">
         ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
         <div class="main-container">
-            <div class="article-top"></div>
+            <div class="article-top hidden"></div>
             <div class="article">
                 ${ document.body.innerHTML }
             </div>
