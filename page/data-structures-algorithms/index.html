@@ -1,28 +1,21 @@
 <!DOCTYPE html>
 <html class="include-toc" lang="en">
 <head>
-    <title>Data structures & algorithms</title>
     <link rel="stylesheet" href="../../assets/main.css">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <style>
     body {
         --lh-article: 1.5;
     }
-    .auto-table .cell { border: 1px solid var(--grey-a); }
-    
-    .info {
-        max-width: 900px;
-        padding: 0.5em 0.75em;
-        margin-inline: auto;
-        font-family: var(--ff-table);
-        background-color: var(--c-bg-lightgreen);
-        font-size: var(--fs-article-2);
+    .auto-table .cell {
+        border: 1px solid var(--grey-a);
     }
     
     </style>
 </head>
 <body>
-# Data structures & algorithms
+!meta
+title: Data structures & algorithms
 
 The code samples are usually in C++ or C# because those are the languages I was working with at the time. The concepts are not language-specific.
 
@@ -35,7 +28,7 @@ O stands for *order*, as the extent to which a function grows in relation to the
 
 Common big-O values and their meaning:
 
-!table this .col-1 { background: var(--c-light-blue-bg); white-space: nowrap; }
+!table this .col-1 { background: var(--c-bg-lightblue); white-space: nowrap; }
 O(1) | Runs the same number of operations no matter the size of the data (does not scale).
 O(N) | Runs once per N (linear scaling).
 O(N<sup>2</sup>) | Runs N operations N times. Consider a loop that runs for the length of the passed array (N), in which there is another loop that also runs for the length of the array (N). The number of operations will thus be (N)(N).<br>O(N3) would be three loops, and so on.
@@ -54,7 +47,7 @@ media/big-o-graph.png
 
 The big-O values of some common algorithms:
 
-!table this { margin-inline: auto; } this .col-1 { background: var(--c-light-blue-bg); }
+!table this { margin-inline: auto; } this .col-1 { background: var(--c-bg-lightblue); }
 bubble sort | O(N<sup>2</sup>)
 selection sort | O(N<sup>2</sup>)*
 insertion sort | O(N<sup>2</sup>)
@@ -63,9 +56,9 @@ quick sort | O(n<sup>2</sup>)**
 linear search | O(N)
 binary search | O(log N)
 
-.\* **Merge sort** and **selection sort** have no variation in their complexity. In other words, there is technically no difference between their worst-case, average, or best-case scenarios, as they cannot possibly finish early.
-
-.\** **Quick sort** almost never performs its theoretical worst-case, and this big-O value is thus particularly misleading compared to the others listed. Its average performance is closer to O(N log N).
+.
+\* Merge sort and selection sort have no variation in their complexity. In other words, there is technically no difference between their worst-case, average, or best-case scenarios, as they cannot possibly finish early.
+\** Quick sort almost never performs its theoretical worst-case, and this big-O value is thus particularly misleading compared to the others listed. Its average performance is closer to O(N log N).
 
 Big-O doesn't tell us everything. Just because two algorithms have the same big-O value doesn't make them identical or equivalent. Insertion sort, selection sort, and bubble sort are each O(N2), and are therefore in a different class of algorithm (in terms of scaling) from something like merge sort, but in terms of their average performance we may still say bubble tends to be worse than selection, and selection tends to be worse than insertion. It's just their theoretical worst-case performance, and the extent to which they scale with N, that is the same.
 
@@ -73,26 +66,26 @@ Big-O doesn't tell us everything. Just because two algorithms have the same big-
 
 It's possible in nearly every programming language to interact with our data at the binary level. This can result in more efficient operations in some cases because your CPU can do bitwise operations faster than the equivalent decimal math, though these days the real-world applications are admittedly limited. It's mostly just neat to learn about because it gives you a better appreciation for how your code works behind the scenes.
 
-* Where it's utilized: especially operation-heavy or resource-light environments, like graphics engines or embedded systems, albeit this is often done by the engine itself and not by you as the coder.
-* If you work with the SpriteKit physics engine in Swift, you'll use bit-masking for collision checks.
+- Where it's utilized: especially operation-heavy or resource-light environments, like graphics engines or embedded systems, albeit this is often done by the engine itself and not by you as the coder.
+- If you work with the SpriteKit physics engine in Swift, you'll use bit-masking for collision checks.
 
 ## Basic operators
 
 These accept 2 values and return 1 value:
 
-!table this .col-1 { background:var(--c-light-blue-bg); } this code { background-color: transparent; }
+!table this .col-1 { background:var(--c-bg-lightblue); } this code { background-color: transparent; }
 `&amp;` (AND) | Each bit of the result is a 1 only if **both** input values also had a 1 in that position.
 `\|` (OR) | Each bit of the result is a 1 if **either** of the input values had a 1 in that position.
 `^` (XOR) | Each bit of the result is a 1 if the input values have a **different** bit in that position.
 
 There's also a `NOT` operator (~), which accepts only 1 value:
 
-!table this .col-1 { background: var(--c-light-blue-bg); } this code { background-color: transparent; }
+!table this .col-1 { background: var(--c-bg-lightblue); } this code { background-color: transparent; }
 `~` (NOT) | Each bit of the result is a 1 only if the input value has a 0 in that position (it *inverses* the bits).
 
 Examples of each operator in action:
 
-!table this { margin-inline: auto; font-family: var(--ff-monospace); } this .col-1 { text-align: center; background: var(--c-light-blue-bg); }
+!table this { margin-inline: auto; font-family: var(--ff-monospace); } this .col-1 { text-align: center; background: var(--c-bg-lightblue); }
 (1110 & 0101) | = 0100
 (1010 \| 0111) | = 1111
 (1100 ^ 1010) | = 0110
@@ -108,12 +101,12 @@ What is the value of `b` here? `10 | 7` makes 15, so what's `~15`? The answer (i
 
 This is because a signed number (like the default `int` data-type, a 32-bit signed integer) uses its first bit to represent whether the number is positive or negative (0 and 1 respectively). That's why the max value is 2<sup>31</sup>-1 instead of 2<sup>32</sup>-1 (but an *unsigned* int does go to 2<sup>32</sup>). The `NOT` operator (`~`) doesn't know what your data represents, because it doesn't see the data-type of its argument, it only sees a string of bits, ergo it indiscriminately flips everything, including the sign bit. This changes how the whole number is interpreted, because negative and positive numbers are stored in binary differently.
 
-* For whatever reason, instead of just having a different sign, a negative number represents value with 0s instead of 1s. It's as though what's being stored is "the difference between this number and the absolute smallest value the data-type can hold" (in this case, -2,147,483,648).
-* There is no 'negative zero', so instead, the binary string that would've been the negative equivalent of zero (a string of all 1s) is interpreted as -1. The positive and negative values are thus misaligned by one position (i.e., the largest value of a standard integer is 2<sup>31</sup>-1, but the smallest value is just -(2<sup>31</sup>).
+- For whatever reason, instead of just having a different sign, a negative number represents value with 0s instead of 1s. It's as though what's being stored is "the difference between this number and the absolute smallest value the data-type can hold" (in this case, -2,147,483,648).
+- There is no 'negative zero', so instead, the binary string that would've been the negative equivalent of zero (a string of all 1s) is interpreted as -1. The positive and negative values are thus misaligned by one position (i.e., the largest value of a standard integer is 2<sup>31</sup>-1, but the smallest value is just -(2<sup>31</sup>).
 
 This can be observed clearly by tracking the binary representation of an int as it crosses the zero line:
 
-!table this { margin-inline: auto; } this .col-1 { background: var(--c-light-blue-bg); text-align: center; }
+!table this { margin-inline: auto; } this .col-1 { background: var(--c-bg-lightblue); text-align: center; }
 2 | 0000000000000000000000000000<mark>0010</mark>
 1 | 0000000000000000000000000000<mark>0001</mark>
 0 | 0000000000000000000000000000<mark>0000</mark>
@@ -163,13 +156,13 @@ Shifting by multiple places is the same as doubling or halving that many times. 
 
 <div class="align-center gap-15">
 
-!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
+!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-bg-lightblue) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
 shifting by x places | is the same as multiplying
 << 1 | * 2
 << 2 | * 2<sup>2</sup> (i.e. \*2\*2)
 << 3 | * 2<sup>3</sup> (i.e. \*2\*2\*2)
 
-!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-light-blue-bg) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
+!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--c-bg-lightblue) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
 shifting by x places | is the same as multiplying
 >> 1 | / 2
 >> 2 | / 2<sup>2</sup> (i.e. \*2\*2)
@@ -192,7 +185,7 @@ The two main search algorithms are simply linear or binary search. They both loo
 
 #### Terminology:
 
-!table
+!table this .col-1 { background-color: var(--c-bg-lightblue); }
 key | the item the algorithm is searching for
 
 ## Linear search
@@ -237,29 +230,74 @@ int binarySearch(int[] arr, int len, int key) {
 
 If the key is less than the middle item, then logically it could only be in the first half of the array, so everything else can be ruled out and the next pass can check only that section.
 
-For example, think about trying to find the value 32 in this array:
+For example, think about trying to find the value 32 in this sorted array. I'll mark 32, the key, in red.
 
-<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <b>32</b>, 44, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95</mark> ]</div>
+<div style="text-align:center; font-family:var(--ff-ui); font-size:var(--fs-article-2);">
+    [ 3, 5, 12, 15, 18, 21, 26, 27, 30, <span class="text-red">32</span>, 44, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
+</div>
 
-It's an odd-number array (23 items), so we'd split that in half (rounding the mid-point down) into 11 and 12 items. 32 is lower than the middle value (the 46), ergo we narrow down to the left half and run again.
+It has 23 items, from index 0 to index 22.
 
-<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
+<div style="width:min-content; font-size:var(--fs-article-2); margin:0 auto; font-family:var(--ff-monospace); white-space:pre; line-height:1;">
+arr[0]: 3
+arr[1]: 5
+arr[2]: 12
+arr[3]: 15
+arr[4]: 18
+arr[5]: 21
+arr[6]: 26
+arr[7]: 27
+arr[8]: 30
+arr[9]: <span class="text-red">32</span>
+arr[10]: 44
+arr[11]: 46
+arr[12]: 51
+arr[13]: 57
+arr[14]: 58
+arr[15]: 60
+arr[16]: 67
+arr[17]: 69
+arr[18]: 73
+arr[19]: 75
+arr[20]: 79
+arr[21]: 82
+arr[22]: 95
+</div>
 
-Then 32 is higher than the middle value (21), so you refocus around the right half of *that* subarray.
+We look at the middle value, which is the 11th item, 46. We then *conceptualize* the areas to the right and left of this mid-point as two sub-arrays, like so:
 
-<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ 3, 5, 12, 15, 18, 21, <mark>26, 27, 30, <b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
+<div style="text-align:center; font-family:var(--ff-ui); font-size:var(--fs-article-2);">
+    [ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <span class="text-red">32</span>, 44</mark>, 46, <mark>51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95</mark> ]
+</div>
 
-<div style="font-family: var(--ff-ui); text-align: center; display: block;">[ 3, 5, 12, 15, 18, 21, 26, 27, 30, <mark><b>32</b>, 44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]</div>
+.
+If the array had an even number of items, the mid-point would round down and the left-side would be one item smaller than the right-side.
 
-This logically repeats until either your mid-point value matches your key, or (in the worst case scenario) you only have one item remaining in the array (which is the only way to verify if your key is absent from the array).
+Since the key we're looking for, 32, is less than the middle value, we narrow our focus to only the left side, and repeat this logic to that area. The middle value of the left-side is at index 5, with a value of 21, so we ask if this is the key (it's not), and then split this conceptual sub-array around that value.
 
-This is an O(log n) algorithm. To search a 10,000,000-length array with linear search would require comparing the key value to, at most, all **10,000,000** items (in the event your key is the last item or absent from the array). For binary search it takes, at most, **24** comparisons. This shows the power of having sorted data.
+<div style="text-align:center; font-family:var(--ff-ui); font-size:var(--fs-article-2);">
+    [ <mark>3, 5, 12, 15, 18</mark>, 21, <mark>26, 27, 30, <span class="text-red">32</span>, 44</mark>, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
+</div>
+
+We repeat this logic until either the mid-point value is the same as your key, or the length of the conceptual sub-array reaches zero, meaning the key was not present in the array.
+
+<div style="text-align:center; font-family:var(--ff-ui); font-size:var(--fs-article-2);">
+    [ 3, 5, 12, 15, 18, 21, <mark>26, 27</mark>, 30, <mark><span class="text-red">32</span>, 44</mark>, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
+</div>
+
+<div style="text-align:center; font-family:var(--ff-ui); font-size:var(--fs-article-2);">
+    [ 3, 5, 12, 15, 18, 21, 26, 27, 30, <mark><span class="text-red">32</span></mark>, <mark>44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
+</div>
+
+At this point, the mid-point value rounds down to the first item, and that matches the key, so we return a value of 9 (the index the key was found in).
+
+This is an O(log n) algorithm. To search a 10,000,000-length array with linear search would require comparing the key value to, at most, **all 10,000,000** items (in the event your key is the last item or absent from the array). For binary search it takes, at most, **24** comparisons to confirm whether the value is present in the array. This shows the power of having sorted data.
 
 # Sorting algorithms
 
 This section covers the following:
 
-!table this .row-1 { font-weight: 700; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+5) .col-1 { border: none; } this td { padding-inline: 20px; } this { margin-inline: auto; }
+!table this .row-1 { font-weight: 700; background-color: var(--c-bg-lightblue); } this tr:nth-child(n+5) .col-1 { border: none; } this td { padding-inline: 20px; } this { margin-inline: auto; }
 basic sorts | more advanced
 bubble sort | merge sort
 selection sort | quick sort
@@ -448,9 +486,9 @@ The terminology for this disadvantage is that merge sort is not **in-place**. An
 
 The easiest implementation is using recursion, splitting the process into three parts:
 
-* **mergeSort** --- The main caller, this creates a temporary array in which to store the results. It passes that array, along with the array that's actually being sorted, along to splitUp.
-* **splitUp** --- This function accepts a section of the array (defined by a left and right bound), and theoretically splits it in half along the mid point, passing the selection to the left and to the right to itself to be split up until these halves are only one element long. Then it starts passing things to merge.
-* **merge** --- The final action, this accepts a selection of the array that's understood to be two adjacent, sorted sections that need to be merged together into an equivalent sorted selection in the results array.
+- **mergeSort** --- The main caller, this creates a temporary array in which to store the results. It passes that array, along with the array that's actually being sorted, along to splitUp.
+- **splitUp** --- This function accepts a section of the array (defined by a left and right bound), and theoretically splits it in half along the mid point, passing the selection to the left and to the right to itself to be split up until these halves are only one element long. Then it starts passing things to merge.
+- **merge** --- The final action, this accepts a selection of the array that's understood to be two adjacent, sorted sections that need to be merged together into an equivalent sorted selection in the results array.
 
 In many implementations, what I'm here calling splitUp is instead an overloaded function also called MergeSort. I'm just giving it a more descriptive name to make the process clearer.
 
@@ -558,8 +596,8 @@ A quick sort works by repeating one fundamental action, called **partitioning**.
 
 There's been many quick sort variations over the years and the code to implement it thus varies widely compared with the other algorithms here. If well written, a quick sort can outperform merge sort while offering the advantage of being in-place. The potential disadvantage is it's not stable, and if not well written for how it's being used the performance can vary widely.
 
-* **IN PLACE?** --- An algorithm is described as "in-place" if it transforms some input directly, not requiring additional memory to be allocated (outside of small storage for, say, a few variables). Merge sort is not in-place because to sort the array it allocates an entire parallel array in which to temporarily store the sorted values. Therefore, a quick sort requires less memory to sort the same data.
-* **NOT STABLE?** --- This means the algorithm doesn't maintain the relative order of equal items. If a quicksort is used to sort customers in a database by surname, then, if two customers with the same surname were in a particular order (e.g. because one registered before the other), the quicksort may swap them around in the final result. (Merge sort and insertion sort are examples of 'stable sorts', meaning they maintain the relative order of equally valued items while sorting.)
+- **IN PLACE?** --- An algorithm is described as "in-place" if it transforms some input directly, not requiring additional memory to be allocated (outside of small storage for, say, a few variables). Merge sort is not in-place because to sort the array it allocates an entire parallel array in which to temporarily store the sorted values. Therefore, a quick sort requires less memory to sort the same data.
+- **NOT STABLE?** --- This means the algorithm doesn't maintain the relative order of equal items. If a quicksort is used to sort customers in a database by surname, then, if two customers with the same surname were in a particular order (e.g. because one registered before the other), the quicksort may swap them around in the final result. (Merge sort and insertion sort are examples of 'stable sorts', meaning they maintain the relative order of equally valued items while sorting.)
 
 A popular approach to implement the concept in teaching material is the Lomuto partition scheme. It simply uses a for-loop to scan the array left to right, and when it finds a value greater than the pivot it pushes that value to the left side. It's not the most optimized method, but it was used because of how easy it is to follow.
 
@@ -738,8 +776,8 @@ That's a problem for the quicksort implementations above. They grab a pivot valu
 
 The ideal pivot value is, of course, one that just so happens to belong in the middle of the array. There's a few different methods to get a value more likely, than random chance, to fit this criterion.
 
-* The simplest solution is to take the middle index as the pivot. In a quicksort that normally takes the first item, you can accomplish that simply by changing the pivot variable assignment from your left value to the middle position, i.e. (left + right) / 2. For a version that uses the last item, we could (left + right + 1) / 2 for the same effect.
-* A computer scientist named Robert Sedgewick later proposed the strategy of using the middle of three items from the array, which came to be known as taking the median of three. It could just be three random items, but the easiest indices to access are the left, right, and middle---and if we're already comparing these items to determine which is the middle value, then we may as well sort them in place while we're at it.
+- The simplest solution is to take the middle index as the pivot. In a quicksort that normally takes the first item, you can accomplish that simply by changing the pivot variable assignment from your left value to the middle position, i.e. (left + right) / 2. For a version that uses the last item, we could (left + right + 1) / 2 for the same effect.
+- A computer scientist named Robert Sedgewick later proposed the strategy of using the middle of three items from the array, which came to be known as taking the median of three. It could just be three random items, but the easiest indices to access are the left, right, and middle---and if we're already comparing these items to determine which is the middle value, then we may as well sort them in place while we're at it.
 
 !codeblock cpp
 // taking the middle index:
@@ -903,7 +941,7 @@ Let's take this example array and throw each number into a bucket based on its r
 <br>
 51, 45, 9, 37, 48, 72, 19, 16, 7, 88, 92, 12, 30, 36, 3, 42, 96, 25
 
-!table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+!table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-bg-lightblue); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
 0|1|2|3|4|5|6|7|8|9
 30|51|72|3||45|16|37|48|9
 ||92|||25|36|7|88|19
@@ -914,7 +952,7 @@ Then you just grab those numbers in order, and repeat for the next column (leftw
 <br>
 30, 51, 72, 92, 12, 42, 3, 45, 25, 16, 36, 37, 7, 48, 88, 9, 19, 96
 
-!table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-light-blue-bg); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+!table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--c-bg-lightblue); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: var(--ff-monospace); min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
 0_ | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90
 3|12|25|30|42|51||72|88|92
 7|16||36|45|||||96
@@ -995,7 +1033,7 @@ Sorting by pure ASCII value creates a pseudo-alphabetization, like ABCDabcd. If 
 
 Practically every language has some kind of built-in string comparison function for you:
 
-!table this .col-1 { background: var(--c-light-blue-bg); }
+!table this .col-1 { background: var(--c-bg-lightblue); }
 C | `strcomp(string1, string2)`
 Java | `string1.compareTo(string2)`
 C++ | `string1.compare(string2)`
@@ -1014,8 +1052,8 @@ In most cases, the return value is an integer, which indicates the relationship 
 
 Exceptions:
 
-* Java's `compareTo`, which returns the whole ASCII difference, not just 1 or 0 (e.g. "a".compareTo("f") returns -5)
-* Python, which has no distinct string comparison method because this functionality is built directly into its comparison operators (as such, it only returns True or False)
+- Java's `compareTo`, which returns the whole ASCII difference, not just 1 or 0 (e.g. "a".compareTo("f") returns -5)
+- Python, which has no distinct string comparison method because this functionality is built directly into its comparison operators (as such, it only returns True or False)
 
 Here's some code to recreate the logic of C++'s string compare:
 
@@ -1038,7 +1076,7 @@ These functions both ignore case, except when case is the only difference betwee
 
 They also contain some logic to make special characters, like `]`, always precede letters, again going against their ASCII value, though for some reason they both order these special characters differently.
 
-!table this .col-1 { background-color: var(--c-light-blue-bg) }
+!table this .col-1 { background-color: var(--c-bg-lightblue) }
 sorted by ASCII | ` !"#$%&'()*+,-./123:;&lt;=&gt;?ABC[\]^_\`abc{\|}~`
 CompareTo | `'- !"#$%&()*,./:;?[\]^_\`{\|}~+&lt;=&gt;123aAbBcC`
 localeCompare | ` _-,;:!?.'"()[]{}*/\&#%\`^+&lt;=&gt;\|~$123aAbBcC`
@@ -1104,8 +1142,9 @@ void stringSort(String[] arr) {
 
 # Memoization
 
-.(Not memorization – albeit that name sort of makes sense too.)
-(Also called 'tabling' in some contexts.)
+.
+Not memorization, albeit that name sort of makes sense too.
+Also called tabling in some contexts.
 
 This means: saving the results of an operation so that future code that wants the results of that operation doesn't need to repeat it to get that result.
 
@@ -1159,9 +1198,9 @@ media/linked-list-vs-array.png|An attempt at conceptualizing the difference betw
 
 A linked list is like a book that says "to continue the story, go to x page and carry on" at the end of each page, while an array is just like a normal book where you always turn to the next page.
 
-* The main **advantage** of a linked list is it's dynamically sized. This means it can be expanded infinitely and is never full. We don't need to know, or care, how many items it's going to store ahead of time.
+- The main **advantage** of a linked list is it's dynamically sized. This means it can be expanded infinitely and is never full. We don't need to know, or care, how many items it's going to store ahead of time.
  By extension, linked lists tend to be more memory efficient than arrays, despite spending more memory on the node container, because they don't take up any more space than they need (as arrays usually do).
-* The main **disadvantage** of a linked list is its lack of random access. If you want the 57th item in a list, the only way to get there is the link held by the 56th, and the only way to the 56th is the link held by the 55th, etc. You can't just quickly reference `list[517]` as you could with an array.
+- The main **disadvantage** of a linked list is its lack of random access. If you want the 57th item in a list, the only way to get there is the link held by the 56th, and the only way to the 56th is the link held by the 55th, etc. You can't just quickly reference `list[517]` as you could with an array.
 
 Linked lists are often just preferred whenever random access doesn't matter, but it depends on the environment and what language or framework you're using. If you want to write your own program and performance is important, it's not that hard to write your own custom-made linked list that does exactly what you need it to do and nothing more.
 
@@ -1182,8 +1221,8 @@ The first node in a stack is called its **root node** (the actual node object us
 
 The logic of stacks and queues can be described as:
 
-* **stack**: the **last** item added will be the **first** item removed (last in/first out, or **LIFO**)
-* **queue**: the **first** item added to be the **first** item removed (first in/first out, or **FIFO**)
+- **stack**: the **last** item added will be the **first** item removed (last in/first out, or **LIFO**)
+- **queue**: the **first** item added to be the **first** item removed (first in/first out, or **FIFO**)
 
 These terms could've been any of their logical equivalents. "Last in, first out" is logically the same as "first in, last out", and could've been swapped in order and ended up "LOFI". But the terms LIFO and FIFO was the pair that stuck as conventional, partially because it makes more sense to focus on what item is removed first because that's what you'll get if you pop or dequeue from the list.
 
@@ -1210,7 +1249,7 @@ media/circular-linked-list.png|A circular doubly-linked list
 
 ### Terminology
 
-!table this .col-1 { background:var(--c-light-blue-bg); }
+!table this .col-1 { background:var(--c-bg-lightblue); }
 linked list | an allocation of data that's dynamically sized because it's not stored contiguously
 stack | a linked list that behaves as first-in, last-out
 queue | a linked list that behaves as first-in, first-out

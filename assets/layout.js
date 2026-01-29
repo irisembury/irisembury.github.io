@@ -1,6 +1,35 @@
 "use strict"
 const HTML = document.documentElement;
 
+const pageData = `The United States at the End of an Era | the-united-states-at-the-end-of-an-era | 2026-01-28
+Give yourself credit | give-yourself-credit | 2026-01-23
+Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
+Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30
+Stay the trenches | stay-the-trenches | 2025-12-17
+Derangement | derangement | 2025-12-12
+Thoughts on immigration | immigration | 2025-11-06
+What is prejudice? | what-is-prejudice | 2025-10-30
+India | india | 2025-10-24
+Liberalism, not extremism | liberalism-not-extremism | 2025-09-19
+The path of normalization | the-path-of-normalization | 2025-09-08
+Lies about Ilhan Omar | ilhan-omar | 2025-08-25
+Israel–Palestine notes | israel-palestine | 2025-07-27
+The lies of Pierre Poilievre | pierre-poilievre | 2025-03-15
+Trump and Russia | trump-and-russia | 2025-03-06
+Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
+Political philosophy | conservatism | 2025-01-30
+Elon Musk and \\| the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
+What is therapy? | what-is-therapy | 2025-01-09
+Enduring falsehoods (Elizabeth Warren and Hillary Clinton) | enduring-falsehoods | 2024-12-19
+Mark Robinson | mark-robinson | 2024-12-15
+The standard relationship model | standard-relationship-model | 2024-12-08
+The Trump appeal | the-trump-appeal | 2024-12-03
+The default politician | the-default-politician | 2024-11-26
+Sex, gender, &amp; transsexuals | sex-gender-transsexuals | 2024-11-19
+Fetishism &amp; politics | fetishism-politics | 2024-11-14
+Types of masculinity | types-of-masculinity | 2024-11-08
+The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`;
+
 const videoData = `give yourself credit | mM5fcuJnfZQ | 2026-01-23
 Potential issues with our elections | 509Q_HUp8CE | 2026-01-19
 Why is Reddit so hated? | jPVl5cfVP1k | 2026-01-13
@@ -42,34 +71,6 @@ Sex, gender, & transsexuals | Hgh3r7gJoWU | 2025-05-29
 Lies people still believe (Elizabeth Warren, Hillary Clinton) | LPQD6sxlWOs | 2025-04-09
 Bernie Sanders and the military industrial complex | yt6O0OMdIT0 | 2025-03-22
 Types of masculinity | lOQSqMhjwZY | 2025-06-12`;
-
-const pageData = `Give yourself credit | give-yourself-credit | 2026-01-23
-Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
-Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30
-Stay the trenches | stay-the-trenches | 2025-12-17
-Derangement | derangement | 2025-12-12
-Thoughts on immigration | immigration | 2025-11-06
-What is prejudice? | what-is-prejudice | 2025-10-30
-India | india | 2025-10-24
-Liberalism, not extremism | liberalism-not-extremism | 2025-09-19
-The path of normalization | the-path-of-normalization | 2025-09-08
-Lies about Ilhan Omar | ilhan-omar | 2025-08-25
-Israel–Palestine notes | israel-palestine | 2025-07-27
-The lies of Pierre Poilievre | pierre-poilievre | 2025-03-15
-Trump and Russia | trump-and-russia | 2025-03-06
-Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
-Political philosophy | conservatism | 2025-01-30
-Elon Musk and \\| the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
-What is therapy? | what-is-therapy | 2025-01-09
-Enduring falsehoods (Elizabeth Warren and Hillary Clinton) | enduring-falsehoods | 2024-12-19
-Mark Robinson | mark-robinson | 2024-12-15
-The standard relationship model | standard-relationship-model | 2024-12-08
-The Trump appeal | the-trump-appeal | 2024-12-03
-The default politician | the-default-politician | 2024-11-26
-Sex, gender, &amp; transsexuals | sex-gender-transsexuals | 2024-11-19
-Fetishism &amp; politics | fetishism-politics | 2024-11-14
-Types of masculinity | types-of-masculinity | 2024-11-08
-The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`
 
 function scrollToTop() {
     window.scrollTo({
@@ -392,7 +393,7 @@ function autoRows(chunk) {
         }
         rows[r] = `<div class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</div>`;
     }
-    /* if !rows declaration had styling included: */
+    /* if !rows declaration had styling included (same as !table logic): */
     let customTableStyle = "";
     if (firstRow.replace(/\s/g, "").length > 1) {
         customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-rows-"+tableNum).replace(/;/g, " !important;") }</style>`;
@@ -402,56 +403,57 @@ function autoRows(chunk) {
     return table;
 }
 
-function indent(chunk) {
-    const lines = chunk.split("\n").slice(1).map( line => {
-        if (line.startsWith("---")) {
-            return `<p class="attribution">${line}</p>`;
+function autoList(list, isFine) {
+    let prevIndent = -1;
+    const closeTags = [];
+    list = list.split("\n").map(
+        li => {
+            const initpad = li.match(/^ */)[0].length;
+            li = li.substring(initpad);
+            const indent = Math.floor(initpad * 0.25);
+            const liType = /^[\*\-] /.test(li) ?"ul" :(/^\d+\. /.test(li) ?"ol" :"none");
+            const listType = (liType =="ol") ?"ol" :"ul";
+            let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
+            li = liType =="none" ?li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
+            li = " ".repeat(indent * 4 + 2) + ( liType =="none" ?"<li class=\"no-marker\">" :"<li>") + li + "</li>\n";
+            if (indent > prevIndent) {
+                li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
+                closeTags.push(" ".repeat(indent * 4) + "</"+ listType +">\n");
+            }
+            else if (indent < prevIndent) {
+                li = closeTags.splice(-(prevIndent - indent)).reverse().join('') + li;
+            }
+            prevIndent = indent;
+            return li;
         }
-        if (line.startsWith(".")) {
-            return `<div class="fine">${ line.substring(1) }</div>`;
-        }
-        return `<p>${line}</p>`;
-    })
-    return `<blockquote>${ textFormat(lines.join("")) }</blockquote>`;
-}
-
-function autoList(chunk, fine) {
-    const listTag = chunk.startsWith("* ") ? "ul" : "ol";
-    let startNumber = "";
-    if (listTag == "ol") {
-        startNumber = chunk.slice(0, chunk.indexOf(" ") - 1);
-    }
-    const lines = chunk.split("\n").map( line => {
-        let li_ = "<li";
-
-        if (line.startsWith("* ")) {
-            line = line.substring(1).trim();
-        }
-        else if (/^\d+\. /.test(line)) {
-            li_ += ` value="${line.slice(0, line.indexOf(" ") - 1)}"`;
-            line = line.slice(line.indexOf(" ")).trim();
-        }
-        else {
-            li_ += ` class="no-marker"`;
-        }
-        return li_ + `>${ textFormat(line) }</li>`;
-    })
-    let list = `<${listTag} class="auto-list"`;
-    if (startNumber) {
-        list += ` start="${startNumber}"`;
-    }
-    list += `>${lines.join("")}</${listTag}>`;
-    if (fine) {
-        list = `<div class="fine">${ list }</div>`;
+    ).join("") + closeTags.join("");
+    if (isFine) {
+        return `<div class="fine">${ list }</div>`;
     }
     return list;
 }
 
+function autoIndent(chunk) {
+    const lines = chunk.split("\n").map(
+        line => {
+            line = line.trim();
+            if (line != "") {
+                if (line.startsWith("---")) {
+                    return `<p class="attribution">${ line }</p>`;
+                }
+                return "<p>"+ line +"</p>";
+            }
+        }
+    )
+    return `<blockquote>${ textFormat(lines.join("")) }</blockquote>`;
+}
+
+
 function articleMeta(chunk) {
     chunk = chunk.split("\n").slice(1);
-    
+
     const meta = { title: "", subtitle: "", date: "", seeAlso: [] }
-    
+
     for (let line of chunk) {
         line = line.split(":").map(c => c.trim());
         if (line.length != 2) {
@@ -462,7 +464,7 @@ function articleMeta(chunk) {
         if (line[0] == "title") {
             line[1] = line[1].replaceAll("---", "—").replaceAll("--", "–");
             meta.title = textFormat(line[1]);
-            document.title = line[1];
+            document.title = line[1].replaceAll("&amp;","&");
             document.querySelector(".page-name-display").innerHTML = line[1];
         }
         else if (line[0] == "subtitle") {
@@ -567,7 +569,9 @@ function interpreter(argValue) {
 
     input = input.map(
         chunk => {
-            if (chunk.startsWith("<")) { return chunk; }
+            chunk = chunk.replace(/\t/g, "    "); /* probably no effect */
+            if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
+            else if (chunk.startsWith("<")) { return chunk; }
             if (chunk == "---") { return "<hr>"; }
             if (chunk.startsWith("!meta")) { articleMeta(chunk); return ""; }
             if (chunk.startsWith("!image-float-left")) { return imageFloat(chunk, "left"); }
@@ -581,15 +585,15 @@ function interpreter(argValue) {
             if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
             chunk = chunk.replace(/`(.+?)`/g, codeReplace);
             
-            let cfine = false;
+            let isFine = false;
             if (chunk.startsWith(".")) {
                 chunk = chunk.slice(1).trimStart();
-                cfine = true;
+                isFine = true;
             }
-            let cinfo = false;
+            let isInfo = false;
             if (chunk.startsWith("!info")) {
                 chunk = chunk.substring(chunk.indexOf("\n"));
-                cinfo = true;
+                isInfo = true;
             }
             
             /* ------------------------------------- links ------------------------------------- */
@@ -625,16 +629,15 @@ function interpreter(argValue) {
             if (chunk.startsWith("!profile-grid")) { return profileGrid(chunk); }
             if (chunk.startsWith("!table")) { return autoTable(chunk); }
             if (chunk.startsWith("!rows")) { return autoRows(chunk); }
-            if (chunk.startsWith("!indent")) { return indent(chunk); }
-            if ( chunk.startsWith("* ") || /^\d+\. /.test(chunk) ) { return autoList(chunk, cfine); }
-            if ( chunk.startsWith("-- ")) { return `<ul class="auto-list">${ chunk.split("\n").map(li => `<li>${ textFormat(li.replace(/^\-\-/, "").trim()) }</li>`).join("") }</ul>`; }
+            if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { return autoList(chunk, isFine); }
+            if (chunk.startsWith("    ")) { return autoIndent(chunk); }
             if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
 
             chunk = `<p>${ textFormat(chunk) }</p>`;
-            if (cfine) {
-                return `<div class="fine">${ chunk }</div>`;
+            if (isFine) {
+                return `<div class="fine">${ chunk.replace(/\n/g, "<br>") }</div>`;
             }
-            else if (cinfo) {
+            if (isInfo) {
                 return `<div class="info">${ chunk }</div>`;
             }
             return chunk;
@@ -924,7 +927,6 @@ window.addEventListener("load", function() {
                 ${ document.body.innerHTML }
             </div>
             <div class="article-footer">
-                ${ index ? "" : `<div class="footer-back-to-index"><a href="../../index.html">Link back to index (front page)</a></div>` }
             </div>
         </div>
     </div>
@@ -943,7 +945,6 @@ window.addEventListener("load", function() {
             entry => entry.length > 2
         ).map(
             entry => {
-                console.log(entry)
                 entry = entry.replaceAll("\\|", "&verbar;").split("|").map( c => c.trim() );
                 while (entry.length < 3) {
                     entry.push("");
@@ -956,7 +957,20 @@ window.addEventListener("load", function() {
     }
     else {
         /* no citelist for front page */
-        let citelist = `<div><table class="citelist">${ contentLinks.map((x, n) => `<tr><td>${ n+1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join('') }</table></div>`;
+        const citeData = contentLinks.map(
+            (x, n) => {
+                return `<tr>
+                    <td>${ n+1 }.</td>
+                    <td><a href="${ x }">${ x }</a></td>
+                </tr>`
+            }
+        ).join("");
+        
+        let citelist = `<div class="footer-back-to-index"><a href="../../index.html">&larr; Back to index (front page)</a></div>
+        <div>
+            <div>Links on this page:</div>
+            <table class="citelist">${ citeData }</table>
+        </div>`;
         document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
     }
     const videosIndex = document.getElementById("videos-index");
@@ -1149,76 +1163,78 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- */
 
     if (HTML.classList.contains("include-toc")) {
-        const hideTocCheckbox = document.getElementById("hide-toc-checkbox");
-        if (!hideTocCheckbox.checked) {
-            window.addEventListener("scroll", tocHighlightUpdateAttempt)
-        }
-        hideTocCheckbox.addEventListener("change", function() {
-            HTML.classList.toggle("include-toc", !this.checked);
-            if (!this.checked) {
-                window.addEventListener("scroll", tocHighlightUpdateAttempt);
-            } else {
-                window.removeEventListener("scroll", tocHighlightUpdateAttempt);
-            }
-        });
-
         const headings = Array.from(document.querySelector(".article").getElementsByClassName("--for-toc"));
-        const toc = document.getElementById("toc");
-        toc.innerHTML = '<div class="toc-title">Table of contents</div>' + headings.map(
-            heading =>
-                `<div class="toc-row ${heading.tagName.toLowerCase()}"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
-        ).join("");
-        toc.scrollTo({ behavior: "instant", top: 0 })
-        const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-        rowsInToc[0].className = "toc-row";
-        rowsInToc[0].innerHTML = '<a class="pseudo-link" onclick="scrollToTop()">(Top)</a>';
-
-        let canTocHighlightUpdate = true;
-        function tocHighlightUpdateAttempt() {
-            if (!canTocHighlightUpdate) {
-                return;
+        if (headings.length > 0) {
+            const hideTocCheckbox = document.getElementById("hide-toc-checkbox");
+            if (!hideTocCheckbox.checked) {
+                window.addEventListener("scroll", tocHighlightUpdateAttempt)
             }
-            canTocHighlightUpdate = false;
-            setTimeout(() => {
-                canTocHighlightUpdate = true;
-                tocHighlightUpdate();
-            }, 500);
-            tocHighlightUpdate();
-        }
-        let lastHeading = -1;
-        
-        function tocHighlightUpdate() {
-            let currentHeading = -1;
-            for (let heading = 0; heading < headings.length; heading += 1) {
-                let elementDistanceFromPageTop = window.scrollY + headings[heading].getBoundingClientRect().top;
-                if (pageYOffset < elementDistanceFromPageTop - (0.4 * window.innerHeight)) {
-                    break;
+            hideTocCheckbox.addEventListener("change", function() {
+                HTML.classList.toggle("include-toc", !this.checked);
+                if (!this.checked) {
+                    window.addEventListener("scroll", tocHighlightUpdateAttempt);
+                } else {
+                    window.removeEventListener("scroll", tocHighlightUpdateAttempt);
                 }
-                currentHeading = heading;
+            });
+            
+            const toc = document.getElementById("toc");
+            toc.innerHTML = '<div class="toc-title">Table of contents</div>' + headings.map(
+                heading =>
+                    `<div class="toc-row ${heading.tagName.toLowerCase()}"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
+            ).join("");
+            toc.scrollTo({ behavior: "instant", top: 0 })
+            const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+            rowsInToc[0].className = "toc-row";
+            rowsInToc[0].innerHTML = '<a class="pseudo-link" onclick="scrollToTop()">(Top)</a>';
+
+            let canTocHighlightUpdate = true;
+            function tocHighlightUpdateAttempt() {
+                if (!canTocHighlightUpdate) {
+                    return;
+                }
+                canTocHighlightUpdate = false;
+                setTimeout(() => {
+                    canTocHighlightUpdate = true;
+                    tocHighlightUpdate();
+                }, 500);
+                tocHighlightUpdate();
             }
-            if (currentHeading != lastHeading) {
-                rowsInToc.forEach( (row, n) => {
-                    if (n == currentHeading) {
-                        row.classList.add("active-heading");
-                        let rRect = row.getBoundingClientRect();
-                        let tRect = toc.getBoundingClientRect();
-                        if (rRect.bottom + 20 > tRect.bottom) {
-                            toc.scrollTo(
-                                { top: row.offsetTop + row.offsetHeight - toc.clientHeight + 20, behavior: "smooth" }
-                            )
-                        }
-                        else if (rRect.top < tRect.top) {
-                            toc.scrollTo(
-                                { top: row.offsetTop - 4, behavior: "smooth" }
-                            )
-                        }
+            let lastHeading = -1;
+            
+            function tocHighlightUpdate() {
+                let currentHeading = -1;
+                for (let heading = 0; heading < headings.length; heading += 1) {
+                    let elementDistanceFromPageTop = window.scrollY + headings[heading].getBoundingClientRect().top;
+                    if (pageYOffset < elementDistanceFromPageTop - (0.4 * window.innerHeight)) {
+                        break;
                     }
-                    else {
-                        row.classList.remove("active-heading");
-                    }
-                })
+                    currentHeading = heading;
+                }
+                if (currentHeading != lastHeading) {
+                    rowsInToc.forEach( (row, n) => {
+                        if (n == currentHeading) {
+                            row.classList.add("active-heading");
+                            let rRect = row.getBoundingClientRect();
+                            let tRect = toc.getBoundingClientRect();
+                            if (rRect.bottom + 20 > tRect.bottom) {
+                                toc.scrollTo(
+                                    { top: row.offsetTop + row.offsetHeight - toc.clientHeight + 20, behavior: "smooth" }
+                                )
+                            }
+                            else if (rRect.top < tRect.top) {
+                                toc.scrollTo(
+                                    { top: row.offsetTop - 4, behavior: "smooth" }
+                                )
+                            }
+                        }
+                        else {
+                            row.classList.remove("active-heading");
+                        }
+                    })
+                }
+                lastHeading = currentHeading;
             }
-            lastHeading = currentHeading;
         }
     }
     else {
