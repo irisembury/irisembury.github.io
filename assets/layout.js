@@ -403,10 +403,10 @@ function autoRows(chunk) {
     return table;
 }
 
-function autoList(list, isFine) {
+function autoList(list) {
     let prevIndent = -1;
     const closeTags = [];
-    list = list.split("\n").map(
+    return list.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
             li = textFormat(li.substring(initpad));
@@ -419,16 +419,13 @@ function autoList(list, isFine) {
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
                 closeTags.push(" ".repeat(indent * 4) + "</"+ listType +">\n");
-            }
-            else if (indent < prevIndent) {
+            } else if (indent < prevIndent) {
                 li = closeTags.splice(-(prevIndent - indent)).reverse().join('') + li;
             }
             prevIndent = indent;
             return li;
         }
     ).join("") + closeTags.join("");
-    if (isFine) { list = '<div class="fine">'+ list +'</div>'; }
-    return list;
 }
 
 function autoIndent(chunk) {
@@ -629,7 +626,13 @@ function interpreter(argValue) {
             if (chunk.startsWith("!profile-grid")) { return profileGrid(chunk); }
             if (chunk.startsWith("!table")) { return autoTable(chunk); }
             if (chunk.startsWith("!rows")) { return autoRows(chunk); }
-            if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { return autoList(chunk, isFine); }
+            if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
+                chunk = autoList(chunk);
+                if (isFine) {
+                    chunk = `<div class="fine">${ chunk }</div>`
+                }
+                return chunk;
+            }
             if (chunk.startsWith("    ")) { return autoIndent(chunk); }
             if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
 
@@ -820,7 +823,7 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 
-const allFonts = "Consolas,Verdana,Cambria,Arial,Calibri,Lexend,Lora,Times New Roman,Georgia,Noto Sans JP,Inter,Open Sans,Faculty Glyphic,Roboto Slab,Roboto,Segoe UI,Trebuchet MS".split(",").map(o => `<option value="${o}">${o}</option>`).sort();
+const allFonts = "Consolas,Verdana,Cambria,Libre Caslon Text,Arial,Epilogue,Calibri,Lexend,Lora,Times New Roman,Georgia,Inter,Open Sans,Roboto Slab,Roboto,Segoe UI,Trebuchet MS".split(",").map(o => `<option value="${o}">${o}</option>`).sort();
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
