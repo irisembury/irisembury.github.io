@@ -27,7 +27,7 @@
         --ff-nav: Trebuchet MS, var(--ff-ui);
         --ff-article: Georgia Pro Digits, Georgia, sans-serif;
         --ff-heading: Lora, sans-serif;
-        --ff-table: Roboto, sans-serif;
+        --ff-table: Open Sans, sans-serif;
         --ff-fine: var(--ff-ui);
         --ff-monospace: Courier Prime, Consolas, monospace;
         --ff-mdash: Ubuntu, Arial, Times, var(--ff-ui);
@@ -40,7 +40,7 @@
         --fs-article-3: 14px;
         --fs-h1: 32px;
         --fs-h2: 24px;
-        --fs-h3: 20px;
+        --fs-h3: 22px;
         --fs-h4: 17px;
         --fs-cite: 0.85em;
         /* line height */
@@ -354,7 +354,7 @@
             .article sup { vertical-align: super; line-height: 1; }
             .article sub { vertical-align: sub; line-height: 1; }
 
-            .article .no-marker { list-style-type: none; }
+            .article .auto-list p { margin-top: 0.66em; }
             .article li { margin-top: 0.66em; }
             .article li br { margin-bottom: 0.33em; }
             .article .fine li { margin-top: 0.1em; }

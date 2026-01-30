@@ -152,7 +152,7 @@ function updateFonts() {
 
 const defaultHeadingFont = "Lora";
 const defaultBodyFont    = "Georgia";
-const defaultTableFont   = "Roboto";
+const defaultTableFont   = "Open Sans";
 
 function menuRestoreDefaults() {
     localStorage.setItem("headingFont", defaultHeadingFont);
@@ -415,7 +415,7 @@ function autoList(list) {
             const listType = (liType =="ol") ?"ol" :"ul";
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
             li = (liType) =="none" ?li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
-            li = " ".repeat(indent * 4 + 2) + ( liType =="none" ?"<li class=\"no-marker\">" :"<li>") + li + "</li>\n";
+            li = " ".repeat(indent * 4 + 2) + ( liType =="none" ?"<p>"+li+"</p>\n" :"<li>"+li+"</li>\n");
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
                 closeTags.push(" ".repeat(indent * 4) + "</"+ listType +">\n");
@@ -627,18 +627,15 @@ function interpreter(argValue) {
             if (chunk.startsWith("!table")) { return autoTable(chunk); }
             if (chunk.startsWith("!rows")) { return autoRows(chunk); }
             if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
-                chunk = autoList(chunk);
-                if (isFine) {
-                    chunk = `<div class="fine">${ chunk }</div>`
-                }
-                return chunk;
+                const class_ = isFine ?"auto-list fine" :"auto-list"
+                return `<div class="${ class_ }">${ autoList(chunk) }</div>`;
             }
             if (chunk.startsWith("    ")) { return autoIndent(chunk); }
             if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
 
             chunk = `<p>${ textFormat(chunk) }</p>`;
             if (isFine) {
-                return `<div class="fine">${ chunk.replace(/\n/g, "<br>") }</div>`;
+                return `<div class="fine">${ chunk.replace(/[^>]\n/g, "<br>") }</div>`;
             }
             if (isInfo) {
                 return `<div class="info">${ chunk }</div>`;
