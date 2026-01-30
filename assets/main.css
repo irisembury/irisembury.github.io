@@ -323,7 +323,8 @@
             .article-top .article-date { order: 2; grid-column: 1; font-size: var(--fs-article-2); font-family: var(--ff-monospace); color: var(--grey-8); }
             .article-top .article-see-also { order: 3; grid-column: 2; display: flex; align-items: center; gap: 0.5em; justify-content: flex-end; font-size: var(--fs-article-3); }
                 .article-top .article-see-also a { line-height: 1; align-items: center; display: flex; gap: 0.3em; color: var(--grey-8); padding: 0.15em; border-radius: 3px; }
-                .article-top .article-see-also svg { width: 24px; height: 24px; }
+                    .article-top .article-see-also a span { display: none; }
+                    .article-top .article-see-also a svg { width: 24px; height: 24px; filter: saturate(0); }
 
         .article-top:not(.hidden) + .article { margin-top: 2em; }
         .article { font-family: var(--ff-article); max-width: var(--main-width); line-height: var(--lh-article-1); font-size: var(--fs-article-1); }
