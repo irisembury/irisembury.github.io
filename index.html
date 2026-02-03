@@ -18,8 +18,17 @@
 </head>
 <body>
 <div style="margin-top: calc(0px - var(--page-top-pad)) !important;">
-    <div style="background-color:#555; background-image:url(assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg); background-size:cover; background-repeat:no-repeat; background-position:center; aspect-ratio:4 / 1; margin:0 auto; max-height:200px; display:flex; justify-content:center; align-items:center;"><span class="no-select" style="line-height:1; color:#fff; text-shadow:1px 1px 3px #0006; font-size:3rem; padding:0.75rem; margin:0.75rem; letter-spacing:3px;">Iris Embury</span></div>
+    <div style="background-color:#555; background-image:url(assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg); background-size:cover; background-repeat:no-repeat; background-position:center; aspect-ratio:4 / 1; margin:0 auto; max-height:200px; display:flex; justify-content:center; align-items:center;"><span class="no-select" style="line-height:1; color:#fff; text-shadow:1px 1px 3px #0005; font-size:2.5rem; padding:1rem; letter-spacing:34px; transition:opacity 3s,letter-spacing 1s; opacity:0;" id="ief-title">Iris Embury</span></div>
 </div>
+<script>
+window.addEventListener("load", () => {
+    setTimeout(
+        () => {
+            document.getElementById("ief-title").style.letterSpacing ="2px";
+            document.getElementById("ief-title").style.opacity ="1";
+    }, 111)
+})
+</script>
 <div style="display:grid; grid-template-columns:1fr auto; gap:1em;">
     <div style="padding-right:0.75em; border-right:1px solid var(--grey-c);">
         <div class="section-label">Text pages</div>
@@ -35,15 +44,14 @@
 <div class="section-label">Resources</div>
 
 !rows
-[A list of every movie I've ever seen](page/movies-list/index.html)
-[The artwork I often use](page/artwork-i-use/index.html)
-[soundboard](page/soundboard/index.html)
-[discord bot custom commands](page/discord-bot-custom-commands/index.html)
-[html extras](page/html-extras/index.html)
-[Anime reviews](page/anime-reviews/index.html)
+[list of every movie I've ever seen](page/movies-list/index.html)
+[the artwork I often use](page/artwork-i-use/index.html)
+[anime reviews](page/anime-reviews/index.html)
 [Poor things (2023 film)](page/poor-things/index.html)
-[Data struct &amp; algorithms notes](page/data-structures-algorithms/index.html)
-[5-letters.html](page/5-letters/index.html)
+[data struct &amp; algorithms notes](page/data-structures-algorithms/index.html)
+[discord bot custom commands](page/discord-bot-custom-commands/index.html)
+[soundboard](page/soundboard/index.html)
+[5-letters expander](page/5-letters/index.html)
 [snowfall.html](page/snowfall.html)
 [clouds.html](page/clouds.html)
 [sliding-block.html](page/sliding-block.html)

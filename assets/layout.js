@@ -152,7 +152,7 @@ function updateFonts() {
 
 const defaultHeadingFont = "Lora";
 const defaultBodyFont    = "Georgia";
-const defaultTableFont   = "Open Sans";
+const defaultTableFont   = "Roboto";
 
 function menuRestoreDefaults() {
     localStorage.setItem("headingFont", defaultHeadingFont);
@@ -494,7 +494,7 @@ function articleMeta(chunk) {
             articleTitle.innerHTML = meta.title;
         }
         else {
-            articleTop.insertAdjacentHTML("beforeend", '<h1 class="article-title">'+ meta.title +'</h1>');
+            articleTop.insertAdjacentHTML("beforeend", '<h1 class="article-title --for-toc">'+ meta.title +'</h1>');
         }
     }
     if (meta.subtitle != "") {
@@ -1163,7 +1163,7 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- */
 
     if (HTML.classList.contains("include-toc")) {
-        const headings = Array.from(document.querySelector(".article").getElementsByClassName("--for-toc"));
+        const headings = Array.from(document.getElementsByClassName("--for-toc"));
         if (headings.length > 0) {
             const hideTocCheckbox = document.getElementById("hide-toc-checkbox");
             if (!hideTocCheckbox.checked) {
@@ -1201,7 +1201,7 @@ window.addEventListener("load", function() {
                 tocHighlightUpdate();
             }
             let lastHeading = -1;
-            
+
             function tocHighlightUpdate() {
                 let currentHeading = -1;
                 for (let heading = 0; heading < headings.length; heading += 1) {
