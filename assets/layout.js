@@ -1,7 +1,7 @@
 "use strict"
 const HTML = document.documentElement;
 
-const pageData = `The United States at the End of an Era | the-united-states-at-the-end-of-an-era | 2026-01-28
+const pageData = `Thoughts on the potential end of the American period | thoughts-on-the-potential-end-of-the-american-period | 2026-01-28
 Give yourself credit | give-yourself-credit | 2026-01-23
 Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
 Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30

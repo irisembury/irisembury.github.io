@@ -3,7 +3,7 @@
 
     :root {
         /* layout dimensions */
-        --main-width: 799px;
+        --main-width: 864px;
         --header-height: 112px;
         --nav-height: 40px;
         --toc-width: 232px;
@@ -35,17 +35,17 @@
         --ff-lb-caption: Roboto, sans-serif;
         /* font-size */
         --fs-ui: 14px;
-        --fs-article-1: 17px;
+        --fs-article-1: 16px;
         --fs-article-2: 15px;
         --fs-article-3: 14px;
-        --fs-h1: 32px;
-        --fs-h2: 24px;
-        --fs-h3: 22px;
-        --fs-h4: 17px;
+        --fs-h1: 2em;
+        --fs-h2: 1.5em;
+        --fs-h3: 1.25em;
+        --fs-h4: 1em;
         --fs-cite: 0.85em;
         /* line height */
         --lh-article-1: 1.75;
-        --lh-article-2: 1.6;
+        --lh-article-2: 1.625;
         /* colors */
         --page-bg: #fafafa;
         --c3-bg: #fff;
@@ -70,7 +70,7 @@
         --grey-f: hsl(0, 0%, 97%);
         --c-white: hsl(0, 0%, 100%);
         --blockquote-accent: #c0c0c0;
-        --link-color: #36c;
+        --link-color: #3370bb;
         --c-mark: #fea;
         --selection-color: #333333;
         --selection-bg: #cddffb;
@@ -324,7 +324,7 @@
             .article-top .article-see-also { order: 3; grid-column: 2; display: flex; align-items: center; gap: 0.5em; justify-content: flex-end; font-size: var(--fs-article-3); }
                 .article-top .article-see-also a { line-height: 1; align-items: center; display: flex; gap: 0.3em; color: var(--grey-8); padding: 0.15em; border-radius: 3px; }
                     .article-top .article-see-also a span { display: none; }
-                    .article-top .article-see-also a svg { width: 24px; height: 24px; filter: saturate(0); }
+                    .article-top .article-see-also a svg { width: 24px; height: 24px; filter: saturate(0.5); }
 
         .article-top:not(.hidden) + .article { margin-top: 2em; }
         .article { font-family: var(--ff-article); max-width: var(--main-width); line-height: var(--lh-article-1); font-size: var(--fs-article-1); }
@@ -354,10 +354,10 @@
             .article sup { vertical-align: super; line-height: 1; }
             .article sub { vertical-align: sub; line-height: 1; }
 
-            .article .auto-list p { margin-top: 0.66em; }
-            .article li { margin-top: 0.66em; }
+            .article li { margin-top: 0.66em; line-height: var(--lh-article-2); }
             .article li br { margin-bottom: 0.33em; }
-            .article .fine li { margin-top: 0.1em; }
+            .article .auto-list p { margin-top: 0.33em; }
+            .article .auto-list + li { margin-top: 0.8em; }
 
             .article a { color: var(--link-color); }
             .article .inline-link-index { font-family: var(--ff-ui); font-size: 0.65em; display: none; }
