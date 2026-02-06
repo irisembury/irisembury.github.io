@@ -17,8 +17,8 @@ Israel–Palestine notes | israel-palestine | 2025-07-27
 The lies of Pierre Poilievre | pierre-poilievre | 2025-03-15
 Trump and Russia | trump-and-russia | 2025-03-06
 Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
-Political philosophy | conservatism | 2025-01-30
-Elon Musk and \\| the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
+Politics | conservatism | 2025-01-30
+Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
 What is therapy? | what-is-therapy | 2025-01-09
 Enduring falsehoods (Elizabeth Warren and Hillary Clinton) | enduring-falsehoods | 2024-12-19
 Mark Robinson | mark-robinson | 2024-12-15
@@ -443,89 +443,97 @@ function autoIndent(chunk) {
     return `<blockquote>${ textFormat(lines.join("")) }</blockquote>`;
 }
 
-
 function articleMeta(chunk) {
     chunk = chunk.split("\n").slice(1);
-
-    const meta = { title: "", subtitle: "", date: "", seeAlso: [] }
-
+    const articleTop = document.querySelector(".article-top");
+    if (articleTop == null) {
+        return;
+    }
+    const otherSources = [];
+    
     for (let line of chunk) {
-        line = line.split(":").map(c => c.trim());
-        if (line.length != 2) {
+        const lCol = line.indexOf(":");
+        if (lCol == -1) {
             continue;
         }
-        line[0] = line[0].toLowerCase();
+        const mKey = line.substring(0, lCol).toLowerCase().trim();
+        const mVal = line.substring(lCol + 1).trim();
         
-        if (line[0] == "title") {
-            line[1] = line[1].replaceAll("---", "—").replaceAll("--", "–");
-            meta.title = textFormat(line[1]);
-            document.title = line[1].replaceAll("&amp;","&");
-            document.querySelector(".page-name-display").innerHTML = line[1];
-        }
-        else if (line[0] == "subtitle") {
-            meta.subtitle = textFormat(line[1]);
-        }
-        else if (line[0] == "last-updated") {
-            meta.date = 'Last updated ' + isoFormat(line[1]);
-        }
-        else if (line[0] == "date") {
-            meta.date = isoFormat(line[1]);
-        }
-        else if (line[0] == "see-also") {
-            line[1] = line[1].toLowerCase();
-            const seeAlso = line[1].split("|").map(c => c.trim());
-            if (seeAlso[0] == "tumblr") {
-                meta.seeAlso.push(`<a title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/${ seeAlso[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>Tumblr</span></a>`);
+        if (mKey == "title") {
+            const mTitle = mVal.replaceAll("---", "—").replaceAll("--", "–");
+            document.title = mTitle.replaceAll("&amp;", "&");
+            let pageNameDisplay = document.querySelector(".page-name-display");
+            if (pageNameDisplay) {
+                pageNameDisplay.innerHTML = mTitle;
             }
-            else if (seeAlso[0] == "substack") {
-                meta.seeAlso.push(`<a title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ seeAlso[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>Substack</span></a>`);
+            const articleTitle = articleTop.querySelector(".article-title");
+            if (articleTitle == null) {
+                articleTop.insertAdjacentHTML('beforeend', '<h1 class="article-title --for-toc">'+ textFormat(mVal) +'</h1>')
+            }
+            else {
+                articleTitle.innerHTML = textFormat(mTitle);
             }
         }
-    }
-    
-    if (meta.seeAlso.length >= 2) {
-        meta.seeAlso.sort().reverse();
-    }
-    const articleTop = document.querySelector(".article-top");
-    
-    if (meta.title != "") {
-        const articleTitle = articleTop.querySelector(".article-title");
-        if (articleTitle != null) {
-            articleTitle.innerHTML = meta.title;
+        else if (mKey == "subtitle") {
+            const articleSubtitle = articleTop.querySelector(".article-subtitle")
+            if (articleSubtitle == null) {
+                articleTop.insertAdjacentHTML("beforeend", '<h2 class="article-subtitle">'+ textFormat(mVal) +'</h2>')
+            }
+            else {
+                articleSubtitle.innerHTML = textFormat(mVal);
+            }
         }
-        else {
-            articleTop.insertAdjacentHTML("beforeend", '<h1 class="article-title --for-toc">'+ meta.title +'</h1>');
+        else if (mKey == "date") {
+            const articleDate = articleTop.querySelector(".article-date")
+            if (articleDate == null) {
+                articleTop.insertAdjacentHTML("beforeend", '<div class="article-date">'+ isoFormat(mVal) +'</div>')
+            }
+            else {
+                articleDate.innerHTML = isoFormat(mVal);
+            }
         }
-    }
-    if (meta.subtitle != "") {
-        const articlesubTitle = articleTop.querySelector(".article-subtitle");
-        if (articlesubTitle != null) {
-            articlesubTitle.innerHTML = meta.subtitle;
+        else if (mKey == "last-updated") {
+            const articleDate = articleTop.querySelector(".article-date")
+            if (articleDate == null) {
+                articleTop.insertAdjacentHTML("beforeend", '<div class="article-date">Last updated: '+ isoFormat(mVal) +'</div>')
+            }
+            else {
+                articleDate.innerHTML = isoFormat(mVal);
+            }
         }
-        else {
-            articleTop.insertAdjacentHTML("beforeend", '<h2 class="article-subtitle">'+ meta.subtitle +'</h2>')
-        }
-    }
-    if (meta.date != "") {
-        const articleDate = articleTop.querySelector(".article-date");
-        if (articleDate != null) {
-            articleDate.innerHTML = meta.date;
-        }
-        else {
-            articleTop.insertAdjacentHTML("beforeend", '<div class="article-date">'+ meta.date +'</div>')
-        }
-    }
-    if (meta.seeAlso != "") {
-        const articleSeeAlso = articleTop.querySelector(".article-see-also");
-        if (articleSeeAlso != null) {
-            articleSeeAlso.innerHTML = meta.seeAlso;
-        }
-        else {
-            articleTop.insertAdjacentHTML("beforeend", '<div class="article-see-also">'+ meta.seeAlso.join("") +'</div>')
+        else if (mKey == "see-also") {
+            const addr = mVal.toLowerCase().split("|").map(c => c.trim());
+            if (addr[0] == "tumblr") {
+                otherSources.push(`<a title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/${ addr[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>Tumblr</span></a>`)
+            }
+            else if (addr[0] == "substack") {
+                otherSources.push(`<a title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ addr[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>Substack</span></a>`)
+            }
         }
     }
     
-    articleTop.classList.toggle("hidden", articleTop.children.length == 0);
+    if (otherSources.length > 0) {
+        otherSources.sort();
+        const seeAlso = articleTop.querySelector(".article-see-also");
+        if (seeAlso == null) {
+            articleTop.insertAdjacentHTML("beforeend", '<div class="article-see-also">'+ otherSources.join("") +'</div>');
+        }
+        else {
+            seeAlso.innerHTML = otherSources.join("");
+        }
+    }
+    
+    let metaItemsVisible = 0;
+    Array.from(articleTop.children).forEach(
+        c => {
+            c.classList.toggle("hidden", c.innerHTML == "")
+            if (c.innerHTML != "") {
+                metaItemsVisible += 1;
+            }
+            
+        }
+    )
+    articleTop.classList.toggle("hidden", metaItemsVisible == 0);
 }
 
 function isoFormat(datestring) {
@@ -534,7 +542,7 @@ function isoFormat(datestring) {
         const [y, m, d] = iso.split("-").map(Number);
         let fdate = new Date(y, m - 1, d);
         fdate = new Intl.DateTimeFormat(undefined,{ year: "numeric", month:"long", day:"numeric"}).format(fdate);
-        datestring = '<time title="Date written (ISO: '+ iso +')" datetime="'+ iso +'">'+ fdate +'</time>';
+        datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ fdate +'</time>';
     }
     return datestring;
 }
@@ -830,7 +838,7 @@ window.addEventListener("load", function() {
     document.body.innerHTML = `<nav id="navbar">
         <div class="align-center gap-8">
             <div class="hamburger icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
-            <div class="gap-5">${ index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : ' &verbar; <div title="This page" class="page-name-display">' + document.title + "</div>" }</div>
+            <div class="gap-5">${ index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : '&verbar;<div title="This page" class="page-name-display">' + document.title + "</div>" }</div>
         </div>
         <div class="align-center gap-8">
              ${ index ? "" : `<a class="jump-to-top no-select" onclick="scrollToTop()">Jump to Top</a>` }
@@ -894,7 +902,7 @@ window.addEventListener("load", function() {
                 <input type="checkbox" class="menu-checkbox" id="hide-toc-checkbox">
             </div>
             <div>
-                <label for="indent-justify-checkbox">Indent and justify</label>
+                <label for="indent-justify-checkbox">Text align justify</label>
                 <input type="checkbox" class="menu-checkbox" id="indent-justify-checkbox">
             </div>
         </div>
@@ -902,15 +910,75 @@ window.addEventListener("load", function() {
         <h3>Fonts override:</h3>
         <table id="fonts">
             <tbody>
-                <tr><td>Headings:</td><td><select class="menu-select" id="heading-font-select">
-                    ${ allFonts }
-                </select></td></tr>
-                <tr><td>Body:</td><td><select class="menu-select" id="body-font-select">
-                    ${ allFonts }
-                </select></td></tr>
-                <tr><td>Tables:</td><td><select class="menu-select" id="table-font-select">
-                    ${ allFonts }
-                </select></td></tr>
+                <tr><td>Headings:</td><td>
+                    <select class="menu-select" id="heading-font-select">
+                        ${
+                            `
+                                Cambria
+                                Epilogue
+                                Georgia
+                                Inter
+                                Libre Caslon Text
+                                Lora
+                                Open Sans
+                                Roboto
+                                Roboto Slab
+                                Segoe UI
+                                Trebuchet MS
+                            `.split("\n").filter(
+                                o => o.trim().length > 2
+                            ).map(
+                                o => {
+                                    o = o.trim();
+                                    return `<option value="${ o }">${ o }</option>`;
+                                }
+                            ).join("")
+                        }
+                    </select>
+                </td></tr>
+                <tr><td>Body:</td><td>
+                    <select class="menu-select" id="body-font-select">
+                        ${
+                            `
+                                Amethysta
+                                Arial
+                                Georgia
+                                Inter
+                                PT Serif
+                                Roboto
+                                Trebuchet MS
+                            `.split("\n").filter(
+                                o => o.trim().length > 2
+                            ).map(
+                                o => {
+                                    o = o.trim();
+                                    return `<option value="${ o }">${ o }</option>`;
+                                }
+                            ).join("")
+                        }
+                    </select>
+                </td></tr>
+                <tr><td>Tables:</td><td>
+                    <select class="menu-select" id="table-font-select">
+                        ${
+                            `
+                                Arial
+                                Open Sans
+                                Roboto
+                                Segoe UI
+                                Trebuchet MS
+                                Ubuntu
+                            `.split("\n").filter(
+                                o => o.trim().length > 2
+                            ).map(
+                                o => {
+                                    o = o.trim();
+                                    return `<option value="${ o }">${ o }</option>`;
+                                }
+                            ).join("")
+                        }
+                    </select>
+                </td></tr>
             </tbody>
         </table>
         <div class="flex-end align-center"><span style="cursor: pointer; color: var(--grey-8);" onclick="menuRestoreDefaults()" title="restore font defaults">restore defaults</span></div>
