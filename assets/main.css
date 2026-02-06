@@ -1,7 +1,8 @@
 
+
     :root {
         /* layout dimensions */
-        --main-width: 720px;
+        --main-width: 744px;
         --header-height: 112px;
         --nav-height: 38px;
         --toc-width: 232px;
@@ -33,7 +34,7 @@
         --ff-lb-caption: Roboto, sans-serif;
         /* font-size */
         --fs-ui: 14px;
-        --fs-article-1: 16px;
+        --fs-article-1: 17px;
         --fs-article-2: 15px;
         --fs-article-3: 14px;
         --fs-h1: 2em;
@@ -179,7 +180,11 @@
     img { display: block; object-fit: contain; }
     ul { list-style-type: disc; }
     ul, ol { padding: 0 2.5em; }
-    ol ul, ul ul, ol ol, ul ol { padding: 0 0 0 2.25em; }
+    ol ol ol, ul ul ul,
+    ol ul ol, ul ol ul,
+    ul ul ol, ol ol ul { font-size: 0.95em; }
+    ol ul, ul ul,
+    ol ol, ul ol { padding: 0 0 0 2.5em; }
     ol ol { list-style-type: lower-alpha; }
     ol ol ol { list-style-type: lower-roman; }
     ol > li { padding-left: 2px; }
@@ -290,20 +295,7 @@
 
             html:not(.include-toc) #toc { display: none !important; }
 
-                #toc {
-                    width: var(--toc-width);
-                    padding: 1.15em 1.25em 2.25em;
-                    height: calc(100vh - var(--nav-height));
-                    box-sizing: border-box;
-                    position: sticky;
-                    top: var(--nav-height);
-                    scrollbar-gutter: stable;
-                    color: var(--grey-8);
-                    scrollbar-color: var(--grey-a) var(--grey-f);
-                    overflow: hidden;
-                    scrollbar-width: thin;
-                }
-                
+                #toc { width: var(--toc-width); padding: 1.15em 1.25em 2.25em; height: calc(100vh - var(--nav-height)); box-sizing: border-box; position: sticky; top: var(--nav-height); scrollbar-gutter: stable; color: var(--grey-8); scrollbar-color: var(--grey-a) var(--grey-f); overflow: hidden; scrollbar-width: thin; }
                     .toc:hover { overflow: auto; }
                     #toc .toc-title { font-weight: 700; color: var(--grey-5); }
                     #toc .toc-row { margin-top: 10px; }
@@ -349,11 +341,11 @@
             .article sup { vertical-align: super; line-height: 1; }
             .article sub { vertical-align: sub; line-height: 1; }
 
-            .article li { margin-top: 0.66em; line-height: var(--lh-article-2); }
-            .article li br { margin-bottom: 0.33em; }
-            .article .auto-list p { margin-top: 0.33em; }
-            .article .auto-list ol + li,
-            .article .auto-list ul + li { margin-top: 0.8em; }
+            .auto-list li { margin-top: 0.66em; line-height: var(--lh-article-2); }
+            .auto-list ol + li,
+            .auto-list ul + li { margin-top: 0.85em; }
+            .auto-list p { margin-top: 0.33em; }
+            .auto-list br { margin-bottom: 0.33em; }
 
             .article a { color: var(--link-color); }
             .article .inline-link-index { font-family: var(--ff-ui); font-size: 0.65em; display: none; }

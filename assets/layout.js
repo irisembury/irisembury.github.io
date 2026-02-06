@@ -1,7 +1,7 @@
 "use strict"
 const HTML = document.documentElement;
 
-const pageData = `The potential end of the American period | thoughts-on-the-potential-end-of-the-american-period | 2026-01-28
+const pageData = `The potential end of the American period | the-potential-end-of-the-american-period | 2026-01-28
 Give yourself credit | give-yourself-credit | 2026-01-23
 Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
 Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30
@@ -914,16 +914,10 @@ window.addEventListener("load", function() {
                     <select class="menu-select" id="heading-font-select">
                         ${
                             `
-                                Cambria
-                                Epilogue
                                 Georgia
-                                Inter
-                                Libre Caslon Text
                                 Lora
-                                Open Sans
+                                Libre Caslon Text
                                 Roboto
-                                Roboto Slab
-                                Segoe UI
                                 Trebuchet MS
                             `.split("\n").filter(
                                 o => o.trim().length > 2
@@ -940,13 +934,13 @@ window.addEventListener("load", function() {
                     <select class="menu-select" id="body-font-select">
                         ${
                             `
-                                Amethysta
-                                Arial
                                 Georgia
-                                Inter
-                                PT Serif
+                                Sitka
+                                Amethysta
+                                Libre Caslon Text
                                 Roboto
                                 Trebuchet MS
+                                Segoe UI
                             `.split("\n").filter(
                                 o => o.trim().length > 2
                             ).map(
@@ -966,8 +960,6 @@ window.addEventListener("load", function() {
                                 Open Sans
                                 Roboto
                                 Segoe UI
-                                Trebuchet MS
-                                Ubuntu
                             `.split("\n").filter(
                                 o => o.trim().length > 2
                             ).map(
