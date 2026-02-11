@@ -1,8 +1,25 @@
 
+    /* default element resets: */
+    * { margin: 0; padding: 0; }
+    sub, sup { font-size: 0.8em; }
+    img { display: block; object-fit: contain; }
+    ul { list-style-type: disc; }
+    ul, ol { padding: 0 2.5em; }
+    ol ul, ul ul, ol ol, ul ol { padding: 0 0 0 2em; }
+    ol ol { list-style-type: lower-alpha; }
+    ol ol ol { list-style-type: lower-roman; }
+    ol > li { padding-left: 2px; }
+    td { vertical-align: top; }
+    hr { border: none; height: 1px; width: 100%; }
+    table { border-collapse: collapse; }
+    a { color: inherit; text-decoration: none; text-underline-offset: 2px; }
+    a:hover { text-decoration: underline; }
+    mark { background-color: var(--c-mark); color: inherit; }
+    input, select { font-family: var(--ff-ui); }
 
     :root {
         /* layout dimensions */
-        --main-width: 744px;
+        --main-width: 800px;
         --header-height: 112px;
         --nav-height: 38px;
         --toc-width: 232px;
@@ -43,7 +60,7 @@
         --fs-h4: 1em;
         --fs-cite: 0.85em;
         /* line height */
-        --lh-article-1: 1.75;
+        --lh-article-1: 1.8;
         --lh-article-2: 1.625;
         /* colors */
         --page-bg: #fafafa;
@@ -131,7 +148,7 @@
         --grey-f: hsl(220, 5%, 20%);
         --c-white: hsl(220, 5%, 15%);
         --blockquote-accent: #5c6f8e;
-        --link-color: #7185ae;
+        --link-color: #2f76b5;
         --c-mark: #55503b;
         --selection-color: #a4a4a4;
         --selection-bg: #4c4f5b;
@@ -174,28 +191,6 @@
         #toc { display: none; }
     }
 
-    /* default resets that I use: */
-    * { margin: 0; padding: 0; }
-    sub, sup { font-size: 0.8em; }
-    img { display: block; object-fit: contain; }
-    ul { list-style-type: disc; }
-    ul, ol { padding: 0 2.5em; }
-    ol ol ol, ul ul ul,
-    ol ul ol, ul ol ul,
-    ul ul ol, ol ol ul { font-size: 0.95em; }
-    ol ul, ul ul,
-    ol ol, ul ol { padding: 0 0 0 2.5em; }
-    ol ol { list-style-type: lower-alpha; }
-    ol ol ol { list-style-type: lower-roman; }
-    ol > li { padding-left: 2px; }
-    td { vertical-align: top; }
-    hr { border: none; height: 1px; width: 100%; }
-    table { border-collapse: collapse; }
-    a { color: inherit; text-decoration: none; text-underline-offset: 2px; }
-    a:hover { text-decoration: underline; }
-    mark { background-color: var(--c-mark); color: inherit; }
-    input, select { font-family: var(--ff-ui); }
-
     ::selection { background-color: var(--selection-bg); color: var(--selection-color); }
     .no-select { user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
     .text-select { -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; }
@@ -230,7 +225,8 @@
     .flat-button:active { outline: 1px solid var(--link-color); }
     textarea { border: 1px solid var(--grey-c); }
 
-    html:not(.layout) body { margin: 2em 3em; white-space: preserve-breaks; line-height: 1.3; }
+    html:not(.layout) { font-family: monospace; }
+    html:not(.layout) body { margin: 2em 3em; white-space: pre-wrap; line-height: 1.3; }
     html:not(.layout) #navbar { display: none; }
     html.layout { scroll-padding-top: calc(var(--nav-height) + 30px); color: var(--grey-3); font-size: var(--fs-ui); scrollbar-color: var(--grey-a) var(--grey-f); background-color: var(--page-bg); padding: 0; min-width: 350px; min-height: 100vh; line-height: 1.4; font-family: var(--ff-ui); }
     html.layout body { background-color: inherit; min-height: 100vh; margin: 0; }
@@ -313,24 +309,21 @@
             .article-top .article-date { order: 3; font-size: var(--fs-article-3); font-family: var(--ff-monospace); color: var(--grey-8); }
             .article-see-also { order: 4; display: flex; align-items: center; gap: 0.5em; font-size: var(--fs-article-3); }
                 .article-see-also a { line-height: 1; align-items: center; display: flex; gap: 0.3em; color: var(--grey-8); padding: 0.15em; border-radius: 3px; }
-                    .article-see-also a span { display: none; }
+                    .article-see-also a span { }
                     .article-see-also a svg { width: 24px; height: 24px; }
 
         .article-top:not(.hidden) + .article { margin-top: 2em; }
         .article { font-family: var(--ff-article); max-width: var(--main-width); line-height: var(--lh-article-1); font-size: var(--fs-article-1); }
             .article .auto-heading { clear: both; color: var(--grey-2); line-height: 1.3; margin-top: 1em; }
-            /* .article p:first-child::first-letter { font-size: 4.8rem; float: left; padding: 6px 4px 2px 0; color: var(--c-red); } */
-            /* .article p:first-child { text-indent: 0 !important; } */
             .article h1 { font-size: var(--fs-h1); font-weight: var(--fw-h1); font-family: var(--ff-heading); }
             .article h2 { font-size: var(--fs-h2); font-weight: var(--fw-h2); font-family: var(--ff-heading); }
             .article h3 { font-size: var(--fs-h3); font-weight: var(--fw-h3); font-family: var(--ff-heading); }
             .article h4 { font-size: var(--fs-h4); font-weight: var(--fw-h4); font-family: inherit; }
 
             .article > * { margin-top: 1rem; }
-            .article > p { margin-top: 1em; }
-            .indent-justify .article p,
-            .indent-justify .article li { text-align: justify; }
-            .indent-justify .article p { text-indent: 3em; }
+            .indent-justify .article > p { text-indent: 2.5em; }
+            .indent-justify .article > p + p { margin-top: 0.2em; }
+            .indent-justify .article p, .indent-justify .article li { text-align: justify; }
             .article .table-wrapper { font-size: var(--fs-article-2); font-family: var(--ff-table); line-height: var(--lh-article-2); }
 
             .article p.drop-cap::first-letter { font-size: 3em; float: left; padding: 0.15em 0.2em 0.1em }
@@ -341,7 +334,8 @@
             .article sup { vertical-align: super; line-height: 1; }
             .article sub { vertical-align: sub; line-height: 1; }
 
-            .auto-list li { margin-top: 0.66em; line-height: var(--lh-article-2); }
+            .auto-list { }
+            .auto-list li { margin-top: 0.66em;  }
             .auto-list ol + li,
             .auto-list ul + li { margin-top: 0.85em; }
             .auto-list p { margin-top: 0.33em; }
@@ -364,7 +358,7 @@
 
             .article hr { margin: 2rem 0; border: none; height: 1px; width: 100%; background-color: var(--grey-c); }
 
-            .article .mdash { margin-inline: 2px 1px; font-family: var(--ff-mdash); line-height: 1; }
+            .article .mdash { margin-inline: 1px 1px; font-family: var(--ff-mdash); line-height: 1; }
 
             .article code { background-color: var(--grey-f); vertical-align: baseline; line-height: 1; padding-inline: 2px; font-family: var(--ff-monospace); letter-spacing: var(--ls-code); font-size: var(--fs-article-3); white-space: pre-wrap; }
             .article code * { font-size: inherit !important; font-family: inherit !important; }
@@ -380,7 +374,7 @@
                     .codeblock .code-comment * { color: inherit !important; }
                     .codeblock .code-macro * { color: inherit !important; }
 
-            .article blockquote { line-height: 1.625; margin-inline: 1px; padding: 0.5em 2em 0.75em 1em; border-left: 2px solid var(--blockquote-accent); color: var(--grey-5); margin-left: 0.3em; }
+            .article blockquote { font-size: 0.97em; line-height: 1.625; margin-inline: 1px; padding: 0.5em 2em 0.75em 1em; border-left: 2px solid var(--blockquote-accent); color: var(--grey-5); margin-left: 0.3em; }
                 .article blockquote > :first-child { margin-top: 0; }
                 .article blockquote > :nth-child(n+2) { margin-top: 0.5em; }
                 .article blockquote .attribution { text-align: right; }

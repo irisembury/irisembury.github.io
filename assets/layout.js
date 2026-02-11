@@ -1,7 +1,7 @@
 "use strict"
 const HTML = document.documentElement;
 
-const pageData = `The potential end of the American period | the-potential-end-of-the-american-period | 2026-01-28
+const pageData = `A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28
 Give yourself credit | give-yourself-credit | 2026-01-23
 Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
 Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30
@@ -88,18 +88,34 @@ function scrollToTop() {
 }
 
 function setLightbox(action) {
-    let lightbox = document.querySelector(".lightbox");
+    const lightbox = document.querySelector(".lightbox");
+    const lbCaption = document.querySelector(".lb-caption");
+    const lbTopLeft = document.querySelector(".lb-top-left");
+    if (lightbox == null || lbCaption == null || lbTopLeft == null) {
+        return;
+    }
+
+    /* action is click from <img> object */
     if (action == "close") {
         lightbox.src = "";
         lightbox.alt = "";
         HTML.classList.remove("lb-enabled");
     }
+    /* action is urlstring passed by function call */
+    else if (typeof action == "string") {
+        console.log("A: " + action)
+        lightbox.src = action;
+        lightbox.alt = action;
+        HTML.classList.add("lb-enabled");
+        lbCaption.innerHTML = action;
+        lbTopLeft.innerHTML = `<a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`
+    }
     else {
         lightbox.src = action.src;
         lightbox.alt = action.alt;
         HTML.classList.add("lb-enabled");
-        document.querySelector(".lb-top-left").innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
-        document.querySelector(".lb-caption").innerHTML = action.alt=="" ? "" : action.alt;
+        lbTopLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+        lbCaption.innerHTML = action.alt;
     }
 }
 
@@ -169,8 +185,8 @@ function imageFloat(chunk, direction) {
             parts.push("");
         }
         const imgUrl = parts[0].trim();
-        let figCaption = textFormat(parts[1].trim());
-        let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
+        let figCaption = autoFormat(parts[1].trim());
+        let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
         if (figCaption && !altText) { altText = figCaption }
         if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
         
@@ -190,7 +206,7 @@ function imageSpan(chunk) {
             parts.push("");
         }
         let imgUrl = parts[0].trim();
-        let altText = textFormat(parts[1].trim().replace(/"/g,"&quot;"));
+        let altText = autoFormat(parts[1].trim().replace(/"/g,"&quot;"));
         return `<div><img loading="lazy" style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
     });
     return `<div class="image-span">${ galleryFigures.join("") }</div>`;
@@ -207,8 +223,8 @@ function gallery(chunk) {
             parts.push("");
         }
         let imgUrl = parts[0].trim();
-        let caption = textFormat(parts[1].trim());
-        let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
+        let caption = autoFormat(parts[1].trim());
+        let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
         return `
         <figure>
             <img loading="lazy" style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
@@ -230,8 +246,8 @@ function squareGallery(chunk) {
             parts.push("");
         }
         const imgUrl = parts[0].trim();
-        let caption = textFormat(parts[1].trim());
-        let altText = textFormat(parts[2].trim().replace(/"/g,"&quot;"));
+        let caption = autoFormat(parts[1].trim());
+        let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
         if (!altText) {
             altText = caption;
         }
@@ -341,18 +357,18 @@ function profileGrid(chunk) {
                 </div>
                 <div>
                     <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISO(entryBirthdate) + "</span>" }</div>
-                    <div class="entry-title">${ textFormat(entryTitle) }</div>
+                    <div class="entry-title">${ autoFormat(entryTitle) }</div>
                 </div>
             </div>
             <div>
-                <div class="entry-description">${ textFormat(entryDescription) }</div>
+                <div class="entry-description">${ autoFormat(entryDescription) }</div>
             </div>
         </div>`;
     })
     return `<div class="profile-grid">${ data.join("") }</div>`;
 }
 
-function autoTable(chunk) {
+function autoTable(chunk, tnum) {
     chunk = chunk.replace(/\n +/g, " ");
     const rows = chunk.split("\n");
     let firstRow = rows.shift().substring("!table".length).trim();
@@ -362,21 +378,20 @@ function autoTable(chunk) {
         let cells = rows[r].replaceAll("\\|", "&verbar;").split("|");
         for (let c = 0; c < cells.length; c += 1) {
             let cellNum = c + 1;
-            cells[c] = `<td class="cell col-${ cellNum + " col-" + (cellNum % 2 == 1 ? "odd" : "even") }">${ textFormat(cells[c].trim()) }</td>`;
+            cells[c] = `<td class="cell col-${ cellNum + " col-" + (cellNum % 2 == 1 ? "odd" : "even") }">${ autoFormat(cells[c].trim()) }</td>`;
         }
         rows[r] = `<tr class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</tr>`;
     }
     /* if !table declaration had styling included: */
     let customTableStyle = "";
     if (firstRow.replace(/\s/g, "").length > 1) {
-        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-table-" + tableNum).replace(/;/g, " !important;") }</style>`;
+        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-table-" + tnum).replace(/;/g, " !important;") }</style>`;
     }
-    let table = `${ customTableStyle }<div class="table-wrapper"><table class="auto-table auto-table-${ tableNum }"><tbody>${ rows.join("") }</tbody></table></div>`;
-    tableNum += 1;
+    let table = `${ customTableStyle }<div class="table-wrapper"><table class="auto-table auto-table-${ tnum }"><tbody>${ rows.join("") }</tbody></table></div>`;
     return table;
 }
 
-function autoRows(chunk) {
+function autoRows(chunk, tnum) {
     let rows = chunk.split("\n");
     let firstRow = rows.shift().substring("!rows".length).trim();
     /* make tbody cells */
@@ -386,7 +401,7 @@ function autoRows(chunk) {
         let cells = rows[r].replaceAll("\\|", "&verbar;").split("|");
         for (let c = 0; c < cells.length; c += 1) {
             let cellNum = c + 1;
-            cells[c] = `<div class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ textFormat(cells[c].trim()) }</div>`;
+            cells[c] = `<div class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ autoFormat(cells[c].trim()) }</div>`;
             if (c + 1 > colWidth) {
                 colWidth = c + 1;
             }
@@ -396,26 +411,25 @@ function autoRows(chunk) {
     /* if !rows declaration had styling included (same as !table logic): */
     let customTableStyle = "";
     if (firstRow.replace(/\s/g, "").length > 1) {
-        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-rows-"+tableNum).replace(/;/g, " !important;") }</style>`;
+        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-rows-"+tnum).replace(/;/g, " !important;") }</style>`;
     }
-    let table = `${ customTableStyle }<div class="table-wrapper"><div class="auto-rows auto-rows-${ tableNum }">${ rows.join("") }</div></div>`;
-    tableNum += 1;
+    let table = `${ customTableStyle }<div class="table-wrapper"><div class="auto-rows auto-rows-${ tnum }">${ rows.join("") }</div></div>`;
     return table;
 }
 
-function autoList(list) {
+function autoList(list, fine) {
     let prevIndent = -1;
     const closeTags = [];
     return list.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
-            li = textFormat(li.substring(initpad));
+            li = autoFormat(li.substring(initpad));
             const indent = Math.floor(initpad * 0.25);
             const liType = /^[\*\-] /.test(li) ?"ul" :(/^\d+\. /.test(li) ?"ol" :"none");
             const listType = (liType =="ol") ?"ol" :"ul";
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
             li = (liType) =="none" ?li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
-            li = " ".repeat(indent * 4 + 2) + ( liType =="none" ?"<p>"+li+"</p>\n" :"<li>"+li+"</li>\n");
+            li = " ".repeat(indent * 4 + 0) + ( liType =="none" ?"<p>"+li+"</p>\n" :"<li>"+li+"</li>\n");
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
                 closeTags.push(" ".repeat(indent * 4) + "</"+ listType +">\n");
@@ -440,10 +454,10 @@ function autoIndent(chunk) {
             }
         }
     )
-    return `<blockquote>${ textFormat(lines.join("")) }</blockquote>`;
+    return `<blockquote>${ autoFormat(lines.join("")) }</blockquote>`;
 }
 
-function articleMeta(chunk) {
+function parseMeta(chunk) {
     chunk = chunk.split("\n").slice(1);
     const articleTop = document.querySelector(".article-top");
     if (articleTop == null) {
@@ -468,19 +482,19 @@ function articleMeta(chunk) {
             }
             const articleTitle = articleTop.querySelector(".article-title");
             if (articleTitle == null) {
-                articleTop.insertAdjacentHTML('beforeend', '<h1 class="article-title --for-toc">'+ textFormat(mVal) +'</h1>')
+                articleTop.insertAdjacentHTML('beforeend', '<h1 class="article-title --for-toc">'+ autoFormat(mVal) +'</h1>')
             }
             else {
-                articleTitle.innerHTML = textFormat(mTitle);
+                articleTitle.innerHTML = autoFormat(mTitle);
             }
         }
         else if (mKey == "subtitle") {
             const articleSubtitle = articleTop.querySelector(".article-subtitle")
             if (articleSubtitle == null) {
-                articleTop.insertAdjacentHTML("beforeend", '<h2 class="article-subtitle">'+ textFormat(mVal) +'</h2>')
+                articleTop.insertAdjacentHTML("beforeend", '<h2 class="article-subtitle">'+ autoFormat(mVal) +'</h2>')
             }
             else {
-                articleSubtitle.innerHTML = textFormat(mVal);
+                articleSubtitle.innerHTML = autoFormat(mVal);
             }
         }
         else if (mKey == "date") {
@@ -504,10 +518,10 @@ function articleMeta(chunk) {
         else if (mKey == "see-also") {
             const addr = mVal.toLowerCase().split("|").map(c => c.trim());
             if (addr[0] == "tumblr") {
-                otherSources.push(`<a title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/${ addr[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>Tumblr</span></a>`)
+                otherSources.push(`<a title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/${ addr[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>read on Tumblr</span></a>`)
             }
             else if (addr[0] == "substack") {
-                otherSources.push(`<a title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ addr[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>Substack</span></a>`)
+                otherSources.push(`<a title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ addr[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>read on Substack</span></a>`)
             }
         }
     }
@@ -551,20 +565,49 @@ function autoHeading(chunk) {
     const tag = "h" + chunk.indexOf(" ");
     chunk = chunk.slice(chunk.indexOf(" ") + 1);
     const id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g ,"");
-    chunk = textFormat(chunk);
+    chunk = autoFormat(chunk);
     if (tag == "h1" || tag == "h2" || tag == "h3") {
         return `<${ tag } id="${ id }" class="auto-heading --for-toc">${ chunk }</${ tag }>`;
     }
     return `<h4 id="${ id }" class="auto-heading">${ chunk }</h4>`;
 }
 
+function linkReplace(chunk, lArr) {
+    return chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkAddress) => {
+        linkAddress = linkAddress.replaceAll("\\)", ")");
+        let linkIndex = lArr.indexOf(linkAddress);
+        if (linkIndex == -1) {
+            linkIndex = lArr.push(linkAddress);
+        }
+        if (linkAddress.startsWith("http")) {
+            if (displayText == "") {
+                return `<a href="${ linkAddress }" class="autoref" title="${ linkAddress }">[${ linkIndex }]</a>`;
+            }
+            else {
+                return `<a href="${ linkAddress }" title="${ linkAddress }">${ displayText }</a><sup class="inline-link-index no-select">${ linkIndex }</sup>`;
+            }
+        }
+        /* internal link */
+        else {
+            /* link to internal image? pass to lightbox */
+            if (linkAddress.endsWith(".png") || linkAddress.endsWith(".jpg")) {
+                return `<a onclick="setLightbox('${ linkAddress }')" class="pseudo-link" title="${ linkAddress.split("/").slice(-1).join("") }">${ displayText }</a>`
+            }
+            if (displayText == "") {
+                return `<a href="${ linkAddress }" target="_blank" class="autoref">[${ linkIndex }]</a>`;
+            }
+            else {
+                return `<a href="${ linkAddress }" target="_blank">${ displayText }</a><sup class="inline-link-index no-select">${ linkIndex }</sup>`;
+            }
+        }
+        
+    })
+}
+
 /* ------------------------------- main interpreter for #article content ------------------------------- */
-var tableNum = 1;
-var linkNum = 1;
-var contentLinks = [];
-function interpreter(argValue) {
+function interpreter(argValue, linksArr) {
     if (argValue instanceof Node) {
-        argValue.innerHTML = interpreter(argValue.innerHTML);
+        argValue.innerHTML = interpreter(argValue.innerHTML, linksArr);
         return;
     }
     let input = argValue.replace(/\n\n+/g, "\n\n")
@@ -572,13 +615,15 @@ function interpreter(argValue) {
         .trim()
         .split("\n\n");
 
+    let tableNum = 1;
     input = input.map(
         chunk => {
             chunk = chunk.replace(/\t/g, "    "); /* probably no effect */
             if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
             else if (chunk.startsWith("<")) { return chunk; }
             if (chunk == "---") { return "<hr>"; }
-            if (chunk.startsWith("!meta")) { articleMeta(chunk); return ""; }
+            if (chunk.startsWith("!meta")) { parseMeta(chunk); return ""; }
+            if (/^#{1,4} /.test(chunk)) { return autoHeading(chunk); }
             if (chunk.startsWith("!image-float-left")) { return imageFloat(chunk, "left"); }
             if (chunk.startsWith("!image-float")) { return imageFloat(chunk, "right"); }
             if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
@@ -589,64 +634,29 @@ function interpreter(argValue) {
             chunk = chunk.replaceAll("\\`", "&#96;");
             if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
             chunk = chunk.replace(/`(.+?)`/g, codeReplace);
+            if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.indexOf("\n")) }</div>`; }
             
-            let isFine = false;
-            if (chunk.startsWith(".")) {
-                chunk = chunk.slice(1).trimStart();
-                isFine = true;
-            }
-            let isInfo = false;
-            if (chunk.startsWith("!info")) {
-                chunk = chunk.substring(chunk.indexOf("\n"));
-                isInfo = true;
-            }
-            
+            let isFine = chunk.startsWith(".");
+            if (isFine) chunk = chunk.slice(1).trimStart();
+
             /* ------------------------------------- links ------------------------------------- */
             /*
                 [text to be displayed](https://irisembury.github.io/)
             */
-            chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkAddress) => {
-                linkAddress = linkAddress.replaceAll("\\)", ")");
-                
-                let linkIndex = contentLinks.indexOf(linkAddress);
-                if (linkIndex == -1) {
-                    linkIndex = contentLinks.push(linkAddress);
-                }
-                
-                if (linkAddress.startsWith("http")) {
-                    if (displayText == "") {
-                        return `<a href="${ linkAddress }" class="autoref" title="${ linkAddress }">[${ linkIndex }]</a>`;
-                    }
-                    else {
-                        return `<a href="${ linkAddress }" title="${ linkAddress }">${ displayText }</a><sup class="inline-link-index no-select">${ linkIndex }</sup>`;
-                    }
-                }
-                else {
-                    if (displayText == "") {
-                        return `<a href="${ linkAddress }" class="autoref">[${ linkIndex }]</a>`;
-                    }
-                    else {
-                        return `<a href="${ linkAddress }">${ displayText }</a><sup class="inline-link-index no-select">${ linkIndex }</sup>`;
-                    }
-                }
-            });
+            chunk = linkReplace(chunk, linksArr);
 
             if (chunk.startsWith("!profile-grid")) { return profileGrid(chunk); }
-            if (chunk.startsWith("!table")) { return autoTable(chunk); }
-            if (chunk.startsWith("!rows")) { return autoRows(chunk); }
+            if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
+            if (chunk.startsWith("!rows")) { return autoRows(chunk, tableNum++); }
+            if (chunk.startsWith("    ")) { return autoIndent(chunk); }
             if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
                 const class_ = isFine ?"auto-list fine" :"auto-list"
-                return `<div class="${ class_ }">${ autoList(chunk) }</div>`;
+                return `<div class="${ class_ }">${ autoList(chunk, isFine) }</div>`;
             }
-            if (chunk.startsWith("    ")) { return autoIndent(chunk); }
-            if (/^\#{1,4} /.test(chunk)) { return autoHeading(chunk); }
 
-            chunk = `<p>${ textFormat(chunk) }</p>`;
+            chunk = `<p>${ autoFormat(chunk) }</p>`;
             if (isFine) {
                 return `<div class="fine">${ chunk.replace(/[^>]\n/g, "<br>") }</div>`;
-            }
-            if (isInfo) {
-                return `<div class="info">${ chunk }</div>`;
             }
             return chunk;
         }
@@ -682,80 +692,42 @@ function ageFromISO(argDate) {
     return age;
 }
 
-function textFormat(input_string) {
-    input_string = input_string.trim();
-    if (input_string == "") { return input_string; }
-    let output = "";
-    
-    /* first: replacements that shouldn't affect inside of tags */
-    while (true) {
-        let openTag = input_string.indexOf("<");
-        let closeTag = openTag + input_string.substring(openTag).indexOf(">");
-        
-        if (openTag == -1 || closeTag == -1) {
-            break;
+function autoFormat(argVal) {
+    argVal = argVal.trim();
+    if (argVal == "") { return argVal; }
+    function auxf(str_in) {
+        if (str_in == "") return str_in;
+        str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;")
+        if (str_in.indexOf("'")!=-1||str_in.indexOf('"')!=-1) {
+            str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1").replaceAll(/"/g, "&rdquo;")
         }
-        /* 
-            This version makes curly-quote replacements easier by including
-            triangle tags in the string we then apply replacements to.
-            i.e. when given:
-                "a b <c> d e"
-            this creates:
-                "a b <"  "c"  "> d e"
-            Then we apply auxFormat to "a b <" and "> d e", but not "c", which is protected.
-            
-            This is useful because it allows auxFormat to see that "b" is not truly the
-            end of the string, and "d" is not truly the start of the string.
-            That would have been the impression if it were instead tokenized as:
-                "a b" "<c>" "d e"
-            
-            In practical terms this means a tag doesn't interrupt the quotes within the
-            same chunk, allowing you to quote bold, links, etc.
-       */
-        output += auxFormat(input_string.substring(0, openTag + 1)) + input_string.substring(openTag + 1, closeTag);
-        input_string = input_string.substring(closeTag);
-        /*
-            If that functionality wasn't desired, you would
-        */
+        return str_in.replaceAll("---", "<span class='mdash'>&mdash;</span>").replaceAll("--", "&ndash;");
     }
-    return (output + auxFormat(input_string)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
-        .replace(/\*(.+?)\*/g, "<i>$1</i>");
-}
-
-function auxFormat(input_string) {
-    if (input_string == "") { return input_string; }
-    /* escaped symbols */
-    input_string = input_string.replaceAll("\\*", "&ast;")
-        .replaceAll('\\"', "&quot;")
-        .replaceAll("\\'", "&apos;")
-        .replaceAll("\|", "&verbar;")
-        .replaceAll("\\(", "&lpar;")
-        .replaceAll("\\)", "&rpar;")
-        .replaceAll("\\[", "&lbrack;")
-        .replaceAll("\\]", "&rbrack;")
-        .replaceAll("\\", "&#92;")
-        .replaceAll("\\^", "&Hat;");
-    
-    /* curly quotes: */
-    if (input_string.indexOf("'") != -1 || input_string.indexOf("\"") != -1) {
-        input_string = input_string
-            .replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1") /* like for saying '95 to indicate a year */
-            .replaceAll(/(>|^| |\()'/g, "$1&lsquo;")
-            .replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2")
-            .replaceAll(/'/g, "&rsquo;")
-            
-            .replaceAll(/(>|^| |\()"/g, "$1&ldquo;")
-            .replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2")
-            .replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1")
-            .replaceAll(/"/g, "&rdquo;")
+    let output = "";
+    while (true) {
+        const openTag = argVal.indexOf("<");
+        const closeTag = argVal.substring(openTag).indexOf(">") + openTag;
+        if (openTag == -1 || closeTag - openTag == -1) { break; }
+        const textContent = argVal.substring(0, openTag +1);
+        const attributes = argVal.substring(openTag+1, closeTag);
+        output += auxf(textContent) + attributes;
+        argVal = argVal.substring(closeTag);
     }
-    /* dashes */
-    input_string = input_string.replaceAll("---", "<span class='mdash'>&mdash;</span>")
-        .replaceAll("--", "&ndash;");
-    input_string = input_string.replace(/@([^\s\/]+)\./g, "<span class=\"text-$1\">").replace(/@[^\s]+\./g, "</span>");
-    
-    return input_string;
+    return (output + auxf(argVal)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\*(.+?)\*/g, "<i>$1</i>");
 }
+/*
+    Regarding the above logic (autoFormat): The substring values I use to define the text content and attributes are so this captures the tag characters (<, >) as part of the text content. This means if given the string `a b <c> d e`, this will read that as `"a b <", "c", "> d e"`. The reason I do this is so auxf(function) can tell "b" is not the end of a string and "d" is not the beginning of one, since that affects how the curly quotes are applied. If this isn't desired and you want the tags to be part of the attributes variable, you could modify the while-true like so:
+    
+    while (true) {
+        const openTag = argVal.indexOf("<");
+        const closeTag = argVal.substring(openTag).indexOf(">") + openTag;
+        if (openTag == -1 || closeTag - openTag == -1) { break; }
+        const textContent = argVal.substring(0, openTag);
+        const attributes = argVal.substring(openTag, closeTag + 1);
+        output += auxf(textContent) + attributes;
+        argVal = argVal.substring(closeTag + 1);
+    }
+*/
 
 function tokenizeByWordChar(stringData) {
     const result = [];
@@ -914,10 +886,11 @@ window.addEventListener("load", function() {
                     <select class="menu-select" id="heading-font-select">
                         ${
                             `
-                                Georgia
                                 Lora
                                 Libre Caslon Text
+                                Georgia
                                 Roboto
+                                Roboto Slab
                                 Trebuchet MS
                             `.split("\n").filter(
                                 o => o.trim().length > 2
@@ -935,11 +908,9 @@ window.addEventListener("load", function() {
                         ${
                             `
                                 Georgia
-                                Sitka
-                                Amethysta
-                                Libre Caslon Text
+                                Sitka Text
                                 Roboto
-                                Trebuchet MS
+                                Arial
                                 Segoe UI
                             `.split("\n").filter(
                                 o => o.trim().length > 2
@@ -997,7 +968,8 @@ window.addEventListener("load", function() {
     </div>
     <style id="pref-styles"></style>`;
 
-    interpreter(document.querySelector(".article"));
+    let contentLinks = [];
+    interpreter(document.querySelector(".article"), contentLinks);
 
     /* ---- irisembury.github.io (front page) ---- */
     if (index) {
@@ -1219,6 +1191,9 @@ window.addEventListener("load", function() {
             }
         })
     })
+
+    let k=document.querySelector(".page-name-display");
+    if (k && k.innerHTML == ""){ k.innerHTML = "This page"; }
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- */
 
