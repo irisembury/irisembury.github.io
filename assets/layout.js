@@ -30,11 +30,11 @@ Fetishism &amp; politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
 The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`;
 
-const videoData = `give yourself credit | mM5fcuJnfZQ | 2026-01-23
+const videoData = `A synopsis of American decline | oUOsAdnK2zs | 2026-02-11
+give yourself credit | mM5fcuJnfZQ | 2026-01-23
 Potential issues with our elections | 509Q_HUp8CE | 2026-01-19
 Why is Reddit so hated? | jPVl5cfVP1k | 2026-01-13
 thoughts and plans | _zePgOyNPt4 | 2026-01-06
-trying to use a camera | iLR3pd8hmVY  | 2026-01-06
 Nick Shirley has farty pants | aQcGUiISQQk | 2026-01-05
 Looking at the recent Somali day care video | Btuz_P5WcyY | 2026-01-03
 Unfortunately, we should keep using bad social media | vDFmEAb2S4A | 2025-12-22
@@ -417,9 +417,9 @@ function autoRows(chunk, tnum) {
     return table;
 }
 
-function autoList(list, fine) {
-    let prevIndent = -1;
+function autoList(list) {
     const closeTags = [];
+    let prevIndent = -1;
     return list.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
@@ -429,7 +429,7 @@ function autoList(list, fine) {
             const listType = (liType =="ol") ?"ol" :"ul";
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
             li = (liType) =="none" ?li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
-            li = " ".repeat(indent * 4 + 0) + ( liType =="none" ?"<p>"+li+"</p>\n" :"<li>"+li+"</li>\n");
+            li = " ".repeat(indent * 4) + ( liType =="none" ?"<p>"+li+"</p>\n" :"<li>"+li+"</li>\n");
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
                 closeTags.push(" ".repeat(indent * 4) + "</"+ listType +">\n");
@@ -649,9 +649,12 @@ function interpreter(argValue, linksArr) {
             if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
             if (chunk.startsWith("!rows")) { return autoRows(chunk, tableNum++); }
             if (chunk.startsWith("    ")) { return autoIndent(chunk); }
+
             if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
-                const class_ = isFine ?"auto-list fine" :"auto-list"
-                return `<div class="${ class_ }">${ autoList(chunk, isFine) }</div>`;
+                if (isFine) {
+                    return `<div class="fine auto-list">${ autoList(chunk) }</div>`
+                }
+                return `<div class="auto-list">${ autoList(chunk) }</div>`
             }
 
             chunk = `<p>${ autoFormat(chunk) }</p>`;
@@ -715,6 +718,7 @@ function autoFormat(argVal) {
     }
     return (output + auxf(argVal)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\*(.+?)\*/g, "<i>$1</i>");
 }
+
 /*
     Regarding the above logic (autoFormat): The substring values I use to define the text content and attributes are so this captures the tag characters (<, >) as part of the text content. This means if given the string `a b <c> d e`, this will read that as `"a b <", "c", "> d e"`. The reason I do this is so auxf(function) can tell "b" is not the end of a string and "d" is not the beginning of one, since that affects how the curly quotes are applied. If this isn't desired and you want the tags to be part of the attributes variable, you could modify the while-true like so:
     
@@ -971,7 +975,7 @@ window.addEventListener("load", function() {
     let contentLinks = [];
     interpreter(document.querySelector(".article"), contentLinks);
 
-    /* ---- irisembury.github.io (front page) ---- */
+    /* ---- front page (irisembury.github.io/index.html) ---- */
     if (index) {
         let pdata = pageData.split("\n").filter(
             entry => entry.length > 2
