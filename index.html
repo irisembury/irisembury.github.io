@@ -5,6 +5,8 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
     body { --main-width: 764px; }
+        .article-top { display: none; }
+        .main-container { padding-top: 0; }
         .auto-rows .row { margin-inline: -0.4em; padding: 0.2em 0.4em; border: 1px solid transparent; }
             .auto-rows .row:hover { border-color: var(--grey-a); }
             .auto-rows .row:hover .date { color: inherit; }
@@ -18,9 +20,7 @@
     </style>
 </head>
 <body>
-<div style="margin-top: calc(0px - var(--page-top-pad)) !important;">
-    <div style="background-color:#555; background-image:url(assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg); background-size:cover; background-repeat:no-repeat; background-position:center; aspect-ratio:4 / 1; margin:0 auto; max-height:200px; display:flex; justify-content:center; align-items:center;"><span class="no-select" style="line-height:1; color:#fff; text-shadow:1px 1px 2px #0005; font-size:2.5rem; padding:1rem; letter-spacing:4px; transition:opacity 3s; opacity:0;" id="ief-title">Iris Embury</span></div>
-</div>
+    <div style="background-color:#555; background-image:url(assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg); background-size:cover; background-repeat:no-repeat; background-position:center; aspect-ratio:4 / 1; margin:0 auto; max-height:200px; display:flex; justify-content:center; align-items:center;"><span class="no-select" style="line-height:1; color:#fff; text-shadow:1px 1px 2px #0005; font-size:2.5rem; padding:1rem; letter-spacing:4px; transition:opacity 3s; opacity:0; font-family:Georgia;" id="ief-title">Iris Embury</span></div>
 <script>
 window.addEventListener("load", () => {
     setTimeout(

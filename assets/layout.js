@@ -140,10 +140,10 @@ function updateFonts() {
 
     if (headingFont != defaultHeadingFont) {
         if (headingFont == "Georgia") {
-            styleText += ` --fw-h1: 600; --fw-h2: 600;`
+            styleText += " --fw-h1: 600; --fw-h2: 600;";
             headingFont = "Georgia Pro";
         }
-        styleText += ` --ff-heading: ${ headingFont },sans-serif;`;
+        styleText += " --ff-heading:" + headingFont + ",sans-serif;";
     }
     if (bodyFont == "Georgia") {
         bodyFont = "Georgia Pro Digits, Georgia";
@@ -153,14 +153,23 @@ function updateFonts() {
     }
 
     if (bodyFont != defaultBodyFont) {
-        styleText += ` --ff-article: ${ bodyFont },sans-serif;`;
+        styleText += " --ff-article:" + bodyFont + ",sans-serif;";
     }
     if (tableFont != defaultTableFont) {
-        styleText += ` --ff-table: ${ tableFont },sans-serif;`;
+        styleText += " --ff-table:" + tableFont + ",sans-serif;";
     }
-
     if (styleText != "") {
-        styleText = `body { ${ styleText } }`
+        styleText = "body { " + styleText + " }";
+    }
+    
+    if (bodyFont == "Roboto") {
+        styleText += " .article { --ls-bold-1: -0.1px; } ";
+    }
+    if (tableFont == "Roboto") {
+        styleText += " .article { --ls-bold-2: -0.1px; }";
+    }
+    else {
+        styleText += " .article { --ls-bold-2: -0.3px; }";
     }
     
     document.getElementById("pref-styles").innerHTML = styleText;
@@ -369,7 +378,7 @@ function profileGrid(chunk) {
 }
 
 function autoTable(chunk, tnum) {
-    chunk = chunk.replace(/\n +/g, " ");
+    chunk = chunk.replace(/\n +/g, "<br>");
     const rows = chunk.split("\n");
     let firstRow = rows.shift().substring("!table".length).trim();
     /* make tbody cells */
@@ -378,7 +387,22 @@ function autoTable(chunk, tnum) {
         let cells = rows[r].replaceAll("\\|", "&verbar;").split("|");
         for (let c = 0; c < cells.length; c += 1) {
             let cellNum = c + 1;
-            cells[c] = `<td class="cell col-${ cellNum + " col-" + (cellNum % 2 == 1 ? "odd" : "even") }">${ autoFormat(cells[c].trim()) }</td>`;
+            cells[c] = autoFormat(cells[c].trim()).split("<br>").map(
+                p => {
+                    let t;
+                    if (p == '<blockquote>' || p == '</blockquote>') t=p;
+                    else if (p.startsWith(".")) t= '<p class="fine">' + p.substring(1).trimStart() + '</p>';
+                    else t='<p>' + p + '</p>';
+                    
+                    // if (p == '<blockquote>' || p == '</blockquote>') return p;
+                    // if (p.startsWith(".")) return '<p class="fine">' + p.substring(1).trimStart() + '</p>';
+                    // return '<p>' + p + '</p>';
+                    
+                    console.log(t)
+                    return t
+                }
+            ).join('');
+            cells[c] = `<td class="cell col-${ cellNum + " col-" + (cellNum % 2 == 1 ? "odd" : "even") }">${ cells[c] }</td>`;
         }
         rows[r] = `<tr class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</tr>`;
     }
@@ -457,97 +481,56 @@ function autoIndent(chunk) {
     return `<blockquote>${ autoFormat(lines.join("")) }</blockquote>`;
 }
 
+function pushInnerHTML(node, text) {
+    const n = document.querySelector(node);
+    if (n) {
+        n.insertAdjacentHTML("beforeend", text);
+    }
+}
+
 function parseMeta(chunk) {
-    chunk = chunk.split("\n").slice(1);
-    const articleTop = document.querySelector(".article-top");
-    if (articleTop == null) {
+    const article = document.querySelector(".article");
+    if (article == null) {
         return;
     }
-    const otherSources = [];
+    const mContainer = article.parentNode;
+    const articleTop = mContainer.insertBefore(document.createElement("div"), article);
+    articleTop.classList.add("article-top");
+    articleTop.innerHTML = '<h1 class="article-title --for-toc"></h1><h2 class="article-subtitle"></h2><div class="info-space"></div>';
     
+    chunk = chunk.split("\n").slice(1);
     for (let line of chunk) {
-        const lCol = line.indexOf(":");
-        if (lCol == -1) {
-            continue;
-        }
-        const mKey = line.substring(0, lCol).toLowerCase().trim();
-        const mVal = line.substring(lCol + 1).trim();
+        line = line.split(":", 2); if (line.length != 2) { continue; }
+        const mKey = line[0].trim(), mVal = line[1].trim();
         
-        if (mKey == "title") {
-            const mTitle = mVal.replaceAll("---", "—").replaceAll("--", "–");
-            document.title = mTitle.replaceAll("&amp;", "&");
-            let pageNameDisplay = document.querySelector(".page-name-display");
-            if (pageNameDisplay) {
-                pageNameDisplay.innerHTML = mTitle;
-            }
-            const articleTitle = articleTop.querySelector(".article-title");
-            if (articleTitle == null) {
-                articleTop.insertAdjacentHTML('beforeend', '<h1 class="article-title --for-toc">'+ autoFormat(mVal) +'</h1>')
-            }
-            else {
-                articleTitle.innerHTML = autoFormat(mTitle);
-            }
-        }
-        else if (mKey == "subtitle") {
-            const articleSubtitle = articleTop.querySelector(".article-subtitle")
-            if (articleSubtitle == null) {
-                articleTop.insertAdjacentHTML("beforeend", '<h2 class="article-subtitle">'+ autoFormat(mVal) +'</h2>')
-            }
-            else {
-                articleSubtitle.innerHTML = autoFormat(mVal);
-            }
-        }
-        else if (mKey == "date") {
-            const articleDate = articleTop.querySelector(".article-date")
-            if (articleDate == null) {
-                articleTop.insertAdjacentHTML("beforeend", '<div class="article-date">'+ isoFormat(mVal) +'</div>')
-            }
-            else {
-                articleDate.innerHTML = isoFormat(mVal);
-            }
-        }
-        else if (mKey == "last-updated") {
-            const articleDate = articleTop.querySelector(".article-date")
-            if (articleDate == null) {
-                articleTop.insertAdjacentHTML("beforeend", '<div class="article-date">Last updated: '+ isoFormat(mVal) +'</div>')
-            }
-            else {
-                articleDate.innerHTML = isoFormat(mVal);
-            }
-        }
-        else if (mKey == "see-also") {
-            const addr = mVal.toLowerCase().split("|").map(c => c.trim());
-            if (addr[0] == "tumblr") {
-                otherSources.push(`<a title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/${ addr[1] }"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>read on Tumblr</span></a>`)
-            }
-            else if (addr[0] == "substack") {
-                otherSources.push(`<a title="This was also posted on Substack" href="https://irisembury.substack.com/p/${ addr[1] }"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>read on Substack</span></a>`)
-            }
-        }
-    }
-    
-    if (otherSources.length > 0) {
-        otherSources.sort();
-        const seeAlso = articleTop.querySelector(".article-see-also");
-        if (seeAlso == null) {
-            articleTop.insertAdjacentHTML("beforeend", '<div class="article-see-also">'+ otherSources.join("") +'</div>');
-        }
-        else {
-            seeAlso.innerHTML = otherSources.join("");
-        }
-    }
-    
-    let metaItemsVisible = 0;
-    Array.from(articleTop.children).forEach(
-        c => {
-            c.classList.toggle("hidden", c.innerHTML == "")
-            if (c.innerHTML != "") {
-                metaItemsVisible += 1;
-            }
+        switch (mKey)
+        {
+            case "title":
+                const mTitle = mVal.replaceAll("---", "—").replaceAll("--", "–");
+                document.title = mTitle.replaceAll("&amp;", "&");
+                articleTop.querySelector(".article-title").innerHTML = autoFormat(mVal);
+                break;
             
+            case "subtitle":
+                articleTop.querySelector(".article-subtitle").innerHTML = autoFormat(mVal);
+                break;
+            
+            case "date":
+                articleTop.querySelector(".info-space").insertAdjacentHTML("afterbegin", autoFormat(mVal));
+                break;
+            
+            case "see-also":
+                let addr = mVal.toLowerCase().split("|").map(c => c.trim());
+                if (addr[0] =="tumblr") {
+                    articleTop.querySelector(".info-space").insertAdjacentHTML("beforeend", '<a class="see-also" title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/'+ addr[1] +'"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>read on Tumblr</span></a>');
+                }
+                else if (addr[0] =="substack") {
+                    articleTop.querySelector(".info-space").insertAdjacentHTML("beforeend", '<a class="see-also" title="This was also posted on Substack" href="https://irisembury.substack.com/p/'+ addr[1] +'"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>read on Substack</span></a>');
+                }
+                break;
         }
-    )
-    articleTop.classList.toggle("hidden", metaItemsVisible == 0);
+    }
+    Array.from(articleTop.children).forEach(c => { if (c.innerHTML =="") { c.remove() } });
 }
 
 function isoFormat(datestring) {
@@ -572,19 +555,19 @@ function autoHeading(chunk) {
     return `<h4 id="${ id }" class="auto-heading">${ chunk }</h4>`;
 }
 
-function linkReplace(chunk, lArr) {
+function linkReplace(chunk, externalLinksArray) {
     return chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkAddress) => {
         linkAddress = linkAddress.replaceAll("\\)", ")");
-        let linkIndex = lArr.indexOf(linkAddress);
-        if (linkIndex == -1) {
-            linkIndex = lArr.push(linkAddress);
-        }
         if (linkAddress.startsWith("http")) {
+            let linkIndex = externalLinksArray.indexOf(linkAddress);
+            if (linkIndex == -1) {
+                linkIndex = externalLinksArray.push(linkAddress);
+            }
             if (displayText == "") {
                 return `<a href="${ linkAddress }" class="autoref" title="${ linkAddress }">[${ linkIndex }]</a>`;
             }
             else {
-                return `<a href="${ linkAddress }" title="${ linkAddress }">${ displayText }</a><sup class="inline-link-index no-select">${ linkIndex }</sup>`;
+                return `<a href="${ linkAddress }" title="${ linkAddress }">${ displayText }</a>`;
             }
         }
         /* internal link */
@@ -594,13 +577,12 @@ function linkReplace(chunk, lArr) {
                 return `<a onclick="setLightbox('${ linkAddress }')" class="pseudo-link" title="${ linkAddress.split("/").slice(-1).join("") }">${ displayText }</a>`
             }
             if (displayText == "") {
-                return `<a href="${ linkAddress }" target="_blank" class="autoref">[${ linkIndex }]</a>`;
+                return `<a href="${ linkAddress }" target="_blank" class="autoref">[↗]</a>`;
             }
             else {
-                return `<a href="${ linkAddress }" target="_blank">${ displayText }</a><sup class="inline-link-index no-select">${ linkIndex }</sup>`;
+                return `<a href="${ linkAddress }" target="_blank">${ displayText }</a>`;
             }
         }
-        
     })
 }
 
@@ -700,7 +682,7 @@ function autoFormat(argVal) {
     if (argVal == "") { return argVal; }
     function auxf(str_in) {
         if (str_in == "") return str_in;
-        str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;")
+        str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
         if (str_in.indexOf("'")!=-1||str_in.indexOf('"')!=-1) {
             str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1").replaceAll(/"/g, "&rdquo;")
         }
@@ -803,8 +785,6 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
 
     return output;
 }
-
-const allFonts = "Consolas,Verdana,Cambria,Libre Caslon Text,Arial,Epilogue,Calibri,Lexend,Lora,Times New Roman,Georgia,Inter,Open Sans,Roboto Slab,Roboto,Segoe UI,Trebuchet MS".split(",").map(o => `<option value="${o}">${o}</option>`).sort();
 
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
@@ -957,7 +937,6 @@ window.addEventListener("load", function() {
     <div class="page-grid">
         ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
         <div class="main-container">
-            <div class="article-top hidden"></div>
             <div class="article">
                 ${ document.body.innerHTML }
             </div>
@@ -993,21 +972,24 @@ window.addEventListener("load", function() {
     }
     else {
         /* no citelist for front page */
-        const citeData = contentLinks.map(
-            (x, n) => {
-                return `<tr>
-                    <td>${ n+1 }.</td>
-                    <td><a href="${ x }">${ x }</a></td>
-                </tr>`
-            }
-        ).join("");
-        
-        let citelist = `<div class="footer-back-to-index"><a href="../../index.html">&larr; Back to index (front page)</a></div>
-        <div>
-            <div>Links on this page:</div>
-            <table class="citelist">${ citeData }</table>
-        </div>`;
-        document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
+        if (contentLinks.length > 0) {
+            const citeData = contentLinks.map(
+                (x, n) => {
+                    return `
+                    <tr>
+                        <td>${ n+1 }.</td>
+                        <td><a href="${ x }">${ x }</a></td>
+                    </tr>`
+                }
+            ).join("");
+            
+            let citelist = `
+            <div>
+                <div>Links on this page:</div>
+                <table class="citelist">${ citeData }</table>
+            </div>`;
+            document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
+        }
     }
     const videosIndex = document.getElementById("videos-index");
     if (videosIndex != null) {
@@ -1015,10 +997,7 @@ window.addEventListener("load", function() {
         videosIndex.innerHTML = ytGallery("!yt-gallery sort"+ lnum +" \n" + videoData);
     }
     /* ---- irisembury.github.io/videos ---- */
-    const allVideoIndex = document.getElementById("all-videos-index");
-    if (allVideoIndex != null) {
-        allVideoIndex.innerHTML = ytGallery("!yt-gallery\n" + videoData);
-    }
+    pushInnerHTML("#all-videos-index", ytGallery("!yt-gallery\n" + videoData));
 
     HTML.classList.add("layout");
     Array.from(document.getElementById("fonts").getElementsByTagName("option")).forEach(o => o.style.fontFamily = `"${ o.value }",system-ui` );
@@ -1212,20 +1191,21 @@ window.addEventListener("load", function() {
                 HTML.classList.toggle("include-toc", !this.checked);
                 if (!this.checked) {
                     window.addEventListener("scroll", tocHighlightUpdateAttempt);
-                } else {
+                }
+                else {
                     window.removeEventListener("scroll", tocHighlightUpdateAttempt);
                 }
             });
             
             const toc = document.getElementById("toc");
-            toc.innerHTML = '<div class="toc-title">Table of contents</div>' + headings.map(
+            toc.innerHTML = '<div class="toc-title">This page contents</div>' + headings.map(
                 heading =>
-                    `<div class="toc-row ${heading.tagName.toLowerCase()}"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
+                    `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
             ).join("");
             toc.scrollTo({ behavior: "instant", top: 0 })
             const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
             rowsInToc[0].className = "toc-row";
-            rowsInToc[0].innerHTML = '<a class="pseudo-link" onclick="scrollToTop()">(Top)</a>';
+            rowsInToc[0].innerHTML = '<a href="#" class="pseudo-link" onclick="scrollToTop()">(Top)</a>';
 
             let canTocHighlightUpdate = true;
             function tocHighlightUpdateAttempt() {
