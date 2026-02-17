@@ -874,6 +874,7 @@ window.addEventListener("load", function() {
                                 Libre Caslon Text
                                 Georgia
                                 Roboto
+                                Inter
                                 Roboto Slab
                                 Trebuchet MS
                             `.split("\n").filter(
