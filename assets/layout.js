@@ -127,62 +127,50 @@ function setBrightness(setValue) {
     document.getElementById("brightness-select").value = brightness;
 }
 
-function updateFonts() {
-    let headingFont = localStorage.getItem("headingFont") || defaultHeadingFont;
-    let bodyFont = localStorage.getItem("bodyFont") || defaultBodyFont;
-    let tableFont = localStorage.getItem("tableFont") || defaultTableFont;
+function updateFonts(mEle) {
+    if (mEle != null && mEle instanceof Node) {
+        localStorage.setItem(mEle.id, mEle.value);
+    }
+    let headingFont = localStorage.getItem("heading-font") || "Lora";
+    let bodyFont = localStorage.getItem("body-font") || "Georgia";
+    let tableFont = localStorage.getItem("table-font") || "Roboto";
 
-    document.getElementById("heading-font-select").value = headingFont;
-    document.getElementById("body-font-select").value = bodyFont;
-    document.getElementById("table-font-select").value = tableFont;
+    document.getElementById("heading-font").value = headingFont;
+    document.getElementById("body-font").value = bodyFont;
+    document.getElementById("table-font").value = tableFont;
 
     let styleText = "";
 
-    if (headingFont != defaultHeadingFont) {
+    if (headingFont != "Lora") {
         if (headingFont == "Georgia") {
             styleText += " --fw-h1: 600; --fw-h2: 600;";
             headingFont = "Georgia Pro";
         }
         styleText += " --ff-heading:" + headingFont + ",sans-serif;";
     }
-    if (bodyFont == "Georgia") {
-        bodyFont = "Georgia Pro Digits, Georgia";
-    }
-    if (tableFont == "Georgia") {
-        tableFont = "Georgia Pro Digits, Georgia";
-    }
-
-    if (bodyFont != defaultBodyFont) {
+    
+    if (bodyFont != "Georgia") {
         styleText += " --ff-article:" + bodyFont + ",sans-serif;";
     }
-    if (tableFont != defaultTableFont) {
-        styleText += " --ff-table:" + tableFont + ",sans-serif;";
-    }
-    if (styleText != "") {
-        styleText = "body { " + styleText + " }";
+    
+    if (tableFont != "Roboto") {
+        if (tableFont == "Georgia") {
+            tableFont = "Georgia Pro Digits, Georgia";
+        }
+        styleText += " --ff-table:" + tableFont + ",sans-serif; --ls-bold-2: -0.3px;";
     }
     
-    if (bodyFont == "Roboto") {
-        styleText += " .article { --ls-bold-1: -0.1px; } ";
-    }
-    if (tableFont == "Roboto") {
-        styleText += " .article { --ls-bold-2: -0.1px; }";
-    }
-    else {
-        styleText += " .article { --ls-bold-2: -0.3px; }";
+    if (styleText != "") {
+        styleText = "body { " + styleText + " }";
     }
     
     document.getElementById("pref-styles").innerHTML = styleText;
 }
 
-const defaultHeadingFont = "Lora";
-const defaultBodyFont    = "Georgia";
-const defaultTableFont   = "Roboto";
-
 function menuRestoreDefaults() {
-    localStorage.setItem("headingFont", defaultHeadingFont);
-    localStorage.setItem("bodyFont", defaultBodyFont);
-    localStorage.setItem("tableFont", defaultTableFont);
+    localStorage.setItem("headingFont", "Lora");
+    localStorage.setItem("bodyFont", "Georgia");
+    localStorage.setItem("tableFont", "Roboto");
     updateFonts();
 }
 
@@ -389,17 +377,9 @@ function autoTable(chunk, tnum) {
             let cellNum = c + 1;
             cells[c] = autoFormat(cells[c].trim()).split("<br>").map(
                 p => {
-                    let t;
-                    if (p == '<blockquote>' || p == '</blockquote>') t=p;
-                    else if (p.startsWith(".")) t= '<p class="fine">' + p.substring(1).trimStart() + '</p>';
-                    else t='<p>' + p + '</p>';
-                    
-                    // if (p == '<blockquote>' || p == '</blockquote>') return p;
-                    // if (p.startsWith(".")) return '<p class="fine">' + p.substring(1).trimStart() + '</p>';
-                    // return '<p>' + p + '</p>';
-                    
-                    console.log(t)
-                    return t
+                    if (p == '<blockquote>' || p == '</blockquote>') { return p; }
+                    if (p.startsWith(".")) { return '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
+                    return '<p>' + p + '</p>';
                 }
             ).join('');
             cells[c] = `<td class="cell col-${ cellNum + " col-" + (cellNum % 2 == 1 ? "odd" : "even") }">${ cells[c] }</td>`;
@@ -479,13 +459,6 @@ function autoIndent(chunk) {
         }
     )
     return `<blockquote>${ autoFormat(lines.join("")) }</blockquote>`;
-}
-
-function pushInnerHTML(node, text) {
-    const n = document.querySelector(node);
-    if (n) {
-        n.insertAdjacentHTML("beforeend", text);
-    }
 }
 
 function parseMeta(chunk) {
@@ -786,6 +759,39 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 
+function menuInit(isIndex) {
+    if (!isIndex) {
+        if (localStorage.getItem(window.location.href + "-full-width") == "true") {
+            HTML.classList.add("full-width");
+            document.getElementById("full-width").checked = true;
+        }
+        document.getElementById("full-width").addEventListener("change", function() {
+            HTML.classList.toggle("full-width", this.checked);
+            localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
+        });
+    }
+    setBrightness();
+    
+    Array.from(document.querySelector(".right-panel").getElementsByTagName("input")).filter(m => m.type.toLowerCase()=="checkbox").forEach(
+        c => {
+            if (localStorage.getItem(c.id) == "true") {
+                c.checked = true;
+                HTML.classList.toggle(c.id, c.checked);
+            }
+        }
+    );
+}
+
+function cb_c_toggle(mEle) {
+    if (mEle != null && mEle instanceof Node && mEle.type.toLowerCase() == "checkbox") {
+        localStorage.setItem(mEle.id, mEle.checked);
+        HTML.classList.toggle(mEle.id, mEle.checked);
+    }
+}
+function so_c_toggle(mEle) {
+    
+}
+
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
     const pathToRoot = index ? "" : "../../";
@@ -837,9 +843,9 @@ window.addEventListener("load", function() {
         <table>
             <tbody>
                 <tr>
-                    <td>Theme:</td>
+                    <td class="no-select">Theme:</td>
                     <td>
-                        <select class="menu-select" id="brightness-select">
+                        <select class="menu-select" id="brightness-select" onchange="setBrightness(this.value)">
                             <option value="light">Light</option>
                             <option value="dark">Dark</option>
                         </select>
@@ -850,24 +856,20 @@ window.addEventListener("load", function() {
         <hr>
         <div class="menu-options">
             <div>
-                <label for="page-full-width">Span page width</label>
-                <input type="checkbox" class="menu-checkbox" id="page-full-width">
+                <label for="full-width">Span page width</label>
+                <input type="checkbox" class="menu-checkbox" id="full-width">
             </div>
             <div>
-                <label for="hide-toc-checkbox"${ HTML.classList.contains("include-toc") ?"" :' style="cursor:help" title="This page has no TOC, but you can change the site-wide preference"' }>Hide table of contents</label>
+                <label for="hide-toc-checkbox" ${ HTML.classList.contains("include-toc") ?"" :'style="cursor:help" title="This page has no ToC, but you can change the site-wide preference"' }>Hide table of contents</label>
                 <input type="checkbox" class="menu-checkbox" id="hide-toc-checkbox">
-            </div>
-            <div>
-                <label for="indent-justify-checkbox">Text align justify</label>
-                <input type="checkbox" class="menu-checkbox" id="indent-justify-checkbox">
             </div>
         </div>
         <hr>
         <h3>Fonts override:</h3>
         <table id="fonts">
             <tbody>
-                <tr><td>Headings:</td><td>
-                    <select class="menu-select" id="heading-font-select">
+                <tr><td class="no-select">Headings:</td><td>
+                    <select class="menu-select" id="heading-font" onchange="updateFonts(this)">
                         ${
                             `
                                 Lora
@@ -888,8 +890,8 @@ window.addEventListener("load", function() {
                         }
                     </select>
                 </td></tr>
-                <tr><td>Body:</td><td>
-                    <select class="menu-select" id="body-font-select">
+                <tr><td class="no-select">Body:</td><td>
+                    <select class="menu-select" id="body-font" onchange="updateFonts(this)">
                         ${
                             `
                                 Georgia
@@ -908,8 +910,8 @@ window.addEventListener("load", function() {
                         }
                     </select>
                 </td></tr>
-                <tr><td>Tables:</td><td>
-                    <select class="menu-select" id="table-font-select">
+                <tr><td class="no-select">Tables:</td><td>
+                    <select class="menu-select" id="table-font" onchange="updateFonts(this)">
                         ${
                             `
                                 Arial
@@ -930,6 +932,21 @@ window.addEventListener("load", function() {
             </tbody>
         </table>
         <div class="flex-end align-center"><span style="cursor: pointer; color: var(--grey-8);" onclick="menuRestoreDefaults()" title="restore font defaults">restore defaults</span></div>
+        <hr>
+        <div class="menu-options">
+            <div>
+                <label for="indent-text">Indent paragraphs</label>
+                <input type="checkbox" class="menu-checkbox" id="indent-text" onchange="cb_c_toggle(this)">
+            </div>
+            <div>
+                <label for="justify-text">Text align justify</label>
+                <input type="checkbox" class="menu-checkbox" id="justify-text" onchange="cb_c_toggle(this)">
+            </div>
+            <div>
+                <label for="static-nav">Static (unsticky) top navbar</label>
+                <input type="checkbox" class="menu-checkbox" id="static-nav" onchange="cb_c_toggle(this)">
+            </div>
+        </div>
         <hr>
         <div class="menu-bottom">
             <p>These options are saved in session storage, not cookies, meaning they&rsquo;re cleared automatically when you close your browser.</p>
@@ -992,13 +1009,15 @@ window.addEventListener("load", function() {
             document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
         }
     }
-    const videosIndex = document.getElementById("videos-index");
-    if (videosIndex != null) {
-        let lnum = videosIndex.className.replace(/\D/g,"") || 3;
-        videosIndex.innerHTML = ytGallery("!yt-gallery sort"+ lnum +" \n" + videoData);
+    
+    if (document.getElementById("videos-index") != null) {
+        let lnum = document.getElementById("videos-index").className.replace(/\D/g,"") || 3;
+        document.getElementById("videos-index").innerHTML = ytGallery("!yt-gallery sort"+ lnum +" \n" + videoData);
     }
     /* ---- irisembury.github.io/videos ---- */
-    pushInnerHTML("#all-videos-index", ytGallery("!yt-gallery\n" + videoData));
+    if (document.getElementById("all-videos-index") != null) {
+        document.getElementById("all-videos-index").insertAdjacentHTML("beforeend", ytGallery("!yt-gallery\n" + videoData));
+    }
 
     HTML.classList.add("layout");
     Array.from(document.getElementById("fonts").getElementsByTagName("option")).forEach(o => o.style.fontFamily = `"${ o.value }",system-ui` );
@@ -1083,48 +1102,8 @@ window.addEventListener("load", function() {
     })
 
     /* ---- ---- ---- ---- ---- ---- items inside gear menu ---- ---- ---- ---- ---- ---- */
-
-    setBrightness();
-    document.getElementById("brightness-select").addEventListener("change", function() {
-        setBrightness(this.value);
-    });
     
-    updateFonts();
-    document.getElementById("heading-font-select").addEventListener("change", function() {
-        localStorage.setItem("headingFont", this.value);
-        updateFonts();
-    });
-    document.getElementById("body-font-select").addEventListener("change", function() {
-        localStorage.setItem("bodyFont", this.value);
-        updateFonts();
-    });
-    document.getElementById("table-font-select").addEventListener("change", function() {
-        localStorage.setItem("tableFont", this.value);
-        updateFonts();
-    });
-
-    if (localStorage.getItem("indent-justify") == "true") {
-        HTML.classList.add("indent-justify");
-        document.getElementById("indent-justify-checkbox").checked = true;
-    } else {
-        document.getElementById("indent-justify-checkbox").checked = false;
-    }
-    document.getElementById("indent-justify-checkbox").addEventListener("change", function() {
-        localStorage.setItem("indent-justify", this.checked);
-        HTML.classList.toggle("indent-justify", this.checked);
-    });
-    
-    /* other options are site-wide, this one is page-specific: */
-    if (!index) {
-        if (localStorage.getItem(window.location.href + "-full-width") == "true") {
-            HTML.classList.add("full-width");
-            document.getElementById("page-full-width").checked = true;
-        }
-        document.getElementById("page-full-width").addEventListener("change", function() {
-            HTML.classList.toggle("full-width", this.checked);
-            localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
-        });
-    }
+    menuInit(index);
     
     if (document.title == "") {
         document.title = "Iris Embury";
