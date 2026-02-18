@@ -141,12 +141,12 @@ function updateFonts(mEle) {
 
     let style = [];
     
-    if (headingFont == "Georgia Pro") { style.push("--fw-h1:600;--fw-h2:600;"); }
     if (headingFont != default_heading_font) { style.push("--ff-heading:"+ headingFont +",sans-serif;"); }
     if (bodyFont != default_body_font) { style.push("--ff-article:"+ bodyFont +",sans-serif;"); }
-    if (bodyFont == "Roboto") { style.push("--ls-bold-1:-0.1px;"); }
-    if (tableFont == "Roboto") { style.push("--ls-bold-2:-0.1px;"); }
     if (tableFont != default_table_font) { style.push("--ff-table:"+ tableFont +",sans-serif;"); }
+    
+    if (bodyFont == "Roboto") { style.push("--ls-bold-1:-0.1px;"); }
+    if (tableFont == "Georgia Pro Digits,Georgia") { style.push("--ls-bold-2:-0.3px;"); }
     
     style = style.join('');
     if (style != "") {
@@ -156,7 +156,7 @@ function updateFonts(mEle) {
     document.getElementById("pref-styles").innerHTML = style;
 }
 
-const default_heading_font = "PT Serif";
+const default_heading_font = "Inter";
 const default_body_font = "Georgia Pro Digits,Georgia";
 const default_table_font = "Roboto";
 function resetFonts() {
@@ -514,6 +514,7 @@ function autoHeading(chunk) {
     chunk = chunk.slice(chunk.indexOf(" ") + 1);
     const id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g ,"");
     chunk = autoFormat(chunk);
+    return `<${ tag } id="${ id }" class="auto-heading --for-toc">${ chunk }</${ tag }>`;
     if (tag == "h1" || tag == "h2" || tag == "h3") {
         return `<${ tag } id="${ id }" class="auto-heading --for-toc">${ chunk }</${ tag }>`;
     }
