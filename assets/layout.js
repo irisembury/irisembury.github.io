@@ -1,7 +1,8 @@
 "use strict"
 const HTML = document.documentElement;
 
-const pageData = `A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28
+const pageData = `Abortion | abortion | 2026-02-18
+A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28
 Give yourself credit | give-yourself-credit | 2026-01-23
 Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
 Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30
@@ -94,7 +95,6 @@ function setLightbox(action) {
     if (lightbox == null || lbCaption == null || lbTopLeft == null) {
         return;
     }
-
     /* action is click from <img> object */
     if (action == "close") {
         lightbox.src = "";
@@ -131,46 +131,38 @@ function updateFonts(mEle) {
     if (mEle != null && mEle instanceof Node) {
         localStorage.setItem(mEle.id, mEle.value);
     }
-    let headingFont = localStorage.getItem("heading-font") || "Lora";
-    let bodyFont = localStorage.getItem("body-font") || "Georgia";
-    let tableFont = localStorage.getItem("table-font") || "Roboto";
+    let headingFont = localStorage.getItem("heading-font") || default_heading_font;
+    let bodyFont = localStorage.getItem("body-font") || default_body_font;
+    let tableFont = localStorage.getItem("table-font") || default_table_font;
 
     document.getElementById("heading-font").value = headingFont;
     document.getElementById("body-font").value = bodyFont;
     document.getElementById("table-font").value = tableFont;
 
-    let styleText = "";
-
-    if (headingFont != "Lora") {
-        if (headingFont == "Georgia") {
-            styleText += " --fw-h1: 600; --fw-h2: 600;";
-            headingFont = "Georgia Pro";
-        }
-        styleText += " --ff-heading:" + headingFont + ",sans-serif;";
+    let style = [];
+    
+    if (headingFont == "Georgia Pro") { style.push("--fw-h1:600;--fw-h2:600;"); }
+    if (headingFont != default_heading_font) { style.push("--ff-heading:"+ headingFont +",sans-serif;"); }
+    if (bodyFont != default_body_font) { style.push("--ff-article:"+ bodyFont +",sans-serif;"); }
+    if (bodyFont == "Roboto") { style.push("--ls-bold-1:-0.1px;"); }
+    if (tableFont == "Roboto") { style.push("--ls-bold-2:-0.1px;"); }
+    if (tableFont != default_table_font) { style.push("--ff-table:"+ tableFont +",sans-serif;"); }
+    
+    style = style.join('');
+    if (style != "") {
+        style = "body { " + style + " }";
     }
     
-    if (bodyFont != "Georgia") {
-        styleText += " --ff-article:" + bodyFont + ",sans-serif;";
-    }
-    
-    if (tableFont != "Roboto") {
-        if (tableFont == "Georgia") {
-            tableFont = "Georgia Pro Digits, Georgia";
-        }
-        styleText += " --ff-table:" + tableFont + ",sans-serif; --ls-bold-2: -0.3px;";
-    }
-    
-    if (styleText != "") {
-        styleText = "body { " + styleText + " }";
-    }
-    
-    document.getElementById("pref-styles").innerHTML = styleText;
+    document.getElementById("pref-styles").innerHTML = style;
 }
 
-function menuRestoreDefaults() {
-    localStorage.setItem("headingFont", "Lora");
-    localStorage.setItem("bodyFont", "Georgia");
-    localStorage.setItem("tableFont", "Roboto");
+const default_heading_font = "PT Serif";
+const default_body_font = "Georgia Pro Digits,Georgia";
+const default_table_font = "Roboto";
+function resetFonts() {
+    localStorage.setItem("heading-font", default_heading_font);
+    localStorage.setItem("body-font", default_body_font);
+    localStorage.setItem("table-font", default_table_font);
     updateFonts();
 }
 
@@ -759,37 +751,11 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 
-function menuInit(isIndex) {
-    if (!isIndex) {
-        if (localStorage.getItem(window.location.href + "-full-width") == "true") {
-            HTML.classList.add("full-width");
-            document.getElementById("full-width").checked = true;
-        }
-        document.getElementById("full-width").addEventListener("change", function() {
-            HTML.classList.toggle("full-width", this.checked);
-            localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
-        });
-    }
-    setBrightness();
-    
-    Array.from(document.querySelector(".right-panel").getElementsByTagName("input")).filter(m => m.type.toLowerCase()=="checkbox").forEach(
-        c => {
-            if (localStorage.getItem(c.id) == "true") {
-                c.checked = true;
-                HTML.classList.toggle(c.id, c.checked);
-            }
-        }
-    );
-}
-
 function cb_c_toggle(mEle) {
     if (mEle != null && mEle instanceof Node && mEle.type.toLowerCase() == "checkbox") {
         localStorage.setItem(mEle.id, mEle.checked);
         HTML.classList.toggle(mEle.id, mEle.checked);
     }
-}
-function so_c_toggle(mEle) {
-    
 }
 
 window.addEventListener("load", function() {
@@ -870,68 +836,28 @@ window.addEventListener("load", function() {
             <tbody>
                 <tr><td class="no-select">Headings:</td><td>
                     <select class="menu-select" id="heading-font" onchange="updateFonts(this)">
-                        ${
-                            `
-                                Lora
-                                Libre Caslon Text
-                                Georgia
-                                Roboto
-                                Inter
-                                Roboto Slab
-                                Trebuchet MS
-                            `.split("\n").filter(
-                                o => o.trim().length > 2
-                            ).map(
-                                o => {
-                                    o = o.trim();
-                                    return `<option value="${ o }">${ o }</option>`;
-                                }
-                            ).join("")
-                        }
+                        <option value="Inter">Inter</option>
+                        <option value="Georgia Pro">Georgia</option>
                     </select>
                 </td></tr>
                 <tr><td class="no-select">Body:</td><td>
                     <select class="menu-select" id="body-font" onchange="updateFonts(this)">
-                        ${
-                            `
-                                Georgia
-                                Sitka Text
-                                Roboto
-                                Arial
-                                Segoe UI
-                            `.split("\n").filter(
-                                o => o.trim().length > 2
-                            ).map(
-                                o => {
-                                    o = o.trim();
-                                    return `<option value="${ o }">${ o }</option>`;
-                                }
-                            ).join("")
-                        }
+                        <option value="Georgia Pro Digits,Georgia">Georgia</option>
+                        <option value="PT Serif">PT Serif</option>
+                        <option value="Roboto">Roboto</option>
+                        <option value="Segoe UI">Segoe UI</option>
                     </select>
                 </td></tr>
                 <tr><td class="no-select">Tables:</td><td>
                     <select class="menu-select" id="table-font" onchange="updateFonts(this)">
-                        ${
-                            `
-                                Arial
-                                Open Sans
-                                Roboto
-                                Segoe UI
-                            `.split("\n").filter(
-                                o => o.trim().length > 2
-                            ).map(
-                                o => {
-                                    o = o.trim();
-                                    return `<option value="${ o }">${ o }</option>`;
-                                }
-                            ).join("")
-                        }
+                        <option value="Georgia Pro Digits,Georgia">Georgia</option>
+                        <option value="Roboto">Roboto</option>
+                        <option value="Segoe UI">Segoe UI</option>
                     </select>
                 </td></tr>
             </tbody>
         </table>
-        <div class="flex-end align-center"><span style="cursor: pointer; color: var(--grey-8);" onclick="menuRestoreDefaults()" title="restore font defaults">restore defaults</span></div>
+        <div class="flex-end align-center"><span style="cursor: pointer; color: var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</span></div>
         <hr>
         <div class="menu-options">
             <div>
@@ -943,7 +869,7 @@ window.addEventListener("load", function() {
                 <input type="checkbox" class="menu-checkbox" id="justify-text" onchange="cb_c_toggle(this)">
             </div>
             <div>
-                <label for="static-nav">Static (unsticky) top navbar</label>
+                <label for="static-nav">Static navbar</label>
                 <input type="checkbox" class="menu-checkbox" id="static-nav" onchange="cb_c_toggle(this)">
             </div>
         </div>
@@ -1101,9 +1027,29 @@ window.addEventListener("load", function() {
         }
     })
 
-    /* ---- ---- ---- ---- ---- ---- items inside gear menu ---- ---- ---- ---- ---- ---- */
+    /* ---- ---- ---- ---- ---- ---- menu set-up ---- ---- ---- ---- ---- ---- */
     
-    menuInit(index);
+    setBrightness();
+    updateFonts();
+    
+    Array.from(document.querySelector(".right-panel").getElementsByTagName("input")).filter(m => m.type.toLowerCase()=="checkbox").forEach(
+        c => {
+            if (localStorage.getItem(c.id) == "true") {
+                c.checked = true;
+                HTML.classList.toggle(c.id, c.checked);
+            }
+        }
+    );
+    if (!index) {
+        if (localStorage.getItem(window.location.href + "-full-width") == "true") {
+            HTML.classList.add("full-width");
+            document.getElementById("full-width").checked = true;
+        }
+        document.getElementById("full-width").addEventListener("change", function() {
+            HTML.classList.toggle("full-width", this.checked);
+            localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
+        });
+    }
     
     if (document.title == "") {
         document.title = "Iris Embury";

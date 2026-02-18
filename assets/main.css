@@ -42,8 +42,8 @@
         /* font-family */
         --ff-ui: Segoe UI, Nirmala UI, system-ui, sans-serif;
         --ff-nav: Trebuchet MS, var(--ff-ui);
-        --ff-article: Roboto, sans-serif;
-        --ff-heading: Lora, sans-serif;
+        --ff-heading: PT Serif, sans-serif;
+        --ff-article: Georgia Pro Digits, Georgia, sans-serif;
         --ff-table: Roboto, sans-serif;
         --ff-monospace: Courier Prime, Consolas, monospace;
         --ff-mdash: Ubuntu, Arial, Times, var(--ff-ui);
@@ -54,9 +54,9 @@
         --fs-article-1: 15.4px;
         --fs-article-2: 15px;
         --fs-article-3: 14px;
-        --fs-h1: 1.75em;
-        --fs-h2: 1.5em;
-        --fs-h3: 1.25em;
+        --fs-h1: 1.5em;
+        --fs-h2: 1.35em;
+        --fs-h3: 1.2em;
         --fs-h4: 1em;
         --fs-cite: 0.85em;
         /* line height */
@@ -332,11 +332,11 @@
 
         .article { font-family: var(--ff-article); max-width: var(--main-width); line-height: var(--lh-article-1); font-size: var(--fs-article-1); }
             .article > :first-child { margin-top: 0 !important; }
-            .article .auto-heading { clear: both; color: var(--grey-2); line-height: 1.5; margin-block: 1em 0.75em; }
-            .article h1 { font-size: var(--fs-h1); font-weight: var(--fw-h1); font-family: var(--ff-heading); }
-            .article h2 { font-size: var(--fs-h2); font-weight: var(--fw-h2); font-family: var(--ff-heading); }
-            .article h3 { font-size: var(--fs-h3); font-weight: var(--fw-h3); font-family: var(--ff-heading); }
-            .article h4 { font-size: var(--fs-h4); font-weight: var(--fw-h4); font-family: inherit; letter-spacing: var(--ls-bold-1); }
+            .article .auto-heading { clear: both; color: var(--grey-2); margin-block: 1em 0.75em; }
+            .article h1 { font-size: var(--fs-h1); font-weight: var(--fw-h1); font-family: var(--ff-heading); line-height: 1.3; }
+            .article h2 { font-size: var(--fs-h2); font-weight: var(--fw-h2); font-family: var(--ff-heading); line-height: 1.4; }
+            .article h3 { font-size: var(--fs-h3); font-weight: var(--fw-h3); font-family: var(--ff-heading); line-height: 1.5; }
+            .article h4 { font-size: var(--fs-h4); font-weight: var(--fw-h4); font-family: inherit; letter-spacing: var(--ls-bold-1); line-height: 1.6; }
 
             .article > * { margin-top: 1rem; }
             .article .table-wrapper { text-align: left; }
@@ -392,7 +392,7 @@
                     .codeblock .code-comment * { color: inherit !important; }
                     .codeblock .code-macro * { color: inherit !important; }
 
-            .article > blockquote { font-size: 0.97em; line-height: 1.625; margin-inline: 1px; padding: 0.5em 2em 0.5em 0.75em; border-left: 2px solid var(--blockquote-accent); color: var(--grey-4); margin-left: 0.3em; }
+            .article > blockquote { line-height: 1.625; margin-inline: 1px; padding: 0.5em 2em 0.5em 0.75em; border-left: 2px solid var(--blockquote-accent); color: var(--grey-4); margin-left: 0.3em; }
                 .article > blockquote > :first-child { margin-top: 0; }
                 .article > blockquote > p:nth-child(n+2) { margin-top: 0.5em; }
                 .article > blockquote .attribution { text-align: right; }
@@ -401,7 +401,7 @@
                 .auto-table td { padding: 0.3em 0.4em; vertical-align: top; }
                     .auto-table .cell > :nth-child(n+2) { margin-top: var(--table-p-margin); }
                     .auto-table .cell blockquote > :nth-child(n+2) { margin-top: var(--table-p-margin); }
-                .auto-table blockquote { font-size: 1em; line-height: inherit; padding: 0.3em 0.5em; }
+                .auto-table blockquote { line-height: inherit; padding: 0.3em 0.5em; }
             .auto-rows .row { display: flex; justify-content: space-between; align-items: center; gap: 1em; }
 
             .auto-video { background-color: var(--grey-1); }
