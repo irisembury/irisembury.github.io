@@ -133,36 +133,48 @@ function updateFonts(mEle) {
     }
     let headingFont = localStorage.getItem("heading-font") || default_heading_font;
     let bodyFont = localStorage.getItem("body-font") || default_body_font;
-    let tableFont = localStorage.getItem("table-font") || default_table_font;
+    let auxFont = localStorage.getItem("aux-font") || default_aux_font;
+    let fontSize = localStorage.getItem("font-size") || default_font_size;
 
     document.getElementById("heading-font").value = headingFont;
     document.getElementById("body-font").value = bodyFont;
-    document.getElementById("table-font").value = tableFont;
+    document.getElementById("aux-font").value = auxFont;
+    document.getElementById("font-size").value = fontSize;
 
     let style = [];
     
     if (headingFont != default_heading_font) { style.push("--ff-heading:"+ headingFont +",sans-serif;"); }
+    
     if (bodyFont != default_body_font) { style.push("--ff-article:"+ bodyFont +",sans-serif;"); }
-    if (tableFont != default_table_font) { style.push("--ff-table:"+ tableFont +",sans-serif;"); }
-    
-    if (bodyFont == "Roboto") { style.push("--ls-bold-1:-0.1px;"); }
-    if (tableFont == "Georgia Pro Digits,Georgia") { style.push("--ls-bold-2:-0.3px;"); }
-    
-    style = style.join('');
-    if (style != "") {
-        style = "body { " + style + " }";
+    if (!bodyFont.startsWith("Georgia")) {
+        if (bodyFont =="Roboto") { style.push("--ls-bold-1:-0.1px;") }
+        else if (bodyFont =="Faculty Glyphic") { style.push("--ls-bold-1:0.25px;") }
+        else style.push("--ls-bold-1:0px;");
+        if (bodyFont.startsWith("Times") || bodyFont =="Trebuchet MS") { style.push("--fs-article-1:16.4px;") }
     }
     
-    document.getElementById("pref-styles").innerHTML = style;
+    if (auxFont != default_aux_font) { style.push("--ff-aux:"+ auxFont +",sans-serif;"); }
+    if (auxFont.startsWith("Georgia")) { style.push("--ls-bold-2:-0.3px;"); }
+    else if (auxFont =="Faculty Glyphic") { style.push("--ls-bold-2:0.25px;"); }
+
+    fontSize = Number(fontSize);
+    if (fontSize != default_font_size) {
+        style.push("--fs-article-1:"+ fontSize +"px;");
+        style.push("--fs-article-2:"+ (fontSize-0.4) +"px;");
+        style.push("--fs-article-3:"+ (fontSize-1.4) +"px;");
+    }
+    
+    document.getElementById("nqcpse").innerHTML = (style.length > 0) ?"body {" + style.join('\n') +"}" :"";
 }
 
 const default_heading_font = "Inter";
 const default_body_font = "Georgia Pro Digits,Georgia";
-const default_table_font = "Roboto";
+const default_aux_font = "Roboto";
+const default_font_size = 15.4;
 function resetFonts() {
     localStorage.setItem("heading-font", default_heading_font);
     localStorage.setItem("body-font", default_body_font);
-    localStorage.setItem("table-font", default_table_font);
+    localStorage.setItem("aux-font", default_aux_font);
     updateFonts();
 }
 
@@ -328,81 +340,54 @@ function codeReplace(match, captured) {
     return `<code>${ captured.replaceAll("\"", "&quot;").replaceAll("'", "&apos;").replaceAll("-", "&hyphen;").replaceAll("(", "&lpar;").replaceAll(")", "&rpar;").replaceAll("[", "&lbrack;").replaceAll("]", "&rbrack;").replaceAll("*", "&ast;").replaceAll("\n", "<br>") }</code>`;
 }
 
-function profileGrid(chunk) {
-    let data = chunk.split("\n").slice(1).filter(c => c.length > 3).map(row => {
-        let rowData = row.replaceAll("\\|","&verbar;").split("|").map(c => c.trim());
-        while (rowData.length < 6) { rowData.push(""); }
-        let entryImageUrl    = rowData[0];
-        let entryName        = rowData[1];
-        let entryBirthdate   = rowData[2];
-        let entryTitle       = rowData[3];
-        let entryDescription = rowData[4].split(" - ").map(p => "<div>" + p + "</div>").join("");
-        let entryIcon        = rowData[5];
-
-        return `<div class="grid-entry">
-            <div class="gap-10 align-center">
-                <div>
-                    <img loading="lazy" onclick="setLightbox(this)" class="profile-grid-img" src="${ entryImageUrl }">
-                </div>
-                <div>
-                    <div class="entry-name">${ entryName }${ entryBirthdate == "" ? "" : " <span class=\"entry-age\">| " + ageFromISO(entryBirthdate) + "</span>" }</div>
-                    <div class="entry-title">${ autoFormat(entryTitle) }</div>
-                </div>
-            </div>
-            <div>
-                <div class="entry-description">${ autoFormat(entryDescription) }</div>
-            </div>
-        </div>`;
-    })
-    return `<div class="profile-grid">${ data.join("") }</div>`;
-}
-
-function autoTable(chunk, tnum) {
-    chunk = chunk.replace(/\n +/g, "<br>");
-    const rows = chunk.split("\n");
-    let firstRow = rows.shift().substring("!table".length).trim();
-    /* make tbody cells */
-    for (let r = 0; r < rows.length; r += 1) {
-        let rowNum = r + 1;
-        let cells = rows[r].replaceAll("\\|", "&verbar;").split("|");
-        for (let c = 0; c < cells.length; c += 1) {
-            let cellNum = c + 1;
-            cells[c] = autoFormat(cells[c].trim()).split("<br>").map(
-                p => {
-                    if (p == '<blockquote>' || p == '</blockquote>') { return p; }
-                    if (p.startsWith(".")) { return '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
-                    return '<p>' + p + '</p>';
-                }
-            ).join('');
-            cells[c] = `<td class="cell col-${ cellNum + " col-" + (cellNum % 2 == 1 ? "odd" : "even") }">${ cells[c] }</td>`;
-        }
-        rows[r] = `<tr class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</tr>`;
-    }
-    /* if !table declaration had styling included: */
-    let customTableStyle = "";
+function autoTable(chunk, table_number) {
+    const table = `<div class="table-wrapper"><table class="auto-table auto-table-${ table_number }"><tbody>${
+        chunk.replace(/\n +/g, "<br>").split("\n").slice(1).map(
+            (row, row_index) => {
+                return `<tr class="row row-${ (row_index + 1) + " row-" + (row_index % 2 ?"even" :"odd") }">${
+                    row.replaceAll("\\|", "&verbar;").split("|").map(
+                        (cell, cell_index) => {
+                            return `<td class="cell col-${ cell_index + 1 } col-${ cell_index % 2 ?"even" :"odd" }">${
+                                cell.split("<br>").map(
+                                    p => {
+                                        p = p.trim();
+                                        if (p == "---") { p = '<hr>'; }
+                                        else if (p.startsWith(".")) { p = '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
+                                        else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
+                                        else p = '<p>' + p + '</p>';
+                                        return autoFormat(p);
+                                    }
+                                ).join('')
+                            }</td>`
+                        }
+                    ).join('')
+                }</tr>`
+            }
+        ).join('')
+    }</tbody></table></div>`
+    
+    const firstRow = chunk.substring("!table".length, chunk.indexOf("\n")).trim();
     if (firstRow.replace(/\s/g, "").length > 1) {
-        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-table-" + tnum).replace(/;/g, " !important;") }</style>`;
+        return table + `<style>${ firstRow.replace(/this/g, ".auto-table-" + table_number).replace(/;/g, " !important;") }</style>`;
     }
-    let table = `${ customTableStyle }<div class="table-wrapper"><table class="auto-table auto-table-${ tnum }"><tbody>${ rows.join("") }</tbody></table></div>`;
     return table;
 }
+/*
+    above (autoTable): The even and odd is 'backwards' because row_index/cell_index are converting from being 0-indexed to being 1-indexed (rows[0] is the 1st row, rows[1] is the 2nd row, etc.)
+*/
 
 function autoRows(chunk, tnum) {
     let rows = chunk.split("\n");
     let firstRow = rows.shift().substring("!rows".length).trim();
     /* make tbody cells */
-    let colWidth = 1;
-    for (let r = 0; r < rows.length; r += 1) {
-        let rowNum = r + 1;
-        let cells = rows[r].replaceAll("\\|", "&verbar;").split("|");
-        for (let c = 0; c < cells.length; c += 1) {
-            let cellNum = c + 1;
-            cells[c] = `<div class="cell col-${ cellNum + " col-" + ((cellNum % 2 == 1) ? "odd" : "even") }">${ autoFormat(cells[c].trim()) }</div>`;
-            if (c + 1 > colWidth) {
-                colWidth = c + 1;
-            }
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
+        let rowNum = rowIndex + 1;
+        let cells = rows[rowIndex].replaceAll("\\|", "&verbar;").split("|");
+        for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 1) {
+            let cellNum = cellIndex + 1;
+            cells[cellIndex] = `<div class="cell col-${ cellNum + " col-" + (cellNum % 2 ? "odd" : "even") }">${ autoFormat(cells[cellIndex].trim()) }</div>`;
         }
-        rows[r] = `<div class="row row-${ rowNum + " row-" + ((rowNum % 2 == 1) ? "odd" : "even") }">${ cells.join("") }</div>`;
+        rows[rowIndex] = `<div class="row row-${ rowNum + " row-" + (rowNum % 2 ? "odd" : "even") }">${ cells.join("") }</div>`;
     }
     /* if !rows declaration had styling included (same as !table logic): */
     let customTableStyle = "";
@@ -515,10 +500,6 @@ function autoHeading(chunk) {
     const id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g ,"");
     chunk = autoFormat(chunk);
     return `<${ tag } id="${ id }" class="auto-heading --for-toc">${ chunk }</${ tag }>`;
-    if (tag == "h1" || tag == "h2" || tag == "h3") {
-        return `<${ tag } id="${ id }" class="auto-heading --for-toc">${ chunk }</${ tag }>`;
-    }
-    return `<h4 id="${ id }" class="auto-heading">${ chunk }</h4>`;
 }
 
 function linkReplace(chunk, externalLinksArray) {
@@ -582,7 +563,7 @@ function interpreter(argValue, linksArr) {
             chunk = chunk.replaceAll("\\`", "&#96;");
             if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
             chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-            if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.indexOf("\n")) }</div>`; }
+            if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
             
             let isFine = chunk.startsWith(".");
             if (isFine) chunk = chunk.slice(1).trimStart();
@@ -668,7 +649,7 @@ function autoFormat(argVal) {
 }
 
 /*
-    Regarding the above logic (autoFormat): The substring values I use to define the text content and attributes are so this captures the tag characters (<, >) as part of the text content. This means if given the string `a b <c> d e`, this will read that as `"a b <", "c", "> d e"`. The reason I do this is so auxf(function) can tell "b" is not the end of a string and "d" is not the beginning of one, since that affects how the curly quotes are applied. If this isn't desired and you want the tags to be part of the attributes variable, you could modify the while-true like so:
+    above (autoFormat): The substring values I use to define the text content and attributes are so this captures the tag characters (<, >) as part of the text content. This means if given the string `a b <c> d e`, this will read that as `"a b <", "c", "> d e"`. The reason I do this is so auxf(function) can tell "b" is not the end of a string and "d" is not the beginning of one, since that affects how the curly quotes are applied. If this isn't desired and you want the tags to be part of the attributes variable, you could modify the while-true like so:
     
     while (true) {
         const openTag = argVal.indexOf("<");
@@ -806,78 +787,20 @@ window.addEventListener("load", function() {
     </nav>
     <div class="screen"></div>
     <div class="right-panel closed">
-        <h3>Display preferences:</h3>
-        <table>
-            <tbody>
-                <tr>
-                    <td class="no-select">Theme:</td>
-                    <td>
-                        <select class="menu-select" id="brightness-select" onchange="setBrightness(this.value)">
-                            <option value="light">Light</option>
-                            <option value="dark">Dark</option>
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <hr>
-        <div class="menu-options">
-            <div>
-                <label for="full-width">Span page width</label>
-                <input type="checkbox" class="menu-checkbox" id="full-width">
-            </div>
-            <div>
-                <label for="hide-toc-checkbox" ${ HTML.classList.contains("include-toc") ?"" :'style="cursor:help" title="This page has no ToC, but you can change the site-wide preference"' }>Hide table of contents</label>
-                <input type="checkbox" class="menu-checkbox" id="hide-toc-checkbox">
-            </div>
-        </div>
-        <hr>
-        <h3>Fonts override:</h3>
-        <table id="fonts">
-            <tbody>
-                <tr><td class="no-select">Headings:</td><td>
-                    <select class="menu-select" id="heading-font" onchange="updateFonts(this)">
-                        <option value="Inter">Inter</option>
-                        <option value="Georgia Pro">Georgia</option>
-                    </select>
-                </td></tr>
-                <tr><td class="no-select">Body:</td><td>
-                    <select class="menu-select" id="body-font" onchange="updateFonts(this)">
-                        <option value="Georgia Pro Digits,Georgia">Georgia</option>
-                        <option value="PT Serif">PT Serif</option>
-                        <option value="Roboto">Roboto</option>
-                        <option value="Segoe UI">Segoe UI</option>
-                    </select>
-                </td></tr>
-                <tr><td class="no-select">Tables:</td><td>
-                    <select class="menu-select" id="table-font" onchange="updateFonts(this)">
-                        <option value="Georgia Pro Digits,Georgia">Georgia</option>
-                        <option value="Roboto">Roboto</option>
-                        <option value="Segoe UI">Segoe UI</option>
-                    </select>
-                </td></tr>
-            </tbody>
-        </table>
-        <div class="flex-end align-center"><span style="cursor: pointer; color: var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</span></div>
-        <hr>
-        <div class="menu-options">
-            <div>
-                <label for="indent-text">Indent paragraphs</label>
-                <input type="checkbox" class="menu-checkbox" id="indent-text" onchange="cb_c_toggle(this)">
-            </div>
-            <div>
-                <label for="justify-text">Text align justify</label>
-                <input type="checkbox" class="menu-checkbox" id="justify-text" onchange="cb_c_toggle(this)">
-            </div>
-            <div>
-                <label for="static-nav">Static navbar</label>
-                <input type="checkbox" class="menu-checkbox" id="static-nav" onchange="cb_c_toggle(this)">
-            </div>
-        </div>
-        <hr>
-        <div class="menu-bottom">
-            <p>These options are saved in session storage, not cookies, meaning they&rsquo;re cleared automatically when you close your browser.</p>
-        </div>
+        <div><div><b>Display preferences:</b></div></div>
+        <div><div>Theme:</div><select class="drop-select" id="brightness-select" onchange="setBrightness(this.value)"><option value="light">Light</option><option value="dark">Dark</option></select></div>
+        <div class="right-side"><label for="full-width">Full page width</label><input type="checkbox" class="checkswitch" id="full-width"></div>
+        <div class="right-side"><label for="hide-toc">Hide table of contents</label><input type="checkbox" class="checkswitch" id="hide-toc"></div>
+        <div><div><b>Fonts override:</b></div></div>
+        <div><div>Headings:</div><div><select class="drop-select font-options" id="heading-font" onchange="updateFonts(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Body:</div><div><select class="drop-select font-options" id="body-font" onchange="updateFonts(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Auxiliary:</div><div><select class="drop-select font-options" id="aux-font" onchange="updateFonts(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div class="right-side"><div style="cursor: pointer; color: var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</div></div>
+        <div><div>Font size:</div><div><select class="drop-select" id="font-size" onchange="updateFonts(this)"><option value="15">15px</option><option value="15.4">15.4px</option><option value="16">16px</option><option value="17">17px</option><option value="18">18px</option><option value="20">20px</option></select></div></div>
+        <div class="right-side"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="checkswitch" id="indent-text" onchange="cb_c_toggle(this)"></div>
+        <div class="right-side"><label for="justify-text">Text align justify</label><input type="checkbox" class="checkswitch" id="justify-text" onchange="cb_c_toggle(this)"></div>
+        <div class="right-side"><label for="static-nav">Un-sticky top navbar</label><input type="checkbox" class="checkswitch" id="static-nav" onchange="cb_c_toggle(this)"></div>
+        <div style="line-height:1.5; padding-top:0.5em; color:var(--grey-7);">If you change anything here, it's saved in session storage, not cookies, meaning it's all deleted automatically after you close your browser.</div>
     </div>
     <div class="page-grid">
         ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
@@ -894,7 +817,7 @@ window.addEventListener("load", function() {
         <div class="lb-wrapper"><img class="lightbox"></div>
         <div class="lb-bottom-panel"><div class="lb-caption"></div></div>
     </div>
-    <style id="pref-styles"></style>`;
+    <style id="nqcpse"></style>`;
 
     let contentLinks = [];
     interpreter(document.querySelector(".article"), contentLinks);
@@ -947,7 +870,7 @@ window.addEventListener("load", function() {
     }
 
     HTML.classList.add("layout");
-    Array.from(document.getElementById("fonts").getElementsByTagName("option")).forEach(o => o.style.fontFamily = `"${ o.value }",system-ui` );
+    Array.from(document.getElementsByClassName("font-options")).forEach(o => o.style.fontFamily = `"${ o.value }",system-ui` );
 
     document.querySelector(".lb-wrapper").addEventListener("click", () => {
         setLightbox("close")
@@ -1029,10 +952,8 @@ window.addEventListener("load", function() {
     })
 
     /* ---- ---- ---- ---- ---- ---- menu set-up ---- ---- ---- ---- ---- ---- */
-    
     setBrightness();
     updateFonts();
-    
     Array.from(document.querySelector(".right-panel").getElementsByTagName("input")).filter(m => m.type.toLowerCase()=="checkbox").forEach(
         c => {
             if (localStorage.getItem(c.id) == "true") {
@@ -1110,7 +1031,7 @@ window.addEventListener("load", function() {
     if (HTML.classList.contains("include-toc")) {
         const headings = Array.from(document.getElementsByClassName("--for-toc"));
         if (headings.length > 0) {
-            const hideTocCheckbox = document.getElementById("hide-toc-checkbox");
+            const hideTocCheckbox = document.getElementById("hide-toc");
             if (!hideTocCheckbox.checked) {
                 window.addEventListener("scroll", tocHighlightUpdateAttempt)
             }
