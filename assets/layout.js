@@ -127,7 +127,7 @@ function setBrightness(setValue) {
     document.getElementById("brightness-select").value = brightness;
 }
 
-function updateFonts(mEle) {
+function updateCSS(mEle) {
     if (mEle != null && mEle instanceof Node) {
         localStorage.setItem(mEle.id, mEle.value);
     }
@@ -157,11 +157,10 @@ function updateFonts(mEle) {
     if (auxFont.startsWith("Georgia")) { style.push("--ls-bold-2:-0.3px;"); }
     else if (auxFont =="Faculty Glyphic") { style.push("--ls-bold-2:0.25px;"); }
 
-    fontSize = Number(fontSize);
     if (fontSize != default_font_size) {
-        style.push("--fs-article-1:"+ fontSize +"px;");
-        style.push("--fs-article-2:"+ (fontSize-0.4) +"px;");
-        style.push("--fs-article-3:"+ (fontSize-1.4) +"px;");
+        fontSize = fontSize.split(",");
+        console.log(fontSize)
+        style.push("--fs-article-1:" + fontSize[0] + "; --fs-article-2:" + fontSize[1] + "; --fs-article-3:" + fontSize[2] + "; ");
     }
     
     document.getElementById("nqcpse").innerHTML = (style.length > 0) ?"body {" + style.join('\n') +"}" :"";
@@ -170,12 +169,12 @@ function updateFonts(mEle) {
 const default_heading_font = "Inter";
 const default_body_font = "Georgia Pro Digits,Georgia";
 const default_aux_font = "Roboto";
-const default_font_size = 15.4;
+const default_font_size = "15.4px,15px,14px";
 function resetFonts() {
     localStorage.setItem("heading-font", default_heading_font);
     localStorage.setItem("body-font", default_body_font);
     localStorage.setItem("aux-font", default_aux_font);
-    updateFonts();
+    updateCSS();
 }
 
 function imageFloat(chunk, direction) {
@@ -792,11 +791,11 @@ window.addEventListener("load", function() {
         <div class="right-side"><label for="full-width">Full page width</label><input type="checkbox" class="checkswitch" id="full-width"></div>
         <div class="right-side"><label for="hide-toc">Hide table of contents</label><input type="checkbox" class="checkswitch" id="hide-toc"></div>
         <div><div><b>Fonts override:</b></div></div>
-        <div><div>Headings:</div><div><select class="drop-select font-options" id="heading-font" onchange="updateFonts(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
-        <div><div>Body:</div><div><select class="drop-select font-options" id="body-font" onchange="updateFonts(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
-        <div><div>Auxiliary:</div><div><select class="drop-select font-options" id="aux-font" onchange="updateFonts(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Headings:</div><div><select class="drop-select font-options" id="heading-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Body:</div><div><select class="drop-select font-options" id="body-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Auxiliary:</div><div><select class="drop-select font-options" id="aux-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
         <div class="right-side"><div style="cursor: pointer; color: var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</div></div>
-        <div><div>Font size:</div><div><select class="drop-select" id="font-size" onchange="updateFonts(this)"><option value="15">15px</option><option value="15.4">15.4px</option><option value="16">16px</option><option value="17">17px</option><option value="18">18px</option><option value="20">20px</option></select></div></div>
+        <div><div>Font size:</div><div><select class="drop-select" id="font-size" onchange="updateCSS(this)"><option value="15px,15px,14px">15px</option><option value="15.4px,15px,14px">15.4px</option><option value="16px,15px,14px">16px</option><option value="17px,15.4px,14.4px">17px</option><option value="18px,16px,15px">18px</option><option value="20px,18px,16px">20px</option></select></div></div>
         <div class="right-side"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="checkswitch" id="indent-text" onchange="cb_c_toggle(this)"></div>
         <div class="right-side"><label for="justify-text">Text align justify</label><input type="checkbox" class="checkswitch" id="justify-text" onchange="cb_c_toggle(this)"></div>
         <div class="right-side"><label for="static-nav">Un-sticky top navbar</label><input type="checkbox" class="checkswitch" id="static-nav" onchange="cb_c_toggle(this)"></div>
@@ -953,7 +952,7 @@ window.addEventListener("load", function() {
 
     /* ---- ---- ---- ---- ---- ---- menu set-up ---- ---- ---- ---- ---- ---- */
     setBrightness();
-    updateFonts();
+    updateCSS();
     Array.from(document.querySelector(".right-panel").getElementsByTagName("input")).filter(m => m.type.toLowerCase()=="checkbox").forEach(
         c => {
             if (localStorage.getItem(c.id) == "true") {
