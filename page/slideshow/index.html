@@ -33,9 +33,9 @@
         --selection-bg: #364f5e !important;
     }
     
-    .article * { transition: transform 0.8s; }
+    .article * { transition: opacity 0.4s, transform 0.7s; font-family: Lexend,Open Sans,Roboto,sans-serif !important; }
     body { overflow-x: hidden; }
-    .hidden-item { transform: translate(100vw); pointer-events: none; }
+    .hidden-item { opacity: 0; transform: translate(100vw); pointer-events: none; }
     
     .article { font-weight: 300; }
     .mdash { font-weight: 600; }
@@ -70,7 +70,7 @@
     
     .auto-list { margin-top: 0 !important; }
     
-    #navbar .hamburger + .gap-5::after { content: "This page is a slideshow. Press F to go foward, D to go back."; display:block; color:var(--grey-5) !important; padding: 0.1em 0.5em; font-size: 14px; }
+    .page-grid::before { content: "This page is a slideshow. Press F to go foward, D to go back."; display:block; color:var(--grey-5) !important; font-family: sans-serif; padding: 0.1em 0.5em; font-size: 2rem; transition: opacity 1s; transition-delay: 1s; opacity: 1; text-align: center; }
     
     .captioned-gallery img { max-width: calc(0.23 * var(--main-width)); }
     
@@ -80,9 +80,9 @@
 
 # Abortion
 
-- this is arguing **in favour of** abortion (with no limits)
+- This is arguing **in favour of** abortion (with no limits)
     - If you're anti-abortion, I try to make a persuasive case for you to consider
-    - If you're also pro-abortion, perhaps I can help improve or clarify your arguments
+    - If you're also pro-abortion, perhaps this can help improve or clarify your arguments
     - I'll also mention what pro-abortion arguments I think are bad
 
 ---
@@ -104,7 +104,7 @@ For **abortion**, imagine
 
 **Should he forcibly stop this abortion from taking place?**
 
-!image-span x
+!image-span 500 nolazy
 media/d1.png
 
 I say **no**---it would be <span class="red">immoral</span> to <span class="red">stop an abortion</span> from taking place. **Abortion should always be legal**.
@@ -144,10 +144,10 @@ If you think abortion is **bad** but don't want it to be **illegal**, that's fin
 
 ## Terms clarifications
 
-!image-span x
+!image-span 500 nolazy
 media/c2.png
 
-!image-span x
+!image-span 500 nolazy
 media/c3.png
 
 - "pro-life" = **anti-abortion**
@@ -190,7 +190,7 @@ media/fetus.png | Fetus
 ---
 
 - The term "fetus" is also not meant to minimize or trivialize
-- "clump of cells"
+    - "clump of cells"
 - many anti-abortion people call all prenatal life a baby
     - this is less precise (could mean babies that have been born)
     - fetus specifies pre-natal
@@ -630,17 +630,16 @@ So for example, people say:
         - This just makes you sound like you want to kill poor people
 
 
-
-
-
-
-
-
 <script src="../../assets/layout.js"></script>
 <script>
 
 /* Make this page into a slideshow: */
 window.addEventListener("load", function() {
+    setTimeout(
+        () => {
+            document.head.insertAdjacentHTML("beforeend","<style>.page-grid::before { opacity:0; }</style>")
+        }, 50
+    );
     function hide(qstr) {
         Array.from(document.querySelectorAll(qstr)).forEach(
             i => i.classList.add("hidden-item")
@@ -650,24 +649,32 @@ window.addEventListener("load", function() {
     
     const pageElements = Array.from(document.querySelector(".article").getElementsByClassName("hidden-item"));
     let n = 0;
+    function revealNext() {
+        if (n < pageElements.length) {
+            let ele = pageElements[n++];
+            ele.classList.remove("hidden-item");
+            
+            if (ele.getBoundingClientRect().bottom + (0.3 * window.innerHeight) > window.innerHeight) {
+                window.scrollTo({
+                    top: ele.offsetTop - (0.3 * window.innerHeight),
+                    behavior: "smooth"
+                })
+            }
+        }
+    }
     function keyControl(e) {
         if (n < pageElements.length) {
             if (e.keyCode == 70) {
-                pageElements[n++].classList.remove("hidden-item");
+                revealNext();
             }
             else if (e.keyCode == 68) {
                 pageElements[--n].classList.add("hidden-item");
             }
         }
     }
-    function revealNext() {
-        if (n < pageElements.length) {
-            pageElements[n++].classList.remove("hidden-item");
-        }
-    }
     
     window.addEventListener("keydown", keyControl);
-    // setInterval(revealNext, 2000);
+    
 })
 
 </script>

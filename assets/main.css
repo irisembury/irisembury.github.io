@@ -150,7 +150,7 @@
         --grey-f: hsl(220, 1%, 20%);
         --c-white: hsl(220, 1%, 15%);
         --blockquote-accent: #5c6f8e;
-        --link-color: #6095c3;
+        --link-color: #7b8fb5;
         --c-mark: #feb2;
         --selection-color: #a4a4a4;
         --selection-bg: #4c4f5b;
@@ -226,8 +226,8 @@
     .flat-button:active { outline: 1px solid var(--link-color); }
 
     /* JavaScript adds .layout class to document element */
-    html:not(.layout) { font-family: monospace; }
-        html:not(.layout) body { margin: 2em 3em; white-space: pre-wrap; line-height: 1.3; }
+    html:not(.layout) {  }
+        html:not(.layout) body { font-family: monospace; margin: 2em 3em; white-space: pre-wrap; line-height: 1.3; }
             html:not(.layout) #navbar { display: none; }
 
     html.layout { font-size: 14px; scroll-padding-top: calc(var(--nav-height) + 30px); color: var(--grey-3); scrollbar-color: var(--grey-a) var(--grey-f); background-color: var(--page-bg); padding: 0; min-width: 350px; min-height: 100vh; line-height: 1.4; font-family: Segoe UI, Nirmala UI, system-ui, sans-serif; }

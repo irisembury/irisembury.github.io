@@ -178,86 +178,78 @@ function resetFonts() {
 }
 
 function imageFloat(chunk, direction) {
-    /* imgUrl | caption | alt-text/title */
-    const lines = chunk.split("\n").slice(1).map( line => {
-        const parts = line.split("|");
-        while (parts.length < 3) {
-            parts.push("");
+    const rows = chunk.split("\n");
+        let firstRow = rows.shift(); firstRow = firstRow.substring(firstRow.indexOf(" "));
+        const lazy = !firstRow.includes("nolazy");
+        const maxHeight = firstRow.replace(/\D/g, "");
+    
+    return `<div class="image-float">${ rows.map(
+        row => {
+            const parts = row.split("|");
+            while (parts.length < 3) { parts.push(""); }
+            let figCaption = autoFormat(parts[1].trim());
+            let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
+            if (figCaption && !altText) { altText = figCaption }
+            if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
+            return `<figure><img ${ lazy ?'load="lazy"' :""} onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
         }
-        const imgUrl = parts[0].trim();
-        let figCaption = autoFormat(parts[1].trim());
-        let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
-        if (figCaption && !altText) { altText = figCaption }
-        if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
-        
-        return `<figure><img loading="lazy" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
-    });
-    return `<div class="image-float ${direction}">${ lines.join("") }</div>`;
+    ).join('') }</div>`;
 }
 
 function imageSpan(chunk) {
-    /* !image-span maxHeight */
-    /* imgUrl | alt-text/title */
     const rows = chunk.split("\n");
-    let homeRow = rows.shift().substring("!image-span".length).trim();
-    const galleryFigures = rows.map( line => {
-        const parts = line.split("|");
-        while (parts.length < 2) {
-            parts.push("");
+        let firstRow = rows.shift(); firstRow = firstRow.substring(firstRow.indexOf(" "));
+        const lazy = !firstRow.includes("nolazy");
+        const maxHeight = firstRow.replace(/\D/g, "");
+    
+    return `<div class="image-span">${ rows.map(
+        row => {
+            const parts = row.split("|");
+            while (parts.length < 3) { parts.push(""); }
+            let imgUrl = parts[0].trim();
+            let altText = autoFormat(parts[1].trim().replace(/"/g,"&quot;"));
+            return `<div><img ${ lazy ?'load="lazy"' :""} style="max-height: ${ maxHeight || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
         }
-        let imgUrl = parts[0].trim();
-        let altText = autoFormat(parts[1].trim().replace(/"/g,"&quot;"));
-        return `<div><img loading="lazy" style="max-height: ${homeRow || 300}px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
-    });
-    return `<div class="image-span">${ galleryFigures.join("") }</div>`;
+    ).join('') }</div>`;
 }
 
 function gallery(chunk) {
-    /* !image-span maxHeight */
-    /* imgUrl | caption | alt-text/title */
     const rows = chunk.split("\n");
-    let homeRow = rows.shift().substring("!gallery".length).trim();
-    let galleryFigures = rows.map( line => {
-        const parts = line.split("|");
-        while (parts.length < 3) {
-            parts.push("");
+        let firstRow = rows.shift(); firstRow = firstRow.substring(firstRow.indexOf(" "));
+        const lazy = !firstRow.includes("nolazy");
+        const maxHeight = firstRow.replace(/\D/g, "");
+    
+    return `<div class="captioned-gallery">${ rows.map(
+        row => {
+            const parts = row.split("|");
+            while (parts.length < 3) {
+                parts.push("");
+            }
+            let imgUrl = parts[0].trim();
+            let caption = autoFormat(parts[1].trim());
+            let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
+            return `<figure><img ${ lazy ?'load="lazy"' :""} style="max-height: ${ maxHeight || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"><figcaption>${ caption }</figcaption></figure>`;
         }
-        let imgUrl = parts[0].trim();
-        let caption = autoFormat(parts[1].trim());
-        let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
-        return `
-        <figure>
-            <img loading="lazy" style="max-height: ${ homeRow || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }">
-            <figcaption>${ caption }</figcaption>
-        </figure>
-        `;
-    });
-    return `<div class="captioned-gallery">${ galleryFigures.join("") }</div>`;
+    ).join('') }</div>`;
 }
 
 function squareGallery(chunk) {
-    /* !square-gallery gridHeight */
-    /* imgUrl | caption | hover text (alt/title) */
     const rows = chunk.split("\n");
-    let homeRow = rows.shift().substring("!image-span".length).trim();
-    const lines = chunk.split("\n").slice(1).map( line => {
-        const parts = line.split("|");
-        while (parts.length < 3) {
-            parts.push("");
+        let firstRow = rows.shift(); firstRow = firstRow.substring(firstRow.indexOf(" "));
+        const lazy = !firstRow.includes("nolazy");
+        const maxHeight = firstRow.replace(/\D/g, "");
+    
+    return `<div class="square-gallery">${ rows.map(
+        row => {
+            const parts = row.split("|");
+            while (parts.length < 3) { parts.push(""); }
+            let caption = autoFormat(parts[1].trim());
+            let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
+            if (!altText) { altText = caption; }
+            if (caption) { caption = `<figcaption>${ caption }</figcaption>`; }
+            return `<figure><div class="img-wrapper"><img loading="lazy" onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
         }
-        const imgUrl = parts[0].trim();
-        let caption = autoFormat(parts[1].trim());
-        let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
-        if (!altText) {
-            altText = caption;
-        }
-        if (caption) {
-            caption = `<figcaption>${ caption }</figcaption>`;
-        }
-        
-        return `<figure><div class="img-wrapper"><img loading="lazy" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
-    });
-    return `<div class="square-gallery">${ lines.join("") }</div>`;
+    ).join('') }</div>`;
 }
 
 function autoVideo(chunk) {
@@ -1083,6 +1075,7 @@ window.addEventListener("load", function() {
                             row.classList.add("active-heading");
                             let rRect = row.getBoundingClientRect();
                             let tRect = toc.getBoundingClientRect();
+                            
                             if (rRect.bottom + 20 > tRect.bottom) {
                                 toc.scrollTo(
                                     { top: row.offsetTop + row.offsetHeight - toc.clientHeight + 20, behavior: "smooth" }
