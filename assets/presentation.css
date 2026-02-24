@@ -1,0 +1,73 @@
+
+
+    html {
+        --main-width: 800px !important;
+        --page-bg: #fff !important;
+        --article-bg: #fff !important;
+        --theme-red: #bb4e4e;
+        --theme-green: #498e61;
+        --fs-article-1: 24px !important;
+        --fs-article-2: 18px !important;
+        --fs-article-3: 16px !important;
+        --selection-bg: #fbd1cd !important;
+        --selection-color: unset !important;
+        
+        --lh-article-1: 1.55 !important;
+        --lh-article-2: 1.45 !important;
+    }
+    html.layout.dark {
+        --page-bg: #171f26 !important;
+        --article-bg: #171f26 !important;
+        --theme-red: #f07174;
+        --theme-green: #6f9d74;
+        --grey-2: hsl(220, 5%, 100%);
+        --grey-3: hsl(220, 4%, 90%);
+        --grey-4: hsl(220, 3%, 90%);
+        --grey-5: hsl(220, 3%, 90%);
+        --grey-6: hsl(220, 3%, 90%);
+        --grey-7: hsl(220, 3%, 90%);
+        --selection-bg: #364f5e !important;
+    }
+    
+    .article * { font-family: Lexend,Open Sans,Roboto,sans-serif !important; }
+    body { overflow-x: hidden; }
+    .article :not(.hidden-item) { transition: transform 0.7s; }
+    .hidden-item { transform: translate(100vw); pointer-events: none; }
+    
+    .article { font-weight: 300; }
+    .mdash { font-weight: 600; }
+    .dark .article { font-weight: 250; }
+    .article i { margin-right: 0.15em; }
+    
+    .navbar, .right-panel { background-color: transparent; }
+    .navbar { opacity: 0; }
+    .navbar:hover { opacity: 1; }
+    .right-panel { border: 1px solid var(--grey-c) !important; }
+    
+    .captioned-gallery, .image-span { margin-bottom: 1.5em; }
+    .image-span, .captioned-gallery { overflow: visible !important; }
+    
+    .article b { font-weight: 550; }
+    .article .green { color: var(--theme-green); font-weight: 400; }
+    .article .red { color: var(--theme-red); font-weight: 400; }
+    
+    .article h1 { font-size: 2.25em; }
+    .article h2 { font-size: 1.35em; }
+    .article h3 { font-size: 1.1em; }
+    .auto-list > ul { padding-left: 2em !important; }
+    .auto-list li { line-height: var(--lh-article-2); }
+    .auto-list ol + li, .auto-list ul + li { margin-top: 1em; }
+    
+    ul ul { list-style-type: none; }
+    ul ul li::before { content: "⤷ "; color: var(--c-red); position: absolute; margin-left: -1.25em; margin-top: -0.15em; }
+    .article > hr { margin: 1em 0; background-color: transparent !important; }
+    
+    .article-footer { display: none; }
+    .article { padding-block: 5vh 100vh; }
+    
+    .auto-list { margin-top: 0 !important; }
+    
+    .captioned-gallery img { max-width: calc(0.23 * var(--main-width)); }
+    
+    
+    

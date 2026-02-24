@@ -29,9 +29,12 @@ The default politician | the-default-politician | 2024-11-26
 Sex, gender, &amp; transsexuals | sex-gender-transsexuals | 2024-11-19
 Fetishism &amp; politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
+Poor Things (2023 film) | poor-things | 2024-10-31
 The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`;
 
-const videoData = `A synopsis of American decline | oUOsAdnK2zs | 2026-02-11
+const videoData = `
+Abortion | CpjJ8TgOxJY | 2026-02-24
+A synopsis of American decline | oUOsAdnK2zs | 2026-02-11
 give yourself credit | mM5fcuJnfZQ | 2026-01-23
 Potential issues with our elections | 509Q_HUp8CE | 2026-01-19
 Why is Reddit so hated? | jPVl5cfVP1k | 2026-01-13
@@ -119,7 +122,7 @@ function setLightbox(action) {
     }
 }
 
-function setBrightness(setValue) {
+function setTheme(setValue) {
     let brightness = setValue || localStorage.getItem("brightness") || "light";
     HTML.classList.remove(...Array.from(document.getElementById("brightness-select").children).map(o => o.value).filter(o => o != brightness));
     HTML.classList.add(brightness);
@@ -159,7 +162,6 @@ function updateCSS(mEle) {
 
     if (fontSize != default_font_size) {
         fontSize = fontSize.split(",");
-        console.log(fontSize)
         style.push("--fs-article-1:" + fontSize[0] + "; --fs-article-2:" + fontSize[1] + "; --fs-article-3:" + fontSize[2] + "; ");
     }
     
@@ -174,12 +176,24 @@ function resetFonts() {
     localStorage.setItem("heading-font", default_heading_font);
     localStorage.setItem("body-font", default_body_font);
     localStorage.setItem("aux-font", default_aux_font);
+    localStorage.setItem("font-size", default_font_size);
     updateCSS();
+}
+function setFormatting(b) {
+    b = b ?true :false;
+    Array.from(document.querySelectorAll(".slide-checkbox.formatting")).forEach(
+        c => {
+            c.checked = b;
+            HTML.classList.toggle(c.id, b);
+            localStorage.setItem(c.id, b);
+        }
+    )
 }
 
 function imageFloat(chunk, direction) {
     const rows = chunk.split("\n");
-        let firstRow = rows.shift(); firstRow = firstRow.substring(firstRow.indexOf(" "));
+        let firstRow = rows.shift();
+            firstRow = firstRow.substring(firstRow.indexOf(" "));
         const lazy = !firstRow.includes("nolazy");
         const maxHeight = firstRow.replace(/\D/g, "");
     
@@ -198,7 +212,8 @@ function imageFloat(chunk, direction) {
 
 function imageSpan(chunk) {
     const rows = chunk.split("\n");
-        let firstRow = rows.shift(); firstRow = firstRow.substring(firstRow.indexOf(" "));
+        let firstRow = rows.shift();
+            firstRow = firstRow.substring(firstRow.indexOf(" "));
         const lazy = !firstRow.includes("nolazy");
         const maxHeight = firstRow.replace(/\D/g, "");
     
@@ -215,7 +230,8 @@ function imageSpan(chunk) {
 
 function gallery(chunk) {
     const rows = chunk.split("\n");
-        let firstRow = rows.shift(); firstRow = firstRow.substring(firstRow.indexOf(" "));
+        let firstRow = rows.shift();
+            firstRow = firstRow.substring(firstRow.indexOf(" "));
         const lazy = !firstRow.includes("nolazy");
         const maxHeight = firstRow.replace(/\D/g, "");
     
@@ -235,7 +251,8 @@ function gallery(chunk) {
 
 function squareGallery(chunk) {
     const rows = chunk.split("\n");
-        let firstRow = rows.shift(); firstRow = firstRow.substring(firstRow.indexOf(" "));
+        let firstRow = rows.shift();
+            firstRow = firstRow.substring(firstRow.indexOf(" "));
         const lazy = !firstRow.includes("nolazy");
         const maxHeight = firstRow.replace(/\D/g, "");
     
@@ -266,8 +283,10 @@ function autoVideo(chunk) {
 
 function ytGallery(chunk) {
     let rows = chunk.split("\n");
-    let gInfo = rows.shift().substring("!yt-gallery".length);
-    let sortInput = gInfo.includes("sort");
+    let firstRow = rows.shift();
+        firstRow = firstRow.substring(firstRow.indexOf(" "))
+    const sortInput = firstRow.includes("sort");
+    const numToInclude = parseInt(firstRow.replace(/\D/g, "")) || rows.length;
     rows = rows.map(
         row => {
             row = row.replace(/\\\|/g, "&verbar;").split("|").map(
@@ -286,7 +305,6 @@ function ytGallery(chunk) {
             return b - a;
         })
     }
-    let numToInclude = parseInt(gInfo.replace(/\D/g, "")) || rows.length;
     rows = rows.slice(0, numToInclude).map( row => {
         let title = row[0];
         let videoCode = row[1];
@@ -343,6 +361,7 @@ function autoTable(chunk, table_number) {
                                     p => {
                                         p = p.trim();
                                         if (p == "---") { p = '<hr>'; }
+                                        
                                         else if (p.startsWith(".")) { p = '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
                                         else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
                                         else p = '<p>' + p + '</p>';
@@ -515,10 +534,10 @@ function linkReplace(chunk, externalLinksArray) {
                 return `<a onclick="setLightbox('${ linkAddress }')" class="pseudo-link" title="${ linkAddress.split("/").slice(-1).join("") }">${ displayText }</a>`
             }
             if (displayText == "") {
-                return `<a href="${ linkAddress }" target="_blank" class="autoref">[↗]</a>`;
+                return `<a href="${ linkAddress }" class="autoref">[↗]</a>`;
             }
             else {
-                return `<a href="${ linkAddress }" target="_blank">${ displayText }</a>`;
+                return `<a href="${ linkAddress }">${ displayText }</a>`;
             }
         }
     })
@@ -570,6 +589,7 @@ function interpreter(argValue, linksArr) {
             if (chunk.startsWith("!rows")) { return autoRows(chunk, tableNum++); }
             if (chunk.startsWith("    ")) { return autoIndent(chunk); }
 
+            if (chunk.startsWith("!list")) { chunk = "- " + chunk.split("\n").slice(1).join("\n- "); }
             if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
                 if (isFine) {
                     return `<div class="fine auto-list">${ autoList(chunk) }</div>`
@@ -596,7 +616,7 @@ function ageFromISO(argDate) {
     const entryYear  = parseInt(argDate.substring(0, 4));
     const entryMonth = parseInt(argDate.substring(4, 6));
     const entryDay   = parseInt(argDate.substring(6, 8));
-    if (entryYear < 999 || entryMonth > 12 || entryDay > 31) {
+    if (entryYear < 999 || entryYear > 2999 || entryMonth > 12 || entryDay > 31) {
         console.error("date-format-error");
         return "";
     }
@@ -724,24 +744,17 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 
-function cb_c_toggle(mEle) {
-    if (mEle != null && mEle instanceof Node && mEle.type.toLowerCase() == "checkbox") {
-        localStorage.setItem(mEle.id, mEle.checked);
-        HTML.classList.toggle(mEle.id, mEle.checked);
-    }
-}
-
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
     const pathToRoot = index ? "" : "../../";
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
 
-    document.body.innerHTML = `<nav id="navbar">
-        <div class="align-center gap-8">
+    document.body.innerHTML = `<nav class="navbar">
+        <div class="nav-left">
             <div class="hamburger icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
             <div class="gap-5">${ index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : '&verbar;<div title="This page" class="page-name-display">' + document.title + "</div>" }</div>
         </div>
-        <div class="align-center gap-8">
+        <div class="nav-right">
              ${ index ? "" : `<a class="jump-to-top no-select" onclick="scrollToTop()">Jump to Top</a>` }
             <div class="gear icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
         </div>
@@ -779,19 +792,25 @@ window.addEventListener("load", function() {
     <div class="screen"></div>
     <div class="right-panel closed">
         <div><div><b>Display preferences:</b></div></div>
-        <div><div>Theme:</div><select class="drop-select" id="brightness-select" onchange="setBrightness(this.value)"><option value="light">Light</option><option value="dark">Dark</option></select></div>
-        <div class="right-side"><label for="full-width">Full page width</label><input type="checkbox" class="checkswitch" id="full-width"></div>
-        <div class="right-side"><label for="hide-toc">Hide table of contents</label><input type="checkbox" class="checkswitch" id="hide-toc"></div>
+        <div><div>Theme:</div><div><select class="drop-select" id="brightness-select" onchange="setTheme(this.value)"><option value="light">Light</option><option value="dark">Dark</option></select></div></div>
+        <div class="right-side"><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox" id="full-width"></div>
+        <div class="right-side"><label for="hide-toc">Hide table of contents (if this page has one)</label><input type="checkbox" class="slide-checkbox" id="hide-toc"></div>
+        <hr>
         <div><div><b>Fonts override:</b></div></div>
-        <div><div>Headings:</div><div><select class="drop-select font-options" id="heading-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
-        <div><div>Body:</div><div><select class="drop-select font-options" id="body-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
-        <div><div>Auxiliary:</div><div><select class="drop-select font-options" id="aux-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Headings:</div><div><select class="drop-select font-select" id="heading-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Body:</div><div><select class="drop-select font-select" id="body-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Secondary:</div><div><select class="drop-select font-select" id="aux-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
+        <div><div>Font size:</div><div><select class="drop-select" id="font-size" onchange="updateCSS(this)"><option value="15px,15px,14px">15px</option><option value="15.4px,15px,14px">15.4px</option><option value="17px,16px,14.4px">17px</option><option value="19px,17px,16px">19px</option></select></div></div>
         <div class="right-side"><div style="cursor: pointer; color: var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</div></div>
-        <div><div>Font size:</div><div><select class="drop-select" id="font-size" onchange="updateCSS(this)"><option value="15px,15px,14px">15px</option><option value="15.4px,15px,14px">15.4px</option><option value="16px,15px,14px">16px</option><option value="17px,15.4px,14.4px">17px</option><option value="18px,16px,15px">18px</option><option value="20px,18px,16px">20px</option></select></div></div>
-        <div class="right-side"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="checkswitch" id="indent-text" onchange="cb_c_toggle(this)"></div>
-        <div class="right-side"><label for="justify-text">Text align justify</label><input type="checkbox" class="checkswitch" id="justify-text" onchange="cb_c_toggle(this)"></div>
-        <div class="right-side"><label for="static-nav">Un-sticky top navbar</label><input type="checkbox" class="checkswitch" id="static-nav" onchange="cb_c_toggle(this)"></div>
-        <div style="line-height:1.5; padding-top:0.5em; color:var(--grey-7);">If you change anything here, it's saved in session storage, not cookies, meaning it's all deleted automatically after you close your browser.</div>
+        <hr>
+        <div><div><b>Formatting:</b></div></div>
+        <div class="right-side"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
+        <div class="right-side"><label for="justify-text">Text align justify</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
+        <div class="right-side"><label for="reduce-margins">Reduce paragraph vertical margins</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
+        <div class="right-side"><label for="narrow-width">Narrow column:</label><input type="checkbox" class="slide-checkbox formatting auto" id="narrow-width"></div>
+        <div class="right-side"><div style="color: var(--grey-8);"><span style="cursor: pointer;" onclick="setFormatting(true)" title="set all above on">enable all above</span> / <span style="cursor: pointer;" onclick="setFormatting(false)" title="set all above off">disable all</span></div></div>
+        <hr>
+        <div style="line-height:1.5; color:var(--grey-7);">If you change anything here, it's saved in session storage, not cookies, meaning it's all deleted automatically after you close your browser.</div>
     </div>
     <div class="page-grid">
         ${ HTML.classList.contains("include-toc") ? `<nav id="toc"></nav>` : "" }
@@ -861,13 +880,13 @@ window.addEventListener("load", function() {
     }
 
     HTML.classList.add("layout");
-    Array.from(document.getElementsByClassName("font-options")).forEach(o => o.style.fontFamily = `"${ o.value }",system-ui` );
+    Array.from(document.getElementsByClassName("font-select")).forEach(o => o.style.fontFamily = o.value + ",system-ui" );
 
     document.querySelector(".lb-wrapper").addEventListener("click", () => {
         setLightbox("close")
     })
 
-    const navbar = document.getElementById("navbar");
+    const navbar = document.querySelector(".navbar");
     let canNavCheck = true;
     function navCheck() {
         if (!canNavCheck) {
@@ -877,17 +896,16 @@ window.addEventListener("load", function() {
         setTimeout(
             function() {
                 canNavCheck = true;
-                navbar.classList.toggle("sticky-active", pageYOffset > 180);
+                navbar.classList.toggle("sticky-active", pageYOffset > 0);
             },
             500
         )
-        navbar.classList.toggle("sticky-active", pageYOffset > 180);
+        navbar.classList.toggle("sticky-active", pageYOffset > 0);
     }
     navCheck();
     window.addEventListener("scroll", navCheck);
 
     /* ---- ---- ---- ---- ---- ---- ---- gearMenu ---- ---- ---- ---- ---- ---- ---- */
-    const gearIcon = document.querySelector(".gear");
     const gearMenu = document.querySelector(".right-panel");
     function gearMenuToggle(option) {
         if (option == "close" || option == "open") {
@@ -897,6 +915,7 @@ window.addEventListener("load", function() {
             gearMenu.classList.toggle("closed", !gearMenu.classList.contains("closed"));
         }
     }
+    const gearIcon = document.querySelector(".gear");
     gearIcon.addEventListener("click", gearMenuToggle);
 
     /* ---- ---- ---- ---- ---- ---- ---- hamburgerMenu ---- ---- ---- ---- ---- ---- ---- */
@@ -943,14 +962,20 @@ window.addEventListener("load", function() {
     })
 
     /* ---- ---- ---- ---- ---- ---- menu set-up ---- ---- ---- ---- ---- ---- */
-    setBrightness();
+    setTheme();
     updateCSS();
-    Array.from(document.querySelector(".right-panel").getElementsByTagName("input")).filter(m => m.type.toLowerCase()=="checkbox").forEach(
+    
+    /* first 2 are always full-width and hide-toc, which require more special handling */
+    Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
         c => {
             if (localStorage.getItem(c.id) == "true") {
                 c.checked = true;
                 HTML.classList.toggle(c.id, c.checked);
             }
+            c.addEventListener("change", function() {
+                localStorage.setItem(c.id, c.checked);
+                HTML.classList.toggle(c.id, c.checked);
+            });
         }
     );
     if (!index) {
@@ -1038,8 +1063,7 @@ window.addEventListener("load", function() {
             
             const toc = document.getElementById("toc");
             toc.innerHTML = '<div class="toc-title">This page contents</div>' + headings.map(
-                heading =>
-                    `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
+                heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
             ).join("");
             toc.scrollTo({ behavior: "instant", top: 0 })
             const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));

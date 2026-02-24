@@ -4,7 +4,11 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    body { --main-width: 764px; }
+    :root {
+        --main-width: 764px !important;
+        --quarter-grid: 210px !important;
+    }
+    html.narrow-width { --main-width: 764px !important; }
         .article-top { display: none; }
         .main-container { padding-top: 0; }
         .auto-rows .row { margin-inline: -0.4em; padding: 0.2em 0.4em; border: 1px solid transparent; }
@@ -40,21 +44,17 @@ window.addEventListener("load", () => {
         <div style="text-align:right; margin-top:0.5em; font-family:Roboto,sans-serif; font-size:var(--fs-article-2)"><a href="page/videos/index.html">see all videos →</a></div>
     </div>
 </div>
-<hr>
-<div class="section-label">Other resources</div>
+
+---
 
 !rows
-[list of every movie I've ever seen](page/movies-list/index.html)
-[the artwork I often use](page/artwork-i-use/index.html)
-[anime reviews](page/anime-reviews/index.html)
-[Poor things (2023 film)](page/poor-things/index.html)
-[data struct &amp; algorithms notes](page/data-structures-algorithms/index.html)
-[discord bot custom commands](page/discord-bot-custom-commands/index.html)
-[soundboard](page/soundboard/index.html)
-[5-letters expander](page/5-letters/index.html)
-[snowfall.html](page/snowfall.html)
-[clouds.html](page/clouds.html)
-[sliding-block.html](page/sliding-block.html)
+[Other](page/other/index.html)
+[Art stuff](page/art/index.html)
+
+.This special page isn't affected by preferences affecting width and layout.
 
 <script src="assets/layout.js"></script>
 </body></html>
+
+
+
