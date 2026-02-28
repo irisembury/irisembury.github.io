@@ -36,24 +36,15 @@ window.addEventListener("load", () => {
 <div style="display:grid; grid-template-columns:1fr auto; gap:1em;">
     <div style="padding-right:0.75em; border-right:1px solid var(--grey-c);">
         <div class="section-label">Text posts</div>
-        <div id="index"></div>
+        <div id="page-index"></div>
     </div>
     <div style="font-size:var(--fs-article-2); line-height:1.3">
         <div class="section-label">Recent videos</div>
         <div id="videos-index" class="4"></div>
-        <div style="text-align:right; margin-top:0.5em; font-family:Roboto,sans-serif; font-size:var(--fs-article-2)"><a href="page/videos/index.html">see all videos →</a></div>
+        <div style="text-align:right; margin-top:0.5em; font-family:Roboto,sans-serif; font-size:var(--fs-article-2)"><a href="page/videos/index.html">see all videos</a></div>
     </div>
 </div>
-
----
-
-!rows
-[Other](page/other/index.html)
-[Art stuff](page/art/index.html)
-
-.This special page isn't affected by preferences affecting width and layout.
-
-<script src="assets/layout.js"></script>
+<script src="assets/layout.js"></script><div class="hidden" id="index"></div>
 </body></html>
 
 

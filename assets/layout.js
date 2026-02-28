@@ -1,7 +1,8 @@
 "use strict"
 const HTML = document.documentElement;
 
-const pageData = `Abortion | abortion | 2026-02-18
+const pageData = `
+The case for abortion | abortion | 2026-02-18
 A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28
 Give yourself credit | give-yourself-credit | 2026-01-23
 Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
@@ -30,7 +31,18 @@ Sex, gender, &amp; transsexuals | sex-gender-transsexuals | 2024-11-19
 Fetishism &amp; politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
 Poor Things (2023 film) | poor-things | 2024-10-31
-The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`;
+The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`.split("\n").filter(n => n).map(
+    entry => {
+        entry = entry.replaceAll("\\|","&verbar;").split("|").map(c => c.trim());
+        while (entry.length < 3) entry.push("");
+        entry = {
+            name: entry[0],
+            url: entry[1],
+            date: entry[2]
+        }
+        return entry;
+    }
+);
 
 const videoData = `
 Abortion | CpjJ8TgOxJY | 2026-02-24
@@ -130,82 +142,61 @@ function setTheme(setValue) {
     document.getElementById("brightness-select").value = brightness;
 }
 
-function updateCSS(mEle) {
+function setCSS(mEle) {
     if (mEle != null && mEle instanceof Node) {
         localStorage.setItem(mEle.id, mEle.value);
     }
-    let headingFont = localStorage.getItem("heading-font") || default_heading_font;
-    let bodyFont = localStorage.getItem("body-font") || default_body_font;
-    let auxFont = localStorage.getItem("aux-font") || default_aux_font;
-    let fontSize = localStorage.getItem("font-size") || default_font_size;
-
-    document.getElementById("heading-font").value = headingFont;
-    document.getElementById("body-font").value = bodyFont;
-    document.getElementById("aux-font").value = auxFont;
-    document.getElementById("font-size").value = fontSize;
-
-    let style = [];
-    
-    if (headingFont != default_heading_font) { style.push("--ff-heading:"+ headingFont +",sans-serif;"); }
-    
-    if (bodyFont != default_body_font) { style.push("--ff-article:"+ bodyFont +",sans-serif;"); }
-    if (!bodyFont.startsWith("Georgia")) {
-        if (bodyFont =="Roboto") { style.push("--ls-bold-1:-0.1px;") }
-        else if (bodyFont =="Faculty Glyphic") { style.push("--ls-bold-1:0.25px;") }
-        else style.push("--ls-bold-1:0px;");
-        if (bodyFont.startsWith("Times") || bodyFont =="Trebuchet MS") { style.push("--fs-article-1:16.4px;") }
-    }
-    
-    if (auxFont != default_aux_font) { style.push("--ff-aux:"+ auxFont +",sans-serif;"); }
-    if (auxFont.startsWith("Georgia")) { style.push("--ls-bold-2:-0.3px;"); }
-    else if (auxFont =="Faculty Glyphic") { style.push("--ls-bold-2:0.25px;"); }
-
-    if (fontSize != default_font_size) {
-        fontSize = fontSize.split(",");
-        style.push("--fs-article-1:" + fontSize[0] + "; --fs-article-2:" + fontSize[1] + "; --fs-article-3:" + fontSize[2] + "; ");
-    }
-    
-    document.getElementById("nqcpse").innerHTML = (style.length > 0) ?"body {" + style.join('\n') +"}" :"";
+    let styleOverrides = [];
+    const selects = Array.from(document.getElementsByClassName("drop-select"));
+    selects.forEach(
+        select => {
+            select.value = localStorage.getItem(select.id) ||sdefaults[select.id];
+            if (select.value != sdefaults[select.id]) { styleOverrides.push(select.id + ": " + select.value) }
+        }
+    )
+    document.getElementById("__css_user_set").innerHTML = styleOverrides.length > 0 ?"html {\n" + styleOverrides.join("!important;\n") + "!important;\n}" :"";
 }
-
-const default_heading_font = "Inter";
-const default_body_font = "Georgia Pro Digits,Georgia";
-const default_aux_font = "Roboto";
-const default_font_size = "15.4px,15px,14px";
-function resetFonts() {
-    localStorage.setItem("heading-font", default_heading_font);
-    localStorage.setItem("body-font", default_body_font);
-    localStorage.setItem("aux-font", default_aux_font);
-    localStorage.setItem("font-size", default_font_size);
-    updateCSS();
+const sdefaults = {
+    "--ff-heading": "Inter",
+    "--ff-article": "Georgia Pro Digits,Georgia",
+    "--ff-secondary": "Roboto",
+    "--ff-small": "Open Sans"
 }
-function setFormatting(b) {
-    b = b ?true :false;
+function resetCSS() {
+    for (let k in sdefaults) {
+        localStorage.setItem(k, sdefaults[k])
+    }
+    setCSS();
+    setFormatting(false);
+}
+function setFormatting(bool) {
+    bool = bool ?true :false;
     Array.from(document.querySelectorAll(".slide-checkbox.formatting")).forEach(
-        c => {
-            c.checked = b;
-            HTML.classList.toggle(c.id, b);
-            localStorage.setItem(c.id, b);
+        checkbox => {
+            checkbox.checked = bool;
+            HTML.classList.toggle(checkbox.id, bool);
+            localStorage.setItem(checkbox.id, bool);
         }
     )
 }
 
-function imageFloat(chunk, direction) {
+function imageFloat(chunk) {
     const rows = chunk.split("\n");
         let firstRow = rows.shift();
+        const direction = firstRow.split(" ").shift().endsWith("left") ?"left" :"right";
             firstRow = firstRow.substring(firstRow.indexOf(" "));
         const lazy = !firstRow.includes("nolazy");
         const maxHeight = firstRow.replace(/\D/g, "");
     
-    return `<div class="image-float">${ rows.map(
+    return `<div class="image-float ${ direction }">${ rows.map(
         row => {
             const parts = row.split("|");
             while (parts.length < 3) { parts.push(""); }
-            let figCaption = autoFormat(parts[1].trim());
-            let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
-            if (figCaption && !altText) { altText = figCaption }
-            if (figCaption) { figCaption = `<figcaption>${ figCaption }</figcaption>`; }
-            return `<figure><img ${ lazy ?'load="lazy"' :""} onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }">${ figCaption }</figure>`;
+            let caption = autoFormat(parts[1]);
+            let altText = autoFormat(parts[2].replace(/"/g,"&quot;"));
+            if (caption && !altText) { altText = caption }
+            if (caption) { caption = `<figcaption>${ caption }</figcaption>`; }
+            return `<figure><img ${ lazy ?'load="lazy"' :""} onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }">${ caption }</figure>`;
         }
     ).join('') }</div>`;
 }
@@ -222,7 +213,7 @@ function imageSpan(chunk) {
             const parts = row.split("|");
             while (parts.length < 3) { parts.push(""); }
             let imgUrl = parts[0].trim();
-            let altText = autoFormat(parts[1].trim().replace(/"/g,"&quot;"));
+            let altText = autoFormat(parts[1].replace(/"/g,"&quot;"));
             return `<div><img ${ lazy ?'load="lazy"' :""} style="max-height: ${ maxHeight || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
         }
     ).join('') }</div>`;
@@ -242,8 +233,8 @@ function gallery(chunk) {
                 parts.push("");
             }
             let imgUrl = parts[0].trim();
-            let caption = autoFormat(parts[1].trim());
-            let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
+            let caption = autoFormat(parts[1]);
+            let altText = autoFormat(parts[2].replace(/"/g,"&quot;"));
             return `<figure><img ${ lazy ?'load="lazy"' :""} style="max-height: ${ maxHeight || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"><figcaption>${ caption }</figcaption></figure>`;
         }
     ).join('') }</div>`;
@@ -260,8 +251,8 @@ function squareGallery(chunk) {
         row => {
             const parts = row.split("|");
             while (parts.length < 3) { parts.push(""); }
-            let caption = autoFormat(parts[1].trim());
-            let altText = autoFormat(parts[2].trim().replace(/"/g,"&quot;"));
+            let caption = autoFormat(parts[1]);
+            let altText = autoFormat(parts[2].replace(/"/g,"&quot;"));
             if (!altText) { altText = caption; }
             if (caption) { caption = `<figcaption>${ caption }</figcaption>`; }
             return `<figure><div class="img-wrapper"><img loading="lazy" onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
@@ -395,7 +386,7 @@ function autoRows(chunk, tnum) {
         let cells = rows[rowIndex].replaceAll("\\|", "&verbar;").split("|");
         for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 1) {
             let cellNum = cellIndex + 1;
-            cells[cellIndex] = `<div class="cell col-${ cellNum + " col-" + (cellNum % 2 ? "odd" : "even") }">${ autoFormat(cells[cellIndex].trim()) }</div>`;
+            cells[cellIndex] = `<div class="cell col-${ cellNum + " col-" + (cellNum % 2 ? "odd" : "even") }">${ autoFormat(cells[cellIndex]) }</div>`;
         }
         rows[rowIndex] = `<div class="row row-${ rowNum + " row-" + (rowNum % 2 ? "odd" : "even") }">${ cells.join("") }</div>`;
     }
@@ -408,10 +399,10 @@ function autoRows(chunk, tnum) {
     return table;
 }
 
-function autoList(list) {
+function autoList(list, fine) {
     const closeTags = [];
     let prevIndent = -1;
-    return list.split("\n").map(
+    list = list.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
             li = autoFormat(li.substring(initpad));
@@ -431,21 +422,23 @@ function autoList(list) {
             return li;
         }
     ).join("") + closeTags.join("");
+    let lclass = fine ?' class="auto-list fine"' :' class="auto-list"';
+    return list.substring(0,3) + lclass + list.substring(3);
 }
 
 function autoIndent(chunk) {
-    const lines = chunk.split("\n").map(
+    return `<blockquote>${ chunk.split("\n").map(
         line => {
-            line = line.trim();
+            line = autoFormat(line);
             if (line != "") {
+                if (line == "---") { return "<hr>"; }
                 if (line.startsWith("---")) {
                     return `<p class="attribution">${ line }</p>`;
                 }
                 return "<p>"+ line +"</p>";
             }
         }
-    )
-    return `<blockquote>${ autoFormat(lines.join("")) }</blockquote>`;
+    ).join('')}</blockquote>`;
 }
 
 function parseMeta(chunk) {
@@ -453,44 +446,35 @@ function parseMeta(chunk) {
     if (article == null) {
         return;
     }
-    const mContainer = article.parentNode;
-    const articleTop = mContainer.insertBefore(document.createElement("div"), article);
-    articleTop.classList.add("article-top");
-    articleTop.innerHTML = '<h1 class="article-title --for-toc"></h1><h2 class="article-subtitle"></h2><div class="info-space"></div>';
+    let articleTop = article.parentNode.insertBefore(document.createElement("div"), article);
+    articleTop.className = "article-top";
+    let mTitle = "", mSubtitle = "", mDate = "", mSeeAlso = [];
     
-    chunk = chunk.split("\n").slice(1);
-    for (let line of chunk) {
-        line = line.split(":", 2); if (line.length != 2) { continue; }
+    chunk.split("\n").slice(1).forEach( line => {
+        line = line.split(":", 2); if (line.length!=2) { return; }
         const mKey = line[0].trim(), mVal = line[1].trim();
         
-        switch (mKey)
-        {
-            case "title":
-                const mTitle = mVal.replaceAll("---", "—").replaceAll("--", "–");
-                document.title = mTitle.replaceAll("&amp;", "&");
-                articleTop.querySelector(".article-title").innerHTML = autoFormat(mVal);
-                break;
-            
-            case "subtitle":
-                articleTop.querySelector(".article-subtitle").innerHTML = autoFormat(mVal);
-                break;
-            
-            case "date":
-                articleTop.querySelector(".info-space").insertAdjacentHTML("afterbegin", autoFormat(mVal));
-                break;
-            
-            case "see-also":
-                let addr = mVal.toLowerCase().split("|").map(c => c.trim());
-                if (addr[0] =="tumblr") {
-                    articleTop.querySelector(".info-space").insertAdjacentHTML("beforeend", '<a class="see-also" title="This was also posted on Tumblr" href="https://tumblr.com/irisembury/'+ addr[1] +'"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>read on Tumblr</span></a>');
-                }
-                else if (addr[0] =="substack") {
-                    articleTop.querySelector(".info-space").insertAdjacentHTML("beforeend", '<a class="see-also" title="This was also posted on Substack" href="https://irisembury.substack.com/p/'+ addr[1] +'"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>read on Substack</span></a>');
-                }
-                break;
+        if (mKey == "title") {
+            document.title = mVal.replaceAll("---", "—").replaceAll("--", "–");
+            mTitle = '<h1 class="article-title --for-toc">' + autoFormat(mVal) + '</h1>';
         }
-    }
-    Array.from(articleTop.children).forEach(c => { if (c.innerHTML =="") { c.remove() } });
+        else if (mKey == "subtitle") {
+            mSubtitle = '<h2 class="article-subtitle">' + autoFormat(mVal) + '</h2>';
+        }
+        else if (mKey == "date") {
+            mDate = '<div class="article-date">' + isoFormat(mVal) + '</div>';
+        }
+        else if (mKey == "see-also") {
+            let addr = mVal.toLowerCase().split("|").map(c => c.trim());
+            if (addr[0] =="tumblr") {
+                mSeeAlso.push('<a class="see-also" title="This was also posted on Tumblr" href="https://irisembury.tumblr.com/'+ addr[1] +'"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>read on Tumblr</span></a>');
+            }
+            else if (addr[0] =="substack") {
+                mSeeAlso.push('<a class="see-also" title="This was also posted on Substack" href="https://irisembury.substack.com/p/'+ addr[1] +'"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>read on Substack</span></a>');
+            }
+        }
+    })
+    articleTop.innerHTML = mTitle + mSubtitle + '<div class="info-space">' + mDate + mSeeAlso.join('') + '</div>'
 }
 
 function isoFormat(datestring) {
@@ -551,59 +535,48 @@ function interpreter(argValue, linksArr) {
     }
     let input = argValue.replace(/\n\n+/g, "\n\n")
         .replace(/\r/g, "") /* for safety, probably no effect */
-        .trim()
-        .split("\n\n");
+        .trim().split("\n\n");
 
     let tableNum = 1;
-    input = input.map(
-        chunk => {
-            chunk = chunk.replace(/\t/g, "    "); /* probably no effect */
-            if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
-            else if (chunk.startsWith("<")) { return chunk; }
-            if (chunk == "---") { return "<hr>"; }
-            if (chunk.startsWith("!meta")) { parseMeta(chunk); return ""; }
-            if (/^#{1,4} /.test(chunk)) { return autoHeading(chunk); }
-            if (chunk.startsWith("!image-float-left")) { return imageFloat(chunk, "left"); }
-            if (chunk.startsWith("!image-float")) { return imageFloat(chunk, "right"); }
-            if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
-            if (chunk.startsWith("!gallery")) { return gallery(chunk); }
-            if (chunk.startsWith("!square-gallery")) { return squareGallery(chunk); }
-            if (chunk.startsWith("!video")) { return autoVideo(chunk); }
-            if (chunk.startsWith("!yt-gallery")) { return ytGallery(chunk); }
-            chunk = chunk.replaceAll("\\`", "&#96;");
-            if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
-            chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-            if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
-            
-            let isFine = chunk.startsWith(".");
-            if (isFine) chunk = chunk.slice(1).trimStart();
+    input = input.map( chunk => {
+        chunk = chunk.replace(/\t/g, "    "); /* probably no effect */
+        if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
+        else if (chunk.startsWith("<")) { return chunk; }
+        if (chunk == "---") { return "<hr>"; }
+        if (chunk.startsWith("!meta")) { parseMeta(chunk); return ""; }
+        if (/^#{1,4} /.test(chunk)) { return autoHeading(chunk); }
+        if (chunk.startsWith("!image-float")) { return imageFloat(chunk); }
+        if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
+        if (chunk.startsWith("!gallery")) { return gallery(chunk); }
+        if (chunk.startsWith("!square-gallery")) { return squareGallery(chunk); }
+        if (chunk.startsWith("!video")) { return autoVideo(chunk); }
+        if (chunk.startsWith("!yt-gallery")) { return ytGallery(chunk); }
+        chunk = chunk.replaceAll("\\`", "&#96;");
+        if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
+        chunk = chunk.replace(/`(.+?)`/g, codeReplace);
+        if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
+        
+        let isFine = chunk.startsWith(".");
+        if (isFine) chunk = chunk.slice(1).trimStart();
 
-            /* ------------------------------------- links ------------------------------------- */
-            /*
-                [text to be displayed](https://irisembury.github.io/)
-            */
-            chunk = linkReplace(chunk, linksArr);
+        /* ------------------------------------- links ------------------------------------- */
+        /*
+            [text to be displayed](https://irisembury.github.io/)
+        */
+        chunk = linkReplace(chunk, linksArr);
 
-            if (chunk.startsWith("!profile-grid")) { return profileGrid(chunk); }
-            if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
-            if (chunk.startsWith("!rows")) { return autoRows(chunk, tableNum++); }
-            if (chunk.startsWith("    ")) { return autoIndent(chunk); }
+        if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
+        if (chunk.startsWith("!rows")) { return autoRows(chunk, tableNum++); }
+        if (chunk.startsWith("    ") || chunk.startsWith("!indent")) { return autoIndent(chunk); }
 
-            if (chunk.startsWith("!list")) { chunk = "- " + chunk.split("\n").slice(1).join("\n- "); }
-            if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
-                if (isFine) {
-                    return `<div class="fine auto-list">${ autoList(chunk) }</div>`
-                }
-                return `<div class="auto-list">${ autoList(chunk) }</div>`
-            }
+        if (chunk.startsWith("!list")) { chunk = "- " + chunk.split("\n").slice(1).join("\n- "); }
+        if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { return autoList(chunk, isFine); }
 
-            chunk = `<p>${ autoFormat(chunk) }</p>`;
-            if (isFine) {
-                return `<div class="fine">${ chunk.replace(/[^>]\n/g, "<br>") }</div>`;
-            }
-            return chunk;
-        }
-    )
+        chunk = autoFormat(chunk);
+        
+        if (isFine) { return `<p class="fine">${ chunk.replace(/\n/g,"<br>") }</p>`; }
+        return `<p>${ chunk.replace(/  \n/g,"<br>") }</p>`;
+    })
     return input.join("");
 }
 
@@ -750,11 +723,11 @@ window.addEventListener("load", function() {
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
 
     document.body.innerHTML = `<nav class="navbar">
-        <div class="nav-left">
+        <div class="nav-segment nav-left">
             <div class="hamburger icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
             <div class="gap-5">${ index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : '&verbar;<div title="This page" class="page-name-display">' + document.title + "</div>" }</div>
         </div>
-        <div class="nav-right">
+        <div class="nav-segment nav-right">
              ${ index ? "" : `<a class="jump-to-top no-select" onclick="scrollToTop()">Jump to Top</a>` }
             <div class="gear icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
         </div>
@@ -768,47 +741,29 @@ window.addEventListener("load", function() {
         <div class="nav-row"><a href="https://irisembury.substack.com/"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg>Substack</a></div>
         <div class="nav-row"><a href="https://discord.gg/fGdV7x5dk2"><svg title="Discord" role="img" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16"><path fill="var(--c-discord)" d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/></svg>Invite to my Discord</a></div>
         <div class="nav-row page-title">Latest pages uploaded</div>
-        ${
-            pageData.split("\n").filter(
-                entry => entry.length > 2
-            ).map(
-                entry => {
-                    entry = entry.replaceAll("\\|","&verbar;").split("|").map(
-                        c => c.trim()
-                    );
-                    while (entry.length < 3) {
-                        entry.push("");
-                    }
-                    entry = {
-                        title: entry[0],
-                        url:   entry[1],
-                        date:  entry[2]
-                    }
-                    return `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>`;
-                }
-            ).join("")
-        }
+        ${ pageData.map( entry => `<div class="nav-row"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.name }</a></div>` ).join("") }
     </nav>
     <div class="screen"></div>
-    <div class="right-panel closed">
-        <div><div><b>Display preferences:</b></div></div>
-        <div><div>Theme:</div><div><select class="drop-select" id="brightness-select" onchange="setTheme(this.value)"><option value="light">Light</option><option value="dark">Dark</option></select></div></div>
-        <div class="right-side"><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox" id="full-width"></div>
-        <div class="right-side"><label for="hide-toc">Hide table of contents (if this page has one)</label><input type="checkbox" class="slide-checkbox" id="hide-toc"></div>
+    <div class="right-panel no-select closed">
+        <div><h3>Display preferences:</h3></div>
+        <div><label for="dark">Dark mode</label><input type="checkbox" class="slide-checkbox auto" id="dark"></div>
+        <div><label for="hide-toc">Hide table of contents (if this page has one)</label><input type="checkbox" class="slide-checkbox" id="hide-toc"></div>
+        <div><label for="full-width">Full page span</label><input type="checkbox" class="slide-checkbox" id="full-width"></div>
         <hr>
-        <div><div><b>Fonts override:</b></div></div>
-        <div><div>Headings:</div><div><select class="drop-select font-select" id="heading-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
-        <div><div>Body:</div><div><select class="drop-select font-select" id="body-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
-        <div><div>Secondary:</div><div><select class="drop-select font-select" id="aux-font" onchange="updateCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div></div>
-        <div><div>Font size:</div><div><select class="drop-select" id="font-size" onchange="updateCSS(this)"><option value="15px,15px,14px">15px</option><option value="15.4px,15px,14px">15.4px</option><option value="17px,16px,14.4px">17px</option><option value="19px,17px,16px">19px</option></select></div></div>
-        <div class="right-side"><div style="cursor: pointer; color: var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</div></div>
+        <div><h3>Formatting:</h3></div>
+        <div><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
+        <div><label for="justify-text">Text align justify</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
+        <div><label for="reduce-margins">Reduce paragraph vertical margins</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
+        <div><label for="narrow-width">Narrow column</label><input type="checkbox" class="slide-checkbox formatting auto" id="narrow-width"></div>
+        <div><div style="margin-top:4px; margin-left:auto; color:var(--grey-8);"><span class="pseudo-link" onclick="setFormatting(true)" title="set all above on">all on</span> / <span class="pseudo-link" onclick="setFormatting(false)" title="all off">all off</span></div></div>
         <hr>
-        <div><div><b>Formatting:</b></div></div>
-        <div class="right-side"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
-        <div class="right-side"><label for="justify-text">Text align justify</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
-        <div class="right-side"><label for="reduce-margins">Reduce paragraph vertical margins</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
-        <div class="right-side"><label for="narrow-width">Narrow column:</label><input type="checkbox" class="slide-checkbox formatting auto" id="narrow-width"></div>
-        <div class="right-side"><div style="color: var(--grey-8);"><span style="cursor: pointer;" onclick="setFormatting(true)" title="set all above on">enable all above</span> / <span style="cursor: pointer;" onclick="setFormatting(false)" title="set all above off">disable all</span></div></div>
+        <div><h3>Fonts override:</h3></div>
+        <div><div>Headings:</div><select class="drop-select font-select" id="--ff-heading" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+        <div><div>Body:</div><select class="drop-select font-select" id="--ff-article" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+        <div><div>Secondary:</div><select class="drop-select font-select" id="--ff-secondary" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+        <div><div>Small:</div><select class="drop-select font-select" id="--ff-small" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+        <div><div style="margin-top:4px; margin-left:auto; cursor:pointer; color:var(--grey-8);" onclick="resetCSS()" title="restore font defaults">restore defaults</div></div>
+        <div><label for="static-nav">Static (un-sticky) navbar</label><input type="checkbox" class="slide-checkbox auto" id="static-nav"></div>
         <hr>
         <div style="line-height:1.5; color:var(--grey-7);">If you change anything here, it's saved in session storage, not cookies, meaning it's all deleted automatically after you close your browser.</div>
     </div>
@@ -824,105 +779,18 @@ window.addEventListener("load", function() {
     </div>
     <div class="lb-container">
         <div class="lb-top-left"></div>
-        <div class="lb-wrapper"><img class="lightbox"></div>
+        <div class="lb-wrapper" onclick="setLightbox('close')"><img class="lightbox"></div>
         <div class="lb-bottom-panel"><div class="lb-caption"></div></div>
     </div>
-    <style id="nqcpse"></style>`;
+    <style id="__css_user_set"></style>`;
 
     let contentLinks = [];
     interpreter(document.querySelector(".article"), contentLinks);
-
-    /* ---- front page (irisembury.github.io/index.html) ---- */
-    if (index) {
-        let pdata = pageData.split("\n").filter(
-            entry => entry.length > 2
-        ).map(
-            entry => {
-                entry = entry.replaceAll("\\|", "&verbar;").split("|").map( c => c.trim() );
-                while (entry.length < 3) {
-                    entry.push("");
-                }
-                /* entry[0] = title, entry[1] = url, entry[2] = date */
-                return `<a href="page/${ pathToRoot + entry[1] }/index.html">${ entry[0] }</a>|<span class="date">${ entry[2] }</span>`;
-            }
-        ).join("\n");
-        document.getElementById("index").innerHTML = autoRows("!rows\n" + pdata);
-    }
-    else {
-        /* no citelist for front page */
-        if (contentLinks.length > 0) {
-            const citeData = contentLinks.map(
-                (x, n) => {
-                    return `
-                    <tr>
-                        <td>${ n+1 }.</td>
-                        <td><a href="${ x }">${ x }</a></td>
-                    </tr>`
-                }
-            ).join("");
-            
-            let citelist = `
-            <div>
-                <div>Links on this page:</div>
-                <table class="citelist">${ citeData }</table>
-            </div>`;
-            document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
-        }
-    }
-    
-    if (document.getElementById("videos-index") != null) {
-        let lnum = document.getElementById("videos-index").className.replace(/\D/g,"") || 3;
-        document.getElementById("videos-index").innerHTML = ytGallery("!yt-gallery sort"+ lnum +" \n" + videoData);
-    }
-    /* ---- irisembury.github.io/videos ---- */
-    if (document.getElementById("all-videos-index") != null) {
-        document.getElementById("all-videos-index").insertAdjacentHTML("beforeend", ytGallery("!yt-gallery\n" + videoData));
-    }
-
     HTML.classList.add("layout");
-    Array.from(document.getElementsByClassName("font-select")).forEach(o => o.style.fontFamily = o.value + ",system-ui" );
-
-    document.querySelector(".lb-wrapper").addEventListener("click", () => {
-        setLightbox("close")
-    })
-
-    const navbar = document.querySelector(".navbar");
-    let canNavCheck = true;
-    function navCheck() {
-        if (!canNavCheck) {
-            return;
-        }
-        canNavCheck = false;
-        setTimeout(
-            function() {
-                canNavCheck = true;
-                navbar.classList.toggle("sticky-active", pageYOffset > 0);
-            },
-            500
-        )
-        navbar.classList.toggle("sticky-active", pageYOffset > 0);
-    }
-    navCheck();
-    window.addEventListener("scroll", navCheck);
-
-    /* ---- ---- ---- ---- ---- ---- ---- gearMenu ---- ---- ---- ---- ---- ---- ---- */
-    const gearMenu = document.querySelector(".right-panel");
-    function gearMenuToggle(option) {
-        if (option == "close" || option == "open") {
-            gearMenu.classList.toggle("closed", option == "close");
-        }
-        else {
-            gearMenu.classList.toggle("closed", !gearMenu.classList.contains("closed"));
-        }
-    }
-    const gearIcon = document.querySelector(".gear");
-    gearIcon.addEventListener("click", gearMenuToggle);
-
-    /* ---- ---- ---- ---- ---- ---- ---- hamburgerMenu ---- ---- ---- ---- ---- ---- ---- */
-    /*
-        connect elements, enable toggles for click handler
+    
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                              .left-panel (hamburger) set-up                          
     */
-    const hamburgerIcon = document.querySelector(".hamburger");
     const hamburgerMenu = document.querySelector(".left-panel");
     function hamburgerMenuToggle(option) {
         if (option == "close" || option == "open") {
@@ -932,10 +800,43 @@ window.addEventListener("load", function() {
             hamburgerMenu.classList.toggle("closed", !hamburgerMenu.classList.contains("closed"));
         }
     }
+    const hamburgerIcon = document.querySelector(".navbar .hamburger.icon");
     hamburgerIcon.addEventListener("click", hamburgerMenuToggle);
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                .right-panel (gear) set-up                            
+    */
+    setCSS();
+    // setTheme();
     
-    /* ---- ---- ---- ---- ---- hamburger & gear close conditions ---- ---- ---- ---- ---- */
-    
+    Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
+        c => {
+            if (localStorage.getItem(c.id) == "true") {
+                c.checked = true;
+                HTML.classList.toggle(c.id, c.checked);
+            }
+            c.addEventListener("change", function() {
+                localStorage.setItem(c.id, c.checked);
+                HTML.classList.toggle(c.id, c.checked);
+            });
+        }
+    );
+    Array.from(document.getElementsByClassName("font-select")).forEach(
+        select => Array.from(select.children).forEach(option => option.style.fontFamily = option.value + ",system-ui" )
+    )
+    const gearMenu = document.querySelector(".right-panel");
+    function gearMenuToggle(option) {
+        if (option == "close" || option == "open") {
+            gearMenu.classList.toggle("closed", option == "close");
+        }
+        else {
+            gearMenu.classList.toggle("closed", !gearMenu.classList.contains("closed"));
+        }
+    }
+    const gearIcon = document.querySelector(".navbar .gear.icon");
+    gearIcon.addEventListener("click", gearMenuToggle);
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                menu close, key conditions                            
+    */
     window.addEventListener("click", function(e) {
         if (!gearMenu.contains(e.target) && !gearIcon.contains(e.target)) {
             gearMenuToggle("close");
@@ -960,88 +861,98 @@ window.addEventListener("load", function() {
             }
         }
     })
-
-    /* ---- ---- ---- ---- ---- ---- menu set-up ---- ---- ---- ---- ---- ---- */
-    setTheme();
-    updateCSS();
     
-    /* first 2 are always full-width and hide-toc, which require more special handling */
-    Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
-        c => {
-            if (localStorage.getItem(c.id) == "true") {
-                c.checked = true;
-                HTML.classList.toggle(c.id, c.checked);
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                      .navbar set-up                                  
+    */
+    let navbar = document.querySelector(".navbar");
+        if (navbar != null) {
+            let canNavCheck = true;
+            function navCheck() {
+                if (!canNavCheck) {
+                    return;
+                }
+                canNavCheck = false;
+                setTimeout(
+                    function() {
+                        canNavCheck = true;
+                        navbar.classList.toggle("sticky-active", pageYOffset > 20);
+                    },
+                    500
+                )
+                navbar.classList.toggle("sticky-active", pageYOffset > 20);
             }
-            c.addEventListener("change", function() {
-                localStorage.setItem(c.id, c.checked);
-                HTML.classList.toggle(c.id, c.checked);
-            });
+            window.addEventListener("scroll", navCheck);
+            navbar.classList.toggle("sticky-active", pageYOffset > 20);
         }
-    );
+
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                     front page list                                 
+    */
+    if (index) {
+        const pageIndex = document.getElementById("page-index");
+        if (pageIndex) {
+            pageIndex.innerHTML = autoRows("!rows\n" + pageData.map(
+                entry => `<a href="page/${ pathToRoot + entry.url }/index.html">${ entry.name }</a>|<span class="date">${ entry.date }</span>`
+            ).join("\n"), 0);
+        }
+    }
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                             for everything except front page                         
+    */
     if (!index) {
+        /* don't allow full-width on front page */
+        let fullWidthCheckbox = document.getElementById("full-width");
         if (localStorage.getItem(window.location.href + "-full-width") == "true") {
             HTML.classList.add("full-width");
-            document.getElementById("full-width").checked = true;
+            fullWidthCheckbox.checked = true;
         }
-        document.getElementById("full-width").addEventListener("change", function() {
+        fullWidthCheckbox.addEventListener("change", () => {
             HTML.classList.toggle("full-width", this.checked);
             localStorage.setItem(window.location.href + "-full-width", this.checked ? "true" : "false");
         });
+        
+        /* don't load citelist on front page */
+        if (contentLinks.length > 0) {
+            const citeData = contentLinks.map(
+                (x, n) => `
+                    <tr>
+                        <td>${ n + 1 }.</td>
+                        <td><a href="${ x }">${ x }</a></td>
+                    </tr>`
+            ).join("");
+            document.querySelector(".article-footer").insertAdjacentHTML("beforeend", `<div><div>Links on this page:</div>
+                <table class="citelist">${ citeData }</table></div>`);
+        }
     }
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                     yt-gallery index                                 
+    */
+    let videosIndex = document.getElementById("videos-index");
+        if (videosIndex != null) {
+            let limit = videosIndex.className.replace(/\D/g,"") || 3;
+            videosIndex.innerHTML = ytGallery("!yt-gallery sort"+ limit +" \n" + videoData);
+        }
     
+    let allVideosIndex = document.getElementById("all-videos-index");
+        if (allVideosIndex != null) {
+            document.getElementById("all-videos-index").insertAdjacentHTML("beforeend", ytGallery("!yt-gallery\n" + videoData));
+        }
+    
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                     display figgling                                 
+    */
     if (document.title == "") {
         document.title = "Iris Embury";
-    } else if (!document.title.endsWith("Iris Embury")) {
+    }
+    else if (!document.title.endsWith("Iris Embury")) {
         document.title += " | Iris Embury";
     }
+    let pnd = document.querySelector(".page-name-display");
+    if (pnd != null && pnd.innerHTML == "") {
+        pnd.innerHTML = "This page";
+    }
     
-    /* ---- ---- ---- ---- ---- ---- quote expand element ---- ---- ---- ---- ---- ---- ---- ---- */
-    Array.from(document.getElementsByClassName("expando")).forEach(expando => {
-        expando.innerHTML = '<span class="expando-triangle no-select"></span>' + expando.innerHTML.split("<br>").map(o => `<p>${ o }</p>`).join("") + '<span class="expando-collapse-button no-select">[ collapse ▲ ]</span>';
-        const triangle = expando.querySelector(".expando-triangle");
-        function expandoToggle(click) {
-            click.stopPropagation();
-            // expanding:
-            if (expando.classList.contains("collapsed")) {
-                expando.classList.remove("collapsed");
-                expando.removeAttribute("title");
-                triangle.innerHTML = "[▲]";
-            }
-            // collapsing:
-            else {
-                expando.classList.add("collapsed");
-                expando.title = "Click to expand";
-                triangle.innerHTML = "[▼]";
-            }
-        }
-        triangle.addEventListener("click", expandoToggle);
-        if (expando.classList.contains("collapsed")) {
-            expando.title = "Click to expand";
-            triangle.innerHTML = "[▼]";
-        }
-        else {
-            triangle.innerHTML = "[▲]";
-        }
-        expando.addEventListener("click", function(click) {
-            expando.classList.remove("collapsed");
-            expando.removeAttribute("title");
-            triangle.innerHTML = "[▲]";
-        })
-        const bottomButton = expando.querySelector(".expando-collapse-button");
-        bottomButton.addEventListener("click", function(click) {
-            click.stopPropagation();
-            expando.classList.add("collapsed");
-            expando.title = "Click to expand";
-            triangle.innerHTML = "[▼]";
-            if (expando.getBoundingClientRect().top + window.scrollY < pageYOffset) {
-                expando.scrollIntoView({ behavior: "smooth" });
-            }
-        })
-    })
-
-    let k=document.querySelector(".page-name-display");
-    if (k && k.innerHTML == ""){ k.innerHTML = "This page"; }
-
     /* ---- ---- ---- ---- ---- ---- ---- ---- table of contents ---- ---- ---- ---- ---- ---- ---- ---- */
 
     if (HTML.classList.contains("include-toc")) {
