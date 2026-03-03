@@ -4,35 +4,20 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    :root {
-        --main-width: 764px !important;
-        --quarter-grid: 210px !important;
-    }
-    html.narrow-width { --main-width: 764px !important; }
-        .article-top { display: none; }
-        .main-container { padding-top: 0; }
-        .auto-rows .row { margin-inline: -0.4em; padding: 0.2em 0.4em; border: 1px solid transparent; }
-            .auto-rows .row:hover { border-color: var(--grey-a); }
-            .auto-rows .row:hover .date { color: inherit; }
-            .auto-rows .date { color: var(--grey-8); }
-        .section-label { font-size: var(--fs-article-2); font-weight: 700; color: var(--grey-5); font-family: Roboto,sans-serif; letter-spacing: 0.2px; margin-block: 0.75rem; }
-        .index-links-right { display:flex; flex-direction:column; gap:0.25em; }
-            .index-links-right a { display:inline-flex; align-items:center; gap: 0.3em; padding: 1px 0; white-space: nowrap; }
-        p + p { margin-top: 0.5em; }
-        .yt-gallery { display: flex; flex-direction: column; max-width: var(--yt-gallery-grid); }
-            .yt-gallery figure { width: 100%; }
+    .main-container { padding-top: 0; }
+    .main-container, .article { max-width: 764px !important; }
+    .auto-rows .row { margin-inline: -0.4em; padding: 0.2em 0.4em; border: 1px solid transparent; }
+    .auto-rows .row:hover { border-color: var(--grey-a); }
+    .auto-rows .row:hover .date { color: inherit; }
+    .auto-rows .date { color: var(--grey-8); }
+    .section-label { font-size: var(--fs-article-2); font-weight: 700; color: var(--grey-5); font-family: Roboto,sans-serif; letter-spacing: 0.2px; margin-block: 0.75rem; }
+    p + p { margin-top: 0.5em; }
+    .yt-gallery { max-width: 210px !important; display: flex; flex-direction: column; max-width: var(--yt-gallery-grid); }
+    .yt-gallery figure { width: 100%; }
     </style>
 </head>
 <body>
-    <div style="background-color:#555; background-image:url(assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg); background-size:cover; background-repeat:no-repeat; background-position:center; aspect-ratio:4 / 1; margin:0 auto; max-height:200px; display:flex; justify-content:center; align-items:center;"><span class="no-select" style="line-height:1; color:#fff; text-shadow:1px 1px 2px #0005; font-size:2.5rem; padding:1rem; letter-spacing:4px; transition:opacity 3s; opacity:0; font-family:Georgia;" id="ief-title">Iris Embury</span></div>
-<script>
-window.addEventListener("load", () => {
-    setTimeout(
-        () => {
-            document.getElementById("ief-title").style.opacity = "1";
-    }, 800)
-})
-</script>
+    <div style="background-color:#555; background-image:url(assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg); background-size:cover; background-repeat:no-repeat; background-position:center; aspect-ratio:4 / 1; margin:0 auto; max-height:200px; display:flex; justify-content:center; align-items:center;"><span class="no-select" style="line-height:1; color:#fff; text-shadow:1px 1px 2px #0005; font-size:2.5rem; padding:1rem; letter-spacing:4px; transition:opacity 3s; opacity:0; font-family:Georgia;" id="banner-float">Iris Embury</span></div>
 <div style="display:grid; grid-template-columns:1fr auto; gap:1em;">
     <div style="padding-right:0.75em; border-right:1px solid var(--grey-c);">
         <div class="section-label">Text posts</div>
@@ -45,6 +30,14 @@ window.addEventListener("load", () => {
     </div>
 </div>
 <script src="assets/layout.js"></script><div class="hidden" id="index"></div>
+<script>
+window.addEventListener("load", () => {
+    setTimeout(
+        () => {
+            document.getElementById("banner-float").style.opacity = "1";
+    }, 800)
+})
+</script>
 </body></html>
 
 
