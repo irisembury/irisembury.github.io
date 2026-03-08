@@ -5,13 +5,12 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
     /* ⮘ ⮙ ⮚ ⮛ ⮜ ⮝ ⮞ ⮟ ⯅ ⯆ ⯇ ⯈ */
-    body { --main-width: 684px !important; }
-    .auto-rows .row { margin-inline: -0.4em; padding: 0.05em 0.4em; border: 1px solid transparent; }
+    .auto-rows .row { gap: 5px; margin-inline: -0.4em; padding: 0.05em 0.4em; border: 1px solid transparent; }
         .auto-rows .row:hover { border-color: var(--grey-a); }
         .auto-rows .row:hover .date { color: inherit; }
         .auto-rows .date { color: var(--grey-8); }
-        .auto-rows .row .col-2 { align-self: center; flex: 1; height: 1px; background: repeating-linear-gradient( to right, var(--grey-a) 0 1px, transparent 2px 6px ); margin-top: 1px; }
-    .yt-gallery { display: flex; flex-direction: column; max-width: 200px; }
+        .auto-rows .row .col-2 { align-self: center; flex: 1; height: 1px; background: repeating-linear-gradient( to right, var(--grey-a) 0 1px, transparent 2px 6px ); margin-top: 2px; }
+    .yt-gallery { display: flex; flex-direction: column; width: 184px; }
     .article h2, .article h3 { color: var(--grey-4); }
     .article h2 { font: 600 16pt Lexend; margin-block: 0.25em 0.35em; }
     .article h3 { font: 600 13pt Lexend; margin-block: 0.25rem 1rem; }
@@ -21,7 +20,7 @@
     </style>
 </head>
 <body>
-<div class="flex">
+<div style="display:flex; max-width:716px; margin:0 auto;">
     <div><div style="background-color: var(--page-bg); border: 1px solid var(--grey-c); padding: 0.5em; margin: 0.5em;"><img load="lazy" height="150" width="150" onclick="setLightbox(this)" src="assets/cabanel-ver.png"></div></div>
     <div style="padding:0.5em;">
         <h2>Iris Embury</h2>
