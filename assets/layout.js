@@ -19,7 +19,7 @@ Notes on Israel and Palestine | israel-palestine | 2025-07-27
 The lies of Pierre Poilievre | pierre-poilievre | 2025-03-15
 Trump and Russia | trump-and-russia | 2025-03-06
 Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
-Politics | conservatism | 2025-01-30
+Political philosophy | conservatism | 2025-01-30
 Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
 What is therapy? | what-is-therapy | 2025-01-09
 Enduring falsehoods (Elizabeth Warren and Hillary Clinton) | enduring-falsehoods | 2024-12-19
@@ -32,19 +32,16 @@ Fetishism &amp; politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
 Poor Things (2023 film) | poor-things | 2024-10-31
 The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`.split("\n").filter(n => n).map(
-    entry => {
-        entry = entry.replaceAll("\\|","&verbar;").split("|").map(c => c.trim());
-        while (entry.length < 3) entry.push("");
-        entry = {
-            name: entry[0],
-            url: entry[1],
-            date: entry[2]
+        entry => {
+            entry = entry.replaceAll("\\|", "&verbar;").split("|").map(c => c.trim());
+            while (entry.length < 3) { entry.push(""); }
+            return { name: entry[0], url: entry[1], date: entry[2] }
         }
-        return entry;
-    }
-);
+    );
 
 const videoData = `
+The order of information | ZfArsg_xyuI | 2026-03-07
+How bad is America, really? | W0Dmtyyc7FU | 2026-03-06
 Abortion | CpjJ8TgOxJY | 2026-02-24
 A synopsis of American decline | oUOsAdnK2zs | 2026-02-11
 give yourself credit | mM5fcuJnfZQ | 2026-01-23
@@ -165,7 +162,7 @@ function resetCSS() {
     setFormatting(false);
 }
 function setFormatting(bool) {
-    bool = bool ?true :false;
+    bool = bool ? true : false;
     Array.from(document.querySelectorAll(".slide-checkbox.formatting")).forEach(
         checkbox => {
             checkbox.checked = bool;
@@ -178,10 +175,10 @@ function setFormatting(bool) {
 function imageFloat(chunk) {
     const rows = chunk.split("\n");
         let firstRow = rows.shift();
-        const direction = firstRow.split(" ").shift().endsWith("left") ?"left" :"right";
+        const direction = firstRow.split(" ").shift().endsWith("left") ?"float-left" :"float-right";
             firstRow = firstRow.substring(firstRow.indexOf(" "));
         const lazy = !firstRow.includes("nolazy");
-        const maxHeight = firstRow.replace(/\D/g, "");
+        const maxHeight = firstRow.replace(/\D/g, "") ||150;
     
     return `<div class="image-float ${ direction }">${ rows.map(
         row => {
@@ -191,7 +188,7 @@ function imageFloat(chunk) {
             let altText = autoFormat(parts[2].replace(/"/g,"&quot;"));
             if (caption && !altText) { altText = caption }
             if (caption) { caption = `<figcaption>${ caption }</figcaption>`; }
-            return `<figure><img ${ lazy ?'load="lazy"' :""} onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }">${ caption }</figure>`;
+            return `<figure><img ${ lazy ?'load="lazy"' :""} style="max-height:${ maxHeight }px" onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }">${ caption }</figure>`;
         }
     ).join('') }</div>`;
 }
@@ -304,10 +301,8 @@ function ytGallery(chunk) {
         let videoUrl = `https://www.youtube.com/watch?v=${ videoCode }`;
         let thumbUrl = `https://i.ytimg.com/vi/${ videoCode }/hqdefault.jpg`;
 
-        let videoThumb = `<a style="min-width:100%" href="${ videoUrl }"><img loading="lazy" src="${ thumbUrl }"></a>`;
-
         return `<figure>
-            <div>${ videoThumb }</div>
+            <a href="${ videoUrl }"><img loading="lazy" src="${ thumbUrl }"></a>
             <figcaption><div class="yt-title"><a href="${ videoUrl }">${ title }</a></div> <div class="yt-date">${ date }</div></figcaption>
         </figure>`;
     });
@@ -347,7 +342,6 @@ function autoTable(chunk, table_number) {
                                     p => {
                                         p = p.trim();
                                         if (p == "---") { p = '<hr>'; }
-                                        
                                         else if (p.startsWith(".")) { p = '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
                                         else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
                                         else p = '<p>' + p + '</p>';
@@ -368,22 +362,24 @@ function autoTable(chunk, table_number) {
     }
     return table;
 }
-/*
-    above (autoTable): The even and odd is 'backwards' because row_index/cell_index are converting from being 0-indexed to being 1-indexed (rows[0] is the 1st row, rows[1] is the 2nd row, etc.)
-*/
+        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                     above (autoTable): The even and odd looks 'backwards'
+                     because row_index/cell_index are converting from
+                     being 0-indexed to being 1-indexed (rows[0] is the 1st row,
+                     rows[1] is the 2nd row, etc.)
+        */
 
 function autoRows(chunk, tnum) {
-    let rows = chunk.split("\n");
+    let rows = chunk.replaceAll("\\|", "&verbar;").split("\n");
     let firstRow = rows.shift().substring("!rows".length).trim();
     /* make tbody cells */
     for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
-        let rowNum = rowIndex + 1;
-        let cells = rows[rowIndex].replaceAll("\\|", "&verbar;").split("|");
+        let cells = rows[rowIndex].split("|");
         for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 1) {
             let cellNum = cellIndex + 1;
             cells[cellIndex] = `<div class="cell col-${ cellNum + " col-" + (cellNum % 2 ? "odd" : "even") }">${ autoFormat(cells[cellIndex]) }</div>`;
         }
-        rows[rowIndex] = `<div class="row row-${ rowNum + " row-" + (rowNum % 2 ? "odd" : "even") }">${ cells.join("") }</div>`;
+        rows[rowIndex] = `<div class="row row-${ (rowIndex + 1) + " row-" + (rowIndex % 2 ? "even" : "odd") }">${ cells.join("") }</div>`;
     }
     /* if !rows declaration had styling included (same as !table logic): */
     let customTableStyle = "";
@@ -455,7 +451,7 @@ function parseMeta(chunk) {
         
         if (mKey == "title") {
             document.title = mVal.replaceAll("---", "—").replaceAll("--", "–").replaceAll("&amp;", "&");
-            mTitle = '<h1 class="auto-heading">' + autoFormat(mVal) + '</h1>';
+            mTitle = '<h1>' + autoFormat(mVal) + '</h1>';
         }
         else if (mKey == "subtitle") {
             mSubtitle = '<h2>' + autoFormat(mVal) + '</h2>';
@@ -476,7 +472,13 @@ function parseMeta(chunk) {
             }
         }
     })
-    articleTop.innerHTML = mTitle + mSubtitle + '<div class="info-space">' + mDate + mSeeAlso.join('') + '</div>';
+    if (mSeeAlso.length > 0) {
+        mSeeAlso = '<div class="see-also-container">' + mSeeAlso.sort().join('') + '</div>';
+    }
+    else {
+        mSeeAlso = '';
+    }
+    articleTop.innerHTML = mTitle + mSubtitle + mDate + mSeeAlso;
 }
 
 function isoFormat(datestring) {
@@ -491,11 +493,12 @@ function isoFormat(datestring) {
 }
 
 function autoHeading(chunk) {
-    const tag = "h" + chunk.indexOf(" ");
-    chunk = chunk.slice(chunk.indexOf(" ") + 1);
-    const id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g ,"");
+    let headingNum = chunk.indexOf(" ") + 1;
+    let tag = "h" + headingNum;
+    chunk = chunk.slice(headingNum);
+    let id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g, "");
     chunk = autoFormat(chunk);
-    return `<${ tag } id="${ id }" class="auto-heading">${ chunk }</${ tag }>`;
+    return `<${ tag + (headingNum <=3 ?' class="for-toc"' :'') } id="${ id }">${ chunk }</${ tag }>`;
 }
 
 function linkReplace(chunk, externalLinksArray) {
@@ -507,7 +510,7 @@ function linkReplace(chunk, externalLinksArray) {
                 linkIndex = externalLinksArray.push(linkAddress);
             }
             if (displayText == "") {
-                return `<a href="${ linkAddress }" class="autoref" title="${ linkAddress }">[${ linkIndex }]</a>`;
+                return `<sup><a href="${ linkAddress }" title="${ linkAddress }">[${ linkIndex }]</a></sup>`;
             }
             else {
                 return `<a href="${ linkAddress }" title="${ linkAddress }">${ displayText }</a>`;
@@ -520,7 +523,7 @@ function linkReplace(chunk, externalLinksArray) {
                 return `<a onclick="setLightbox('${ linkAddress }')" class="pseudo-link" title="${ linkAddress.split("/").slice(-1).join("") }">${ displayText }</a>`
             }
             if (displayText == "") {
-                return `<a href="${ linkAddress }" class="autoref">[↗]</a>`;
+                return `<sup><a href="${ linkAddress }">[↗]</a></sup>`;
             }
             else {
                 return `<a href="${ linkAddress }">${ displayText }</a>`;
@@ -546,7 +549,7 @@ function interpreter(argValue, linksArr) {
         else if (chunk.startsWith("<")) { return chunk; }
         if (chunk == "---") { return "<hr>"; }
         if (chunk.startsWith("!meta")) { parseMeta(chunk); return ""; }
-        if (/^#{1,4} /.test(chunk)) { return autoHeading(chunk); }
+        if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         if (chunk.startsWith("!image-float")) { return imageFloat(chunk); }
         if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
         if (chunk.startsWith("!gallery")) { return gallery(chunk); }
@@ -619,7 +622,7 @@ function autoFormat(argVal) {
         if (str_in.indexOf("'")!=-1||str_in.indexOf('"')!=-1) {
             str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1").replaceAll(/"/g, "&rdquo;")
         }
-        return str_in.replaceAll("---", "<span class='mdash'>&mdash;</span>").replaceAll("--", "&ndash;");
+        return str_in.replaceAll("---", '<span class="mdash">&mdash;</span>').replaceAll("--", "&ndash;");
     }
     let output = "";
     while (true) {
@@ -750,13 +753,12 @@ window.addEventListener("load", function() {
         <div><h3>Display:</h3></div>
         <div><label for="dark">Dark mode</label><input type="checkbox" class="slide-checkbox auto" id="dark"></div>
         <hr>
-        <div><h3>Layout:</h3></div>
-        <div><label for="hide-toc">Hide table of contents (if this page has one)</label><input type="checkbox" class="slide-checkbox auto" id="hide-toc"></div>
+        <div><h3>Site layout:</h3></div>
         <div><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
-        <div><label for="narrow-width">Reduce column width</label><input type="checkbox" class="slide-checkbox auto" id="narrow-width"></div>
+        <div><label for="hide-toc">Hide table of contents (if this page has one)</label><input type="checkbox" class="slide-checkbox auto" id="hide-toc"></div>
         <hr>
-        <div><h3>Text formatting:</h3></div>
-        <div><label for="text-larger">Increase font size</label><input type="checkbox" class="slide-checkbox formatting auto" id="text-larger"></div>
+        <div><h3>Article formatting:</h3></div>
+        <div><label for="narrow-width">Narrow column width</label><input type="checkbox" class="slide-checkbox auto" id="narrow-width"></div>
         <div><label for="justify-text">Justify text</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
         <div><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
         <div><label for="reduce-margins">Reduce paragraph margin</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
@@ -896,7 +898,7 @@ window.addEventListener("load", function() {
     let pageIndex = document.getElementById("page-index");
         if (pageIndex) {
             pageIndex.innerHTML = autoRows("!rows\n" + pageData.map(
-                entry => `<a href="page/${ pathToRoot + entry.url }/index.html">${ entry.name }</a>|<span class="date">${ entry.date }</span>`
+                entry => `<a href="page/${ pathToRoot + entry.url }/index.html">${ entry.name }</a>||<span class="date">${ entry.date }</span>`
             ).join("\n"), 0);
         }
     let videosIndex = document.getElementById("videos-index");
@@ -928,19 +930,25 @@ window.addEventListener("load", function() {
                                     table of contents                                 
     */
     if (HTML.classList.contains("load-toc")) {
-        const headings = Array.from(document.querySelectorAll(".main-container .auto-heading"));
+        const headings = Array.from(document.getElementsByClassName("for-toc"));
+        headings.forEach(
+            h => {
+                h.classList.remove("for-toc");
+                if (h.classList.length == 0) {
+                    h.removeAttribute("class");
+                }
+            }
+        );
         if (headings.length > 0) {
             /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                         create contents                             
             */
             const toc = document.getElementById("toc");
-            toc.innerHTML = '<div class="toc-title">This page contents</div>' + headings.map(
+            toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + headings.map(
                 heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
             ).join("");
             toc.scrollTo({ behavior: "instant", top: 0 })
             const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-            rowsInToc[0].className = "toc-row";
-            rowsInToc[0].innerHTML = '<a class="pseudo-link" onclick="scrollToTop()">(Top)</a>';
 
             /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                     focus highlight updater                         

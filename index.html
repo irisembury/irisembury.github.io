@@ -4,40 +4,51 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    .main-container { padding-top: 0; }
-    .main-container, .article { max-width: 764px !important; }
-    .auto-rows .row { margin-inline: -0.4em; padding: 0.2em 0.4em; border: 1px solid transparent; }
-    .auto-rows .row:hover { border-color: var(--grey-a); }
-    .auto-rows .row:hover .date { color: inherit; }
-    .auto-rows .date { color: var(--grey-8); }
-    .section-label { font-size: var(--fs-article-2); font-weight: 700; color: var(--grey-5); font-family: Roboto,sans-serif; letter-spacing: 0.2px; margin-block: 0.75rem; }
-    p + p { margin-top: 0.5em; }
-    .yt-gallery { max-width: 210px !important; display: flex; flex-direction: column; max-width: var(--yt-gallery-grid); }
-    .yt-gallery figure { width: 100%; }
+    /* ⮘ ⮙ ⮚ ⮛ ⮜ ⮝ ⮞ ⮟ ⯅ ⯆ ⯇ ⯈ */
+    body { --main-width: 684px !important; }
+    .auto-rows .row { margin-inline: -0.4em; padding: 0.05em 0.4em; border: 1px solid transparent; }
+        .auto-rows .row:hover { border-color: var(--grey-a); }
+        .auto-rows .row:hover .date { color: inherit; }
+        .auto-rows .date { color: var(--grey-8); }
+        .auto-rows .row .col-2 { align-self: center; flex: 1; height: 1px; background: repeating-linear-gradient( to right, var(--grey-a) 0 1px, transparent 2px 6px ); margin-top: 1px; }
+    .yt-gallery { display: flex; flex-direction: column; max-width: 200px; }
+    .article h2, .article h3 { color: var(--grey-4); }
+    .article h2 { font: 600 16pt Lexend; margin-block: 0.25em 0.35em; }
+    .article h3 { font: 600 13pt Lexend; margin-block: 0.25rem 1rem; }
+    .out-links { display: flex; flex-direction: column; flex-wrap: wrap; height: 132px; padding-left: 1em; }
+    .out-links div { padding: 0.2em 1em; }
+    .out-links div:before { content: '⮞'; margin-right: 5px; }
     </style>
 </head>
 <body>
-    <div style="background-color:#555; background-image:url(assets/karl-friedrich-schinkel-landschaft-mit-pilger-1813.jpg); background-size:cover; background-repeat:no-repeat; background-position:center; aspect-ratio:4 / 1; margin:0 auto; max-height:200px; display:flex; justify-content:center; align-items:center;"><span class="no-select" style="line-height:1; color:#fff; text-shadow:1px 1px 2px #0005; font-size:2.5rem; padding:1rem; letter-spacing:4px; transition:opacity 3s; opacity:0; font-family:Georgia;" id="banner-float">Iris Embury</span></div>
-<div style="display:grid; grid-template-columns:1fr auto; gap:1em;">
-    <div style="padding-right:0.75em; border-right:1px solid var(--grey-c);">
-        <div class="section-label">Text posts</div>
-        <div id="page-index"></div>
-    </div>
-    <div style="font-size:var(--fs-article-2); line-height:1.3">
-        <div class="section-label">Recent videos</div>
-        <div id="videos-index" class="4"></div>
-        <div style="text-align:right; margin-top:0.5em; font-family:Roboto,sans-serif; font-size:var(--fs-article-2)"><a href="page/videos/index.html">see all videos</a></div>
+<div class="flex">
+    <div><div style="background-color: var(--page-bg); border: 1px solid var(--grey-c); padding: 0.5em; margin: 0.5em;"><img load="lazy" height="150" width="150" onclick="setLightbox(this)" src="assets/cabanel-ver.png"></div></div>
+    <div style="padding:0.5em;">
+        <h2>Iris Embury</h2>
+        <div class="out-links">
+            <div><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA">YouTube</a></div>
+            <div><a href="https://patreon.com/irisembury">Patreon</a></div>
+            <div><a href="https://irisembury.tumblr.com">Tumblr</a></div>
+            <div><a href="https://bsky.app/profile/irisembury.bsky.social">Bluesky</a></div>
+            <div><a href="https://x.com/irisembury">Twitter/X</a></div>
+            <div><a href="https://irisembury.substack.com">Substack</a></div>
+            <div><a href="https://discord.gg/fGdV7x5dk2">Discord server</a></div>
+        </div>
     </div>
 </div>
-<script src="assets/layout.js"></script><div class="hidden" id="index"></div>
-<script>
-window.addEventListener("load", () => {
-    setTimeout(
-        () => {
-            document.getElementById("banner-float").style.opacity = "1";
-    }, 800)
-})
-</script>
+<hr>
+<div class="center">
+    <div style="padding-right:1em; margin-right:1em; border-right:1px solid var(--grey-c);">
+        <h3>Text pages hosted here:</h3>
+        <div id="page-index"></div>
+    </div>
+    <div>
+        <h3>Latest videos:</h3>
+        <div id="videos-index" class="4"></div>
+        <div style="text-align:right; margin-top:0.5em; font-family:var(--ff-secondary);"><a href="page/videos/index.html">see all videos</a></div>
+    </div>
+</div>
+<script src="assets/layout.js"></script><script>document.querySelectorAll("a[href]").forEach(a => { a.title = a.href })</script><div class="hidden" id="index"></div>
 </body></html>
 
 
