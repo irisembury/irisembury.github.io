@@ -11,11 +11,11 @@ Stay the trenches | stay-the-trenches | 2025-12-17
 Derangement | derangement | 2025-12-12
 Thoughts on immigration | immigration | 2025-11-06
 What is prejudice? | what-is-prejudice | 2025-10-30
-India | india | 2025-10-24
+India notes | india | 2025-10-24
 Liberalism, not extremism | liberalism-not-extremism | 2025-09-19
 The path of normalization | the-path-of-normalization | 2025-09-08
 Lies about Ilhan Omar | ilhan-omar | 2025-08-25
-Notes on Israel and Palestine | israel-palestine | 2025-07-27
+Israel Palestine conflict notes | israel-palestine | 2025-07-27
 The lies of Pierre Poilievre | pierre-poilievre | 2025-03-15
 Trump and Russia | trump-and-russia | 2025-03-06
 Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
@@ -27,19 +27,16 @@ Mark Robinson | mark-robinson | 2024-12-15
 The standard relationship model | standard-relationship-model | 2024-12-08
 The Trump appeal | the-trump-appeal | 2024-12-03
 The default politician | the-default-politician | 2024-11-26
-Sex, gender, &amp; transsexuals | sex-gender-transsexuals | 2024-11-19
-Fetishism &amp; politics | fetishism-politics | 2024-11-14
+Sex, gender, & transsexuals | sex-gender-transsexuals | 2024-11-19
+Fetishism & politics | fetishism-politics | 2024-11-14
 Types of masculinity | types-of-masculinity | 2024-11-08
 Poor Things (2023 film) | poor-things | 2024-10-31
-The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`.split("\n").filter(n => n).map(
-        entry => {
-            entry = entry.replaceAll("\\|", "&verbar;").split("|").map(c => c.trim());
-            while (entry.length < 3) { entry.push(""); }
-            return { name: entry[0], url: entry[1], date: entry[2] }
-        }
-    );
+The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
+`
+.split("\n").map(n => n.split("|").map(c => c.trim())).filter(n => n.length == 3).map(n => {return{name:n[0],url:n[1],date:n[2]}})
 
 const videoData = `
+Epstein thoughts | 5ymc2ePfFR8 | 2026-03-08
 The order of information | ZfArsg_xyuI | 2026-03-07
 How bad is America, really? | W0Dmtyyc7FU | 2026-03-06
 Abortion | CpjJ8TgOxJY | 2026-02-24
@@ -63,7 +60,7 @@ What is prejudice? | BzahVdIEYpA | 2025-11-03
 Notes on India | Pz0Oq1rb14E | 2025-10-24
 Notes on Saudi Arabia | 9RhaYU21Qag | 2025-10-17
 Jon Stewart is part of the problem | yYF2n0PDDRE | 2025-10-11
-The internet's latest over-reaction \\| Riyadh Comedy Festival | XXXisl9wOC0 | 2025-10-08
+Riyadh Comedy Festival | XXXisl9wOC0 | 2025-10-08
 Ilhan Omar makes waves after Charlie Kirk shooting | JDseBrbtp6E | 2025-10-04
 The path of normalization | TYoe1jxBYPY | 2025-09-19
 Why do people like Trump? | tcF0f-Dtgic | 2025-09-14
@@ -83,7 +80,7 @@ Trans fetishism & politics | vk57rvM1zWo | 2025-04-02
 Sex, gender, & transsexuals | Hgh3r7gJoWU | 2025-05-29
 Lies people still believe (Elizabeth Warren, Hillary Clinton) | LPQD6sxlWOs | 2025-04-09
 Bernie Sanders and the military industrial complex | yt6O0OMdIT0 | 2025-03-22
-Types of masculinity | lOQSqMhjwZY | 2025-06-12`.split("\n").filter(n => n).join("\n");
+Types of masculinity | lOQSqMhjwZY | 2025-06-12`.split("\n").filter(n => n.split("|").length == 3).join("\n");
 
 function scrollToTop() {
     window.scrollTo({
@@ -100,52 +97,46 @@ function scrollToTop() {
     }
 }
 
+let page_lightbox,page_lbCaption,page_lbTopLeft;
 function setLightbox(action) {
-    const lightbox = document.querySelector(".lightbox");
-    const lbCaption = document.querySelector(".lb-caption");
-    const lbTopLeft = document.querySelector(".lb-top-left");
-    if (lightbox == null || lbCaption == null || lbTopLeft == null) {
-        return;
-    }
+    if (!page_lightbox || !page_lbCaption || !page_lbTopLeft) { return; }
     /* action is click from <img> object */
     if (action == "close") {
-        lightbox.src = "";
-        lightbox.alt = "";
+        page_lightbox.src = "";
+        page_lightbox.alt = "";
         HTML.classList.remove("lb-enabled");
     }
     /* action is urlstring passed by function call */
     else if (typeof action == "string") {
-        console.log("A: " + action)
-        lightbox.src = action;
-        lightbox.alt = action;
+        page_lightbox.src = action;
+        page_lightbox.alt = action;
         HTML.classList.add("lb-enabled");
-        lbCaption.innerHTML = action;
-        lbTopLeft.innerHTML = `<a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`
+        page_lbCaption.innerHTML = action;
+        page_lbTopLeft.innerHTML = `<a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`
     }
     else {
-        lightbox.src = action.src;
-        lightbox.alt = action.alt;
+        page_lightbox.src = action.src;
+        page_lightbox.alt = action.alt;
         HTML.classList.add("lb-enabled");
-        lbTopLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
-        lbCaption.innerHTML = action.alt;
+        page_lbTopLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+        page_lbCaption.innerHTML = action.alt;
     }
 }
 
-function setTheme(setValue) {
-    let brightness = setValue || localStorage.getItem("brightness") || "light";
-    HTML.classList.remove(...Array.from(document.getElementById("brightness-select").children).map(o => o.value).filter(o => o != brightness));
-    HTML.classList.add(brightness);
-    localStorage.setItem("brightness", brightness);
-    document.getElementById("brightness-select").value = brightness;
-}
+// function setTheme(setValue) {
+    // let brightness = setValue || localStorage.getItem("brightness") || "light";
+    // HTML.classList.remove(...Array.from(document.getElementById("brightness-select").children).map(o => o.value).filter(o => o != brightness));
+    // HTML.classList.add(brightness);
+    // localStorage.setItem("brightness", brightness);
+    // document.getElementById("brightness-select").value = brightness;
+// }
 
 function setCSS(mEle) {
     if (mEle != null && mEle instanceof Node) {
         localStorage.setItem(mEle.id, mEle.value);
     }
     let styleOverrides = [];
-    const selects = Array.from(document.getElementsByClassName("drop-select"));
-    selects.forEach(
+    Array.from(document.getElementsByClassName("drop-select")).forEach(
         select => {
             select.value = localStorage.getItem(select.id) ||sdefaults[select.id];
             if (select.value != sdefaults[select.id]) { styleOverrides.push(select.id + ": " + select.value) }
@@ -465,10 +456,10 @@ function parseMeta(chunk) {
                 return;
             }
             if (addr[0] =="tumblr") {
-                mSeeAlso.push('<a class="see-also" title="This was also posted on Tumblr" href="https://irisembury.tumblr.com/'+ addr[1] +'"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>read on Tumblr</span></a>');
+                mSeeAlso.push('<a class="see-also" title="Read this on Tumblr" href="https://irisembury.tumblr.com/'+ addr[1] +'"><svg title="Tumblr" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 530 530"><path fill="var(--c-tumblr)" d="M260,0 C403.1,0 520,116.9 520,260 C520,403.1 403.1,520 260,520 C116.9,520 0,403.1 0,260 C0,116.9 116.9,0 260,0 Z"/><path fill="var(--c-tumblr-white)" d="M222.5 113.9h55.8v71.1h48.3v55.8h-48.3v91.5c0 24.1 13.6 31.6 32.2 31.6 9.5 0 20.6-1.4 28.5-3.9v51.9c-9.9 4.7-27.8 9.4-47.3 9.4-47.6 0-78.5-29.3-78.5-82.7V240.8h-38.9v-55.8h38.9v-71.1z"/></svg><span>Tumblr</span></a>');
             }
             else if (addr[0] =="substack") {
-                mSeeAlso.push('<a class="see-also" title="This was also posted on Substack" href="https://irisembury.substack.com/p/'+ addr[1] +'"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>read on Substack</span></a>');
+                mSeeAlso.push('<a class="see-also" title="Read this on Substack" href="https://irisembury.substack.com/p/'+ addr[1] +'"><svg title="Substack" role="img" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 64 64"><path fill="var(--c-substack)" d="M8 10 H56 V16 H8 Z" /><path fill="var(--c-substack)" d="M8 22 H56 V28 H8 Z" /><path fill="var(--c-substack)" d="M8 34 H56 V62 L32 50 L8 62 Z" /></svg><span>Substack</span></a>');
             }
         }
     })
@@ -493,7 +484,7 @@ function isoFormat(datestring) {
 }
 
 function autoHeading(chunk) {
-    let headingNum = chunk.indexOf(" ") + 1;
+    let headingNum = chunk.indexOf(" ");
     let tag = "h" + headingNum;
     chunk = chunk.slice(headingNum);
     let id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g, "");
@@ -596,7 +587,7 @@ function ageFromISO(argDate) {
     const entryDay   = parseInt(argDate.substring(6, 8));
     if (entryYear < 999 || entryYear > 2999 || entryMonth > 12 || entryDay > 31) {
         console.error("date-format-error");
-        return "";
+        return "?";
     }
     const todaysDate = new Date();
     let age = todaysDate.getFullYear() - entryYear;
@@ -605,7 +596,7 @@ function ageFromISO(argDate) {
     if (todaysDate.getMonth() < entryMonth) {
         age -= 1;
     } else {
-        // in birth-month, but not birthday yet:
+        // yes birth-month, but not day yet:
         if (todaysDate.getMonth() == entryMonth && todaysDate.getDate < entryDay) {
             age -= 1;
         }
@@ -613,41 +604,40 @@ function ageFromISO(argDate) {
     return age;
 }
 
-function autoFormat(argVal) {
-    argVal = argVal.trim();
-    if (argVal == "") { return argVal; }
     function auxf(str_in) {
-        if (str_in == "") return str_in;
         str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
         if (str_in.indexOf("'")!=-1||str_in.indexOf('"')!=-1) {
             str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1").replaceAll(/"/g, "&rdquo;")
         }
         return str_in.replaceAll("---", '<span class="mdash">&mdash;</span>').replaceAll("--", "&ndash;");
     }
+
+function autoFormat(_string) {
+    _string = _string.trim();
     let output = "";
+    let s = 0;
     while (true) {
-        const openTag = argVal.indexOf("<");
-        const closeTag = argVal.substring(openTag).indexOf(">") + openTag;
+        if (s++ > 50) { break; }
+        const openTag = _string.indexOf("<");
+        const closeTag = _string.substring(openTag).indexOf(">") + openTag;
         if (openTag == -1 || closeTag - openTag == -1) { break; }
-        const textContent = argVal.substring(0, openTag +1);
-        const attributes = argVal.substring(openTag+1, closeTag);
-        output += auxf(textContent) + attributes;
-        argVal = argVal.substring(closeTag);
+        output += auxf(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
+        _string = _string.substring(closeTag);
     }
-    return (output + auxf(argVal)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\*(.+?)\*/g, "<i>$1</i>");
+    return (output + auxf(_string)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\*(.+?)\*/g, "<i>$1</i>")
 }
 
 /*
     above (autoFormat): The substring values I use to define the text content and attributes are so this captures the tag characters (<, >) as part of the text content. This means if given the string `a b <c> d e`, this will read that as `"a b <", "c", "> d e"`. The reason I do this is so auxf(function) can tell "b" is not the end of a string and "d" is not the beginning of one, since that affects how the curly quotes are applied. If this isn't desired and you want the tags to be part of the attributes variable, you could modify the while-true like so:
     
     while (true) {
-        const openTag = argVal.indexOf("<");
-        const closeTag = argVal.substring(openTag).indexOf(">") + openTag;
+        const openTag = stringInput.indexOf("<");
+        const closeTag = stringInput.substring(openTag).indexOf(">") + openTag;
         if (openTag == -1 || closeTag - openTag == -1) { break; }
-        const textContent = argVal.substring(0, openTag);
-        const attributes = argVal.substring(openTag, closeTag + 1);
+        const textContent = stringInput.substring(0, openTag);
+        const attributes = stringInput.substring(openTag, closeTag + 1);
         output += auxf(textContent) + attributes;
-        argVal = argVal.substring(closeTag + 1);
+        stringInput = stringInput.substring(closeTag + 1);
     }
 */
 
@@ -722,6 +712,66 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 
+/* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                        focus highlight updater                         
+*/
+let lastHeading = -1;
+let rowsInToc = [], articleHeadings = [];
+function toc_update() {
+    let currentHeading = -1;
+    for (let heading = 0; heading < articleHeadings.length; heading += 1) {
+        let elementDistanceFromPageTop = window.scrollY + articleHeadings[heading].getBoundingClientRect().top;
+        if (pageYOffset < elementDistanceFromPageTop - (0.4 * window.innerHeight)) {
+            break;
+        }
+        currentHeading = heading;
+    }
+    if (currentHeading != lastHeading) {
+        rowsInToc.forEach( (row, n) => {
+            if (n == currentHeading) {
+                row.classList.add("active-heading");
+                /* ----
+                    After this being in the code for some time, it seems like it's rarely useful at all (on most pages
+                    the TOC isn't even going to scroll) while adding work to every toc page. Disabled for now.
+                */
+                // let rRect = row.getBoundingClientRect();
+                // let tRect = toc.getBoundingClientRect();
+                
+                // if (rRect.bottom + 20 > tRect.bottom) {
+                    // toc.scrollTo(
+                        // { top: row.offsetTop + row.offsetHeight - toc.clientHeight + 20, behavior: "smooth" }
+                    // )
+                // }
+                // else if (rRect.top < tRect.top) {
+                    // toc.scrollTo(
+                        // { top: row.offsetTop - 4, behavior: "smooth" }
+                    // )
+                // }
+            }
+            else {
+                row.classList.remove("active-heading");
+            }
+        })
+    }
+    lastHeading = currentHeading;
+}
+
+let can_toc_update = true;
+function attempt_toc_update() {
+    if (!can_toc_update) {
+        return;
+    }
+    if (HTML.classList.contains("hide-toc")) {
+        return;
+    }
+    can_toc_update = false;
+    toc_update();
+    setTimeout(() => {
+        can_toc_update = true;
+        toc_update();
+    }, 500);
+}
+
 window.addEventListener("load", function() {
     const index = document.getElementById("index") != null;
     const pathToRoot = index ? "" : "../../";
@@ -729,12 +779,12 @@ window.addEventListener("load", function() {
 
     document.body.innerHTML = `<nav class="navbar">
         <div class="nav-segment nav-left">
-            <div class="hamburger icon"><svg viewBox="0 0 24 24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
+            <div class="hamburger icon"><svg viewBox="0 0 24 24" height="28" width="36"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
             <div class="gap-5">${ index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : '&verbar;<div title="This page" class="page-name-display">' + document.title + "</div>" }</div>
         </div>
         <div class="nav-segment nav-right">
-             ${ index ? "" : `<a class="jump-to-top no-select" onclick="scrollToTop()">Jump to Top</a>` }
-            <div class="gear icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
+            <div class="jump-arrow icon" onclick="scrollToTop()"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" height="24" viewBox="0 0 24 24" width="24"><path d="M5.293 15.207a1 1 0 001.414 0L12 9.914l5.293 5.293a1 1 0 101.414-1.414L12 7.086l-6.707 6.707a1 1 0 000 1.414Z"></path></svg></div>
+            <div class="gear icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="28"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
         </div>
     </nav>
     <nav class="left-panel closed">
@@ -769,16 +819,13 @@ window.addEventListener("load", function() {
         <div><div>Body:</div><select class="drop-select font-select" id="--ff-article" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
         <div><div>Secondary:</div><select class="drop-select font-select" id="--ff-secondary" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
         <div><div style="margin-left:auto; cursor:pointer; color:var(--grey-8);" onclick="resetCSS()" title="restore font defaults">restore defaults</div></div>
-        <div><label for="static-nav">Static (un-sticky) navbar</label><input type="checkbox" class="slide-checkbox auto" id="static-nav"></div>
         <hr>
         <div><div style="line-height:1.5; color:var(--grey-6);"><p>These preferences are saved in your browser's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">local storage</a>. To clear your local storage for this site, simply <a class="pseudo-link" onclick="localStorage.clear()">click here</a>.</p></div></div>
     </div>
     <div class="page-grid">
         <nav id="toc"></nav>
         <div class="main-container">
-            <div class="article">
-                ${ document.body.innerHTML }
-            </div>
+            <div class="article">${ document.body.innerHTML }</div>
             <div class="article-footer">
             </div>
         </div>
@@ -793,6 +840,10 @@ window.addEventListener("load", function() {
     let contentLinks = [];
     interpreter(document.querySelector(".article"), contentLinks);
     HTML.classList.add("layout");
+    
+    page_lightbox = document.querySelector(".lightbox");
+    page_lbCaption = document.querySelector(".lb-caption");
+    page_lbTopLeft = document.querySelector(".lb-top-left");
     
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                               .left-panel (hamburger) set-up                          
@@ -859,7 +910,7 @@ window.addEventListener("load", function() {
         }
         else if (e.key === "Home") {
             let toc = document.getElementById("toc");
-            if (toc) {
+            if (toc != null) {
                 toc.scrollTo({
                     behavior: "smooth",
                     top: 0
@@ -921,17 +972,17 @@ window.addEventListener("load", function() {
     else if (!document.title.endsWith("Iris Embury")) {
         document.title += " | Iris Embury";
     }
-    let pnd = document.querySelector(".page-name-display");
-    if (pnd != null && pnd.innerHTML == "") {
-        pnd.innerHTML = "This page";
+    let pagenamedisp = document.querySelector(".page-name-display");
+    if (pagenamedisp != null && pagenamedisp.innerHTML == "") {
+        pagenamedisp.innerHTML = "This page";
     }
-    
+
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                     table of contents                                 
     */
     if (HTML.classList.contains("load-toc")) {
-        const headings = Array.from(document.getElementsByClassName("for-toc"));
-        headings.forEach(
+        articleHeadings = Array.from(document.getElementsByClassName("for-toc"));
+        articleHeadings.forEach(
             h => {
                 h.classList.remove("for-toc");
                 if (h.classList.length == 0) {
@@ -939,76 +990,19 @@ window.addEventListener("load", function() {
                 }
             }
         );
-        if (headings.length > 0) {
+        if (articleHeadings.length > 0) {
             /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                         create contents                             
             */
             const toc = document.getElementById("toc");
-            toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + headings.map(
-                heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>`
-            ).join("");
+            toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + articleHeadings.map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
             toc.scrollTo({ behavior: "instant", top: 0 })
-            const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-
-            /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                    focus highlight updater                         
-            */
-            let lastHeading = -1;
-            function toc_hl_update() {
-                let currentHeading = -1;
-                for (let heading = 0; heading < headings.length; heading += 1) {
-                    let elementDistanceFromPageTop = window.scrollY + headings[heading].getBoundingClientRect().top;
-                    if (pageYOffset < elementDistanceFromPageTop - (0.4 * window.innerHeight)) {
-                        break;
-                    }
-                    currentHeading = heading;
-                }
-                if (currentHeading != lastHeading) {
-                    rowsInToc.forEach( (row, n) => {
-                        if (n == currentHeading) {
-                            row.classList.add("active-heading");
-                            let rRect = row.getBoundingClientRect();
-                            let tRect = toc.getBoundingClientRect();
-                            
-                            if (rRect.bottom + 20 > tRect.bottom) {
-                                toc.scrollTo(
-                                    { top: row.offsetTop + row.offsetHeight - toc.clientHeight + 20, behavior: "smooth" }
-                                )
-                            }
-                            else if (rRect.top < tRect.top) {
-                                toc.scrollTo(
-                                    { top: row.offsetTop - 4, behavior: "smooth" }
-                                )
-                            }
-                        }
-                        else {
-                            row.classList.remove("active-heading");
-                        }
-                    })
-                }
-                lastHeading = currentHeading;
-            }
             /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                         attach to window                            
             */
-            let can_toc_update = true;
-            let canTocHighlightUpdate = true;
-            function toc_hl_attempt() {
-                if (!can_toc_update) {
-                    return;
-                }
-                if (HTML.classList.contains("hide-toc")) {
-                    return;
-                }
-                can_toc_update = false;
-                setTimeout(() => {
-                    can_toc_update = true;
-                    toc_hl_update();
-                }, 500);
-                toc_hl_update();
-            }
-            window.addEventListener("scroll", toc_hl_attempt);
-            toc_hl_attempt();
+            rowsInToc = Array.from(toc.getElementsByClassName("toc-row")).slice(1);
+            window.addEventListener("scroll", attempt_toc_update);
+            attempt_toc_update();
         }
     }
     else {

@@ -10,20 +10,20 @@
         .auto-rows .row:hover .date { color: inherit; }
         .auto-rows .date { color: var(--grey-8); }
         .auto-rows .row .col-2 { align-self: center; flex: 1; height: 1px; background: repeating-linear-gradient( to right, var(--grey-a) 0 1px, transparent 2px 6px ); margin-top: 2px; }
-    .yt-gallery { display: flex; flex-direction: column; width: 184px; }
-    .article h2, .article h3 { color: var(--grey-4); }
-    .article h2 { font: 600 16pt Lexend; margin-block: 0.25em 0.35em; }
-    .article h3 { font: 600 13pt Lexend; margin-block: 0.25rem 1rem; }
+    .article h1,
+    .article h2,
+    .article h3,
+    .article h4 { font-family: Lexend,sans-serif; color: var(--grey-4); }
     .out-links { display: flex; flex-direction: column; flex-wrap: wrap; height: 132px; padding-left: 1em; }
-    .out-links div { padding: 0.2em 1em; }
-    .out-links div:before { content: '⮞'; margin-right: 5px; }
+        .out-links div { padding: 0.1em 1em; }
+        .out-links div:before { content: '⮞'; margin-right: 5px; }
     </style>
 </head>
 <body>
-<div style="display:flex; max-width:716px; margin:0 auto;">
-    <div><div style="background-color: var(--page-bg); border: 1px solid var(--grey-c); padding: 0.5em; margin: 0.5em;"><img load="lazy" height="150" width="150" onclick="setLightbox(this)" src="assets/cabanel-ver.png"></div></div>
-    <div style="padding:0.5em;">
-        <h2>Iris Embury</h2>
+<div class="flex">
+    <div><div style="background-color: var(--page-bg); border: 1px solid var(--grey-c); padding: 0.5em; margin-right: 0.5em;"><img load="lazy" height="150" width="150" onclick="setLightbox(this)" src="assets/cabanel-ver.png"></div></div>
+    <div style="padding: 0.25em 0.75em;">
+        <h2 style="margin:0 0 0.25em;">Iris Embury</h2>
         <div class="out-links">
             <div><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA">YouTube</a></div>
             <div><a href="https://patreon.com/irisembury">Patreon</a></div>
@@ -36,7 +36,21 @@
     </div>
 </div>
 <hr>
-<div class="center">
+
+#### Latest videos:
+
+<div id="videos-index" class="4"></div>
+<div style="text-align:right; margin-top:0.5em; font-family:var(--ff-secondary);"><a href="page/videos/index.html">see all videos</a></div>
+
+#### Text pages hosted here:
+
+<div id="page-index"></div>
+
+
+
+
+
+<!-- <div class="center">
     <div style="padding-right:1em; margin-right:1em; border-right:1px solid var(--grey-c);">
         <h3>Text pages hosted here:</h3>
         <div id="page-index"></div>
@@ -46,7 +60,10 @@
         <div id="videos-index" class="4"></div>
         <div style="text-align:right; margin-top:0.5em; font-family:var(--ff-secondary);"><a href="page/videos/index.html">see all videos</a></div>
     </div>
-</div>
+</div> -->
+
+
+
 <script src="assets/layout.js"></script><script>document.querySelectorAll("a[href]").forEach(a => { a.title = a.href })</script><div class="hidden" id="index"></div>
 </body></html>
 
