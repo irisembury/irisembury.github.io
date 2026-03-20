@@ -100,11 +100,11 @@ function parseSource(string_in) {
         let sitename = vals[0], id = vals[1];
         if (sitename == "tumblr") {
             let href = 'https://irisembury.tumblr.com/post/' + id;
-            return '<a class="external-link tumblr-link" href="' + href + '" title="Read this page on my Tumblr"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a>'
+            return '<a class="external-link tumblr-link" href="' + href + '" title="Read this page on Tumblr"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a>'
         }
         if (sitename == "substack") {
             let href = 'https://irisembury.substack.com/p/' + id;
-            return '<a class="external-link substack-link" href="' + href + '" title="Read this page on my Substack"><span class="substack-logo inline-icon"></span><span>Substack</span></a>'
+            return '<a class="external-link substack-link" href="' + href + '" title="Read this page on Substack"><span class="substack-logo inline-icon"></span><span>Substack</span></a>'
         }
     }
     return "";

@@ -106,19 +106,16 @@
         /* letter-spacing? */
         --ls-bold-1: -0.1px;
         --ls-bold-2: -0.1px;
-        --binary-shadow: linear-gradient(transparent 50%,#0000000f 60%);
         --youtube-logo: url(youtube-logo.png);
         --github-logo: url(github-logo.png);
         --patreon-logo: url(patreon-logo.png);
         --discord-logo: url(discord-logo.png);
-        --twitter-png: url(x-logo.png);
-        --twitter-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 23 23'%3E%3Cpath fill='%23111' d='M21.742 21.75l-7.563-11.179 7.056-8.321h-2.456l-5.691 6.714-4.54-6.714H2.359l7.29 10.776L2.25 21.75h2.456l6.035-7.118 4.818 7.118h6.191-.008zM7.739 3.818L18.81 20.182h-2.447L5.29 3.818h2.447z'%3E%3C/path%3E%3C/svg%3E");
-        --twitter-logo: var(--twitter-png, var(--twitter-svg));
+        --twitter-logo: url(x-logo.png);
+        --twitter-logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='1 1 22 22'%3E%3Cpath fill='%23111' d='M21.742 21.75l-7.563-11.179 7.056-8.321h-2.456l-5.691 6.714-4.54-6.714H2.359l7.29 10.776L2.25 21.75h2.456l6.035-7.118 4.818 7.118h6.191-.008zM7.739 3.818L18.81 20.182h-2.447L5.29 3.818h2.447z'%3E%3C/path%3E%3C/svg%3E");
         --substack-logo: url(substack-logo.png);
+            --substack-logo: url("data:image/svg+xml,%3Csvg viewBox='0 -1 21 21' fill='%23ff8e42' stroke-width='1.8' stroke='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpath d='M1.96484 0.624512H18.0354V2.70052H1.96484V0.624512Z' stroke='none'%3E%3C/path%3E%3Cpath d='M1.96484 4.77655H18.0354V6.85254H1.96484V4.77655Z' stroke='none'%3E%3C/path%3E%3Cpath d='M1.96484 8.92857V19.9505L10.0001 14.6347L18.0354 19.9505V8.92857H1.96484Z' stroke='none'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
         --bluesky-logo: url(bluesky-logo.png);
-        --bluesky-logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 530'%3E%3Cpath fill='%234da8f9' d='m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z'/%3E%3C/svg%3E");
-        
-        
+            --bluesky-logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 530'%3E%3Cpath fill='%234da8f9' d='m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z'/%3E%3C/svg%3E");
         
         --tumblr-logo: url(tumblr-logo.png);
         --facebook-logo: url(facebook-logo.png);
@@ -163,15 +160,14 @@
         --c-red: #b15f60;
         --c-green: hsl(118, 25%, 37%);
         --c-blue: hsl(230, 34%, 58%);
-        --c-gold: hsl(40, 32%, 50%);
+        --c-gold: hsl(40, 32%, 52%);
         --c-iris: hsl(252, 32%, 50%);
         /* colours for backgrounds */
-        --c-bg-lightblue: #79f2;
-        --c-bg-lightgreen: #303c36;
-        --c-bg-lightred: #432e31;
+        --c-bg-lightblue: #18e2;
+        --c-bg-lightgreen: #2932;
+        --c-bg-lightred: #f442;
         --c-bg-lightyellow: #3e3c33;
         --c-bg-cream: #3b3c3e;
-        --binary-shadow: linear-gradient(#ffffff0a 50%,transparent 60%);
     }
     
     /* JavaScript adds .layout class to document element, so :not(.layout) means if layout.js fails to load */
@@ -216,6 +212,7 @@
     .substack-logo { background-image: var(--substack-logo); }
     .tumblr-logo { background-image: var(--tumblr-logo); } .dark .tumblr-logo { filter: brightness(1.15) grayscale(0.15); }
     .twitter-logo { background-image: var(--twitter-logo); } .dark .twitter-logo { filter: invert(0.75); }
+    .twitter-logo-2 { background-image: var(--twitter-logo-2); } .dark .twitter-logo-2 { filter: invert(0.75); }
     .youtube-logo { background-image: var(--youtube-logo); } .dark .youtube-logo { filter: grayscale(0.15); }
     .internal-image { width: 14px; height: 14px; background-image: var(image-icon.png); } .dark .internal-image { filter: invert(0.75); }
 
@@ -273,7 +270,7 @@
     .right-panel.closed { opacity: 0; transform: translate(0); pointer-events: none; }
     .right-panel { line-height: 1.15; box-sizing: border-box; z-index: 2; top: var(--nav-height); right: calc(0px - var(--right-width)); position: fixed; background-color: var(--menu-bg); max-width: var(--right-width); border: 1px solid var(--grey-c); max-width: var(--right-width); padding: 14px; opacity: 1; transform: translateX(calc(0px - var(--right-width))); transition: transform 0.1s, opacity 0.1s; }
         .right-panel > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-        .right-panel > div + div { margin-top: 12px; }
+        .right-panel > div + div { margin-top: 13px; }
         .right-panel p + p { margin-top: 0.5em; }
         .right-panel a { text-decoration: 1px dotted underline var(--grey-a); }
         .right-panel hr { margin: 13px 0; background-color: var(--grey-c); }
