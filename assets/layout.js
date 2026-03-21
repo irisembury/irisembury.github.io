@@ -33,13 +33,13 @@ const page_data = [
 ];
 
 const videoData = `
-Epstein thoughts | 5ymc2ePfFR8 | 2026-03-08
+Elections | 7lw6rO_Pv7I | 2026-03-20
+Jeffrey Epstein | 5ymc2ePfFR8 | 2026-03-08
 The order of information | ZfArsg_xyuI | 2026-03-07
 How bad is America, really? | W0Dmtyyc7FU | 2026-03-06
 Abortion | CpjJ8TgOxJY | 2026-02-24
 A synopsis of American decline | oUOsAdnK2zs | 2026-02-11
 give yourself credit | mM5fcuJnfZQ | 2026-01-23
-Potential issues with our elections | 509Q_HUp8CE | 2026-01-19
 Why is Reddit so hated? | jPVl5cfVP1k | 2026-01-13
 thoughts and plans | _zePgOyNPt4 | 2026-01-06
 Nick Shirley has farty pants | aQcGUiISQQk | 2026-01-05
