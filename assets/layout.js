@@ -1,42 +1,55 @@
 "use strict"
 const HTML = document.documentElement;
 
-const page_data = [
-    { title:"The case for abortion", url:"abortion", date:"2026-02-18", other:["substack|the-case-for-abortion","tumblr|809547051047272448"] },
-    { title:"A synopsis of American decline", url:"a-synopsis-of-american-decline", date:"2026-01-28", other:["substack|a-synopsis-of-american-decline"] },
-    { title:"Give yourself credit", url:"give-yourself-credit", date:"2026-01-23", other:["tumblr|806587768751915008","substack|give-yourself-credit"] },
-    { title:"Nick Shirley and Somali day cares", url:"somali-day-cares", date:"2026-01-02", other:["substack|nick-shirley-and-the-somali-daycares"] },
-    { title:"Why is Reddit so hated?", url:"why-is-reddit-so-hated", date:"2025-12-30", other:["substack|why-is-reddit-so-hated"] },
-    { title:"Stay the trenches", url:"stay-the-trenches", date:"2025-12-17", other:["substack|stay-the-trenches"] },
-    { title:"On derangement", url:"derangement", date:"2025-12-12", other:["tumblr|803146121725771776","substack|derangement"] },
-    { title:"Thoughts on immigration", url:"immigration", date:"2025-11-06", other:["substack|thoughts-on-immigration"] },
-    { title:"What is prejudice?", url:"what-is-prejudice", date:"2025-10-30", other:["substack|prejudice"] },
-    { title:"Notes on India", url:"india", date:"2025-10-24", other:["substack|india","tumblr|798351257128615936"] },
-    { title:"Liberalism, not extremism", url:"liberalism-not-extremism", date:"2025-09-19", other:["substack|liberalism-not-extremism","tumblr|795164683319574528"] },
-    { title:"Normalization", url:"the-path-of-normalization", date:"2025-09-08", other:["substack|normalization-and-status-quo-bias"] },
-    { title:"Lies about Ilhan Omar", url:"ilhan-omar", date:"2025-08-25", other:["substack|ilhan-omar","tumblr|794091916138594304"] },
-    { title:"Notes on Israel and Palestine", url:"israel-palestine", date:"2025-07-27", other:[] },
-    { title:"Lies told by Pierre Poilievre", url:"pierre-poilievre", date:"2025-03-15", other:["tumblr|782079973591760896","substack|pierre-poilievre"] },
-    { title:"Trump and Russia", url:"trump-and-russia", date:"2025-03-06", other:["tumblr|777321996757450752","substack|trump-and-russia"] },
-    { title:"Why get bottom surgery?", url:"why-get-bottom-surgery", date:"2025-02-09", other:["tumblr|775036555284856832"] },
-    { title:"Liberal conservatism", url:"conservatism", date:"2025-01-30", other:[] },
-    { title:"Elon Musk and the Nazi Salute", url:"elon-musk-nazi-salute", date:"2025-01-24", other:["substack|the-nazi-salute","tumblr|773565389405847552"] },
-    { title:"Lies about Elizabeth Warren and Hillary Clinton", url:"lies-about-warren-clinton", date:"2024-12-19", other:["tumblr|770730090759946240","substack|enduring-falsehoods-about-warren"] },
-    { title:"Mark Robinson", url:"mark-robinson", date:"2024-12-15", other:["tumblr|769962893917798400"] },
-    { title:"The Trump appeal", url:"the-trump-appeal", date:"2024-12-03", other:["tumblr|770270265635667968"] },
-    { title:"The default politician", url:"the-default-politician", date:"2024-11-26", other:["substack|the-default-politician-is-a-normal","tumblr|770305075441778688"] },
-    { title:"Sex, gender, & transsexuals", url:"sex-gender-transsexuals", date:"2024-11-19", other:[] },
-    { title:"Fetishism and politics", url:"fetishism-politics", date:"2024-11-14", other:["tumblr|770364766791352320"] },
-    { title:"Types of masculinity", url:"types-of-masculinity", date:"2024-11-08", other:["tumblr|770310861444300800"] },
-    { title:"Poor Things (2023 film)", url:"poor-things", date:"2024-10-31", other:["tumblr|769969807464464384"] },
-    { title:"The trans prison stats argument", url:"the-trans-prison-stats-argument", date:"2024-10-19", other:["substack|the-trans-prison-stats-argument","tumblr|771501478599868416"] }
-];
+const page_data = `
+The case for abortion | abortion | 2026-02-18 | substack:the-case-for-abortion tumblr:809547051047272448
+A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28 | substack:a-synopsis-of-american-decline
+Give yourself credit | give-yourself-credit | 2026-01-23 | tumblr:806587768751915008 substack:give-yourself-credit
+Fetishism & politics | fetishism-politics | 2024-11-14 | tumblr:770364766791352320
+Nick Shirley & Somali day cares | somali-day-cares | 2026-01-02 | substack:nick-shirley-and-the-somali-daycares
+Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30 | substack:why-is-reddit-so-hated
+Stay the trenches | stay-the-trenches | 2025-12-17 | substack:stay-the-trenches
+On derangement | derangement | 2025-12-12 | tumblr:803146121725771776 substack:derangement
+Thoughts on immigration | immigration | 2025-11-06 | substack:thoughts-on-immigration
+What is prejudice? | what-is-prejudice | 2025-10-30 | substack:prejudice
+Notes on India | notes-on-india | 2025-10-24 | substack:india tumblr:798351257128615936
+Liberalism not extremism | liberalism-not-extremism | 2025-09-19 | substack:liberalism-not-extremism tumblr:795164683319574528
+Normalization | the-path-of-normalization | 2025-09-08 | substack:normalization-and-status-quo-bias
+Lies about Ilhan Omar | lies-about-ilhan-omar | 2025-08-25 | substack:ilhan-omar tumblr:794091916138594304
+Notes on Israel & Palestine | israel-palestine | 2025-07-27 
+Lies told by Pierre Poilievre | pierre-poilievre | 2025-03-15 | tumblr:782079973591760896 substack:pierre-poilievre
+Trump & Russia | trump-and-russia | 2025-03-06 | tumblr:777321996757450752 substack:trump-and-russia
+Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09 | tumblr:775036555284856832
+Liberal conservatism | conservatism | 2026-03-24 
+Elon Musk & the Nazi Salute | elon-musk-nazi-salute | 2025-01-24 | substack:the-nazi-salute | tumblr:773565389405847552
+Lies about Elizabeth Warren & Hillary Clinton | lies-about-warren-clinton | 2024-12-19 | tumblr:770730090759946240 substack:enduring-falsehoods-about-warren
+Mark Robinson | mark-robinson | 2024-12-15 | tumblr:769962893917798400
+The Trump appeal | the-trump-appeal | 2024-12-03 | tumblr:770270265635667968
+The default politician | the-default-politician | 2024-11-26 | substack:the-default-politician-is-a-normal tumblr:770305075441778688
+Sex gender & transsexuals | sex-gender-transsexuals | 2024-11-19 
+Bernie Sanders & the military industrial complex | bernie-sanders-and-the-military-industrial-complex | 2024-12-16 | tumblr:770070077409214464
+Types of masculinity | types-of-masculinity | 2024-11-08 | tumblr:770310861444300800
+Poor Things (2023 film) | poor-things | 2024-10-31 | tumblr:769969807464464384
+The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19 | substack:the-trans-prison-stats-argument tumblr:771501478599868416`.split("\n").filter(n => n.length > 5).map(
+    n => {
+        let [title, url, date, other] = n.split("|", 4).map(c => c.trim());
+        other = other ?other.split(" ").sort() :[];
+        return { title, url, date, other }
+    }
+).sort(
+    (a, b) => parseInt(b.date.replace(/\D/g, "")) - parseInt(a.date.replace(/\D/g,""))
+).map(
+    n => {
+        n.title = n.title.replaceAll('&', '&amp;').replaceAll('---', '&mdash;').replaceAll('--', '&ndash;');
+        return n;
+    }
+);
 
 const videoData = `
 Elections | 7lw6rO_Pv7I | 2026-03-20
 Jeffrey Epstein | 5ymc2ePfFR8 | 2026-03-08
 The order of information | ZfArsg_xyuI | 2026-03-07
-How bad is America, really? | W0Dmtyyc7FU | 2026-03-06
+How bad is America, really? | W0Dmtyyc7FU | 2026-03-04
 Abortion | CpjJ8TgOxJY | 2026-02-24
 A synopsis of American decline | oUOsAdnK2zs | 2026-02-11
 give yourself credit | mM5fcuJnfZQ | 2026-01-23
@@ -95,17 +108,14 @@ function scrollToTop() {
 }
 
 function parseSource(string_in) {
-    let vals = string_in.split("|", 2);
-    if (vals.length == 2) {
-        let sitename = vals[0], id = vals[1];
-        if (sitename == "tumblr") {
-            let href = 'https://irisembury.tumblr.com/post/' + id;
-            return '<a class="external-link tumblr-link" href="' + href + '" title="Read this page on Tumblr"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a>'
-        }
-        if (sitename == "substack") {
-            let href = 'https://irisembury.substack.com/p/' + id;
-            return '<a class="external-link substack-link" href="' + href + '" title="Read this page on Substack"><span class="substack-logo inline-icon"></span><span>Substack</span></a>'
-        }
+    let [site, id] = string_in.split(":", 2);
+    if (site == "tumblr") {
+        let href = 'https://irisembury.tumblr.com/post/' + id;
+        return '<a class="external-link tumblr-link" href="' + href + '" title="Read this page on Tumblr"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a>'
+    }
+    if (site == "substack") {
+        let href = 'https://irisembury.substack.com/p/' + id;
+        return '<a class="external-link substack-link" href="' + href + '" title="Read this page on Substack"><span class="substack-logo inline-icon"></span><span>Substack</span></a>'
     }
     return "";
 }
@@ -292,23 +302,24 @@ function ytGallery(chunk) {
             return b - a;
         })
     }
-    rows = rows.slice(0, numToInclude).map( row => {
-        let title = row[0];
-        let videoCode = row[1];
-        let date = row[2];
+    rows = rows.slice(0, numToInclude).map(
+        row => {
+            let title = row[0];
+            let videoCode = row[1];
+            let date = row[2];
 
-        while (videoCode.charAt(videoCode.length - 1) == "/") {
-            videoCode = videoCode.substring(0, videoCode.length - 1);
-        }
-        videoCode = videoCode.split("/").slice(-1);
+            while (videoCode.charAt(videoCode.length - 1) == "/") {
+                videoCode = videoCode.substring(0, videoCode.length - 1);
+            }
+            videoCode = videoCode.split("/").slice(-1);
 
-        let videoUrl = `https://www.youtube.com/watch?v=${ videoCode }`;
-        let thumbUrl = `https://i.ytimg.com/vi/${ videoCode }/hqdefault.jpg`;
+            let videoUrl = `https://www.youtube.com/watch?v=${ videoCode }`;
+            let thumbUrl = `https://i.ytimg.com/vi/${ videoCode }/hqdefault.jpg`;
 
-        return `<figure>
-            <a href="${ videoUrl }"><img loading="lazy" src="${ thumbUrl }"></a>
-            <figcaption><div class="yt-title"><a href="${ videoUrl }">${ title }</a></div> <div class="yt-date">${ date }</div></figcaption>
-        </figure>`;
+            return `<figure>
+                <a href="${ videoUrl }"><img loading="lazy" src="${ thumbUrl }"></a>
+                <figcaption><div class="yt-title"><a href="${ videoUrl }">${ title }</a></div> <div class="yt-date">${ date }</div></figcaption>
+            </figure>`;
     });
     return `<div class="table-wrapper"><div class="yt-gallery">${ rows.join("") }</div></div>`;
 }
@@ -350,11 +361,11 @@ function autoTable(chunk, table_number) {
                                         else p = '<p>' + p + '</p>';
                                         return autoFormat(p);
                                     }
-                                ).join('')
+                                ).join('').replaceAll('</blockquote><blockquote>', '')
                             }</td>`
                         }
                     ).join('')
-                }</tr>`
+                }</tr>`;
             }
         ).join('')
     }</tbody></table></div>`
@@ -439,25 +450,22 @@ function parseMeta(chunk) {
     let title = "", subtitle = "", date = "", seeAlso = [];
     chunk.split("\n").slice(1).forEach(
         line => {
-            line = line.split(":", 2);
-            if (line.length == 2) {
-                let key = line[0].trim(), val = line[1].trim();
-                
-                if (key == "title") {
-                    document.title = val.replaceAll("---", "—").replaceAll("--", "–").replaceAll("&amp;", "&");
-                    title = '<h1 class="article-title for-toc">' + autoFormat(val) + '</h1>';
-                }
-                else if (key == "subtitle") {
-                    subtitle = '<h2 class="article-subtitle">' + autoFormat(val) + '</h1>';
-                }
-                else if (key == "date") {
-                    date = '<div class="article-date">' + isoFormat(val) + ' · Iris Embury</div>';
-                }
-                else if (key == "see-also") {
-                    val = parseSource(val.toLowerCase());
-                    if (val) {
-                        seeAlso.push(val);
-                    }
+            let [key,val] = line.split(":").map(c => c.trim());
+
+            if (key == "title") {
+                document.title = val.replaceAll("---", "\u2014").replaceAll("--", "\u2013").replaceAll("&amp;", "\u0026");
+                title = '<h1 class="article-title for-toc">' + autoFormat(val) + '</h1>';
+            }
+            else if (key == "subtitle") {
+                subtitle = '<h2 class="article-subtitle">' + autoFormat(val) + '</h1>';
+            }
+            else if (key == "date") {
+                date = '<div class="article-date">' + isoFormat(val) + '</div>';
+            }
+            else if (key == "see-also") {
+                val = parseSource(val.toLowerCase());
+                if (val) {
+                    seeAlso.push(val);
                 }
             }
         }
@@ -468,13 +476,21 @@ function parseMeta(chunk) {
     return title + subtitle + date;
 }
 
-function isoFormat(datestring) {
-    if (/^\d{4}-\d{2}-\d{2}$/.test(datestring)) {
-        const iso = datestring;
-        const [y, m, d] = iso.split("-").map(Number);
-        let fdate = new Date(y, m - 1, d);
-        fdate = new Intl.DateTimeFormat(undefined,{ year: "numeric", month:"long", day:"numeric"}).format(fdate);
-        datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ fdate +'</time>';
+/* converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
+function isoFormat(datestring, flag) {
+    let input = datestring.replace(/\D/g, "")
+    if (input.length == 8) {
+        const iso = input.substring(0,4) + "-" + input.substring(4,6) + "-" + input.substring(6,8);
+        let [year,month,day] = iso.split("-").map(Number);
+        if (month >= 1 && month <= 12) {
+            if (flag) {
+                month = { 1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June", 7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec" }[month]
+            }
+            else {
+                month = { 1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December" }[month]
+            }
+        }
+        datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ year + " " + month + " " + day +'</time>';
     }
     return datestring;
 }
@@ -482,13 +498,13 @@ function isoFormat(datestring) {
 function autoHeading(chunk) {
     let headingNum = chunk.indexOf(" ");
     let tag = "h" + headingNum;
-    chunk = chunk.slice(headingNum);
+    chunk = chunk.slice(headingNum + 1);
     let id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g, "");
     chunk = autoFormat(chunk);
     return `<${ tag + (headingNum <=3 ?' class="auto-heading for-toc"' :'') } id="${ id }">${ chunk }</${ tag }>`;
 }
 
-function linkReplace(chunk, externalLinksArray) {
+function linkReplace(chunk, articleLinksArray) {
     return chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
         linkUrl = linkUrl.replaceAll("\\)", ")");
         displayText = displayText.trim();
@@ -497,27 +513,27 @@ function linkReplace(chunk, externalLinksArray) {
         
         let link_index = '[res]';
         if (linkUrl.startsWith("http")) {
-            link_index = externalLinksArray.indexOf(linkUrl);
+            link_index = articleLinksArray.indexOf(linkUrl);
             if (link_index == -1) {
-                link_index = externalLinksArray.push(linkUrl);
+                link_index = articleLinksArray.push(linkUrl);
             }
             link_index = '[' + link_index + ']';
         }
 
         let a_tag = '<a href="' + linkUrl + '"';
-        let link_title = "";
+        let link_title = linkUrl;
         let link_class = [];
         let link_inner = displayText || link_index;
-        if (!external && linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg")) {
-            a_tag = `<a onclick="setLightbox('${ linkUrl }')"`;
-            link_class.push("pseudo-link");
-            link_inner += '<span class="internal-image inline-icon"></span>';
-            link_title = linkUrl.split("/").slice(-1).join("");
+        if (!external) {
+            if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg")) {
+                a_tag = `<a onclick="setLightbox('${ linkUrl }')"`;
+                link_class.push("pseudo-link");
+                link_inner += '<span class="inline-icon lightbox-link"></span>';
+                link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
+            }
         }
         else {
-            link_title = linkUrl;
-        }
-        if (external) {
+            a_tag += ' target="_blank"';
             link_class.push("external-link");
             if (linkUrl.includes("youtube.com") || linkUrl.includes("youtu.be")) {
                 link_inner += '<span class="youtube-logo inline-icon"></span>';
@@ -622,27 +638,25 @@ function ageFromISO(argDate) {
     return age;
 }
 
-    function auxf(str_in) {
-        str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
-        if (str_in.indexOf("'")!=-1||str_in.indexOf('"')!=-1) {
-            str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1").replaceAll(/"/g, "&rdquo;")
-        }
-        return str_in.replaceAll("---", '<span class="mdash">&mdash;</span>').replaceAll("--", "&ndash;");
+function auxf(str_in) {
+    str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
+    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
+        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1").replaceAll(/"/g, "&rdquo;")
     }
+    return str_in.replaceAll("---", '<span class="mdash">&mdash;</span>').replace(/\-\-([^>])/g, "&ndash;$1");
+}
 
 function autoFormat(_string) {
     _string = _string.trim();
     let output = "";
-    let s = 0;
     while (true) {
-        if (s++ > 50) { break; }
         const openTag = _string.indexOf("<");
         const closeTag = _string.substring(openTag).indexOf(">") + openTag;
         if (openTag == -1 || closeTag - openTag == -1) { break; }
         output += auxf(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
         _string = _string.substring(closeTag);
     }
-    return (output + auxf(_string)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\*(.+?)\*/g, "<em>$1</em>")
+    return (output + auxf(_string)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>")
 }
 
 /*
@@ -739,14 +753,14 @@ function toc_update() {
     let currentHeading = -1;
     for (let heading = 0; heading < articleHeadings.length; heading += 1) {
         let elementDistanceFromPageTop = window.scrollY + articleHeadings[heading].getBoundingClientRect().top;
-        if (pageYOffset < elementDistanceFromPageTop - (0.4 * window.innerHeight)) {
+        if (pageYOffset < elementDistanceFromPageTop - (0.475 * window.innerHeight)) {
             break;
         }
         currentHeading = heading;
     }
     if (currentHeading != lastHeading) {
         rowsInToc.forEach( (row, n) => {
-            if (n == currentHeading) {
+            if (n == currentHeading && n > 0) {
                 row.classList.add("active-heading");
                 /* ----
                     After this being in the code for some time, it seems like it's rarely useful at all (on most pages
@@ -806,9 +820,6 @@ window.addEventListener("load", function() {
         </div>
     </nav>
     <nav class="left-panel closed">
-        <div class="nav-row title">Links</div>
-        <div class="nav-row"><a href="https://irisembury.github.io/"><span class="inline-icon grandchamp-logo"></span><span>Front page (this repo)</span></a></div>
-        <div class="nav-row"><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="inline-icon youtube-logo"></span><span>YouTube channel</span></a></div>
         <div class="nav-row title">Page listing</div>
         ${ page_data.map( entry => `<div class="nav-row link"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>` ).join("") }
     </nav>
@@ -972,22 +983,17 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                       index elements                                  
     */
-    
+
     let pageIndex = document.getElementById("page-index");
         if (pageIndex) {
             pageIndex.innerHTML = page_data.map(
-                entry => {
-                    let link_element = `<a href="page/${ entry.url }/index.html">${ entry.title }</a>`;
-                    entry.other.sort().forEach(
-                        u => { link_element += ' ' + parseSource(u); }
-                    )
-                    return '<li></span><span class="entry-date">' + entry.date + ':</span> ' + link_element + '</li>';
-                }
-            ).join("\n")
+                entry => `<div><span class="date">${ isoFormat(entry.date, 1) }:</span><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>`
+            ).join('');
+            pageIndex.classList.add('summary');
         }
     let videosIndex = document.getElementById("videos-index");
         if (videosIndex != null) {
-            let limit = videosIndex.className.replace(/\D/g,"") || 3;
+            let limit = videosIndex.className.replace(/\D/g,"") || 10;
             videosIndex.innerHTML = ytGallery("!yt-gallery sort"+ limit +" \n" + videoData);
         }
     
@@ -1016,12 +1022,12 @@ window.addEventListener("load", function() {
                                         create contents                             
             */
             const toc = document.getElementById("toc");
-            toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + articleHeadings.map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
+            toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + articleHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
             toc.scrollTo({ behavior: "instant", top: 0 })
             /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                         attach to window                            
             */
-            rowsInToc = Array.from(toc.getElementsByClassName("toc-row")).slice(1);
+            rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
             window.addEventListener("scroll", attempt_toc_update);
             attempt_toc_update();
         }

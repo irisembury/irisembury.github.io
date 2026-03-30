@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="label-external">
 <head>
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -11,17 +11,16 @@
     /* for unique page elements */
     .profile { display: flex; gap: 1rem; justify-content: center; text-align: left; }
         .profile-image-box { background-color: var(--page-bg); border: 1px solid var(--grey-c); padding: 0.5em; }
-            .profile-image-box img { cursor: unset; object-fit: cover; background-repeat: no-repeat; background-size: contain; background-position: center; }
+            .profile-image-box img { max-height: 300px; cursor: unset; object-fit: cover; background-repeat: no-repeat; background-size: contain; background-position: center; }
         .profile h1 { margin: 0; }
         .links-area { display: flex; }
-            .links-area > div > div { margin: 16px 0px 0 24px; }
+            .links-area > div > div { min-width: 7em; margin: 1em 0px 0 2em; }
                 .links-area > div > div > div { line-height: 1; }
-                    .links-area a { font-family: Inter,var(--ff-article); font-size: var(--fs-article-3); display: flex; gap: 3px; align-items: center; }
-                    .links-area p { letter-spacing: 0.25px; max-width: 15em; margin: 2px 0 -2px 2px; line-height: 1.25; font-family: var(--ff-ui); font-size: 0.85em; color: var(--grey-8); }
+                    .links-area a { font-size: var(--fs-article-2);  }
+                    .links-area a .inline-icon { margin-right: 4px; }
+                    .links-area p { display: none; letter-spacing: 0.25px; max-width: 15em; margin: 2px 0 -2px 2px; line-height: 1.25; font-family: var(--ff-ui); font-size: 0.85em; color: var(--grey-9); }
 
-    .article { }
-    .article > p { max-width: 654px; margin: 1em auto; font-size: var(--fs-article-2); }
-
+    .article > p { max-width: 750px; margin: 1em auto; font-size: var(--fs-article-2); }
     .auto-rows .row { gap: 5px; margin-inline: -0.4em; padding: 0.05em 0.4em; border: 1px solid transparent; }
         .auto-rows .row:hover { border-color: var(--grey-a); }
         .auto-rows .row:hover .date { color: inherit; }
@@ -32,23 +31,34 @@
     .article h2,
     .article h3,
     .article h4 { font-family: Lexend,sans-serif; color: var(--grey-4); }
-    .article h1 { font-size: 18pt; }
-    .article h3 { line-height: 1.3 !important; margin-top: 1.25em !important; }
+    .article h1 { font-size: 22pt; }
+    .article h2 { font-size: 18pt; }
+    .article h3 { font-size: 16pt; }
+    .article h4 { font-size: 15pt; }
 
-    #page-index { line-height: 1.3; }
-        #page-index li + li { margin-top: 18px; }
-            #page-index .entry-date { letter-spacing: -0.15px; font-size: var(--fs-article-3); font-family: Arial,var(--ff-ui); }
-            #page-index .external-link { margin-left: 4px; border: 1px solid var(--grey-e); border-radius: 3px; padding: 2px 6px 3px 2px; color: var(--grey-6); }
-            #page-index .external-link + .external-link { margin-left: 0; }
-            #page-index .external-link:hover { text-decoration: none; border-color: var(--grey-9); color: var(--grey-4); }
-                #page-index .external-link .inline-icon { margin-inline: 2px 3px; }
-                #page-index .external-link span { font-family: var(--ff-ui); font-size: var(--fs-article-3); color: inherit; }
+    .summary-toggle { border: 1px solid var(--grey-a); padding: 3px 8px 4px; font-size: var(--fs-article-3); font-family: var(--ff-ui); }
+    .summary-toggle::after { content: "Show more"; color: var(--grey-4); }
+    #page-index.summary + .summary-toggle::after { content: "Show less"; }
+    #page-index { scroll-margin-top: 100px; width: 525px; margin-bottom: 2em; line-height: 1.3; }
+        #page-index > div { display: flex; align-items: baseline; gap: 4px; padding: 10px 0 9px; }
+        #page-index > div + div { border-top: 1px dashed var(--grey-c); }
+            #page-index .date { font-size: var(--fs-article-3); }
+            #page-index .entry-main {  }
+            #page-index .entry-info { display: flex; gap: 3px; color: var(--grey-5); font-size: var(--fs-article-3); }
+                #page-index .entry-info a { border: 1px solid var(--grey-e); padding: 3px 5px 3px 2px; line-height: 1; white-space: nowrap; text-decoration: none; }
+                #page-index .entry-info a + a { margin-left: 2px; }
+                #page-index .entry-info a:hover { border-color: var(--grey-a); }
+                    #page-index .entry-info a span { color: var(--grey-5); font-family: var(--ff-ui); font-size: var(--fs-article-3); }
+    #page-index.summary > div:nth-child(n + 21) { display: none; }
+
+    .link-icon::after { display: block; content: ""; background-image: var(--link-icon); border-radius: 2px; width: 16px; height: 16px; margin-inline: 2px; display: inline-block; vertical-align: sub; object-fit: contain; background-repeat: no-repeat; background-size: contain; background-position: center; }
+    
     </style>
 </head>
 <body>
 <div class="profile">
     <div>
-        <div class="profile-image-box"><img load="lazy" height="200" width="150" src="assets/202603081203093.jpg"></div>
+        <div class="profile-image-box"><img width="150" height="200" src="assets/202603081203093.jpg"></div>
     </div>
     <div>
         <h1>Iris Embury</h1>
@@ -58,28 +68,38 @@
                 <div><div><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span>Bluesky</span></a></div></div>
                 <div><div><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span>Twitter/X</span></a></div></div>
                 <div><div><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a></div></div>
-                <div><div><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></div><p>No paywalled content</p></div>
             </div>
             <div>
-                <div><div><a target="_blank" href="discord/index.html"><span class="discord-logo inline-icon"></span><span>Discord (server invite)</span></a></div><p>No paywall</p></div>
-                <div><div><a target="_blank" href="https://patreon.com/irisembury"><span class="patreon-logo inline-icon"></span><span>Patreon</span></a></div><p>No paywalled content; just an option to donate</p></div>
-                <div><div><a target="_blank" href="https://github.com/irisembury"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></div></div>
+                <div><div><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></div><p>No paywalled content</p></div>
+                <div>
+                    <div><a target="_blank" href="https://patreon.com/irisembury"><span class="patreon-logo inline-icon"></span><span>Patreon</span></a></div>
+                    <p>No paywalled content; just an option to donate</p>
+                </div>
+                <div>
+                    <div><a target="_blank" href="discord/index.html"><span class="discord-logo inline-icon"></span><span>Discord (server invite)</span></a></div>
+                    <p>No paywall</p>
+                </div>
+                <div>
+                    <div><a target="_blank" href="https://github.com/irisembury"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<div class="align-center column">
+    <h2>Recent videos</h2>
+</div>
+<div id="videos-index"></div>
+<div style="text-align: right; margin-top: 0;">
+    <div><a target="_blank" style="padding: 3px 6px; margin-right: 2em;" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="link-icon"></span></a></div>
+</div>
+<div class="align-center column" style="margin-bottom:2em;">
+    <h2>Text posts</h2>
+    <ul id="page-index"></ul>
+    <div><a class="summary-toggle pseudo-link" onclick="let pageIndex = document.getElementById('page-index'); let collapsing = !pageIndex.classList.contains('summary'); pageIndex.classList.toggle('summary', collapsing); if (collapsing) { console.log('scrolling back to top of element'); pageIndex.scrollIntoView({behavior:'smooth'}); }"></a></div>
+</div>
 
-I'm a random internet person. There's no particular reason you should know me. I just write and make videos and stuff. I put this page together so the things I do can be found in one place, which is good enough until I get around to making my own actual website.
-
-I'm <span class="age-from">1994-03-07</span> and have lived in Canada for most of my life. I manage this page and my accounts on all other websites solely. I have no association with any other person or organization.
-
-### Recent videos:
-
-<div id="videos-index" class="9"></div>
-
-### Text docs:
-
-<ul id="page-index"></ul>
+I maintain this page and my accounts on all other websites solely. I have no association with any other person or organization.
 
 <div class="hidden" id="index"></div>
 <script src="assets/layout.js"></script>

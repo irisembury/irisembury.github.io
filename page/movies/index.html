@@ -5,10 +5,13 @@
     <link rel="stylesheet" href="../../assets/main.css">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <style>
+    .table-wrapper { max-height: 700px; overflow-y: scroll; background-color: var(--grey-f); padding: 10px 15px; }
     .auto-table td { padding: 1px 13px 1px 0 !important; }
     </style>
 </head>
 <body>
+
+Here's a list of every movie I've ever seen, sorted by release date.
 
 <!-- Note to self: this table self-sorts by date; you don't have to do it yourself. -->
 
@@ -249,11 +252,14 @@ Harry Potter and the Goblet of Fire | 2005
 Harry Potter and the Order of the Phoenix | 2007
 Harry Potter and the Half-Blood Prince | 2009
 Harry Potter and the Deathly Hallows – Part 1 | 2010
+V for Vendetta (2005)
 Harry Potter and the Deathly Hallows – Part 2 | 2011
 The Jungle Book | 1967
 Twilight | 2008
 The Twilight Saga: New Moon | 2009
+South Park: Bigger, Longer & Uncut | 1999
 The Twilight Saga: Eclipse | 2010
+Monty Python and the Holy Grail | 1975
 One Flew Over the Cuckoo's Nest | 1975
 Captain Phillips | 2013
 The Hunchback of Notre Dame | 1996
@@ -265,29 +271,30 @@ Back to the Future Part III | 1990
 
 ---
 
-That's <span id="movie-count" class="digit"></span> movies.
+Total count: <span id="movie-count"></span> movies.
 
-I haven't seen many movies in total. I didn't see many as a kid. Then in my 20s I started keeping a list, starting with all the movies I could recall having seen throughout my life before then.
+I grew up without television and seldom ever went to theatres, which I didn't enjoy, so I basically only saw movies when my parents bought VHS tapes or DVDs, which wasn't many. A few Disney flicks, a random movie called Mouse Hunt. Then in my late 20s I had noticed I was losing track of too many cultural touchpoints when talking to other people and that movie references were a big part of the broader culture, so I should make a concerted effort to go patch that knowledge by going back and watching a lot of the movies that it feels like "everybody knows" (e.g. Back to the Future, Star Wars, Harry Potter, Pirates of the Caribbean, Top Gun, Mission: Impossible). I'm not going to do a rating for every movie, but here are some of my favourites that I want to highlight:
 
-I don't want to do a complex rating thing, but some of my favourites are:
-
-- Poor Things ⭐
+- Poor Things
 - Dial M for Murder
 - Twelve Angry Men
 - Edge of Tomorrow
 - Pride and Prejudice (the 2005 version starring Keira Knightley)
-- Conspiracy (2001)
+- Taken
+- A Few Good Men
 
-I love Oscar-bait character-driven dramas, but with rare exception I dislike anything too focused on love and relationships.
+*Dial M for Murder* was my favourite movie until I saw *Poor Things*. I don't know how to rate things other than those being the top two. I apparently dialogue-heavy dramas. Interesting characters, talking in rooms.
 
-Some other commentary:
+A few negative notes:
 
-- **Star Trek: Section 31**. This was shockingly bad. *Star Trek* already didn't translate that well into movies anyway---the TNG movies had some good moments but were overall badly written---but this one somehow blew all previous attempts away. *Nothing* worked. They shouldn't have even released it. It might be the worst movie I've ever seen, out of everything on this page.
-- **Whiplash**. This movie was actually just dumb as shit. I sort of understand why people like the idea that it's *trying* to convey, about becoming great under pressure or whatever, but the way it tried to convey that was not good. The teacher was just an idiot. I'd have laughed in his face and been like, what are you doing? I don't know how people took it seriously.
+- **Star Trek: Section 31**. This was shockingly bad. *Star Trek* already didn't translate that well into movies anyway---the TNG movies had some good moments, but were overall badly written---but this one somehow blew all previous attempts away. *Nothing* worked. They shouldn't have even released it.
+- **Whiplash**. This movie was actually just dumb as shit. I understand why people like the idea that it's *trying* to convey about rising to the occasion and becoming great under pressure, but the way it tried to convey that was not good. The teacher was just an idiot. I'd have cracked up laughing at him. I don't know how people took it seriously.
 - **Elf**. Fuck this stupid, unfunny movie. Oh my god.
-- **Zoolander**. Not the worst, but I had to accept Ben Stiller's sense of comedy just doesn't do it for me. Every silly movie he's in, I'm just, like, waiting for him to stop.
+- **Zoolander**. It's not the worst, but I had to accept Ben Stiller's sense of comedy just doesn't do it for me. Every silly movie he's in, I'm just waiting for him to stop.
 
-Why haven't I seen a single movie released in 2020 or 2021? Just a coincidence?
+Why haven't I seen a single movie released in 2020 or 2021? Just a coincidence? I don't know.
+
+Anyway.
 
 <script src="../../assets/layout.js"></script>
 <script>
@@ -295,8 +302,7 @@ window.addEventListener("load", function() {
     let table = document.querySelector(".auto-table tbody");
     let rows = Array.from(table.rows);
     document.getElementById("movie-count").innerHTML = rows.length;
-
-    rows.sort((a, b) => Number(a.cells[1].textContent) - Number(b.cells[1].textContent));
+    rows.sort((a, b) => parseInt(a.cells[1].textContent) - parseInt(b.cells[1].textContent));
     rows.forEach(row => table.appendChild(row));
 });
 </script>
