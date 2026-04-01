@@ -45,7 +45,8 @@ The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19 |
     }
 );
 
-const videoData = `
+const video_data = `
+Air Canada CEO | z7KFTiYDgnc | 2026-04-01
 Elections | 7lw6rO_Pv7I | 2026-03-20
 Jeffrey Epstein | 5ymc2ePfFR8 | 2026-03-08
 The order of information | ZfArsg_xyuI | 2026-03-07
@@ -90,7 +91,7 @@ Trans fetishism & politics | vk57rvM1zWo | 2025-04-02
 Sex, gender, & transsexuals | Hgh3r7gJoWU | 2025-05-29
 Lies people still believe (Elizabeth Warren, Hillary Clinton) | LPQD6sxlWOs | 2025-04-09
 Bernie Sanders and the military industrial complex | yt6O0OMdIT0 | 2025-03-22
-Types of masculinity | lOQSqMhjwZY | 2025-06-12`.split("\n").filter(n => n.split("|").length == 3).join("\n");
+Types of masculinity | lOQSqMhjwZY | 2025-06-12`.split("\n").filter(n => n.split("|").length == 3);
 
 function scrollToTop() {
     window.scrollTo({
@@ -120,8 +121,10 @@ function parseSource(string_in) {
     return "";
 }
 
-let page_lightbox,page_lbCaption,page_lbTopLeft;
 function setLightbox(action) {
+    let page_lbTopLeft = document.querySelector(".lb-top-left");
+    let page_lightbox = document.querySelector(".lightbox");
+    let page_lbCaption = document.querySelector(".lb-caption");
     if (!page_lightbox || !page_lbCaption || !page_lbTopLeft) { return; }
     /* action is click from <img> object */
     if (action == "close") {
@@ -146,29 +149,36 @@ function setLightbox(action) {
     }
 }
 
-// function setTheme(setValue) {
-    // let brightness = setValue || localStorage.getItem("brightness") || "light";
-    // HTML.classList.remove(...Array.from(document.getElementById("brightness-select").children).map(o => o.value).filter(o => o != brightness));
-    // HTML.classList.add(brightness);
-    // localStorage.setItem("brightness", brightness);
-    // document.getElementById("brightness-select").value = brightness;
-// }
+function setClass(sEle) {
+    if (sEle != null && sEle instanceof Node) {
+        let sValue = sEle.value;
+        HTML.classList.remove(...Array.from(sEle.children).map(o => o.value).filter(o => o != sValue));
+        HTML.classList.add(sValue);
+        localStorage.setItem(sEle.id, sEle.value);
+    }
+}
 
+const sdefaults = { "--ff-heading": "Inter", "--ff-article": "Georgia Pro Digits,Georgia", "--ff-secondary": "Roboto" }
 function setCSS(mEle) {
     if (mEle != null && mEle instanceof Node) {
         localStorage.setItem(mEle.id, mEle.value);
     }
     let styleOverrides = [];
-    Array.from(document.getElementsByClassName("drop-select")).forEach(
+    Array.from(document.getElementsByClassName("css-override")).forEach(
         select => {
             select.value = localStorage.getItem(select.id) ||sdefaults[select.id];
-            if (select.value != sdefaults[select.id]) { styleOverrides.push(select.id + ": " + select.value) }
+            if (select.value != sdefaults[select.id]) {
+                console.log(select.id)
+                styleOverrides.push(select.id + ": " + select.value)
+            }
         }
     )
-    document.getElementById("__css_user_set").innerHTML = styleOverrides.length > 0 ?"html {\n" + styleOverrides.join("!important;\n") + "!important;\n}" :"";
+    document.getElementById("__css_user_set").innerHTML = "";
+    if (styleOverrides.length > 0) {
+        document.getElementById("__css_user_set").innerHTML = ":root { " + styleOverrides.join(";") + "}"
+    }
 }
-const sdefaults = { "--ff-heading": "Inter", "--ff-article": "Georgia Pro Digits,Georgia", "--ff-secondary": "Roboto" }
-function resetCSS() {
+function resetFonts() {
     for (let k in sdefaults) {
         localStorage.setItem(k, sdefaults[k])
     }
@@ -282,8 +292,6 @@ function ytGallery(chunk) {
     let rows = chunk.split("\n");
     let firstRow = rows.shift();
         firstRow = firstRow.substring(firstRow.indexOf(" "))
-    const sortInput = firstRow.includes("sort");
-    const numToInclude = parseInt(firstRow.replace(/\D/g, "")) || rows.length;
     rows = rows.map(
         row => {
             row = row.replace(/\\\|/g, "&verbar;").split("|").map(
@@ -292,34 +300,17 @@ function ytGallery(chunk) {
             while (row.length < 3) {
                 row.push("");
             }
-            return row;
+            let [ title, videoCode, date ] = row;
+            return { title, videoCode, date };
         }
     );
-    if (sortInput) {
-        rows.sort((a, b) => {
-            a = parseInt(a[2].replace(/\D/g, "")) || 0;
-            b = parseInt(b[2].replace(/\D/g, "")) || 0;
-            return b - a;
-        })
-    }
-    rows = rows.slice(0, numToInclude).map(
+    rows = rows.map(
         row => {
-            let title = row[0];
-            let videoCode = row[1];
-            let date = row[2];
-
-            while (videoCode.charAt(videoCode.length - 1) == "/") {
-                videoCode = videoCode.substring(0, videoCode.length - 1);
+            while (row.videoCode.charAt(row.videoCode.length - 1) == "/") {
+                row.videoCode = videoCode.substring(0, videoCode.length - 1);
             }
-            videoCode = videoCode.split("/").slice(-1);
-
-            let videoUrl = `https://www.youtube.com/watch?v=${ videoCode }`;
-            let thumbUrl = `https://i.ytimg.com/vi/${ videoCode }/hqdefault.jpg`;
-
-            return `<figure>
-                <a href="${ videoUrl }"><img loading="lazy" src="${ thumbUrl }"></a>
-                <figcaption><div class="yt-title"><a href="${ videoUrl }">${ title }</a></div> <div class="yt-date">${ date }</div></figcaption>
-            </figure>`;
+            row.videoCode = row.videoCode.split("/").slice(-1);
+            return '<figure><a href="https://www.youtube.com/watch?v=' + row.videoCode + '"><img loading="lazy" src="https://i.ytimg.com/vi/' + row.videoCode + '/hqdefault.jpg"></a><figcaption><div class="yt-title"><a href="https://www.youtube.com/watch?v=' + row.videoCode + '">' + row.title + '</a></div> <div class="yt-date">' + row.date + '</div></figcaption></figure>';
     });
     return `<div class="table-wrapper"><div class="yt-gallery">${ rows.join("") }</div></div>`;
 }
@@ -826,7 +817,7 @@ window.addEventListener("load", function() {
     <div class="screen"></div>
     <div class="right-panel closed">
         <div><h3>Display:</h3></div>
-        <div><label for="dark">Dark mode</label><input type="checkbox" class="slide-checkbox auto" id="dark"></div>
+        <div><div>Theme:</div><select class="drop-select" id="__set_theme" onchange="setClass(this)"><option value="light">Light</option><option value="paper">Paperback</option><option value="dark">Dark</option></select></div>
         <hr>
         <div><h3>Site layout:</h3></div>
         <div><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
@@ -840,10 +831,10 @@ window.addEventListener("load", function() {
         <div><div style="margin-left:auto; color:var(--grey-8);"><span class="pseudo-link" onclick="setFormatting(true)" title="set all above on">all on</span> / <span class="pseudo-link" onclick="setFormatting(false)" title="all off">all off</span></div></div>
         <hr>
         <div><h3>Fonts override:</h3></div>
-        <div><div>Headings:</div><select class="drop-select font-select" id="--ff-heading" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
-        <div><div>Body:</div><select class="drop-select font-select" id="--ff-article" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
-        <div><div>Secondary:</div><select class="drop-select font-select" id="--ff-secondary" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
-        <div><div style="margin-left:auto; cursor:pointer; color:var(--grey-8);" onclick="resetCSS()" title="restore font defaults">restore defaults</div></div>
+        <div><div>Headings:</div><select class="drop-select css-override" id="--ff-heading" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+        <div><div>Body:</div><select class="drop-select css-override" id="--ff-article" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+        <div><div>Secondary:</div><select class="drop-select css-override" id="--ff-secondary" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+        <div><div style="margin-left:auto; cursor:pointer; color:var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</div></div>
         <hr>
         <div><div style="line-height:1.5; color:var(--grey-6);"><p>These preferences are saved in your browser's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">local storage</a>. To clear your local storage for this site, simply <a class="pseudo-link" onclick="localStorage.clear()">click here</a>.</p></div></div>
     </div>
@@ -865,29 +856,18 @@ window.addEventListener("load", function() {
     let contentLinks = [];
     interpreter(document.querySelector(".article"), contentLinks);
     HTML.classList.add("layout");
-    page_lightbox = document.querySelector(".lightbox");
-    page_lbCaption = document.querySelector(".lb-caption");
-    page_lbTopLeft = document.querySelector(".lb-top-left");
-    if (contentLinks.length > 0) {
-        const citeData = contentLinks.map(
-            (x, n) => {
-                return `
-                <tr>
-                    <td class="no-select">${ n+1 }.</td>
-                    <td><a href="${ x }">${ x }</a></td>
-                </tr>`
-            }
-        ).join("");
+    setCSS();
+    let lTheme = localStorage.getItem("__set_theme");
+    if (lTheme != null) {
+        HTML.classList.add(lTheme);
+        document.getElementById("__set_theme").value = lTheme;
+    }
 
-        let citelist = `
-        <div>
-            <div>Links on this page:</div>
-            <table class="citelist">${ citeData }</table>
-        </div>`;
-        document.querySelector(".article-footer").insertAdjacentHTML("beforeend", citelist);
+    if (contentLinks.length > 0) {
+        document.querySelector(".article-footer").insertAdjacentHTML("beforeend", `<div><div>Links on this page:</div><table class="citelist">${ contentLinks.map((x, n) => `<tr><td class="no-select">${ n+1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join("") }</table></div>`);
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
-    
+
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                               .left-panel (hamburger) set-up                          
     */
@@ -905,9 +885,7 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                 .right-panel (gear) set-up                            
     */
-    setCSS();
-    // setTheme();
-    
+
     Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
         c => {
             if (localStorage.getItem(c.id) == "true") {
@@ -989,14 +967,13 @@ window.addEventListener("load", function() {
             pageIndex.innerHTML = page_data.map(
                 entry => `<div><span class="date">${ isoFormat(entry.date, 1) }:</span><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>`
             ).join('');
-            pageIndex.classList.add('summary');
         }
     let videosIndex = document.getElementById("videos-index");
         if (videosIndex != null) {
             let limit = videosIndex.className.replace(/\D/g,"") || 10;
-            videosIndex.innerHTML = ytGallery("!yt-gallery sort"+ limit +" \n" + videoData);
+            videosIndex.innerHTML = ytGallery("!yt-gallery\n" + video_data.slice(0, 14).join('\n'));
         }
-    
+
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                      display figgling                                 
     */
