@@ -1,6 +1,6 @@
 
     /* default element resets: */
-    /* ⮘ ⮙ ⮚ ⮛ ⮜ ⮝ ⮞ ⮟ ⯅ ⯆ ⯇ ⯈ */
+    /* ⮘ ⮙ ⮚ ⮛ ⮜ ⮝ ⮞ ⮟ ⯅ ⯆ ⯇ ⯈ ⤷ ⤶ */
     * { margin: 0; padding: 0; }
     ul, ol { padding: 0 2.5em; }
     sub, sup { font-size: 0.9em; }
@@ -101,6 +101,7 @@
         --c-gold: hsl(45,100%, 32%);
         /* colours for backgrounds */
         --c-bg-lightblue: #e7f0ff;
+        --c-bg-lightblue-subtle: #fafbff;
         --c-bg-lightgreen: #dff2df;
         --c-bg-lightred: #fdd;
         --c-bg-lightyellow: hsl(50, 100%, 90%);
@@ -122,7 +123,7 @@
         --tumblr-logo: url(tumblr-logo.png);
         --facebook-logo: url(facebook-logo.png);
         --github-logo: url(github-logo.png);
-        --link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 -1 26 26' fill='none' stroke='%23386db7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
+        --link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 -1 26 26' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
         --lightbox-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='16 15 68 68' fill='%23333'%3E%3Crect fill='none' width='100' height='100'/%3E%3Cpath d='M22,35 V26 Q22,22 26,22 H35 M65,22 H74 Q78,22 78,26 V35 M78,65 V74 Q78,78 74,78 H65 M32,78 H26 Q22,78 22,74 V65' stroke='%23444' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Crect x='34' y='34' width='32' height='32' rx='5'/%3E%3Cpath d='M38,60 L48,48 L54,55 L58,50 L64,60 Z' fill='white'/%3E%3C/svg%3E");
     }
     /* themes? */
@@ -147,6 +148,7 @@
         --blockquote-bg: #e9e6dd;
         --blockquote-accent: #bcb6ac;
         --menu-bg: #fbf9f4;
+        --c-bg-lightblue-subtle: #ececee;
     }
     html.dark {
         --page-bg: hsl(220, 7%, 18%);
@@ -191,6 +193,7 @@
         --c-gold: hsl(40, 32%, 52%);
         --c-iris: hsl(252, 32%, 50%);
         /* colours for backgrounds */
+        --c-bg-lightblue-subtle: #343840;
         --c-bg-lightblue: #5695ff18;
         --c-bg-lightgreen: #2932;
         --c-bg-lightred: #f442;
@@ -342,7 +345,7 @@
             .article-date { font-family: var(--ff-ui); color: var(--grey-8); font-size: var(--fs-article-2); }
 
             .article h1, .article h2, .article h3, .article h4, .article h5, .article h6 { clear: both; margin-block: 1em 0.5em; text-align: left; }
-            .article h1, .article h2, .article h3 { font-family: var(--ff-heading); }
+            .article h1, .article h2, .article h3 { color: var(--grey-2); font-family: var(--ff-heading); }
             .article h1 { line-height: 1.3; }
             .article h2 { line-height: 1.4; }
             .article h3 { line-height: 1.5; }
@@ -417,7 +420,7 @@
             .auto-rows { }
                 .auto-rows .row { display: flex; justify-content: space-between; gap: 1em; }
 
-            .yt-gallery { grid-template-rows: 1fr; grid-auto-rows: 0; overflow: hidden; justify-content: center; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 150px)); gap: 0.5em var(--article-grid-gap); }
+            .yt-gallery { grid-template-rows: 1fr; grid-auto-rows: 0; overflow: hidden; justify-content: center; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 150px)); gap: 0 var(--article-grid-gap); }
                 .yt-gallery figure { max-width: 200px; min-width: 150px; overflow: hidden; }
                     .yt-gallery img { cursor: pointer; background-color: var(--grey-e); width: 100%; object-fit: cover; aspect-ratio: 16 / 8.9; border: 1px solid var(--grey-a); box-sizing: border-box; }
                     .yt-gallery figcaption { margin-top: 0.3em; }

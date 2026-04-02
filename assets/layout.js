@@ -30,7 +30,8 @@ Sex gender & transsexuals | sex-gender-transsexuals | 2024-11-19
 Bernie Sanders & the military industrial complex | bernie-sanders-and-the-military-industrial-complex | 2024-12-16 | tumblr:770070077409214464
 Types of masculinity | types-of-masculinity | 2024-11-08 | tumblr:770310861444300800
 Poor Things (2023 film) | poor-things | 2024-10-31 | tumblr:769969807464464384
-The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19 | substack:the-trans-prison-stats-argument tumblr:771501478599868416`.split("\n").filter(n => n.length > 5).map(
+The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19 | substack:the-trans-prison-stats-argument tumblr:771501478599868416
+`.split("\n").filter(n => n.length > 5).map(
     n => {
         let [title, url, date, other] = n.split("|", 4).map(c => c.trim());
         other = other ?other.split(" ").sort() :[];
@@ -965,7 +966,12 @@ window.addEventListener("load", function() {
     let pageIndex = document.getElementById("page-index");
         if (pageIndex) {
             pageIndex.innerHTML = page_data.map(
-                entry => `<div><span class="date">${ isoFormat(entry.date, 1) }:</span><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>`
+                entry => {
+                    return `<div>
+                        <div class='space-between gap-rem'><a style="font-size:16px;letter-spacing:0.5px;" href="page/${ entry.url }/index.html">${ entry.title }</a><span class='entry-date'>${ entry.date }</span></div>
+                        <div class='entry-under'>${ entry.other.length > 0 ? entry.other.sort().map(u => parseSource(u)).join('') : 'Not hosted anywhere else.' }</div>
+                    </div>`;
+                }
             ).join('');
         }
     let videosIndex = document.getElementById("videos-index");

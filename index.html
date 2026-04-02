@@ -4,63 +4,60 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    /* This is a 'special' page and ergo has much more styling than usual. */
-    .page-grid { background-color: #f4f5f6; }
+    .page-grid { background-color: #f2f3f4; }
     .paper .page-grid { background-color: #e8e6df; }
     .dark .page-grid { background-color: #242529; }
 
+    .article { display: flex; flex-direction: column; align-items: center; }
+    .article h1, .article h2 { font-family: Lora, Georgia, sans-serif !important; }
+
+    #videos-index,
+    #videos-index + div { min-width: 648px; }
+    #page-index { min-width: 632px; }
+
     /* for unique page elements */
-    .links-area { line-height: 1.3; display: flex; gap: 30px;  }
-        .links-area section { padding-left: 15px; display: flex; flex-direction: column; gap: 15px; }
-            .links-area .inline-icon { margin-right: 4px; }
-            .links-area p { font-family: var(--ff-ui); margin-left: 22px; max-width: 150px; font-size: 90%; color: var(--grey-9); }
-
-    #page-index { max-height: 600px; overflow-y: scroll; margin-bottom: 2em; line-height: 1.3; }
-        #page-index > div { display: flex; align-items: baseline; gap: 4px; padding: 10px 0 9px; }
-        #page-index > div:nth-child(n + 2) { border-top: 1px dashed var(--grey-c); }
-            #page-index .entry-info { display: flex; gap: 3px; color: var(--grey-5); font-size: var(--fs-article-3); }
-                #page-index .entry-info a { border: 1px solid var(--grey-e); padding: 3px 5px 3px 2px; line-height: 1; white-space: nowrap; text-decoration: none; }
-                #page-index .entry-info a + a { margin-left: 2px; }
-                #page-index .entry-info a:hover { border-color: var(--grey-a); }
-                    #page-index .entry-info a span { color: var(--grey-5); font-family: var(--ff-ui); font-size: var(--fs-article-3); }
-
+    .links-area { line-height: 1.3; display: flex; gap: 30px; }
+        .links-area div > div { padding-right: 10px; }
+        .links-area div > div + div { padding-top: 15px; }
+            .links-area .inline-icon { margin-right: 5px; }
+            .links-area p { font-family: var(--ff-ui); max-width: 150px; font-size: 90%; color: var(--grey-9); }
     .link-icon::after { display: block; content: ""; background-image: var(--link-icon); border-radius: 2px; width: 16px; height: 16px; margin-inline: 2px; display: inline-block; vertical-align: sub; object-fit: contain; background-repeat: no-repeat; background-size: contain; background-position: center; }
-    
+
+    #page-index > div { line-height: 1.15; padding: 12px 10px 13px; border-top: 1px dashed var(--grey-a); display: flex; flex-direction: column; gap: 8px; }
+    #page-index > div:hover { background-color: var(--c-bg-lightblue-subtle); }
+        .entry-date { color: var(--grey-5); font-size: var(--fs-article-2); }
+        .entry-under { display: flex; gap: 5px; color: var(--grey-8); font-family: var(--ff-ui); font-size: var(--fs-article-3); }
+            .entry-under a { line-height: 1; white-space: nowrap; display: flex; align-items: center; color: var(--grey-6); }
+            .entry-under a:hover { border-color: var(--grey-a); text-decoration: none; }
+            .entry-under .inline-icon { margin-right: 4px; }
+
     </style>
 </head>
 <body>
-
-# Iris Embury
-
+<h1>Iris Embury</h1>
 <div class="links-area">
-    <section>
+    <div>
         <div><div><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span>YouTube</span></a></div></div>
         <div><div><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span>Bluesky</span></a></div></div>
         <div><div><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span>Twitter/X</span></a></div></div>
-    </section>
-    <section>
+    </div>
+    <div>
         <div><div><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a></div></div>
         <div><div><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></div><p>No paywalled content</p></div>
-    </section>
-    <section>
+    </div>
+    <div>
         <!--<div><div><a target="_blank" href="https://patreon.com/irisembury"><span class="patreon-logo inline-icon"></span><span>Patreon</span></a></div><p>No paywalled content; just an option to donate</p></div>-->
         <div><div><a target="_blank" href="discord/index.html"><span class="discord-logo inline-icon"></span><span>Discord (server invite)</span></a></div><p>No paywall</p></div>
         <div><div><a target="_blank" href="https://github.com/irisembury"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></div></div>
-    </section>
+    </div>
 </div>
-
-## Recent videos
-
+<h2>Recent videos</h2>
 <div id="videos-index"></div>
-<div style="text-align: right; margin-top: 10px;">
-<div><a target="_blank" style="padding: 3px 6px; margin-right: 2em;" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="link-icon"></span></a></div>
+<div style="text-align: right; margin-top: 10px; ">
+<div><a target="_blank" style="padding: 3px 6px;" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="link-icon"></span></a></div>
 </div>
-
-## Text pages
-
+<h2>Text pages</h2>
 <div id="page-index"></div>
-
 <div class="hidden" id="index"></div>
 <script src="assets/layout.js"></script>
 </body></html>
-
