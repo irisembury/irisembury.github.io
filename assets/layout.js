@@ -968,8 +968,8 @@ window.addEventListener("load", function() {
             pageIndex.innerHTML = page_data.map(
                 entry => {
                     return `<div>
-                        <div class='space-between gap-rem'><a style="font-size:16px;letter-spacing:0.5px;" href="page/${ entry.url }/index.html">${ entry.title }</a><span class='entry-date'>${ entry.date }</span></div>
-                        <div class='entry-under'>${ entry.other.length > 0 ? entry.other.sort().map(u => parseSource(u)).join('') : 'Not hosted anywhere else.' }</div>
+                        <div class='entry-main'><a href="page/${ entry.url }/index.html">${ entry.title }</a><span class='entry-date'>${ entry.date }</span></div>
+                        <div class='entry-under'>${ entry.other.length > 0 ? entry.other.sort().reverse().map(u => parseSource(u)).join('') : 'Not hosted anywhere else.' }</div>
                     </div>`;
                 }
             ).join('');

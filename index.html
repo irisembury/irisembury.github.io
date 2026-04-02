@@ -20,15 +20,17 @@
         .links-area div > div { padding-right: 10px; }
         .links-area div > div + div { padding-top: 15px; }
             .links-area .inline-icon { margin-right: 5px; }
+            .links-area .inline-icon + span { font-family: Inter,Roboto,var(--ff-ui); }
             .links-area p { font-family: var(--ff-ui); max-width: 150px; font-size: 90%; color: var(--grey-9); }
     .link-icon::after { display: block; content: ""; background-image: var(--link-icon); border-radius: 2px; width: 16px; height: 16px; margin-inline: 2px; display: inline-block; vertical-align: sub; object-fit: contain; background-repeat: no-repeat; background-size: contain; background-position: center; }
 
-    #page-index > div { line-height: 1.15; padding: 12px 10px 13px; border-top: 1px dashed var(--grey-a); display: flex; flex-direction: column; gap: 8px; }
-    #page-index > div:hover { background-color: var(--c-bg-lightblue-subtle); }
-        .entry-date { color: var(--grey-5); font-size: var(--fs-article-2); }
-        .entry-under { display: flex; gap: 5px; color: var(--grey-8); font-family: var(--ff-ui); font-size: var(--fs-article-3); }
-            .entry-under a { line-height: 1; white-space: nowrap; display: flex; align-items: center; color: var(--grey-6); }
-            .entry-under a:hover { border-color: var(--grey-a); text-decoration: none; }
+    #page-index > div { line-height: 1.15; padding: 12px 10px 13px; border-top: 1px dashed var(--grey-a); display: flex; flex-direction: column; gap: 5px; }
+    #page-index > div:hover { background-color: var(--bg-light-blue-subtle); }
+        .entry-main { display: flex; justify-content: space-between; gap: 1rem; }
+            .entry-main a { font-family: Lexend, Inter, sans-serif !important; }
+            .entry-date { color: var(--grey-4); font-size: var(--fs-article-2); font-size: 16px; letter-spacing: 0.5px; }
+        .entry-under { display: flex; gap: 6px; color: var(--grey-8); font-family: var(--ff-ui); font-size: var(--fs-article-3); }
+            .entry-under a { margin-left: 5px; margin-top: 1px; line-height: 1; white-space: nowrap; display: flex; align-items: center; color: var(--grey-6); }
             .entry-under .inline-icon { margin-right: 4px; }
 
     </style>

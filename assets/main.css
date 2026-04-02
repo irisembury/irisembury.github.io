@@ -100,12 +100,12 @@
         --c-iris: hsl(252, 55%, 60%);
         --c-gold: hsl(45,100%, 32%);
         /* colours for backgrounds */
-        --c-bg-lightblue: #e7f0ff;
-        --c-bg-lightblue-subtle: #fafbff;
-        --c-bg-lightgreen: #dff2df;
-        --c-bg-lightred: #fdd;
-        --c-bg-lightyellow: hsl(50, 100%, 90%);
-        --c-bg-cream: #fbf6ec;
+        --bg-light-blue: #e7f0ff;
+        --bg-light-blue-subtle: #fafbff;
+        --bg-light-green: #dff2df;
+        --bg-light-red: #fdd;
+        --bg-light-yellow: hsl(50, 100%, 90%);
+        --bg-cream: #fbf6ec;
         /* letter-spacing? */
         --ls-bold-1: -0.1px;
         --ls-bold-2: -0.1px;
@@ -148,7 +148,7 @@
         --blockquote-bg: #e9e6dd;
         --blockquote-accent: #bcb6ac;
         --menu-bg: #fbf9f4;
-        --c-bg-lightblue-subtle: #ececee;
+        --bg-light-blue-subtle: #ececee;
     }
     html.dark {
         --page-bg: hsl(220, 7%, 18%);
@@ -193,12 +193,12 @@
         --c-gold: hsl(40, 32%, 52%);
         --c-iris: hsl(252, 32%, 50%);
         /* colours for backgrounds */
-        --c-bg-lightblue-subtle: #343840;
-        --c-bg-lightblue: #5695ff18;
-        --c-bg-lightgreen: #2932;
-        --c-bg-lightred: #f442;
-        --c-bg-lightyellow: #3e3c33;
-        --c-bg-cream: #3b3c3e;
+        --bg-light-blue-subtle: #343840;
+        --bg-light-blue: #5695ff18;
+        --bg-light-green: #2932;
+        --bg-light-red: #f442;
+        --bg-light-yellow: #3e3c33;
+        --bg-cream: #3b3c3e;
     }
     
     /* JavaScript adds .layout class to document element, so :not(.layout) means if layout.js fails to load */
@@ -383,7 +383,7 @@
                 .article .fine + .fine { margin-top: 0.5rem; }
                 .article .fine li + li { margin-top: 0.3em; }
 
-            .article .info { line-height: var(--lh-article-2); max-width: var(--main-width); padding: 0.5em 0.75em; margin-inline: auto; font-family: var(--ff-secondary); background-color: var(--c-bg-lightgreen); font-size: var(--fs-article-2); }
+            .article .info { line-height: var(--lh-article-2); max-width: var(--main-width); padding: 0.5em 0.75em; margin-inline: auto; font-family: var(--ff-secondary); background-color: var(--bg-light-green); font-size: var(--fs-article-2); }
             .rows .row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0px 2px; }
             .article .mdash { margin-inline: 1px; font-family: var(--ff-mdash); line-height: 1; }
 
