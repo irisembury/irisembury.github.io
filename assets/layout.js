@@ -1,11 +1,12 @@
 "use strict"
 const HTML = document.documentElement;
-
+//Liberal conservatism | conservatism | 2026-03-24
 const page_data = `
 The case for abortion | abortion | 2026-02-18 | substack:the-case-for-abortion tumblr:809547051047272448
 A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28 | substack:a-synopsis-of-american-decline
 Give yourself credit | give-yourself-credit | 2026-01-23 | tumblr:806587768751915008 substack:give-yourself-credit
 Fetishism & politics | fetishism-politics | 2024-11-14 | tumblr:770364766791352320
+
 Nick Shirley & Somali day cares | somali-day-cares | 2026-01-02 | substack:nick-shirley-and-the-somali-daycares
 Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30 | substack:why-is-reddit-so-hated
 Stay the trenches | stay-the-trenches | 2025-12-17 | substack:stay-the-trenches
@@ -20,7 +21,6 @@ Notes on Israel & Palestine | israel-palestine | 2025-07-27
 Lies told by Pierre Poilievre | pierre-poilievre | 2025-03-15 | tumblr:782079973591760896 substack:pierre-poilievre
 Trump & Russia | trump-and-russia | 2025-03-06 | tumblr:777321996757450752 substack:trump-and-russia
 Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09 | tumblr:775036555284856832
-Liberal conservatism | conservatism | 2026-03-24 
 Elon Musk & the Nazi Salute | elon-musk-nazi-salute | 2025-01-24 | substack:the-nazi-salute | tumblr:773565389405847552
 Lies about Elizabeth Warren & Hillary Clinton | lies-about-warren-clinton | 2024-12-19 | tumblr:770730090759946240 substack:enduring-falsehoods-about-warren
 Mark Robinson | mark-robinson | 2024-12-15 | tumblr:769962893917798400
@@ -968,8 +968,8 @@ window.addEventListener("load", function() {
             pageIndex.innerHTML = page_data.map(
                 entry => {
                     return `<div>
-                        <div class='entry-main'><a href="page/${ entry.url }/index.html">${ entry.title }</a><span class='entry-date'>${ entry.date }</span></div>
-                        <div class='entry-under'>${ entry.other.length > 0 ? entry.other.sort().reverse().map(u => parseSource(u)).join('') : 'Not hosted anywhere else.' }</div>
+                        <div><div><a href="page/${ entry.url }/index.html">${ entry.title }</a></div><div><span class='entry-date'>${ entry.date }</span></div></div>
+                        <div>${ entry.other.length > 0 ? '<span>Mirrors:</span>' + entry.other.sort().reverse().map(u => parseSource(u)).join('') : '<span>Only hosted here.</span>' }</div>
                     </div>`;
                 }
             ).join('');
