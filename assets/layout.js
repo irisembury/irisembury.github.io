@@ -4,9 +4,7 @@ const HTML = document.documentElement;
 const page_data = `
 The case for abortion | abortion | 2026-02-18 | substack:the-case-for-abortion tumblr:809547051047272448
 A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28 | substack:a-synopsis-of-american-decline
-Give yourself credit | give-yourself-credit | 2026-01-23 | tumblr:806587768751915008 substack:give-yourself-credit
 Fetishism & politics | fetishism-politics | 2024-11-14 | tumblr:770364766791352320
-
 Nick Shirley & Somali day cares | somali-day-cares | 2026-01-02 | substack:nick-shirley-and-the-somali-daycares
 Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30 | substack:why-is-reddit-so-hated
 Stay the trenches | stay-the-trenches | 2025-12-17 | substack:stay-the-trenches
@@ -113,11 +111,11 @@ function parseSource(string_in) {
     let [site, id] = string_in.split(":", 2);
     if (site == "tumblr") {
         let href = 'https://irisembury.tumblr.com/post/' + id;
-        return '<a class="external-link tumblr-link" href="' + href + '" title="Read this page on Tumblr"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a>'
+        return '<a class="external-link tumblr-link" href="' + href + '" title="Read this page on Tumblr"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>'
     }
     if (site == "substack") {
         let href = 'https://irisembury.substack.com/p/' + id;
-        return '<a class="external-link substack-link" href="' + href + '" title="Read this page on Substack"><span class="substack-logo inline-icon"></span><span>Substack</span></a>'
+        return '<a class="external-link substack-link" href="' + href + '" title="Read this page on Substack"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>'
     }
     return "";
 }
@@ -818,7 +816,7 @@ window.addEventListener("load", function() {
     <div class="screen"></div>
     <div class="right-panel closed">
         <div><h3>Display:</h3></div>
-        <div><div>Theme:</div><select class="drop-select" id="__set_theme" onchange="setClass(this)"><option value="light">Light</option><option value="paper">Paperback</option><option value="dark">Dark</option></select></div>
+        <div><label for="dark">Dark mode:</label><input type="checkbox" class="slide-checkbox formatting auto" id="dark"></div>
         <hr>
         <div><h3>Site layout:</h3></div>
         <div><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
@@ -858,11 +856,11 @@ window.addEventListener("load", function() {
     interpreter(document.querySelector(".article"), contentLinks);
     HTML.classList.add("layout");
     setCSS();
-    let lTheme = localStorage.getItem("__set_theme");
-    if (lTheme != null) {
-        HTML.classList.add(lTheme);
-        document.getElementById("__set_theme").value = lTheme;
-    }
+    // let lTheme = localStorage.getItem("__set_theme");
+    // if (lTheme != null) {
+        // HTML.classList.add(lTheme);
+        // document.getElementById("__set_theme").value = lTheme;
+    // }
 
     if (contentLinks.length > 0) {
         document.querySelector(".article-footer").insertAdjacentHTML("beforeend", `<div><div>Links on this page:</div><table class="citelist">${ contentLinks.map((x, n) => `<tr><td class="no-select">${ n+1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join("") }</table></div>`);
@@ -967,10 +965,12 @@ window.addEventListener("load", function() {
         if (pageIndex) {
             pageIndex.innerHTML = page_data.map(
                 entry => {
-                    return `<div>
-                        <div><div><a href="page/${ entry.url }/index.html">${ entry.title }</a></div><div><span class='entry-date'>${ entry.date }</span></div></div>
-                        <div>${ entry.other.length > 0 ? '<span>Mirrors:</span>' + entry.other.sort().reverse().map(u => parseSource(u)).join('') : '<span>Only hosted here.</span>' }</div>
-                    </div>`;
+                    return `
+                    <tr>
+                        <td><div><a href="page/${ entry.url }/index.html">${ entry.title }</a></div></td>
+                        <td class='date-cell'><span>${ entry.date }</span></td>
+                        <td><div class='mirror-cell'>${ entry.other.length > 0 ? entry.other.sort().map(u => ' ' + parseSource(u)).join('') : '' }</div></td>
+                    </tr>`
                 }
             ).join('');
         }
