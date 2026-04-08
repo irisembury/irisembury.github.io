@@ -4,58 +4,81 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    :root { --main-width: 854px; }
-    
-    .article h1, .article h2 { font-family: Lora,serif; text-align: center; }
-    .yt-gallery { justify-content: space-between; padding-left: 1px; }
+    .mh-top { display:none; }
+    :root { --ff-heading: Lora,Georgia,serif; }
+    .article h1 { font-size: 2.4em; }
+    .article h2 { font-size: 1.8em; text-align: center; }
     
     .inline-icon { margin-right: 5px; }
 
     /* for unique page elements */
-    .links-area { justify-content: center; line-height: 1; display: flex; gap: 25px; }
-        .links-area div > div + div { padding-top: 15px; }
-            .links-area a { display: inline-flex; align-items: center; border: 1px solid #0000; padding: 4px 8px 4px 3px; }
-            .links-area a:hover { border-color: var(--grey-9); text-decoration: none; }
-            .links-area p { margin-top: 2px; margin-left: 12px; font-family: var(--ff-ui); max-width: 140px; font-size: 90%; color: var(--grey-9); }
+    .profile-img { cursor: pointer; display: block; height: 240px; aspect-ratio: 3 / 4; border: 1px solid var(--grey-c); }
+    .links-area { display: flex; line-height: 1; }
+        .links-area li { list-style-type: none; margin-top: 1rem; }
+            .links-area a { display: inline-flex; align-items: center; padding: 4px 7px 4px 4px; }
+            .links-area p { margin-top: 2px; margin-left: 12px; font-family: var(--ff-ui); max-width: 140px; font-size: 90%; color: var(--grey-8); }
     .link-icon { display: block; content: ""; background-image: var(--link-icon); border-radius: 2px; width: 16px; height: 16px; margin-inline: 2px; display: inline-block; vertical-align: sub; object-fit: contain; background-repeat: no-repeat; background-size: contain; background-position: center; }
 
     #page-index { line-height: 1; margin-left: auto; margin-right: auto; }
     #page-index tr + tr { border-top: 1px dashed var(--grey-c); }
     #page-index tr:hover { background-color: var(--bg-light-blue-subtle); }
-        #page-index td { padding: 12px 16px 11px; vertical-align: middle; }
+        #page-index td { padding: 12px; vertical-align: middle; }
 
-        .date-cell { white-space: nowrap; color: var(--grey-5); font-family: var(--ff-ui); font-size: var(--fs-article-2); }
+        .date-cell { white-space: nowrap; color: var(--grey-5); font-family: Roboto,var(--ff-ui); font-size: var(--fs-article-2); }
         .mirror-cell { font-family: var(--ff-ui); font-size: var(--fs-article-3); }
         .mirror-cell a { padding: 3px; }
             .mirror-cell .link-text { display: none; }
             .mirror-cell .inline-icon { margin: 0; padding: 1px; }
 
+    .fine { text-align: center; }
     </style>
 </head>
 <body>
-# Iris Embury
-
-<div class="links-area">
-<div>
-    <div><div><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span>YouTube</span></a></div></div>
-    <div><div><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span>Bluesky</span></a></div></div>
-    <div><div><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span>Twitter/X</span></a></div></div>
-</div>
-<div>
-    <div><div><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a></div></div>
-    <div><div><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></div><p>No paywalled content</p></div>
-</div>
-<div>
-    <div><div><a target="_blank" href="discord/index.html"><span class="discord-logo inline-icon"></span><span>Discord (server invite)</span></a></div><p>No paywall</p></div>
-    <div><div><a target="_blank" href="https://github.com/irisembury"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></div></div>
-</div>
+<div class="gap-17 center">
+    <div>
+        <div><h1 style="margin:0">Iris Embury</h1></div>
+        <div class="links-area">
+            <ul>
+                <li><div><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span>YouTube</span></a></div></li>
+                <li><div><a href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span>Bluesky</span></a></div></li>
+                <li><div><a href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span>Twitter/X</span></a></div></li>
+            </ul>
+            <ul>
+                <li><div><a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a></div></li>
+                <li>
+                    <div><a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></div>
+                    <p>No paywalled content</p>
+                </li>
+                <li>
+                    <div><a href="discord/index.html"><span class="discord-logo inline-icon"></span><span>Discord (server invite)</span></a></div>
+                    <p>Public; no paywall</p>
+                </li>
+                <li><div><a href="https://github.com/irisembury"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></div></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 ## Recent videos
 
-<div id="videos-index"></div><div style="text-align: right; margin-top: 10px; "><a target="_blank" style="padding: 3px 6px;" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="link-icon"></span></a></div>
+<div id="videos-index"></div><div style="text-align: right; margin-top: 10px; "><a title="Link to YouTube" style="padding: 3px 6px;" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="link-icon"></span></a></div>
+
+**About me:**
+I'm an English-born Canadian living in Ontario. I talk about politics and stuff in articles and videos. I decided to stop being anonymous and take online content production more seriously in late 2025 after being a very political person for a long time and feeling dissatisfied with the state of the world and of our online media landscape.
+
+I don't yet earn any revenue from anything I do. If you'd like to directly support the production of more content like mine, including helping me invest in better equipment, please consider donating through one of the links below. I'm committed to this either way, but with your help everything I'm working toward can come sooner rather than later.
+
+<div class="center gap-30">
+    <div><a href="https://www.paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span>PayPal</span></a></div>
+    <div><a href="https://www.ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span>Ko-fi</span></a></div>
+    <div><a href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span><span>Patreon</span></a></div>
+</div>
+
+I maintain this repo and my profiles on all other websites solely and independently. I'm not associated with any other person or organization.
 
 ## Text pages
 
 <table id="page-index"></table>
-<div class="hidden" id="index"></div><script src="assets/layout.js"></script></body></html>
+
+<div class="hidden" id="index"></div><script src="assets/layout.js"></script>
+</body></html>
