@@ -25,7 +25,7 @@
     :root {
         /* layout dimensions */
         --main-width: 914px;
-        --header-height: 112px;
+        --header-height: 84px;
         --nav-height: 41px;
         --toc-width: 232px;
         --left-width: 286px;
@@ -45,7 +45,6 @@
         --ff-secondary: Roboto, Segoe UI, Nirmala UI, system-ui, sans-serif;
         --ff-monospace: Consolas, monospace;
         --ff-mdash: Ubuntu, Segoe UI, Nirmala UI, system-ui, sans-serif;
-        --ff-lb-caption: Roboto, Segoe UI, Nirmala UI, system-ui, sans-serif;
         /* font-size */
         --fs-ui: 14px;
         --fs-article-1: 15.4px;
@@ -62,7 +61,7 @@
         --menu-bg: #fafafa;
         --nav-bg: #363636;
         --nav-color: #808080;
-        --header-footer-bg: #40464b;
+        --header-footer-bg: #404449;
         --grey-1: hsl(0, 0%, 7%);
         --grey-2: hsl(0, 0%, 14%);
         --grey-3: hsl(0, 0%, 20%);
@@ -78,8 +77,8 @@
         --grey-f: hsl(0, 0%, 97%);
         --c-white: #fff;
         --blockquote-bg: hsl(0, 0%, 98%);
-        --blockquote-accent: hsl(220, 22%, 48%);
-        --link-color: hsl(217, 50%, 50%);
+        --blockquote-accent: hsl(211, 24%, 48%);
+        --link-color: hsl(215, 46%, 48%);
         --c-mark: #fea;
         --selection-color: #333333;
         --selection-bg: #fea;
@@ -158,6 +157,7 @@
         --menu-bg: hsl(240, 4%, 24%);
         --nav-bg: hsl(240, 4%, 6%);
         --nav-color: hsl(240, 4%, 45%);
+        --header-footer-bg: #252527;
         --grey-2: hsl(240, 4%, 75%);
         --grey-3: hsl(240, 4%, 65%);
         --grey-4: hsl(240, 4%, 60%);
@@ -201,16 +201,12 @@
         --bg-light-red: #f442;
         --bg-light-yellow: #3e3c33;
         --bg-cream: #3b3c3e;
-        --header-footer-bg: #212224;
     }
 
     @media (hover: none) and (pointer: coarse) {
         body {
             --main-width: 100%;
         }
-    }
-    @media (max-width: 1050px) {
-        #toc { display: none; }
     }
 
     /* .label-external .external-link { display: inline-flex; align-items: center; gap: 3px; } */
@@ -266,9 +262,9 @@
     html.full-width { --main-width: unset; }
         html.full-width #page { max-width: unset; border: none; }
 
-    .mh-top { min-height: 84px; background-color: var(--header-footer-bg); background-repeat: no-repeat; background-size: cover; background-position: center; }
+    .mh-top { min-height: var(--header-height); background-color: var(--header-footer-bg); background-repeat: no-repeat; background-size: cover; background-position: center; }
     .gn-top { padding: 0 8px; line-height: 1; display: flex; align-items: stretch; justify-content: space-between; gap: 1rem; font-family: var(--ff-nav); color: var(--nav-color); z-index: 2; height: var(--nav-height); background-color: var(--nav-bg); position: sticky; top: 0; transition: filter 0.5s; }
-        .nav-segment { gap: 8px; display: flex; align-items: center; }
+        .gn-segment { gap: 8px; display: flex; align-items: center; }
             #page-name-display { text-overflow: ellipsis; white-space: nowrap; overflow-x: hidden; display: inline-block; overflow-inline: clip; }
             .gn-top a { display: block; }
             .gn-top a:hover, .icon:hover { filter: brightness(1.2); }
@@ -403,7 +399,7 @@
                     .image-float.float-left { float: left; margin-left: 0; margin-right: 1em; }
                         .image-float figure { padding: 8px; border: 1px solid var(--grey-c); background-color: var(--page-bg); }
                             .image-float img { cursor: pointer; box-sizing: border-box; margin: auto; max-width: 100%; }
-                            .image-float figcaption { text-align: center; margin-top: 5px; font-family: var(--ff-secondary); font-size: var(--fs-article-3); color: var(--grey-6); }
+                            .image-float figcaption { text-align: center; margin-top: 5px; font-family: var(--ff-secondary); font-size: var(--fs-article-3); color: var(--grey-5); }
                     .image-span { max-width: 100%; gap: 8px; overflow: hidden; display: flex; justify-content: space-evenly; align-items: center; }
                     .article .image-span + .image-span { margin-top: 8px; }
                         .image-span img { cursor: pointer; width: inherit; max-width: 100%; max-height: 100%; }
@@ -429,14 +425,13 @@
                         .citelist .no-select { text-align: right; padding-right: 0.4em; padding-left: 0.6em; }
         .page-footer { min-height: 150px; padding: 2rem var(--article-side-pad); color: var(--grey-8); background-color: var(--header-footer-bg); }
             .page-footer > div { max-width: var(--main-width); margin: 0 auto; }
+            .page-footer > div + div { margin-top: 1rem; }
             .page-footer li { list-style-type: none; }
             .page-footer li + li { margin-top: 0.5rem; }
 
-    .lightbox { display: flex; z-index: 4; color: #808080; height: 100vh; width: 100%; background-color: #000c; position: fixed; left: 0; top: 0; align-items: stretch; flex-direction: column; justify-content: space-between; }
-        .lightbox .lb-top-left { padding: 10px; background-color: #000; font-family: var(--ff-ui); font-size: 1rem; }
-        .lightbox .lb-main { overflow: hidden; flex-grow: 1; display: flex; justify-content: center; align-items: center; }
-            .lightbox img { object-fit: contain; max-width: 100%; max-height: 100%; }
-        .lightbox .lb-panel { background-color: #000; display: flex; justify-content: center; align-items: center; }
-            .lightbox .lb-panel .lb-caption { padding: 20px; margin: 0 auto; font-family: var(--ff-lb-caption); font-size: 1.1rem; max-width: var(--main-width); }
-
-
+    .lightbox { max-width: 100%; max-height: 100%; z-index: 4; color: var(--nav-color); font-family: var(--ff-ui); height: 100vh; width: 100%; background-color: #0008; position: fixed; left: 0; top: 0; display: flex; align-items: stretch; flex-direction: column; justify-content: space-between; }
+        .lb-top-left { background-color: var(--nav-bg); font-size: 1rem; height: var(--nav-height); display: flex; align-items: center; padding: 0 1rem; }
+        .lb-img_wrapper { overflow: hidden; flex-grow: 1; display: flex; justify-content: center; align-items: center; }
+            .lb-img_wrapper img { object-fit: contain; max-width: 100%; max-height: 100%; }
+        .lb-caption-panel { background-color: #111; display: flex; justify-content: center; align-items: center; padding: 2rem 1rem; }
+            .lb-caption-panel div { text-align: left; max-width: var(--main-width); font-size: 1.1rem; }

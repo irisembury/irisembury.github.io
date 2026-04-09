@@ -1,6 +1,6 @@
 "use strict"
 const HTML = document.documentElement;
-const meta = { loadCitelist: false, loadTOC: false, videoList: [], pageList: [], lastHeading: -1, rowsInToc: [], canTocUpdate: true, pageHeadings: [], cssDefaults: { "--ff-heading": "Inter", "--ff-article": "Georgia Pro Digits,Georgia", "--ff-secondary": "Roboto" } }
+const meta = { loadCitelist: false, loadTOC: false, videoList: [], pageList: [], lastHeading: -1, rowsInToc: [], canNavCheck: true, canTocUpdate: true, pageHeadings: [], cssDefaults: { "--ff-heading": "Inter", "--ff-article": "Georgia Pro Digits,Georgia", "--ff-secondary": "Roboto" } }
 
 meta.videoList = `Liberal Conservatism | Sy33HSFsuu8 | 2026-04-07
 Air Canada CEO steps down | z7KFTiYDgnc | 2026-04-01
@@ -11,30 +11,31 @@ How bad is America, really? | W0Dmtyyc7FU | 2026-03-04
 Abortion | CpjJ8TgOxJY | 2026-02-24
 A synopsis of American decline | oUOsAdnK2zs | 2026-02-11
 give yourself credit | mM5fcuJnfZQ | 2026-01-23
-Why is Reddit so hated? | jPVl5cfVP1k | 2026-01-13
-thoughts and plans | _zePgOyNPt4 | 2026-01-06`.split("\n").filter(n => n.split("|").length == 3);
-meta.pageList = `Liberal conservatism | liberal-conservatism | 2026-03-24
-The case for abortion | abortion | 2026-02-18 | substack:the-case-for-abortion tumblr:809547051047272448
-A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28 | substack:a-synopsis-of-american-decline
+Why is Reddit so hated? | jPVl5cfVP1k | 2026-01-13`.split("\n").filter(n => n.split("|").length == 3);
+
+meta.pageList = `Rational ignorance | rational-ignorance | 2026-04-09 | substack:rational-ignorance tumblr:813419185909727232 patreon:155199122
+Liberal conservatism | liberal-conservatism | 2026-03-24 | substack:foundations-of-liberal-conservatism
+The case for abortion | abortion | 2026-02-18 | substack:the-case-for-abortion tumblr:809547051047272448 patreon:155199340
+A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28 | substack:186165875 patreon:155201485
 Fetishism & politics | fetishism-politics | 2024-11-14 | tumblr:770364766791352320
-Nick Shirley & the Somali day cares | somali-day-cares | 2026-01-02 | substack:nick-shirley-and-the-somali-daycares
+Nick Shirley & the Somali day cares | somali-day-cares | 2026-01-02 | substack:nick-shirley-and-the-somali-daycares patreon:155200604
 Why is Reddit so hated? | why-is-reddit-so-hated | 2025-12-30 | substack:why-is-reddit-so-hated
 Stay the trenches | stay-the-trenches | 2025-12-17 | substack:stay-the-trenches
 Immigration | immigration | 2025-11-06 | substack:thoughts-on-immigration
 What is prejudice? | what-is-prejudice | 2025-10-30 | substack:prejudice
 Notes on India | notes-on-india | 2025-10-24 | substack:india tumblr:798351257128615936
-Liberalism not extremism | liberalism-not-extremism | 2025-09-19 | substack:liberalism-not-extremism tumblr:795164683319574528
+Liberalism not extremism | liberalism-not-extremism | 2025-09-19 | substack:liberalism-not-extremism tumblr:795164683319574528 patreon:155199811
 Status quo bias & the path of normalization | the-path-of-normalization | 2025-09-08 | substack:normalization-and-status-quo-bias
 Lies about Ilhan Omar | lies-about-ilhan-omar | 2025-08-25 | substack:ilhan-omar tumblr:794091916138594304
 Israel & Palestine | israel-palestine | 2025-07-27 
-Lies told by Pierre Poilievre | pierre-poilievre | 2025-03-15 | tumblr:782079973591760896 substack:pierre-poilievre
+Lies told by Pierre Poilievre | pierre-poilievre | 2025-03-15 | tumblr:782079973591760896 substack:pierre-poilievre patreon:155202545
 Trump & Russia | trump-and-russia | 2025-03-06 | tumblr:777321996757450752 substack:trump-and-russia
 Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09 | tumblr:775036555284856832
 Elon Musk & the Nazi Salute | elon-musk-nazi-salute | 2025-01-24 | substack:the-nazi-salute tumblr:773565389405847552
 Lies about Elizabeth Warren & Hillary Clinton | lies-about-warren-clinton | 2024-12-19 | tumblr:770730090759946240 substack:enduring-falsehoods-about-warren
 Mark Robinson | mark-robinson | 2024-12-15 | tumblr:769962893917798400
 The Trump appeal | the-trump-appeal | 2024-12-03 | tumblr:770270265635667968
-The default politician | the-default-politician | 2024-11-26 | substack:the-default-politician-is-a-normal tumblr:770305075441778688
+The default politician is a white man | the-default-politician | 2024-11-26 | substack:the-default-politician-is-a-normal tumblr:770305075441778688
 Sex, gender, & transsexuals | sex-gender-transsexuals | 2024-11-19 
 Bernie Sanders & the military industrial complex | bernie-sanders-and-the-military-industrial-complex | 2024-12-16 | tumblr:770070077409214464
 Types of masculinity | types-of-masculinity | 2024-11-08 | tumblr:770310861444300800
@@ -80,36 +81,40 @@ function parseSource(string_in, separator = ":") {
         let href = 'https://irisembury.substack.com/p/' + id;
         return '<a class="external-link substack-link" href="' + href + '" title="Read this page on Substack"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>'
     }
+    if (site == "patreon") {
+        let href = 'https://www.patreon.com/posts/' + id;
+        return '<a class="external-link patreon-link" href="' + href + '" title="Read this page on Patreon"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a>'
+    }
     return "";
 }
 
 function setLightbox(action) {
-    let page_lbTopLeft = document.querySelector(".lb-top-left");
-    let page_lightbox = document.querySelector(".lightbox img");
-    let page_lbCaption = document.querySelector(".lb-caption");
-    if (!page_lightbox || !page_lbCaption || !page_lbTopLeft) {
-        return;
-    }
-    /* action is click from <img> object */
-    if (action == "close") {
-        page_lightbox.src = "";
-        page_lightbox.alt = "";
-        HTML.classList.remove("lb-enabled");
-    }
-    /* action is URLstring passed by function call */
-    else if (typeof action == "string") {
-        page_lightbox.src = action;
-        page_lightbox.alt = action;
-        HTML.classList.add("lb-enabled");
-        page_lbCaption.innerHTML = action;
-        page_lbTopLeft.innerHTML = `<a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`
-    }
-    else {
-        page_lightbox.src = action.src;
-        page_lightbox.alt = action.alt;
-        HTML.classList.add("lb-enabled");
-        page_lbTopLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
-        page_lbCaption.innerHTML = action.alt;
+    const lightbox = document.querySelector(".lightbox");
+    let [ topLeft, img, caption ] = Array.from(lightbox.children).slice(0, 3);
+    img = img.children[0];
+    if (lightbox && topLeft && img && caption) {
+        /* action is click from <img> object */
+        if (action == "close") {
+            img.src = "";
+            img.alt = "";
+            topLeft.innerHTML = '';
+            lightbox.classList.add("hidden");
+        }
+        /* action is URLstring passed by function call */
+        else if (typeof action == "string") {
+            img.src = action;
+            img.alt = action;
+            lightbox.classList.remove("hidden");
+            caption.innerHTML = action;
+            topLeft.innerHTML = `<a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`
+        }
+        else {
+            img.src = action.src;
+            img.alt = action.alt;
+            lightbox.classList.remove("hidden");
+            topLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+            caption.innerHTML = action.alt;
+        }
     }
 }
 
@@ -442,7 +447,7 @@ function parseMeta(chunk) {
     if (seeAlso.length > 0) {
         seeAlso = seeAlso.sort().join('');
         seeAlso = '<div class="see-also-container label-external">This content was also posted in other places:' + seeAlso + '</div>';
-        pushElement('.article-footer', seeAlso, 'top');
+        unshiftElement('.article-footer', seeAlso);
     }
     return title + subtitle + date;
 }
@@ -770,20 +775,33 @@ function attempt_toc_update() {
     }, 500);
 }
 
-function pushElement(parentIdentity, contents, side = "bottom") {
+function setInnerHTML(targetIdentity, contents) {
+    let target = document.querySelector(targetIdentity);
+    if (target == null) {
+        console.error(`Couldn't find ${ targetIdentity }`);
+        return;
+    }
+    target.innerHTML = contents;
+}
+
+function pushElement(parentIdentity, contents, position = "bottom") {
     let parent = document.querySelector(parentIdentity);
     if (parent == null) {
+        console.error(`Couldn't find ${ parentIdentity }`);
         return;
     }
     let node = document.createElement("div");
     node.innerHTML = contents;
-    
-    if (side == "bottom") {
+    if (position == "bottom") {
         parent.appendChild(node);
     }
     else {
         parent.insertBefore(node, parent.firstElementChild);
     }
+}
+
+function unshiftElement(parentIdentity, contents) {
+    pushElement(parentIdentity, contents, "top");
 }
 
 window.addEventListener("load", function() {
@@ -794,26 +812,70 @@ window.addEventListener("load", function() {
     document.body.innerHTML = `
     <header class="mh-top"></header>
     <nav class="gn-top">
-        <div class="nav-segment nav-left">
+        <div class="gn-segment">
             <div id="hamburger" class="icon"><svg viewBox="0 0 24 24" height="28" width="30"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
             <div class="gap-5">${ index ? "<span>Iris Embury</span>" : `<a href="${ pathToRoot }index.html">Iris Embury</a>` }${ index ? "" : '&verbar;<div title="This page" id="page-name-display">' + document.title + "</div>" }</div>
         </div>
         <div></div>
-        <div class="nav-segment right">
+        <div class="gn-segment">
             <div class="jump-arrow icon" onclick="scrollToTop()"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" height="24" viewBox="0 0 24 24" width="24"><path d="M5.293 15.207a1 1 0 001.414 0L12 9.914l5.293 5.293a1 1 0 101.414-1.414L12 7.086l-6.707 6.707a1 1 0 000 1.414Z"></path></svg></div>
             <div id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="28"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
         </div>
     </nav>
     <div id="pagebox">
+        <div class="right-panel closed">
+            <div><h3>Display:</h3></div>
+            <div><label for="dark">Dark mode:</label><input type="checkbox" class="slide-checkbox auto" id="dark"></div>
+            <hr>
+            <div><h3>Site layout:</h3></div>
+            <div><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
+            <hr>
+            <div><h3>Article formatting:</h3></div>
+            <div><label for="narrow-width">Narrow column width</label><input type="checkbox" class="slide-checkbox formatting auto" id="narrow-width"></div>
+            <div><label for="justify-text">Justify text</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
+            <div><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
+            <div><label for="reduce-margins">Reduce paragraph margin</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
+            <div><div style="margin-left:auto; color:var(--grey-8);"><span class="pseudo-link" onclick="setFormatting(true)" title="set all above on">all on</span> / <span class="pseudo-link" onclick="setFormatting(false)" title="all off">all off</span></div></div>
+            <hr>
+            <div><h3>Fonts override:</h3></div>
+            <div><div>Headings:</div><select class="drop-select css-override" id="--ff-heading" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+            <div><div>Body:</div><select class="drop-select css-override" id="--ff-article" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+            <div><div>Secondary:</div><select class="drop-select css-override" id="--ff-secondary" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
+            <div><div style="margin-left:auto; cursor:pointer; color:var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</div></div>
+            <hr>
+            <div><div style="line-height:1.5;color:var(--grey-6);"><p>These preferences are saved in your browser's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">local storage</a>. To clear your local storage for this site, simply <a class="pseudo-link" onclick="localStorage.clear()" title="Nothing visible happens when you click this, but I tested it and it works.">click here</a>.</p></div></div>
+        </div>
+        <nav class="left-panel closed">
+            <div class="nav-row title">Page listing</div>
+            ${ meta.pageList.map( entry => `<div class="nav-row link"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>` ).join("") }
+        </nav>
+        <div class="screen"></div>
         <div class="page-grid">
             <div class="main-container">
                 <div class="article">${ document.body.innerHTML }</div>
                 <footer class="article-footer"></footer>
             </div>
         </div>
-        <footer class="page-footer">
-            ${ index ?"<div>This page was last modified: " + document.lastModified.replaceAll("/", "-").substring(0,10) + '.' + "</div>" :`
-                <div class='space-evenly'>
+        <footer class="page-footer"></footer>
+    </div>
+    <div class="lightbox hidden">
+        <div class="lb-top-left"></div>
+        <div class="lb-img_wrapper" onclick="setLightbox('close')"><img></div>
+        <div class="lb-caption-panel"><div></div></div>
+    </div>
+    <style id="__css_user_set"></style>`;
+
+    let contentLinks = [];
+    interpreter(document.querySelector(".article"), contentLinks);
+    HTML.classList.add("layout");
+    setCSS();
+    
+    if (index) {
+        pushElement('.page-footer', "This page was last modified: " + document.lastModified.replaceAll("/", "-").substring(0,10) + '.');
+        pushElement('.page-footer', "I maintain this repo and my profiles on all other websites solely and independently. I'm not associated with any other person or organization.</div>");
+    }
+    else {
+        pushElement('.page-footer', `                <div class='space-evenly'>
                     <div class='column gap-rem'>
                         <div>Recently pages added:</div>
                         <div>
@@ -838,47 +900,8 @@ window.addEventListener("load", function() {
                             </ul>
                         </div>
                     </div>
-                </div>` }
-        </footer>
-    </div>
-    <div class="right-panel closed">
-        <div><h3>Display:</h3></div>
-        <div><label for="dark">Dark mode:</label><input type="checkbox" class="slide-checkbox formatting auto" id="dark"></div>
-        <hr>
-        <div><h3>Site layout:</h3></div>
-        <div><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
-        <hr>
-        <div><h3>Article formatting:</h3></div>
-        <div><label for="narrow-width">Narrow column width</label><input type="checkbox" class="slide-checkbox formatting auto" id="narrow-width"></div>
-        <div><label for="justify-text">Justify text</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
-        <div><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
-        <div><label for="reduce-margins">Reduce paragraph margin</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
-        <div><div style="margin-left:auto; color:var(--grey-8);"><span class="pseudo-link" onclick="setFormatting(true)" title="set all above on">all on</span> / <span class="pseudo-link" onclick="setFormatting(false)" title="all off">all off</span></div></div>
-        <hr>
-        <div><h3>Fonts override:</h3></div>
-        <div><div>Headings:</div><select class="drop-select css-override" id="--ff-heading" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
-        <div><div>Body:</div><select class="drop-select css-override" id="--ff-article" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
-        <div><div>Secondary:</div><select class="drop-select css-override" id="--ff-secondary" onchange="setCSS(this)"><option value="Arial">Arial</option><option value="Consolas">Consolas</option><option value="Courier New">Courier New</option><option value="Epilogue">Epilogue</option><option value="Faculty Glyphic">Faculty Glyphic</option><option value="Georgia Pro Digits,Georgia">Georgia</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter">Inter</option><option value="Lexend">Lexend</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Open Sans">Open Sans</option><option value="PT Serif">PT Serif</option><option value="Roboto">Roboto</option><option value="Roboto Slab">Roboto Slab</option><option value="Segoe UI">Segoe UI</option><option value="Sitka Text">Sitka Text</option><option value="Times New Roman,Times">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option></select></div>
-        <div><div style="margin-left:auto; cursor:pointer; color:var(--grey-8);" onclick="resetFonts()" title="restore font defaults">restore defaults</div></div>
-        <hr>
-        <div><div style="line-height:1.5;color:var(--grey-6);"><p>These preferences are saved in your browser's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">local storage</a>. To clear your local storage for this site, simply <a class="pseudo-link" onclick="localStorage.clear()" title="Nothing visible happens when you click this, but I tested it and it works.">click here</a>.</p></div></div>
-    </div>
-    <nav class="left-panel closed">
-        <div class="nav-row title">Page listing</div>
-        ${ meta.pageList.map( entry => `<div class="nav-row link"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>` ).join("") }
-    </nav>
-    <div class="screen"></div>
-    <div class="lightbox hidden">
-        <div class="lb-top-left"></div>
-        <div class="lb-main" onclick="setLightbox('close')"><img></div>
-        <div class="lb-panel"><div class="lb-caption"></div></div>
-    </div>
-    <style id="__css_user_set"></style>`;
-
-    let contentLinks = [];
-    interpreter(document.querySelector(".article"), contentLinks);
-    HTML.classList.add("layout");
-    setCSS();
+                </div>`)
+    }
 
     if (meta.loadCitelist && contentLinks.length > 0) {
         pushElement('.article-footer', `<div>Links on this page:</div><table class="citelist">${ contentLinks.map((x, n) => `<tr><td class="no-select">${ n+1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join("") }</table>`);
@@ -891,11 +914,11 @@ window.addEventListener("load", function() {
     const hamburgerMenu = document.querySelector(".left-panel");
     
     function hamburgerMenuToggle(option = "toggle") {
-        if (option == "toggle") {
-            hamburgerMenu.classList.toggle("closed", !hamburgerMenu.classList.contains("closed"));
+        if (option == "close" || option == "open") {
+            hamburgerMenu.classList.toggle("closed", option == "close");
         }
         else {
-            hamburgerMenu.classList.toggle("closed", option == "close");
+            hamburgerMenu.classList.toggle("closed", !hamburgerMenu.classList.contains("closed"));
         }
     }
     const hamburgerIcon = document.getElementById("hamburger");
@@ -956,50 +979,22 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                       #navbar set-up                                  
     */
-    let navbar = document.getElementById(".gn-top");
-        if (navbar != null) {
-            let canNavCheck = true;
-            function navCheck() {
-                if (!canNavCheck) {
-                    return;
-                }
-                canNavCheck = false;
-                setTimeout(
-                    function() {
-                        canNavCheck = true;
-                        navbar.classList.toggle("sticky-active", pageYOffset > 20);
-                    },
-                    500
-                )
-                navbar.classList.toggle("sticky-active", pageYOffset > 20);
-            }
-            window.addEventListener("scroll", navCheck);
-            navbar.classList.toggle("sticky-active", pageYOffset > 20);
-        }
-
+    navCheck();
+    window.addEventListener("scroll", navCheck);
+    
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                       index elements                                  
     */
-
-    let pageIndex = document.getElementById("page-index");
-        if (pageIndex) {
-            pageIndex.innerHTML = meta.pageList.map(
-                entry => {
-                    return `
-                    <tr>
-                        <td><div><a href="page/${ entry.url }/index.html">${ entry.title }</a></div></td>
-                        <td class='date-cell'><span>${ entry.date }</span></td>
-                        <td><div class='mirror-cell'>${ entry.other.length > 0 ? entry.other.sort().map(u => ' ' + parseSource(u)).join('') : '' }</div></td>
-                    </tr>`
-                }
-            ).join('');
-        }
-    let videosIndex = document.getElementById("videos-index");
-        if (videosIndex != null) {
-            let limit = videosIndex.className.replace(/\D/g,"") || 10;
-            videosIndex.innerHTML = ytGallery("!yt-gallery\n" + meta.videoList.slice(0, 14).join('\n'));
-        }
-
+    setInnerHTML('#page-index', meta.pageList.map(
+        entry => `
+        <tr>
+            <td><div><a href="page/${ entry.url }/index.html">${ entry.title }</a></div></td>
+            <td class='date-cell'><span>${ entry.date }</span></td>
+            <td><div class='mirror-cell'>${ entry.other.length > 0 ? entry.other.map(u => ' ' + parseSource(u)).join('') : '' }</div></td>
+        </tr>`
+    ).join(''));
+    setInnerHTML('#videos-index', ytGallery("!yt-gallery\n" + meta.videoList.slice(0, 14).join('\n')))
+    
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                      display figgling                                 
     */
@@ -1009,9 +1004,9 @@ window.addEventListener("load", function() {
     else if (!document.title.endsWith("Iris Embury")) {
         document.title += " | Iris Embury";
     }
-    let pagenamedisp = document.getElementById("page-name-display");
-    if (pagenamedisp != null && pagenamedisp.innerHTML == "") {
-        pagenamedisp.innerHTML = "This page";
+    let pageNameDisplay = document.getElementById("page-name-display");
+    if (pageNameDisplay != null && pageNameDisplay.innerHTML == "") {
+        pageNameDisplay.innerHTML = "This page";
     }
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -1041,5 +1036,21 @@ window.addEventListener("load", function() {
     }
 })
 
-
+function navCheck() {
+    let navbar = document.querySelector('.gn-top');
+    if (navbar != null) {
+        if (!meta.canNavCheck) {
+            return;
+        }
+        meta.canNavCheck = false;
+        setTimeout(
+            function() {
+                meta.canNavCheck = true;
+                navbar.classList.toggle("sticky-active", pageYOffset > 120);
+            },
+            500
+        )
+        navbar.classList.toggle("sticky-active", pageYOffset > 120);
+    }
+}
 
