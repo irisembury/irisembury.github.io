@@ -777,11 +777,9 @@ function attempt_toc_update() {
 
 function setInnerHTML(targetIdentity, contents) {
     let target = document.querySelector(targetIdentity);
-    if (target == null) {
-        console.error(`Couldn't find ${ targetIdentity }`);
-        return;
+    if (target != null) {
+        target.innerHTML = contents;
     }
-    target.innerHTML = contents;
 }
 
 function pushElement(parentIdentity, contents, position = "bottom") {
