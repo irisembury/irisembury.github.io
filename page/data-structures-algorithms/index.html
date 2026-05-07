@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="include-toc" lang="en">
+<html lang="en">
 <head>
     <link rel="stylesheet" href="../../assets/main.css">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
@@ -8,14 +8,15 @@
         --lh-article: 1.5;
     }
     .auto-table .cell {
-        border: 1px solid var(--grey-a);
+        border: 1px solid var(--theme-grey-a);
     }
     
     </style>
 </head>
 <body>
-!meta
-title: Data structures & algorithms
+# Data structures & algorithms
+
+!loadtoc
 
 The code samples are usually in C++ or C# because those are the languages I was working with at the time. The concepts are not language-specific.
 
@@ -156,13 +157,13 @@ Shifting by multiple places is the same as doubling or halving that many times. 
 
 <div class="align-center gap-15">
 
-!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
+!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--theme-grey-f) }
 shifting by x places | is the same as multiplying
 << 1 | * 2
 << 2 | * 2<sup>2</sup> (i.e. \*2\*2)
 << 3 | * 2<sup>3</sup> (i.e. \*2\*2\*2)
 
-!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
+!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--theme-grey-f) }
 shifting by x places | is the same as multiplying
 >> 1 | / 2
 >> 2 | / 2<sup>2</sup> (i.e. \*2\*2)

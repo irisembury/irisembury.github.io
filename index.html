@@ -1,90 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" class="label-external">
+<html lang="en">
 <head>
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    .mh-top { display:none; }
-    :root { --ff-heading: Lora,Georgia,serif; }
-    .article h1 { font-size: 2.4em; }
-    .article h2 { font-size: 1.8em; text-align: center; }
+    .mh-top { display: none; }
     
-    .inline-icon { margin-right: 5px; }
+    .article {
+        max-width: var(--article-width) !important; /* disables full-width toggle */
+    }
+    .article p { font-size: 16.4px; }
 
-    /* for unique page elements */
-    .profile-img { cursor: pointer; display: block; height: 240px; aspect-ratio: 3 / 4; border: 1px solid var(--grey-c); }
-    .links-area { display: flex; line-height: 1; }
-        .links-area li { list-style-type: none; margin-top: 1rem; }
-            .links-area a { display: inline-flex; align-items: center; padding: 4px 7px 4px 4px; }
-            .links-area p { margin-top: 2px; margin-left: 12px; font-family: var(--ff-ui); max-width: 140px; font-size: 90%; color: var(--grey-8); }
-    .link-icon { display: block; content: ""; background-image: var(--link-icon); border-radius: 2px; width: 16px; height: 16px; margin-inline: 2px; display: inline-block; vertical-align: sub; object-fit: contain; background-repeat: no-repeat; background-size: contain; background-position: center; }
+    .social-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0 2px; }
+        .social-icons a { display: block; }
+        .social-icons .inline-icon { display: block; width: 30px; height: 30px; }
 
-    #page-index { line-height: 1; margin-left: auto; margin-right: auto; }
-    #page-index tr + tr { border-top: 1px dashed var(--grey-c); }
-    #page-index tr:hover { background-color: var(--bg-light-blue-subtle); }
-        #page-index td { padding: 12px; vertical-align: middle; }
+    .content-div { display: flex; justify-content: center; align-items: stretch; max-width: var(--article-width); margin-inline: auto; }
+        .content-div h3 { margin: 0 0 0.5rem; }
 
-        .date-cell { white-space: nowrap; color: var(--grey-5); font-family: Roboto,var(--ff-ui); font-size: var(--fs-article-2); }
-        .mirror-cell { font-family: var(--ff-ui); font-size: var(--fs-article-3); }
-        .mirror-cell a { padding: 3px; }
-            .mirror-cell .link-text { display: none; }
-            .mirror-cell .inline-icon { margin: 0; padding: 1px; }
 
-    .fine { text-align: center; }
     </style>
 </head>
 <body>
-<div class="gap-17 center">
-    <div>
-        <div><h1 style="margin:0">Iris Embury</h1></div>
-        <div class="links-area">
-            <ul>
-                <li><div><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span>YouTube</span></a></div></li>
-                <li><div><a href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span>Bluesky</span></a></div></li>
-                <li><div><a href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span>Twitter/X</span></a></div></li>
-            </ul>
-            <ul>
-                <li><div><a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a></div></li>
-                <li>
-                    <div><a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></div>
-                    <p>No paywalled content</p>
-                </li>
-                <li>
-                    <div><a href="https://www.patreon.com/cw/irisembury/posts"><span class="patreon-logo inline-icon"></span><span>Patreon</span></a></div>
-                    <p>Free mirrors</p>
-                </li>
-            </ul>
-            <ul>
-                <li>
-                    <div><a href="discord/index.html"><span class="discord-logo inline-icon"></span><span>Discord (server invite)</span></a></div>
-                    <p>Public; no paywall</p>
-                </li>
-                <li><div><a href="https://github.com/irisembury"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></div></li>
-            </ul>
+<div class="center">
+    <div class="align-center gap-rem">
+        <div><div><img style="aspect-ratio:1; width:124px; border:2px solid #333;" src="assets/pi.png"></div></div>
+        <div>
+            <div><h1 style="font-family: IBM Plex Serif,Lora,serif; margin:0 0 14px; line-height:1; font-size:40px;">Iris Embury</h1></div>
+            <div>
+                <div class="social-icons label-external">
+                    <div><a title="YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span></a></div>
+                    <div><a title="Twitter/X" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span></a></div>
+                    <div><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span></a></div>
+                    <div><a title="Substack" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span></a></div>
+                    <div><a title="Tumblr" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span></a></div>
+                    <div><a title="Medium" href="https://www.medium.com/@irisembury"><span class="medium-logo inline-icon"></span></a></div>
+                    <div><a title="Discord" href="discord/index.html"><span class="discord-logo inline-icon"></span></a></div>
+                    <div><a title="Patreon" href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span></a></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-## Recent videos
+I'm an English Canadian, <span class="age-from">1994-03-07</span>, living in Ontario. I make articles and videos that I post across various websites. I made this repo to be a point of convergence for links to everything I do.
 
-<div id="videos-index"></div><div style="text-align: right; margin-top: 10px; "><a title="Link to YouTube" style="padding: 3px 6px;" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="link-icon"></span></a></div>
+I operate this page and all my profiles solely and independently. I have no association with any other person or organization.
 
-**About me:**
-I'm an English-born Canadian living in Ontario. I talk about politics and stuff in articles and videos. I decided to stop being anonymous and take online content production more seriously in late 2025 after being a very political person for a long time and feeling dissatisfied with the state of the world and of our online media landscape.
-
-I don't yet earn any revenue from anything I do. If you'd like to directly support the production of more content like mine, including helping me invest in better equipment, please consider donating through one of the links below. I'm committed to this either way, but with your help everything I'm working toward can come sooner rather than later.
-
-<div class="center gap-30">
-    <div><a href="https://www.paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span>PayPal</span></a></div>
-    <div><a href="https://www.ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span>Ko-fi</span></a></div>
-    <div><a href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span><span>Patreon</span></a></div>
+<hr>
+<div class="content-div">
+    <div class="video-index label-external"><h3>Videos<a title="See all videos on YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="inline-icon link-icon"></span></a></h3></div>
+    <div style="padding: 0 24px;"><div style="background-color:var(--theme-grey-c); height:100%; width:1px;"></div></div>
+    <div class="page-index label-external"><h3>Text</h3></div>
 </div>
-
-Note that although I host content on Patreon, everything there is free to access. I am simply using it as another website where I can post mirrors of videos and articles.
-
-## Text pages
-
-<table id="page-index"></table>
-
 <div class="hidden" id="index"></div><script src="assets/layout.js"></script>
+<p style="opacity:0; max-width:unset; pointer-events:none; height:0; margin-top:0;" class="no-select">. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</p>
 </body></html>
+
