@@ -4,56 +4,66 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    .mh-top { display: none; }
-    
-    .article {
+    .main-content {
         max-width: var(--article-width) !important; /* disables full-width toggle */
     }
-    .article p { font-size: 16.4px; }
 
-    .social-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0 2px; }
+    .social-icons { margin-block: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0 2px; }
         .social-icons a { display: block; }
         .social-icons .inline-icon { display: block; width: 30px; height: 30px; }
 
-    .content-div { display: flex; justify-content: center; align-items: stretch; max-width: var(--article-width); margin-inline: auto; }
-        .content-div h3 { margin: 0 0 0.5rem; }
-
-
+    .content-div { line-height: 1; font-size: var(--fs-article-2); font-family: var(--ff-secondary); display: flex; justify-content: center; align-items: stretch; max-width: var(--article-width); margin-inline: auto; }
+        .section-top { border-bottom: 1px dashed var(--theme-grey-a); align-items: center; margin-bottom: 1rem; display: flex; justify-content: space-between; }
+            .section-top h3 { margin: 0; }
+            .section-top a { color: var(--theme-grey); }
+    
+    .page-index { width: 100%; }
+        .page-entry { padding: 8px; margin-inline: -9px; display: flex; justify-content: space-between; gap: 1rem; }
+        .page-entry:hover { background-color: var(--bg-light-blue-subtle); }
+        .page-entry .page-date { margin-top: 5px; }
+        .page-entry .page-mirrors { white-space: nowrap; }
+            .page-entry .page-mirrors a { padding: 2px; }
+            .page-entry .page-mirrors .link-text { display: none; }
+            .page-entry .page-mirrors .inline-icon { margin: 0; padding: 1px; }
+    
     </style>
 </head>
 <body>
-<div class="center">
-    <div class="align-center gap-rem">
-        <div><div><img style="aspect-ratio:1; width:124px; border:2px solid #333;" src="assets/pi.png"></div></div>
-        <div>
-            <div><h1 style="font-family: IBM Plex Serif,Lora,serif; margin:0 0 14px; line-height:1; font-size:40px;">Iris Embury</h1></div>
-            <div>
-                <div class="social-icons label-external">
-                    <div><a title="YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span></a></div>
-                    <div><a title="Twitter/X" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span></a></div>
-                    <div><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span></a></div>
-                    <div><a title="Substack" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span></a></div>
-                    <div><a title="Tumblr" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span></a></div>
-                    <div><a title="Medium" href="https://www.medium.com/@irisembury"><span class="medium-logo inline-icon"></span></a></div>
-                    <div><a title="Discord" href="discord/index.html"><span class="discord-logo inline-icon"></span></a></div>
-                    <div><a title="Patreon" href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span></a></div>
-                </div>
-            </div>
+<div class='center'><h1 style="font-size:48px; font-family: IBM Plex Serif,Lora,serif; margin:0; line-height:1;">Iris Embury</h1></div>
+<div>
+    <div class="social-icons label-external">
+        <div><a title="YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span></a></div>
+        <div><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span></a></div>
+        <div><a title="Twitter/X" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span></a></div>
+        <div><a title="Substack" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span></a></div>
+        <div><a title="Tumblr" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span></a></div>
+        <div><a title="Medium" href="https://www.medium.com/@irisembury"><span class="medium-logo inline-icon"></span></a></div>
+        <div><a title="Discord" href="discord/index.html"><span class="discord-logo inline-icon"></span></a></div>
+        <div><a title="Patreon" href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span></a></div>
+    </div>
+</div>
+
+I'm an English Canadian, <span class="age-from">1994-03-07</span>, living in Ontario. I write stuff and make videos, usually about politics. I made this repo to be a convergence point for everything I do.
+
+I operate this page and all my profiles solely and independently. I have no association with any other person or organization.
+
+---
+
+<div class="content-div">
+    <div class="video-index label-external">
+        <div class="section-top">
+            <h3>Videos</h3>
+            <a title="See all videos on YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all<span class="inline-icon link-icon"></span></a>
+        </div>
+    </div>
+    <div style="padding: 0 24px;"><div style="background-color:var(--theme-grey-c); height:100%; width:1px;"></div></div>
+    <div class="page-index label-external">
+        <div class="section-top">
+            <h3>Text</h3>
+            <a title="List of all pages" href="page/index.html">see all</a>
         </div>
     </div>
 </div>
 
-I'm an English Canadian, <span class="age-from">1994-03-07</span>, living in Ontario. I make articles and videos that I post across various websites. I made this repo to be a point of convergence for links to everything I do.
-
-I operate this page and all my profiles solely and independently. I have no association with any other person or organization.
-
-<hr>
-<div class="content-div">
-    <div class="video-index label-external"><h3>Videos<a title="See all videos on YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="inline-icon link-icon"></span></a></h3></div>
-    <div style="padding: 0 24px;"><div style="background-color:var(--theme-grey-c); height:100%; width:1px;"></div></div>
-    <div class="page-index label-external"><h3>Text</h3></div>
-</div>
-<div class="hidden" id="index"></div><script src="assets/layout.js"></script>
-<p style="opacity:0; max-width:unset; pointer-events:none; height:0; margin-top:0;" class="no-select">. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</p>
-</body></html>
+<script src="assets/layout.js"></script></body></html>
 

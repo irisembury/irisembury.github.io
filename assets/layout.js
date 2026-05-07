@@ -1,62 +1,83 @@
 "use strict"
 const HTML = document.documentElement;
-const meta = { flags:[], lastHeading: 0, rowsInToc:[], videoList:[], pageList:[], canNavCheck:true, canTocUpdate:true, pageHeadings:[], fontDefaults: { "--ff-heading":"'Inter',sans-serif", "--ff-body":"var(--ff-Georgia)", "--ff-secondary":"'Segoe UI',system-ui" }}
-
-meta.videoList = [
-    { title:"Liberalism not Leftism", url:"DgGf_g4aGYA", date:"2026-05-06" },
-    { title:"Liberal Conservatism", url:"Sy33HSFsuu8", date:"2026-04-07" },
-    { title:"Elections", url:"7lw6rO_Pv7I", date:"2026-03-20" },
-    { title:"Epstein", url:"5ymc2ePfFR8", date:"2026-03-08" },
-    { title:"How bad is America, really?", url:"W0Dmtyyc7FU", date:"2026-03-04" },
-    { title:"In defense of abortion", url:"CpjJ8TgOxJY", date:"2026-02-24" },
-    { title:"American decline", url:"oUOsAdnK2zs", date:"2026-02-11" },
-    { title:"give yourself credit", url:"mM5fcuJnfZQ", date:"2026-01-23" },
-    { title:"Why is Reddit so hated?", url:"jPVl5cfVP1k", date:"2026-01-13" },
-    { title:"Pride 2025 in Toronto", url:"PL3u9OOGxew", date:"2025-07-05" },
-    { title:"Immigration", url:"6MEkIZQFV6w", date:"2025-11-23" },
-    { title:"Notes on India", url:"Pz0Oq1rb14E", date:"2025-10-24" },
-    { title:"Sex, gender, & transsexuals", url:"Hgh3r7gJoWU", date:"2025-10-17" },
-    { title:"Notes on Saudi Arabia", url:"9RhaYU21Qag", date:"2025-10-17" },
-    { title:"Ilhan Omar making waves after Charlie Kirk's death", url:"JDseBrbtp6E", date:"2025-10-04" },
-    { title:"Why do people like Trump?", url:"tcF0f-Dtgic", date:"2025-09-14" },
-    { title:"Lies about Ilhan Omar", url:"zgE4L-e9yg0", date:"2025-09-03" },
-    { title:"Lies about Elizabeth Warren and Hillary Clinton", url:"LPQD6sxlWOs", date:"2025-04-09" }
-]
-
-meta.pageList = [
-    { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
-    { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
-    { title:"Floor crossings", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
-    { title:"Rational ignorance", url:"rational-ignorance", date:"2026-04-09", mirrors:["substack:rational-ignorance","tumblr:813419185909727232","patreon:155199122"] },
-    { title:"Liberal conservatism", subtitle:"A philosophy of prudence and humility", url:"liberal-conservatism", date:"2026-03-24", mirrors:["substack:foundations-of-liberal-conservatism"], flags:["toc","wide"] },
-    { title:"The case for abortion", url:"abortion", date:"2026-02-18", mirrors:["substack:the-case-for-abortion","tumblr:809547051047272448","patreon:155199340"], flags:["toc","wide"] },
-    { title:"A synopsis of American decline", url:"a-synopsis-of-american-decline", date:"2026-01-28", mirrors:["substack:186165875","patreon:155201485"], flags:["toc"] },
-    { title:"Fetishism & politics", url:"fetishism-politics", date:"2024-11-14", mirrors:["tumblr:770364766791352320"] },
-    { title:"Nick Shirley & the Somali day cares", url:"somali-day-cares", date:"2026-01-02", mirrors:["substack:183243480","patreon:155200604"], flags:["citelist"] },
-    { title:"Why is Reddit so hated?", subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it", url:"why-is-reddit-so-hated", date:"2025-12-30", mirrors:["substack:why-is-reddit-so-hated"], flags:["toc"] },
-    { title:"Stay the trenches", url:"stay-the-trenches", date:"2025-12-17", mirrors:["substack:stay-the-trenches"] },
-    { title:"Immigration", url:"immigration", date:"2025-11-06", mirrors:["substack:183229652"] },
-    { title:"Prejudice", url:"what-is-prejudice", date:"2025-10-30", mirrors:["substack:prejudice"] },
-    { title:"Notes on India", url:"notes-on-india", date:"2025-10-24", mirrors:["substack:india","tumblr:798351257128615936"] },
-    { title:"Liberalism not leftism", subtitle:"An overview of leftist historical revisionism and a warning for liberals", url:"liberalism-not-leftism", date:"2025-09-19", mirrors:["substack:liberalism-not-extremism","tumblr:795164683319574528","patreon:155199811"] },
-    { title:"Status quo bias & the path of normalization", url:"the-path-of-normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
-    { title:"Lies about Ilhan Omar", url:"lies-about-ilhan-omar", date:"2025-08-25", flags:["citelist"], mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
-    { title:"Israel & Palestine", url:"israel-palestine", date:"2025-07-27", flags:["toc","wide"] },
-    { title:"The problems with Pierre Poilievre", url:"pierre-poilievre", date:"2025-03-15", mirrors:["tumblr:782079973591760896","substack:pierre-poilievre patreon:155202545"], flags:["citelist","toc"] },
-    { title:"Trump & Russia", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
-    { title:"Why get bottom surgery?", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
-    { title:"Elon Musk & the Nazi Salute", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
-    { title:"Lies about Elizabeth Warren & Hillary Clinton", url:"lies-about-warren-clinton", date:"2024-12-19", mirrors:["tumblr:770730090759946240","substack:153821886"], flags:["citelist"] },
-    { title:"Mark Robinson", url:"mark-robinson", date:"2024-12-15", mirrors:["tumblr:769962893917798400"] },
-    { title:"The Trump appeal", url:"the-trump-appeal", date:"2024-12-03", mirrors:["tumblr:770270265635667968"] },
-    { title:"The normal white man bias", url:"the-normal-white-man-bias", date:"2024-11-26", mirrors:["substack:153823028","tumblr:770305075441778688","medium:0c508d4c51b5"] },
-    { title:"Sex, gender, & transsexuals", url:"sex-gender-transsexuals", date:"2024-11-19" },
-    { title:"Bernie Sanders & the military industrial complex", url:"bernie-sanders-and-the-military-industrial-complex", date:"2024-12-16", mirrors:["tumblr:770070077409214464"] },
-    { title:"Types of masculinity", url:"types-of-masculinity", date:"2024-11-08", mirrors:["tumblr:770310861444300800"] },
-    { title:"Poor Things (2023 film)", url:"poor-things", date:"2024-10-31", mirrors:["tumblr:769969807464464384"] },
-    { title:"The trans prison stats argument", url:"the-trans-prison-stats-argument", date:"2024-10-19", mirrors:["substack:the-trans-prison-stats-argument","tumblr:771501478599868416"] },
-    { title:"Record of statements by select public figures", url:"public-record", flags:["hidden","toc","wide"] }
-].sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")));
+const meta = {
+    flags:[],
+    lastHeading: 0,
+    rowsInToc:[],
+    videoListData:[
+        { title:"Liberalism not Leftism", date:"2026-05-06", url:"DgGf_g4aGYA" },
+        { title:"Liberal Conservatism", date:"2026-04-07", url:"Sy33HSFsuu8" },
+        { title:"Elections", date:"2026-03-20", url:"7lw6rO_Pv7I" },
+        { title:"Epstein", date:"2026-03-08", url:"5ymc2ePfFR8" },
+        { title:"How bad is America, really?", date:"2026-03-04", url:"W0Dmtyyc7FU" },
+        { title:"In defense of abortion", date:"2026-02-24", url:"CpjJ8TgOxJY" },
+        { title:"American decline", date:"2026-02-11", url:"oUOsAdnK2zs" },
+        { title:"give yourself credit", date:"2026-01-23", url:"mM5fcuJnfZQ" },
+        { title:"Why is Reddit so hated?", date:"2026-01-13", url:"jPVl5cfVP1k" },
+        { title:"Pride 2025 in Toronto", date:"2025-07-05", url:"PL3u9OOGxew" },
+        { title:"Immigration", date:"2025-11-23", url:"6MEkIZQFV6w" },
+        { title:"Notes on India", date:"2025-10-24", url:"Pz0Oq1rb14E" },
+        { title:"Sex, gender, & transsexuals", date:"2025-10-17", url:"Hgh3r7gJoWU" },
+        { title:"Notes on Saudi Arabia", date:"2025-10-17", url:"9RhaYU21Qag" },
+        { title:"Ilhan Omar making waves after Charlie Kirk's death", date:"2025-10-04", url:"JDseBrbtp6E" },
+        { title:"Why do people like Trump?", date:"2025-09-14", url:"tcF0f-Dtgic" },
+        { title:"Lies about Ilhan Omar", date:"2025-09-03", url:"zgE4L-e9yg0" },
+        { title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
+    ],
+    pageListData:[
+        { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
+        { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
+        { title:"Floor crossings", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
+        { title:"Rational ignorance", url:"rational-ignorance", date:"2026-04-09", mirrors:["substack:rational-ignorance","tumblr:813419185909727232","patreon:155199122"] },
+        { title:"Liberal conservatism", subtitle:"A philosophy of prudence and humility", url:"liberal-conservatism", date:"2026-03-24", mirrors:["substack:foundations-of-liberal-conservatism"], flags:["toc","wide"] },
+        { title:"The case for abortion", url:"abortion", date:"2026-02-18", mirrors:["substack:the-case-for-abortion","tumblr:809547051047272448","patreon:155199340"], flags:["toc","wide"] },
+        { title:"A synopsis of American decline", url:"a-synopsis-of-american-decline", date:"2026-01-28", mirrors:["substack:186165875","patreon:155201485"], flags:["toc"] },
+        { title:"Fetishism & politics", url:"fetishism-politics", date:"2024-11-14", mirrors:["tumblr:770364766791352320"] },
+        { title:"Nick Shirley & the Somali day cares", url:"somali-day-cares", date:"2026-01-02", mirrors:["substack:183243480","patreon:155200604"], flags:["citelist"] },
+        { title:"Why is Reddit so hated?", subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it", url:"why-is-reddit-so-hated", date:"2025-12-30", mirrors:["substack:why-is-reddit-so-hated"], flags:["toc"] },
+        { title:"Stay the trenches", url:"stay-the-trenches", date:"2025-12-17", mirrors:["substack:stay-the-trenches"] },
+        { title:"Immigration", url:"immigration", date:"2025-11-06", mirrors:["substack:183229652"] },
+        { title:"Prejudice", url:"what-is-prejudice", date:"2025-10-30", mirrors:["substack:prejudice"] },
+        { title:"Notes on India", url:"notes-on-india", date:"2025-10-24", mirrors:["substack:india","tumblr:798351257128615936"] },
+        { title:"Liberalism not leftism", subtitle:"An overview of leftist historical revisionism and a warning for liberals", url:"liberalism-not-leftism", date:"2025-09-19", mirrors:["substack:liberalism-not-extremism","tumblr:795164683319574528","patreon:155199811"] },
+        { title:"Status quo bias & the path of normalization", url:"the-path-of-normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
+        { title:"Lies about Ilhan Omar", url:"lies-about-ilhan-omar", date:"2025-08-25", flags:["citelist"], mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
+        { title:"Israel & Palestine", url:"israel-palestine", date:"2025-07-27", flags:["toc","wide"] },
+        { title:"The problems with Pierre Poilievre", url:"pierre-poilievre", date:"2025-03-15", mirrors:["tumblr:782079973591760896","substack:pierre-poilievre patreon:155202545"], flags:["citelist","toc"] },
+        { title:"Trump & Russia", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
+        { title:"Why get bottom surgery?", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
+        { title:"Elon Musk & the Nazi Salute", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
+        { title:"Lies about Elizabeth Warren & Hillary Clinton", url:"lies-about-warren-clinton", date:"2024-12-19", mirrors:["tumblr:770730090759946240","substack:153821886"], flags:["citelist"] },
+        { title:"Mark Robinson", url:"mark-robinson", date:"2024-12-15", mirrors:["tumblr:769962893917798400"] },
+        { title:"The Trump appeal", url:"the-trump-appeal", date:"2024-12-03", mirrors:["tumblr:770270265635667968"] },
+        { title:"The normal white man bias", url:"the-normal-white-man-bias", date:"2024-11-26", mirrors:["substack:153823028","tumblr:770305075441778688","medium:0c508d4c51b5"] },
+        { title:"Sex, gender, & transsexuals", url:"sex-gender-transsexuals", date:"2024-11-19" },
+        { title:"Bernie Sanders & the military industrial complex", url:"bernie-sanders-and-the-military-industrial-complex", date:"2024-12-16", mirrors:["tumblr:770070077409214464"] },
+        { title:"Types of masculinity", url:"types-of-masculinity", date:"2024-11-08", mirrors:["tumblr:770310861444300800"] },
+        { title:"Poor Things (2023 film)", url:"poor-things", date:"2024-10-31", mirrors:["tumblr:769969807464464384"] },
+        { title:"The trans prison stats argument", url:"the-trans-prison-stats-argument", date:"2024-10-19", mirrors:["substack:the-trans-prison-stats-argument","tumblr:771501478599868416"] },
+        { title:"Record of statements by select public figures", url:"public-record", flags:["hidden","toc","wide"] }
+    ],
+    pageList:function(){
+        return meta.pageListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 15)
+    },
+    pageListFull:function(){
+        return meta.pageListData
+    },
+    videoList:function(){
+        return meta.videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 5)
+    },
+    canNavCheck:true,
+    canTocUpdate:true,
+    pageHeadings:[],
+    fontDefaults: {
+        "--ff-heading":"'Inter',sans-serif",
+        "--ff-body":"var(--ff-Georgia)",
+        "--ff-secondary":"'Segoe UI',system-ui"
+    }
+}
+meta.pageListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
+meta.videoListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
 
 function scrollToTop() {
     window.scrollTo({
@@ -374,15 +395,6 @@ function autoIndent(chunk) {
             }
         }
     ).join('') }</blockquote>`;
-}
-
-function getDirectory() {
-    let path = window.location.pathname.replace(/index\.html$/, "");
-    if (path.endsWith("/")) {
-        path = path.slice(0, -1);
-    }
-    path = path.substring(path.lastIndexOf('/') + 1);
-    return path;
 }
 
 /* converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
@@ -707,9 +719,32 @@ function attempt_toc_update() {
     }, 500);
 }
 
+/* irisembury.github.io/page/RETURN_VALUE/index.html */
+function getDirectory() {
+    let path = window.location.pathname.replace(/index\.html$/, "");
+    if (path.endsWith("/")) {
+        path = path.slice(0, -1);
+    }
+    path = path.substring(path.lastIndexOf('/') + 1);
+    return path;
+}
+function getPathToRoot() {
+    let path = window.location.pathname;
+    if (path.endsWith("index.html")) {
+        path = path.slice(0, -10);
+    }
+    if (path.endsWith("/")) {
+        path = path.slice(0, -1);
+    }
+    path = path.substring(path.indexOf("irisembury.github.io"));
+    path = path.replace(/[^/]/g,'');
+    
+    return '../'.repeat(path.length);
+}
+
 window.addEventListener("load", function() {
-    const index = document.getElementById("index") != null;
-    const pathToRoot = index ? "" : "../../";
+    const pathToRoot = getPathToRoot();
+    const index = pathToRoot == "";
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
 
     document.body.innerHTML = `
@@ -730,7 +765,7 @@ window.addEventListener("load", function() {
         <div class="panel-wrapper">
             <nav class="left-panel closed">
                 <div class="nav-row title">Page listing</div>
-                ${ meta.pageList.map( entry => `<div class="nav-row link"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>` ).join("") }
+                ${ meta.pageList().map( entry => `<div class="nav-row link"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>` ).join("") }
             </nav>
             <div class="right-panel closed">
                 <div><div><h3>Display:</h3></div></div>
@@ -818,9 +853,9 @@ window.addEventListener("load", function() {
         }
     )
     setCSS();
-    
+
     if (!index) {
-        const entry = meta.pageList.find(e => e.url == getDirectory());
+        const entry = meta.pageListFull().find(e => e.url == getDirectory());
         if (entry) {
             if (entry.flags && entry.flags.length > 0) {
                 meta.flags = entry.flags;
@@ -854,7 +889,6 @@ window.addEventListener("load", function() {
     
     if (meta.flags.includes("wide")) {
         HTML.style.setProperty("--article-width", "954px");
-        HTML.style.setProperty("--fs-article-1", "16px");
     }
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -867,7 +901,7 @@ window.addEventListener("load", function() {
                 <div>Pages recently added:</div>
                 <div>
                     <ul>
-                        ${ meta.pageList.slice(0, 4).map( entry => `<li><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></li>` ).join("") }
+                        ${ meta.pageList().slice(0, 4).map( entry => `<li><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></li>` ).join("") }
                     </ul>
                 </div>
             </div>
@@ -971,21 +1005,30 @@ window.addEventListener("load", function() {
                                       index elements                                  
     */
 
-    document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", meta.pageList.filter(p => !p.flags || !p.flags.includes("hidden")).map(
+    document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", meta.pageList().map(
         entry => `
             <div class="page-entry">
                 <div>
-                    <div><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
+                    <div class="page-link"><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
                     <div class="page-date">${ entry.date }</div>
                 </div>
                 <div class="page-mirrors">${ Object.hasOwn(entry, "mirrors") && entry.mirrors.length > 0 ? entry.mirrors.map(m => " " + parseSource(m)).join('') :''}</div>
             </div>
         `
     ).join(''))
+    document.querySelector(".page-index-all")?.insertAdjacentHTML("beforeend", `<table><tbody><tr style="font-weight:700"><td>Page</td><td>Date</td><td>Mirrors</td></tr>${meta.pageListFull().map(
+        entry => `
+                <tr>
+                    <td class="page-link"><a href="page/${ entry.url }/index.html">${ entry.title }</a></td>
+                    <td class="page-date">${ entry.date ?entry.date :'n.d.' }</td>
+                    <td class="page-mirrors">${ Object.hasOwn(entry, "mirrors") && entry.mirrors.length > 0 ? entry.mirrors.map(m => " " + parseSource(m)).join('') :''}</td>
+                </tr>
+            `
+        ).join('')}</tbody></table>`)
     document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", 
-        `<div class="yt-gallery">
+        `<div class="video-gallery">
             ${
-                meta.videoList.map(
+                meta.videoList().map(
                     v => `
                         <figure>
                             <a href="https://www.youtube.com/watch?v=${ v.url }"><img loading="lazy" src="https://i.ytimg.com/vi/${ v.url }/hqdefault.jpg"></a>
