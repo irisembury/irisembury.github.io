@@ -26,7 +26,8 @@
         --page-bg: light-dark(#fff, #222);
         --article-bg: light-dark(#fff, #222);
         --nav-bg: light-dark(#202020, #000);
-        --header-bg: light-dark(#2f3643, #090c11);
+        --header-bg: light-dark(#2f3643, #11141a);
+        --footer-bg: light-dark(#2f3238, #161616);
         --theme-grey-3: light-dark(#333, #ddd);
         --theme-grey-2: light-dark(#222, #eee);
         --theme-grey-6: light-dark(#666, #aaa);
@@ -354,7 +355,7 @@
                         .citelist a { text-decoration: none; }
                         .citelist a:hover { text-decoration: underline; }
                         .citelist .no-select { text-align: right; padding-right: 0.4em; padding-left: 0.6em; }
-        .page-footer { min-height: 150px; padding: 30px var(--article-padding); color: light-dark(#808182, #606162); background-color: light-dark(#2f3238, #080808); }
+        .page-footer { min-height: 150px; padding: 30px var(--article-padding); color: light-dark(#808182, #606162); background-color: var(--footer-bg); }
             .page-footer > * { max-width: var(--article-width); margin: 0 auto; }
             .page-footer > * + * { margin-top: 1rem; }
             .page-footer li { list-style-type: none; }
