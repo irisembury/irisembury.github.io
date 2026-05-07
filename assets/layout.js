@@ -781,13 +781,10 @@ window.addEventListener("load", function() {
                 <hr>
                 <div><h3>Fonts override:</h3></div>
                 <div><label>Headings:</label><select class="drop-select" id="--ff-heading" onchange="setCSS(this)">
-                    <option value="'Arial',sans-serif">Arial</option>
                     <option value="var(--ff-Georgia)">Georgia</option>
                     <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
                     <option value="'IBM Plex Serif',serif">IBM Plex Serif</option>
                     <option value="'Inter',sans-serif">Inter</option>
-                    <option value="'Lexend',sans-serif">Lexend</option>
-                    <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
                     <option value="'Lora',serif">Lora</option>
                     <option value="'Merriweather',serif">Merriweather</option>
                     <option value="'Open Sans',sans-serif">Open Sans</option>
@@ -802,20 +799,18 @@ window.addEventListener("load", function() {
                     <option value="var(--ff-Georgia)">Georgia</option>
                     <option value="'IBM Plex Sans',serif",sans-serif>IBM Plex Sans</option>
                     <option value="'Inter',sans-serif">Inter</option>
-                    <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
                     <option value="'Open Sans',sans-serif">Open Sans</option>
                     <option value="'Ubuntu Em Dash','PT Serif',serif">PT Serif</option>
                     <option value="'Merriweather Em Dash',Roboto,sans-serif">Roboto</option>
                     <option value="'Segoe UI',system-ui">Segoe UI</option>
                 </select></div>
                 <div><label>Secondary:</label><select class="drop-select" id="--ff-secondary" onchange="setCSS(this)">
-                    <option value="'Arial',sans-serif">Arial</option>
                     <option value="var(--ff-Georgia)">Georgia</option>
                     <option value="'IBM Plex Sans',serif",sans-serif>IBM Plex Sans</option>
                     <option value="'Inter',sans-serif">Inter</option>
                     <option value="'Open Sans',sans-serif">Open Sans</option>
                     <option value="'PT Serif',serif">PT Serif</option>
-                    <option value="'Merriweather Em Dash',Roboto,sans-serif">Roboto</option>
+                    <option value="var(--ff-Roboto)">Roboto</option>
                     <option value="'Segoe UI',system-ui">Segoe UI</option>
                     <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                 </select></div>
@@ -1019,7 +1014,7 @@ window.addEventListener("load", function() {
     document.querySelector(".page-index-all")?.insertAdjacentHTML("beforeend", `<table><tbody><tr style="font-weight:700"><td>Page</td><td>Date</td><td>Mirrors</td></tr>${meta.pageListFull().map(
         entry => `
                 <tr>
-                    <td class="page-link"><a href="page/${ entry.url }/index.html">${ entry.title }</a></td>
+                    <td class="page-link"><a href="${ entry.url }/index.html">${ entry.title }</a></td>
                     <td class="page-date">${ entry.date ?entry.date :'n.d.' }</td>
                     <td class="page-mirrors">${ Object.hasOwn(entry, "mirrors") && entry.mirrors.length > 0 ? entry.mirrors.map(m => " " + parseSource(m)).join('') :''}</td>
                 </tr>
