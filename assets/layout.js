@@ -751,22 +751,16 @@ window.addEventListener("load", function() {
         <header class="mh-top"></header>
         <nav class="gn-top">
             <div class="gn-segment">
-                <div id="hamburger" class="icon"><svg viewBox="0 0 24 24" height="28" width="30"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
                 <div class="page-id">
                     ${ index ?'<span>Iris Embury</span>' :'<span><a href="' + pathToRoot + 'index.html">Iris Embury</a></span>' }
                 </div>
             </div>
-            <div></div>
             <div class="gn-segment">
                 <div class="jump-arrow icon" onclick="scrollToTop()"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" height="24" viewBox="0 0 24 24" width="24"><path d="M5.293 15.207a1 1 0 001.414 0L12 9.914l5.293 5.293a1 1 0 101.414-1.414L12 7.086l-6.707 6.707a1 1 0 000 1.414Z"></path></svg></div>
                 <div id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="28"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
             </div>
         </nav>
         <div class="panel-wrapper">
-            <nav class="left-panel closed">
-                <div class="nav-row title">Page listing</div>
-                ${ meta.pageList().map( entry => `<div class="nav-row link"><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></div>` ).join("") }
-            </nav>
             <div class="right-panel closed">
                 <div><div><h3>Display:</h3></div></div>
                 <div class="push-right"><label for="lightswitch">Dark mode</label><input type="checkbox" class="slide-checkbox" id="lightswitch"></div>
@@ -856,7 +850,10 @@ window.addEventListener("load", function() {
                 meta.flags = entry.flags;
             }
             if (entry.mirrors && entry.mirrors.length > 0) {
-                document.querySelector('.side-contents')?.insertAdjacentHTML("afterbegin", `<section class="mirror-container column gap-8 label-external"><div>This page was also posted in other places:</div><div style="padding:0 1rem">${ entry.mirrors.map(m => " " + parseSource(m)).join('') }</div></section><hr>`);
+                document.querySelector('.article-footer')?.insertAdjacentHTML("afterbegin", `<section class="mirror-container column gap-8 label-external"><div>The text of this page was also posted in other places:</div><div style="padding:0 1rem">${ entry.mirrors.map(m => " " + parseSource(m)).join(' &mdash; ') }</div></section>`);
+            }
+            if (entry.title) {
+                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span>&verbar;</span><span>'+entry.title+'</span>');
             }
             
             article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title">${ autoFormat(entry.title) }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }</div></div>` :''));
@@ -895,14 +892,15 @@ window.addEventListener("load", function() {
             <div class='column gap-rem'>
                 <div>Pages recently added:</div>
                 <div>
-                    <ul>
+                    <ul class='label-external'>
                         ${ meta.pageList().slice(0, 4).map( entry => `<li><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></li>` ).join("") }
                     </ul>
                 </div>
             </div>
+            <style>.page-footer a { filter:grayscale(1); } .page-footer .inline-icon { margin-right: 3px; } .page-footer .twitter-logo, .page-footer .github-logo { filter:invert(0.75); } .page-footer .tumblr-logo { filter:brightness(1.2); }</style>
             <div class='column gap-rem'>
                 <div>External links:</div>
-                <div class='flex'>
+                <div class='flex label-external'>
                     <ul>
                         <li><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span>YouTube channel</span></a></li>
                         <li><a href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span>Twitter/X</span></a></li>
@@ -924,22 +922,6 @@ window.addEventListener("load", function() {
     }
     document.querySelector(".article-footer")?.insertAdjacentHTML("beforeend", ``);
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
-
-    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                              #left-panel (hamburger) set-up                          
-    */
-    const hamburgerMenu = document.querySelector(".left-panel");
-
-    function hamburgerMenuToggle(option = "toggle") {
-        if (option == "close" || option == "open") {
-            hamburgerMenu.classList.toggle("closed", option == "close");
-        }
-        else {
-            hamburgerMenu.classList.toggle("closed", !hamburgerMenu.classList.contains("closed"));
-        }
-    }
-    const hamburgerIcon = document.getElementById("hamburger");
-    hamburgerIcon.addEventListener("click", hamburgerMenuToggle);
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                 #right-panel (gear) set-up                            
@@ -974,9 +956,6 @@ window.addEventListener("load", function() {
     window.addEventListener("click", function(e) {
         if (!gearMenu.contains(e.target) && !gearIcon.contains(e.target)) {
             gearMenuToggle("close");
-        }
-        if (!hamburgerMenu.contains(e.target) && !hamburgerIcon.contains(e.target)) {
-            hamburgerMenuToggle("close");
         }
     })
     window.addEventListener("keydown", function(e) {
