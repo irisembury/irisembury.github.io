@@ -23,8 +23,8 @@
 
     :root {
         color-scheme: light dark;
-        --page-bg: light-dark(#fff, #222);
-        --article-bg: light-dark(#fff, #222);
+        --page-bg: light-dark(#fff, #111);
+        --article-bg: light-dark(#fff, #111);
         --nav-bg: light-dark(#202020, #000);
         --header-bg: light-dark(#2f3643, #11141a);
         --footer-bg: light-dark(#2f3238, #161616);
@@ -57,7 +57,7 @@
         --bg-light-green: light-dark(#dff2df, #2932);
         --bg-light-red: light-dark(#fdd, #f442);
         --bg-light-yellow: light-dark(#fff7cc, #3e3c33);
-        --bg-cream: light-dark(#fbf6ec, #a981);
+        --bg-cream: light-dark(#fbf6ec, #ccc1);
     }
     :root {
         /* layout dimensions */
@@ -155,7 +155,7 @@
     .label-external .inline-icon.link-icon { background-image: var(--link-icon); }
     .close-button { background-image: var(--close-button); cursor: pointer; }
 
-    ::selection { background-color: light-dark(#fff6af, #345); color: light-dark(#333, #fff); }
+    ::selection { background-color: light-dark(#fea, #333a44); color: light-dark(#333, #ddd); }
     .page-footer ::selection { background-color: light-dark(#555, #333); color:  light-dark(#bbb, #888); }
     .no-select { user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
     .text-select { -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; }
@@ -196,6 +196,7 @@
 
     .mh-top { min-height: var(--header-height); background-color: var(--header-bg); }
     .gn-top { z-index: 5; padding: 0 8px 0 12px; line-height: 1; display: flex; align-items: stretch; justify-content: space-between; gap: 1rem; font-family: var(--ff-nav); color: light-dark(#888, #666); height: var(--nav-height); position: sticky; top: 0; background-color: var(--nav-bg); }
+        
         .gn-segment { gap: 8px; display: flex; align-items: center; }
             .page-id { display: flex; align-items: center; gap: 5px; text-overflow: ellipsis; white-space: nowrap; overflow-x: hidden; overflow-inline: clip; padding-right: 0.5rem; }
             .gn-top a { display: block; }
