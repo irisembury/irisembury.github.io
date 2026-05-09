@@ -140,7 +140,7 @@
     .label-external .inline-icon { border-radius: 1px; margin-inline: 2px; width: 16px; height: 16px; display: inline-block; vertical-align: center; object-fit: contain; background-repeat: no-repeat; background-size: contain; background-position: center; }
     .label-external .inline-icon.bluesky-logo { background-image: var(--bluesky-logo); } .dark .bluesky-logo {  }
     .label-external .inline-icon.discord-logo { background-image: var(--discord-logo); } .dark .discord-logo { filter: contrast(1.25); }
-    .label-external .inline-icon.facebook-logo { background-image: var(--facebook-logo); } .dark .facebook-logo { filter: brightness(0.85) grayscale(0.3); }
+    .label-external .inline-icon.facebook-logo { background-image: var(--facebook-logo); } .dark .facebook-logo { filter: brightness(1.2) grayscale(0.4); }
     .label-external .inline-icon.github-logo { background-image: var(--github-logo); } .dark .github-logo { filter: invert(1) grayscale(1); }
     .label-external .inline-icon.patreon-logo { background-image: var(--patreon-logo); } .dark .patreon-logo { filter: contrast(1.2); }
     .label-external .inline-icon.substack-logo { background-image: var(--substack-logo); } .dark .substack-logo { filter: grayscale(0.1) brightness(1.05); }
