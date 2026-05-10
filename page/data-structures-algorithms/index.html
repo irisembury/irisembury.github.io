@@ -14,11 +14,6 @@
     </style>
 </head>
 <body>
-# Data structures & algorithms
-
-!loadtoc
-
-The code samples are usually in C++ or C# because those are the languages I was working with at the time. The concepts are not language-specific.
 
 # Big-O notation
 
@@ -61,7 +56,7 @@ binary search | O(log N)
 \* Merge sort and selection sort have no variation in their complexity. In other words, there is technically no difference between their worst-case, average, or best-case scenarios, as they cannot possibly finish early.
 \** Quick sort almost never performs its theoretical worst-case, and this big-O value is thus particularly misleading compared to the others listed. Its average performance is closer to O(N log N).
 
-Big-O doesn't tell us everything. Just because two algorithms have the same big-O value doesn't make them identical or equivalent. Insertion sort, selection sort, and bubble sort are each O(N2), and are therefore in a different class of algorithm (in terms of scaling) from something like merge sort, but in terms of their average performance we may still say bubble tends to be worse than selection, and selection tends to be worse than insertion. It's just their theoretical worst-case performance, and the extent to which they scale with N, that is the same.
+Big-O doesn't tell us everything. Just because two algorithms have the same big-O value doesn't make them identical or equivalent. Insertion sort, selection sort, and bubble sort are each O(N2), and are therefore in a different class of algorithm from something like merge sort in terms of scaling, but in terms of their average performance we may still say bubble tends to be worse than selection, and selection tends to be worse than insertion. It's just their theoretical worst-case performance, and the extent to which they scale with N, that is the same.
 
 # Bitwise operations
 
@@ -265,7 +260,7 @@ arr[21]: 82
 arr[22]: 95
 </div>
 
-We look at the middle value, which is the 11th item, 46. We then *conceptualize* the areas to the right and left of this mid-point as two "sub-arrays", like so:
+We look at the middle value, which is the 11th item, 46. We then *conceptualize* the areas to the right and left of this mid-point as two "sub-arrays," like so:
 
 <div style="text-align:center; font-family:var(--ff-ui); font-size:var(--fs-article-2);">
     [ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <span class="text-red">32</span>, 44</mark>, 46, <mark>51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95</mark> ]
@@ -1225,12 +1220,12 @@ The logic of stacks and queues can be described as:
 - **stack**: the **last** item added will be the **first** item removed (last in/first out, or **LIFO**)
 - **queue**: the **first** item added to be the **first** item removed (first in/first out, or **FIFO**)
 
-These terms could've been any of their logical equivalents. "Last in, first out" is logically the same as "first in, last out", and could've been swapped in order and ended up "LOFI". But the terms LIFO and FIFO was the pair that stuck as conventional, partially because it makes more sense to focus on what item is removed first because that's what you'll get if you pop or dequeue from the list.
+These terms could've been any of their logical equivalents. "Last in, first out" is logically the same as "first in, last out," and could've been swapped in order and ended up "LOFI." But the terms LIFO and FIFO was the pair that stuck as conventional, partially because it makes more sense to focus on what item is removed first because that's what you'll get if you pop or dequeue from the list.
 
 The other major distinction to consider is whether the nodes are **singly-linked**, meaning each node holds just one pointer (to the next item), or **doubly-linked**, meaning the nodes hold two pointers (to both the next and previous nodes), allowing two-way traversal. This often isn't needed, though, so you'll commonly just be using singly-linked lists, and that's what a lot of material focuses on.
 
 !info
-In both cases, the word 'linked' is an adjective describing 'list', whereas 'singly' and 'doubly' are adverbs describing how the list is linked. I see some students refer to a "singly-linked linked list", but this is redundant. We can just say "singly-linked list".
+In both cases, the word 'linked' is an adjective describing 'list', whereas 'singly' and 'doubly' are adverbs describing how the list is linked. I see some students refer to a "singly-linked linked list," but this is redundant. We can just say "singly-linked list."
 
 !image-span
 media/singly-doubly-linked.png|A visualization of singly- and doubly-linked lists.

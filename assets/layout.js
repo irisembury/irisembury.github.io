@@ -29,12 +29,12 @@ const meta = {
         { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
         { title:"Floor crossings", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
         { title:"Rational ignorance", url:"rational-ignorance", date:"2026-04-09", mirrors:["substack:rational-ignorance","tumblr:813419185909727232","patreon:155199122"] },
-        { title:"Liberal conservatism", subtitle:"A philosophy of prudence and humility", url:"liberal-conservatism", date:"2026-03-24", mirrors:["substack:foundations-of-liberal-conservatism"], flags:["toc","wide"] },
-        { title:"The case for abortion", url:"abortion", date:"2026-02-18", mirrors:["substack:the-case-for-abortion","tumblr:809547051047272448","patreon:155199340"], flags:["toc","wide"] },
-        { title:"A synopsis of American decline", url:"a-synopsis-of-american-decline", date:"2026-01-28", mirrors:["substack:186165875","patreon:155201485"], flags:["toc"] },
+        { title:"Liberal conservatism", subtitle:"A philosophy of prudence and humility", url:"liberal-conservatism", date:"2026-03-24", mirrors:["substack:foundations-of-liberal-conservatism"], flags:["wide"] },
+        { title:"The case for abortion", url:"abortion", date:"2026-02-18", mirrors:["substack:the-case-for-abortion","tumblr:809547051047272448","patreon:155199340"] },
+        { title:"A synopsis of American decline", url:"a-synopsis-of-american-decline", date:"2026-01-28", mirrors:["substack:186165875","patreon:155201485"] },
         { title:"Fetishism & politics", url:"fetishism-politics", date:"2024-11-14", mirrors:["tumblr:770364766791352320"] },
         { title:"Nick Shirley & the Somali day cares", url:"somali-day-cares", date:"2026-01-02", mirrors:["substack:183243480","patreon:155200604"], flags:["citelist"] },
-        { title:"Why is Reddit so hated?", subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it", url:"why-is-reddit-so-hated", date:"2025-12-30", mirrors:["substack:why-is-reddit-so-hated"], flags:["toc"] },
+        { title:"Why is Reddit so hated?", subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it", url:"why-is-reddit-so-hated", date:"2025-12-30", mirrors:["substack:why-is-reddit-so-hated"] },
         { title:"Stay the trenches", url:"stay-the-trenches", date:"2025-12-17", mirrors:["substack:stay-the-trenches"] },
         { title:"Immigration", url:"immigration", date:"2025-11-06", mirrors:["substack:183229652"] },
         { title:"Prejudice", url:"what-is-prejudice", date:"2025-10-30", mirrors:["substack:prejudice"] },
@@ -42,8 +42,8 @@ const meta = {
         { title:"Liberalism not leftism", subtitle:"An overview of leftist historical revisionism and a warning for liberals", url:"liberalism-not-leftism", date:"2025-09-19", mirrors:["substack:liberalism-not-extremism","tumblr:795164683319574528","patreon:155199811"] },
         { title:"Status quo bias & the path of normalization", url:"the-path-of-normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
         { title:"Lies about Ilhan Omar", url:"lies-about-ilhan-omar", date:"2025-08-25", flags:["citelist"], mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
-        { title:"Israel & Palestine", url:"israel-palestine", date:"2025-07-27", flags:["toc","wide"] },
-        { title:"The problems with Pierre Poilievre", url:"pierre-poilievre", date:"2025-03-15", mirrors:["tumblr:782079973591760896","substack:pierre-poilievre patreon:155202545"], flags:["citelist","toc"] },
+        { title:"Israel & Palestine", url:"israel-palestine", date:"2025-07-27", flags:["wide"] },
+        { title:"The problems with Pierre Poilievre", url:"pierre-poilievre", date:"2025-03-15", mirrors:["tumblr:782079973591760896","substack:pierre-poilievre patreon:155202545"], flags:["citelist"] },
         { title:"Trump & Russia", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
         { title:"Why get bottom surgery?", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
         { title:"Elon Musk & the Nazi Salute", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
@@ -56,28 +56,31 @@ const meta = {
         { title:"Types of masculinity", url:"types-of-masculinity", date:"2024-11-08", mirrors:["tumblr:770310861444300800"] },
         { title:"Poor Things (2023 film)", url:"poor-things", date:"2024-10-31", mirrors:["tumblr:769969807464464384"] },
         { title:"The trans prison stats argument", url:"the-trans-prison-stats-argument", date:"2024-10-19", mirrors:["substack:the-trans-prison-stats-argument","tumblr:771501478599868416"] },
-        { title:"Record of statements by select public figures", url:"public-record", flags:["hidden","toc","wide"] }
+        { title:"Record of statements by select public figures", url:"public-record", flags:["hidden","wide"] },
+        { title:"Anime reviews", url:"anime-reviews", flags:["hidden","wide"] },
+        { title:"Data Structures & Algorithms", url:"data-structures-algorithms", flags:["hidden","wide"] }
     ],
     pageList:function(){
-        return meta.pageListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 15)
+        return meta.pageListData.filter(p => !p.flags || !p.flags.includes("hidden"))
     },
     pageListFull:function(){
         return meta.pageListData
     },
     videoList:function(){
-        return meta.videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 5)
+        return meta.videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 6)
     },
     canNavCheck:true,
     canTocUpdate:true,
     pageHeadings:[],
     fontDefaults: {
         "--ff-heading":"'Inter',sans-serif",
-        "--ff-body":"var(--ff-Georgia)",
+        "--ff-body":"'Georgia Pro Digits','Georgia',serif",
         "--ff-secondary":"'Segoe UI',system-ui"
     }
 }
 meta.pageListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
 meta.videoListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
+meta.pageListData.forEach(p => { if (p.title) { p.title = autoFormat(p.title); } })
 
 function scrollToTop() {
     window.scrollTo({
@@ -156,11 +159,16 @@ function setCSS(mEle) {
         localStorage.setItem(mEle.id, mEle.value);
     }
     const cssPanel = document.getElementById("__css_user_set");
-    cssPanel?.replaceChildren();
-    const styleOverrides = [];
-    Array.from(document.getElementsByClassName("drop-select")).forEach(select => styleOverrides.push(select.id + ":" + (localStorage.getItem(select.id) || meta.fontDefaults[select.id])))
-    if (styleOverrides.length > 0) {
-        cssPanel?.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
+    if (cssPanel) {
+        cssPanel.replaceChildren();
+        const styleOverrides = [];
+        Array.from(document.getElementsByClassName("drop-select")).forEach(select => styleOverrides.push(select.id + ":" + (localStorage.getItem(select.id) || meta.fontDefaults[select.id])))
+        if (styleOverrides.length > 0) {
+            cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
+        }
+        if (localStorage.getItem("--ff-heading") == "'Georgia Pro',serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important }");
+        }
     }
 }
 
@@ -564,9 +572,9 @@ function ageFromISO(argDate) {
 function auxf(str_in) {
     str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
     if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
-        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"(,|\.)/g, "<span style='margin-right:-2px'>&rdquo;</span>$1").replaceAll(/"/g, "&rdquo;")
+        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/(,|\.)"/g, "$1<span style='margin-left:-1px'>&rdquo;</span>").replaceAll(/"/g, "&rdquo;")
     }
-    return str_in.replaceAll("---", '<span class="mdash">&mdash;</span>').replace(/\-\-/g, "&ndash;");
+    return str_in.replaceAll("---", '&mdash;').replace(/\-\-/g, "&ndash;");
 }
 
 function autoFormat(_string) {
@@ -719,6 +727,22 @@ function attempt_toc_update() {
     }, 500);
 }
 
+function formattingToggle() {
+    const fswitches = Array.from(document.querySelectorAll(".slide-checkbox.formatting"));
+    let anyOff = false;
+    fswitches.forEach(
+        s => {
+            if (s.checked == false) { anyOff = true; }
+        }
+    )
+    fswitches.forEach(
+        s => {
+            s.checked = anyOff;
+            s.dispatchEvent(new Event('change'));
+        }
+    )
+}
+
 /* irisembury.github.io/page/RETURN_VALUE/index.html */
 function getDirectory() {
     let path = window.location.pathname.replace(/index\.html$/, "");
@@ -752,7 +776,7 @@ window.addEventListener("load", function() {
         <nav class="gn-top">
             <div class="gn-segment">
                 <div class="page-id">
-                    ${ index ?'<span>Iris Embury</span>' :'<span><a href="' + pathToRoot + 'index.html">Iris Embury</a></span>' }
+                    ${ index ?'<span>Index Page</span>' :'<span><a href="' + pathToRoot + 'index.html">Index Page</a></span>' }
                 </div>
             </div>
             <div class="gn-segment">
@@ -772,10 +796,12 @@ window.addEventListener("load", function() {
                 <div class="push-right"><label for="justify-text">Justify text</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
                 <div class="push-right"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
                 <div class="push-right"><label for="reduce-margins">Reduce margins</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
+                <div class="push-right"><label for="increase-line-height">Increase line height</label><input type="checkbox" class="slide-checkbox formatting auto" id="increase-line-height"></div>
+                <div><div style="margin-left:auto; cursor:pointer; color:grey;" onclick="formattingToggle()" title="Flips the above switches">toggle all</div></div>
                 <hr>
                 <div><h3>Fonts override:</h3></div>
                 <div><label>Headings:</label><select class="drop-select" id="--ff-heading" onchange="setCSS(this)">
-                    <option value="var(--ff-Georgia)">Georgia</option>
+                    <option value="'Georgia Pro',serif">Georgia</option>
                     <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
                     <option value="'IBM Plex Serif',serif">IBM Plex Serif</option>
                     <option value="'Inter',sans-serif">Inter</option>
@@ -783,14 +809,14 @@ window.addEventListener("load", function() {
                     <option value="'Merriweather',serif">Merriweather</option>
                     <option value="'Open Sans',sans-serif">Open Sans</option>
                     <option value="'PT Serif',serif">PT Serif</option>
-                    <option value="var(--ff-Roboto)">Roboto</option>
+                    <option value="'Roboto',sans-serif">Roboto</option>
                     <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
                     <option value="'Segoe UI',system-ui">Segoe UI</option>
                     <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                 </select></div>
                 <div><label>Body:</label><select class="drop-select" id="--ff-body" onchange="setCSS(this)">
                     <option value="'Arial',sans-serif">Arial</option>
-                    <option value="var(--ff-Georgia)">Georgia</option>
+                    <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
                     <option value="'IBM Plex Sans',serif",sans-serif>IBM Plex Sans</option>
                     <option value="'Inter',sans-serif">Inter</option>
                     <option value="'Open Sans',sans-serif">Open Sans</option>
@@ -799,12 +825,12 @@ window.addEventListener("load", function() {
                     <option value="'Segoe UI',system-ui">Segoe UI</option>
                 </select></div>
                 <div><label>Secondary:</label><select class="drop-select" id="--ff-secondary" onchange="setCSS(this)">
-                    <option value="var(--ff-Georgia)">Georgia</option>
+                    <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
                     <option value="'IBM Plex Sans',serif",sans-serif>IBM Plex Sans</option>
                     <option value="'Inter',sans-serif">Inter</option>
                     <option value="'Open Sans',sans-serif">Open Sans</option>
                     <option value="'PT Serif',serif">PT Serif</option>
-                    <option value="var(--ff-Roboto)">Roboto</option>
+                    <option value="'Roboto',sans-serif">Roboto</option>
                     <option value="'Segoe UI',system-ui">Segoe UI</option>
                     <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                 </select></div>
@@ -830,9 +856,9 @@ window.addEventListener("load", function() {
         </div>
         <style id="__css_user_set"></style>`;
 
-    const c_links = [];
     const article = document.querySelector(".article");
-    interpreter(article, c_links);
+    const article_links = [];
+    interpreter(article, article_links);
     HTML.classList.add("layout");
     Array.from(document.getElementsByClassName("drop-select")).forEach(
         select => {
@@ -842,7 +868,9 @@ window.addEventListener("load", function() {
         }
     )
     setCSS();
-
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                        non-index                                     
+    */
     if (!index) {
         const entry = meta.pageListFull().find(e => e.url == getDirectory());
         if (entry) {
@@ -850,46 +878,21 @@ window.addEventListener("load", function() {
                 meta.flags = entry.flags;
             }
             if (entry.mirrors && entry.mirrors.length > 0) {
-                document.querySelector('.article-footer')?.insertAdjacentHTML("afterbegin", `<section class="mirror-container column gap-8 label-external"><div>The text of this page was also posted in other places:</div><div style="padding:0 1rem">${ entry.mirrors.map(m => " " + parseSource(m)).join(' &mdash; ') }</div></section>`);
+                document.querySelector('.article-footer')?.insertAdjacentHTML("afterbegin", `
+                    <section class="mirror-container column gap-8 label-external">
+                        <div>The text of this page was also posted in other places:</div>
+                        <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div>
+                    </section>
+                `);
             }
             if (entry.title) {
-                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span>&verbar;</span><span>'+entry.title+'</span>');
+                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> &rarr; </span><span>'+entry.title+'</span>');
             }
-            
-            article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title">${ autoFormat(entry.title) }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }</div></div>` :''));
+            article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }</div></div>` :''));
         }
-    }
-    
-    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                        dark theme                                    
-    */
-
-    const lightswitch = document.getElementById("lightswitch");
-    if (lightswitch != null) {
-        let scheme = (localStorage.getItem("css-color-scheme") == "dark" ?"dark" :"light");
-        lightswitch.checked = (scheme == "dark");
-        HTML.style.colorScheme = scheme;
-        HTML.classList.toggle("dark", scheme == "dark");
-
-        lightswitch.addEventListener("change", function() {
-            let val = this.checked ?"dark" :"light";
-            localStorage.setItem("css-color-scheme", val);
-            HTML.style.colorScheme = val;
-            HTML.classList.toggle("dark", this.checked);
-        })
-    }
-    
-    if (meta.flags.includes("wide")) {
-        HTML.style.setProperty("--article-width", "954px");
-    }
-
-    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-    
-    */
-    
-    if (!index) {
+        
         document.querySelector(".page-footer")?.insertAdjacentHTML("beforeend", `<div class='space-evenly'>
-            <div class='column gap-rem'>
+            <div class='column gap-rem' style="max-width:calc(var(--article-width) - 390px)">
                 <div>Pages recently added:</div>
                 <div>
                     <ul class='label-external'>
@@ -897,7 +900,7 @@ window.addEventListener("load", function() {
                     </ul>
                 </div>
             </div>
-            <style>.page-footer a { filter:grayscale(1); } .page-footer .inline-icon { margin-right: 3px; } .page-footer .twitter-logo, .page-footer .github-logo { filter:invert(0.75); } .page-footer .tumblr-logo { filter:brightness(1.2); }</style>
+            <style> .page-footer a { filter:grayscale(1); } .page-footer .inline-icon { margin-right: 3px; } .page-footer .twitter-logo, .page-footer .github-logo { filter:invert(0.75); } .page-footer .tumblr-logo { filter:brightness(1.2); } </style>
             <div class='column gap-rem'>
                 <div>External links:</div>
                 <div class='flex label-external'>
@@ -917,16 +920,49 @@ window.addEventListener("load", function() {
         </div>`)
     }
 
-    if (meta.flags.includes("citelist") && c_links.length > 0) {
-        document.querySelector(".article-footer")?.insertAdjacentHTML("beforeend", `<div><div>Links on this page:</div><table class="citelist">${ c_links.map((x, n) => `<tr><td class="no-select">${ n + 1 }.</td><td><a href="${ x }">${ x }</a></td></tr>`).join("") }</table></div>`);
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                        dark theme                                    
+    */
+    const lightswitch = document.getElementById("lightswitch");
+    if (lightswitch != null) {
+        let scheme = (localStorage.getItem("css-color-scheme") == "dark" ?"dark" :"light");
+        lightswitch.checked = (scheme == "dark");
+        HTML.style.colorScheme = scheme;
+        HTML.classList.toggle("dark", scheme == "dark");
+
+        lightswitch.addEventListener("change", function() {
+            let val = this.checked ?"dark" :"light";
+            localStorage.setItem("css-color-scheme", val);
+            HTML.style.colorScheme = val;
+            HTML.classList.toggle("dark", this.checked);
+        })
     }
-    document.querySelector(".article-footer")?.insertAdjacentHTML("beforeend", ``);
+
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                        other flags                                   
+    */
+    if (meta.flags.includes("wide")) {
+        HTML.classList.add("page-wide")
+    }
+    if (meta.flags.includes("citelist") && article_links.length > 0) {
+        document.querySelector(".article-footer")?.insertAdjacentHTML("beforeend", `<div>
+                <div>Links on this page:</div>
+                <table class="citelist">
+                    ${
+                        article_links.map((x, n) => `
+                            <tr>
+                                <td class="no-select">${ n + 1 }.</td><td><a href="${ x }">${ x }</a></td>
+                            </tr>
+                        `).join("")
+                    }
+                </table>
+            </div>`);
+    }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                 #right-panel (gear) set-up                            
     */
-
     Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
         c => {
             if (localStorage.getItem(c.id) == "true") {
@@ -990,15 +1026,6 @@ window.addEventListener("load", function() {
             </div>
         `
     ).join(''))
-    document.querySelector(".page-index-all")?.insertAdjacentHTML("beforeend", `<table><tbody><tr style="font-weight:700"><td>Page</td><td>Date</td><td>Mirrors</td></tr>${meta.pageListFull().map(
-        entry => `
-                <tr>
-                    <td class="page-link"><a href="${ entry.url }/index.html">${ entry.title }</a></td>
-                    <td class="page-date">${ entry.date ?entry.date :'n.d.' }</td>
-                    <td class="page-mirrors">${ Object.hasOwn(entry, "mirrors") && entry.mirrors.length > 0 ? entry.mirrors.map(m => " " + parseSource(m)).join('') :''}</td>
-                </tr>
-            `
-        ).join('')}</tbody></table>`)
     document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", 
         `<div class="video-gallery">
             ${
@@ -1008,7 +1035,7 @@ window.addEventListener("load", function() {
                             <a href="https://www.youtube.com/watch?v=${ v.url }"><img loading="lazy" src="https://i.ytimg.com/vi/${ v.url }/hqdefault.jpg"></a>
                             <figcaption>
                                 <div class="yt-title"><a href="https://www.youtube.com/watch?v=${ v.url }">${ v.title }</a></div>
-                                ${ v.date ?'<div class="yt-date">' + v.date + '</div>' :'' }
+                                ${ v.date ?'<div><span class="yt-date">' + v.date + '</span></div>' :'' }
                             </figcaption>
                         </figure>
                         `
@@ -1030,27 +1057,25 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                     table of contents                                 
     */
-    if (meta.flags.includes("toc")) {
-        meta.pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
-        if (meta.pageHeadings.length > 0) {
-            meta.pageHeadings.forEach(h => { h.classList.remove("for-toc"); if (h.classList.length == 0) { h.removeAttribute('class') } });
-            
-            /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                        create contents                             
-            */
-            const pageGrid = document.querySelector(".page-grid");
-            const toc = pageGrid.insertBefore(document.createElement("nav"), pageGrid.firstElementChild);
-            toc.classList.add("toc");
-            pageGrid.classList.add("right-space");
-            toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + meta.pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
-            toc.scrollTo({ behavior: "instant", top: 0 })
-            /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                        attach to window                            
-            */
-            meta.rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-            window.addEventListener("scroll", attempt_toc_update);
-            attempt_toc_update();
-        }
+    meta.pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
+    if (meta.pageHeadings.length > 2) {
+        meta.pageHeadings.forEach(h => { h.classList.remove("for-toc"); if (h.classList.length == 0) { h.removeAttribute('class') } });
+        
+        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                    create contents                             
+        */
+        const pageGrid = document.querySelector(".page-grid");
+        const toc = pageGrid.insertBefore(document.createElement("nav"), pageGrid.firstElementChild);
+        toc.classList.add("toc");
+        pageGrid.classList.add("right-space");
+        toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + meta.pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
+        toc.scrollTo({ behavior: "instant", top: 0 })
+        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                    attach to window                            
+        */
+        meta.rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+        window.addEventListener("scroll", attempt_toc_update);
+        attempt_toc_update();
     }
 })
 
