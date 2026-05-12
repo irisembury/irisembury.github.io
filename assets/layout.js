@@ -73,9 +73,9 @@ const meta = {
     canTocUpdate:true,
     pageHeadings:[],
     fontDefaults: {
-        "--ff-heading":"'Inter',sans-serif",
-        "--ff-body":"'Georgia Pro Digits','Georgia',serif",
-        "--ff-secondary":"'Segoe UI',system-ui"
+        "--ff-heading":"Inter,sans-serif",
+        "--ff-body":"Georgia Pro Digits,Georgia,serif",
+        "--ff-secondary":"Segoe UI,system-ui"
     }
 }
 meta.pageListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
@@ -765,6 +765,18 @@ function getPathToRoot() {
     
     return '../'.repeat(path.length);
 }
+function pageFooter(_content) {
+    let node = document.querySelector(".page-footer");
+    if (node != null) {
+        node.insertAdjacentHTML("beforeend", `<div>${ autoFormat(_content) }</div>`);
+    }
+}
+function articleFooter(_content) {
+    let node = document.querySelector(".article-footer");
+    if (node != null) {
+        node.insertAdjacentHTML("beforeend", `<div>${ autoFormat(_content) }</div>`);
+    }
+}
 
 window.addEventListener("load", function() {
     const pathToRoot = getPathToRoot();
@@ -801,38 +813,42 @@ window.addEventListener("load", function() {
                 <hr>
                 <div><h3>Fonts override:</h3></div>
                 <div><label>Headings:</label><select class="drop-select" id="--ff-heading" onchange="setCSS(this)">
-                    <option value="'Georgia Pro',serif">Georgia</option>
-                    <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
-                    <option value="'IBM Plex Serif',serif">IBM Plex Serif</option>
-                    <option value="'Inter',sans-serif">Inter</option>
-                    <option value="'Lora',serif">Lora</option>
-                    <option value="'Merriweather',serif">Merriweather</option>
-                    <option value="'Open Sans',sans-serif">Open Sans</option>
-                    <option value="'PT Serif',serif">PT Serif</option>
-                    <option value="'Roboto',sans-serif">Roboto</option>
-                    <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
-                    <option value="'Segoe UI',system-ui">Segoe UI</option>
-                    <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                    <option value="Faculty Glyphic,sans-serif">Faculty Glyphic</option>
+                    <option value="Georgia Pro,serif">Georgia</option>
+                    <option value="IBM Plex Sans,system-ui">IBM Plex Sans</option>
+                    <option value="IBM Plex Serif,serif">IBM Plex Serif</option>
+                    <option value="Inter,sans-serif">Inter</option>
+                    <option value="Lora,serif">Lora</option>
+                    <option value="Merriweather,serif">Merriweather</option>
+                    <option value="Open Sans,sans-serif">Open Sans</option>
+                    <option value="PT Serif,serif">PT Serif</option>
+                    <option value="Roboto,sans-serif">Roboto</option>
+                    <option value="Roboto Slab,sans-serif">Roboto Slab</option>
+                    <option value="Segoe UI,system-ui">Segoe UI</option>
+                    <option value="Trebuchet MS,sans-serif">Trebuchet MS</option>
                 </select></div>
                 <div><label>Body:</label><select class="drop-select" id="--ff-body" onchange="setCSS(this)">
-                    <option value="'Arial',sans-serif">Arial</option>
-                    <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
-                    <option value="'IBM Plex Sans',serif",sans-serif>IBM Plex Sans</option>
-                    <option value="'Inter',sans-serif">Inter</option>
-                    <option value="'Open Sans',sans-serif">Open Sans</option>
-                    <option value="'Ubuntu Em Dash','PT Serif',serif">PT Serif</option>
-                    <option value="'Merriweather Em Dash',Roboto,sans-serif">Roboto</option>
-                    <option value="'Segoe UI',system-ui">Segoe UI</option>
+                    <option value="Arial,sans-serif">Arial</option>
+                    <option value="Faculty Glyphic,sans-serif">Faculty Glyphic</option>
+                    <option value="Georgia Pro Digits,Georgia,serif">Georgia</option>
+                    <option value="IBM Plex Sans,system-ui">IBM Plex Sans</option>
+                    <option value="IBM Plex Serif,serif">IBM Plex Serif</option>
+                    <option value="Inter,sans-serif">Inter</option>
+                    <option value="Open Sans,sans-serif">Open Sans</option>
+                    <option value="PT Serif,serif">PT Serif</option>
+                    <option value="Roboto,sans-serif">Roboto</option>
+                    <option value="Segoe UI,system-ui">Segoe UI</option>
                 </select></div>
                 <div><label>Secondary:</label><select class="drop-select" id="--ff-secondary" onchange="setCSS(this)">
-                    <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
-                    <option value="'IBM Plex Sans',serif",sans-serif>IBM Plex Sans</option>
-                    <option value="'Inter',sans-serif">Inter</option>
-                    <option value="'Open Sans',sans-serif">Open Sans</option>
-                    <option value="'PT Serif',serif">PT Serif</option>
-                    <option value="'Roboto',sans-serif">Roboto</option>
-                    <option value="'Segoe UI',system-ui">Segoe UI</option>
-                    <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                    <option value="Faculty Glyphic,sans-serif">Faculty Glyphic</option>
+                    <option value="Georgia Pro Digits,Georgia,serif">Georgia</option>
+                    <option value="IBM Plex Sans,system-ui",sans-serif>IBM Plex Sans</option>
+                    <option value="Inter,sans-serif">Inter</option>
+                    <option value="Open Sans,sans-serif">Open Sans</option>
+                    <option value="PT Serif,serif">PT Serif</option>
+                    <option value="Roboto,sans-serif">Roboto</option>
+                    <option value="Segoe UI,system-ui">Segoe UI</option>
+                    <option value="Trebuchet MS,sans-serif">Trebuchet MS</option>
                 </select></div>
                 <div><div style="margin-left:auto; cursor:pointer; color:grey;" onclick="restoreDefaults()" title="restore font defaults">restore defaults</div></div>
                 <hr>
@@ -886,12 +902,17 @@ window.addEventListener("load", function() {
                 `);
             }
             if (entry.title) {
-                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> &rarr; </span><span>'+entry.title+'</span>');
+                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
             }
             article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }</div></div>` :''));
         }
         
-        document.querySelector(".page-footer")?.insertAdjacentHTML("beforeend", `<div class='space-evenly'>
+        articleFooter(`<div style='font-size:16px; line-height:1.7; font-family:var(--ff-secondary); color:var(--theme-grey-5,grey);'>
+            <p>This is a personal site. I use it to host the original copies of things that I post onto various other sites. I'm not an expert or authority on any relevant topic. I have no association with any other person or organization. To contact me for any reason you can email irisembury@gmail.com.</p>
+        </div>`);
+
+        pageFooter(`
+        <div class='space-evenly'>
             <div class='column gap-rem' style="max-width:calc(var(--article-width) - 390px)">
                 <div>Pages recently added:</div>
                 <div>
