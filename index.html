@@ -15,9 +15,9 @@
     }
 
     .article h1.index-title { font-size: 42px; font-family: IBM Plex Serif,Lora,serif; margin: 0; line-height: 1; }
-    .social-icons { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 2px; }
+    .social-icons { margin-block: 1em; display: flex; flex-wrap: wrap; gap: 10px; }
         .social-icons a { display: block; }
-        .social-icons .inline-icon { display: block; width: 30px; height: 30px; }
+        .social-icons .inline-icon { display: block; width: 32px; height: unset; }
 
     .content-div { line-height: 1; font-size: var(--fs-article-2); font-family: var(--ff-secondary); display: flex; justify-content: center; align-items: stretch; max-width: var(--article-width); margin-inline: auto; }
         .section-top { align-items: center; display: flex; justify-content: space-between; }
@@ -25,7 +25,7 @@
             .section-top a { color: var(--theme-grey); }
 
     .page-index { width: 100%; }
-        .page-entry { padding: 8px; margin-inline: -9px; display: flex; justify-content: space-between; gap: 1rem; }
+        .page-entry { padding: 8px; margin-inline: -8px; display: flex; justify-content: space-between; gap: 1rem; }
         .page-entry:hover { background-color: var(--bg-light-blue-subtle); }
         .page-entry .page-date { margin-top: 5px; }
         .page-entry .page-mirrors { white-space: nowrap; }
@@ -36,21 +36,24 @@
     </style>
 </head>
 <body>
-<h1 class="index-title">Iris Embury</h1>
-<div>
-    <div class="social-icons label-external">
-        <div><a title="YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span></a></div>
-        <div><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span></a></div>
-        <div><a title="Twitter/X" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span></a></div>
-        <div><a title="Tumblr" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span></a></div>
-        <div><a title="Discord" href="https://discord.gg/fGdV7x5dk2"><span class="discord-logo inline-icon"></span></a></div>
-        <div><a title="Patreon" href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span></a></div>
-        <div><a title="Substack" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span></a></div>
-        <div><a title="Medium" href="https://www.medium.com/@irisembury"><span class="medium-logo inline-icon"></span></a></div>
+<div class="gap-10">
+    <div><img width="100" height="100" style="border:1px solid var(--theme-grey-a,gray); padding:3px;" src="assets/002.png"></div>
+    <div>
+        <h1 class="index-title">Iris Embury</h1>
+        <div class="social-icons label-external">
+            <div><a title="YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span></a></div>
+            <div><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span></a></div>
+            <div><a title="Twitter/X" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span></a></div>
+            <div><a title="Tumblr" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span></a></div>
+            <div><a title="Discord" href="https://discord.gg/fGdV7x5dk2"><span class="discord-logo inline-icon"></span></a></div>
+            <div><a title="Patreon" href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span></a></div>
+            <div><a title="Substack" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span></a></div>
+            <div><a title="Medium" href="https://www.medium.com/@irisembury"><span class="medium-logo inline-icon"></span></a></div>
+        </div>
     </div>
 </div>
 
-I'm an English Canadian, <span class="age-from">1994-03-07</span>, living in Ontario. I write stuff and make videos, usually about politics. I made this repo to be a convergence point for everything I do.
+I'm an English Canadian, <span class="age-from">1994-03-07</span>, living in Ontario. I write stuff and make videos, usually about politics. I made this page to be a convergence point for everything I do.
 
 I operate this page and all my profiles solely and independently. I have no association with any other person or organization.
 

@@ -5,6 +5,7 @@ const meta = {
     lastHeading: 0,
     rowsInToc:[],
     videoListData:[
+        { title:"Floor crossers", date:"2026-05-17", url:"EK_MCMiFakA" },
         { title:"Liberalism not Leftism", date:"2026-05-06", url:"DgGf_g4aGYA" },
         { title:"Liberal Conservatism", date:"2026-04-07", url:"Sy33HSFsuu8" },
         { title:"Elections", date:"2026-03-20", url:"7lw6rO_Pv7I" },
@@ -166,7 +167,7 @@ function setCSS(mEle) {
         if (styleOverrides.length > 0) {
             cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
         }
-        if (localStorage.getItem("--ff-heading") == "'Georgia Pro',serif") {
+        if (localStorage.getItem("--ff-heading") == "Georgia Pro,serif") {
             cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important }");
         }
     }
@@ -894,22 +895,20 @@ window.addEventListener("load", function() {
                 meta.flags = entry.flags;
             }
             if (entry.mirrors && entry.mirrors.length > 0) {
-                document.querySelector('.article-footer')?.insertAdjacentHTML("afterbegin", `
+                articleFooter(`
                     <section class="mirror-container column gap-8 label-external">
                         <div>The text of this page was also posted in other places:</div>
-                        <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div>
+                        <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="rect-link">' + parseSource(m) + '</span>').join('') }</div>
                     </section>
                 `);
             }
             if (entry.title) {
                 document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
             }
-            article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }</div></div>` :''));
+            article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }` :'') + '</div>');
         }
-        
-        articleFooter(`<div style='font-size:16px; line-height:1.7; font-family:var(--ff-secondary); color:var(--theme-grey-5,grey);'>
-            <p>This is a personal site. I use it to host the original copies of things that I post onto various other sites. I'm not an expert or authority on any relevant topic. I have no association with any other person or organization. To contact me for any reason you can email irisembury@gmail.com.</p>
-        </div>`);
+
+        articleFooter(`This is a personal site. I'm not an expert or authority on any relevant topic. I have no association with any other person or organization.`);
 
         pageFooter(`
         <div class='space-evenly'>
@@ -966,18 +965,18 @@ window.addEventListener("load", function() {
         HTML.classList.add("page-wide")
     }
     if (meta.flags.includes("citelist") && article_links.length > 0) {
-        document.querySelector(".article-footer")?.insertAdjacentHTML("beforeend", `<div>
-                <div>Links on this page:</div>
-                <table class="citelist">
-                    ${
-                        article_links.map((x, n) => `
-                            <tr>
-                                <td class="no-select">${ n + 1 }.</td><td><a href="${ x }">${ x }</a></td>
-                            </tr>
-                        `).join("")
-                    }
-                </table>
-            </div>`);
+        articleFooter(`<div>
+            <div>Links on this page:</div>
+            <table class="citelist">
+                ${
+                    article_links.map((x, n) => `
+                        <tr>
+                            <td class="no-select">${ n + 1 }.</td><td><a href="${ x }">${ x }</a></td>
+                        </tr>
+                    `).join("")
+                }
+            </table>
+        </div>`);
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
 

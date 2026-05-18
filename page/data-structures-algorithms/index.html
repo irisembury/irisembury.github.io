@@ -116,7 +116,7 @@ Try an unsigned int instead:
 unsigned int a = 10 | 7;
 unsigned int b = ~a;
 
-In this case the value doesn't flip to negative---but you might be expecting a low output, because `a` is only storing a value of 15, but it's being stored in a 4-byte wide integer, meaning the binary value in that space ends up being not `1111`, but `00000000000000000000000000001111`.
+In this case the value doesn't flip to negative --- but you might be expecting a low output, because `a` is only storing a value of 15, but it's being stored in a 4-byte wide integer, meaning the binary value in that space ends up being not `1111`, but `00000000000000000000000000001111`.
 
 The `~` operator flips all those digits and returns `11111111111111111111111111110000`, which is 4294967280, precisely 15 less than the maximum value an unsigned int can hold.
 
@@ -361,7 +361,7 @@ The condition for the nested loop is important. The first loop compares its iter
 
 In this algorithm, each item is shifted rightward while it's greater than the item to its left.
 
-To visualize this, many people suggest imagining the array is split into two parts, divided at the iterator: the left side is effectively an ordered subarray, into which we're inserting the items from the right---hence the name.
+To visualize this, many people suggest imagining the array is split into two parts, divided at the iterator: the left side is effectively an ordered subarray, into which we're inserting the items from the right --- hence the name.
 
 !image-float
 media/insertion-sort.png|insertion sort visualization
@@ -717,7 +717,7 @@ What the code would actually do is this:
 !image-span
 media/qsort-step-2.png
 
-That could make it seem like we're partitioning around pivot+1, or that the rule changed to placing any item less than or equal to the pivot on the left---but not quite, as any additional instances of the pivot value would always be swapped to end up opposite the side they started on.
+That could make it seem like we're partitioning around pivot+1, or that the rule changed to placing any item less than or equal to the pivot on the left --- but not quite, as any additional instances of the pivot value would always be swapped to end up opposite the side they started on.
 
 !image-span
 media/qsort-step-3.png
@@ -762,7 +762,7 @@ void quickSort(int arr[], int left, int right) {
 
 #### Does the algorithm run better with that final swap in each pass or without it?
 
-I tested that versions as thoroughly as I could on three different computers, timing how long it'd take to fully sort 1000 different arrays that each had a billion randomly-generated values, taking averages of those times, trying it with different data types---and the result was that if one did perform better, the difference was always at most very slight, basically unnoticeable. It was consistently about the same. I started just not including the final swap because it makes other things easier to modiy since the code doesn't need to track the index.
+I tested that versions as thoroughly as I could on three different computers, timing how long it'd take to fully sort 1000 different arrays that each had a billion randomly-generated values, taking averages of those times, trying it with different data types --- and the result was that if one did perform better, the difference was always at most very slight, basically unnoticeable. It was consistently about the same. I started just not including the final swap because it makes other things easier to modiy since the code doesn't need to track the index.
 
 #### Optimizing for sorted data
 
@@ -773,7 +773,7 @@ That's a problem for the quicksort implementations above. They grab a pivot valu
 The ideal pivot value is, of course, one that just so happens to belong in the middle of the array. There's a few different methods to get a value more likely, than random chance, to fit this criterion.
 
 - The simplest solution is to take the middle index as the pivot. In a quicksort that normally takes the first item, you can accomplish that simply by changing the pivot variable assignment from your left value to the middle position, i.e. (left + right) / 2. For a version that uses the last item, we could (left + right + 1) / 2 for the same effect.
-- A computer scientist named Robert Sedgewick later proposed the strategy of using the middle of three items from the array, which came to be known as taking the median of three. It could just be three random items, but the easiest indices to access are the left, right, and middle---and if we're already comparing these items to determine which is the middle value, then we may as well sort them in place while we're at it.
+- A computer scientist named Robert Sedgewick later proposed the strategy of using the middle of three items from the array, which came to be known as taking the median of three. It could just be three random items, but the easiest indices to access are the left, right, and middle --- and if we're already comparing these items to determine which is the middle value, then we may as well sort them in place while we're at it.
 
 !codeblock cpp
 // taking the middle index:
@@ -1023,7 +1023,7 @@ To compare two strings, compare their first letter. If one comes before the othe
 
 To compare letters, reference their ASCII values. [https://www.w3schools.com/charsets/ref_html_ascii.asp](https://www.w3schools.com/charsets/ref_html_ascii.asp) The important ones are: numbers are 48--57, the uppercase alphabet is 65--90, the lowercase alphabet is 97--122. Everything in between are symbols, like !$#^[<.
 
-Sorting by pure ASCII value creates a pseudo-alphabetization, like ABCDabcd. If you use case normalization (comparing not the strings directly, but the return value of the strings being passed to a method like ToUpper), you achieve a regular---albeit case insensitive---alphabetization, like AabBCcDd.
+Sorting by pure ASCII value creates a pseudo-alphabetization, like ABCDabcd. If you use case normalization (comparing not the strings directly, but the return value of the strings being passed to a method like ToUpper), you achieve a regular --- albeit case insensitive --- alphabetization, like AabBCcDd.
 
 #### String comparison methods
 
@@ -1185,7 +1185,7 @@ static void main(String[] args) {
 
 To review: an array is a contiguous reservation in memory. Each item is stored one after the next. To traverse an array therefore means increasing the memory location of our pointer by the size of the array's type. For example, a standard integer is 32 bits, or 4 bytes wide, which means the second item is 4 bytes after the first, and so on.
 
-This calculation is done for us by the standard bracket notation, `arr[i]`. The index value we provide is multiplied by the array's type and added to arr, which is really just a pointer to the first item. That's why array indices in C++ can also be written as `*(arr + n)`, and why arrays are naturally zero-indexed (you don't need to add anything to get to the first element, because that's where you already are---the first item is simply `*arr`).
+This calculation is done for us by the standard bracket notation, `arr[i]`. The index value we provide is multiplied by the array's type and added to arr, which is really just a pointer to the first item. That's why array indices in C++ can also be written as `*(arr + n)`, and why arrays are naturally zero-indexed (you don't need to add anything to get to the first element, because that's where you already are --- the first item is simply `*arr`).
 
 A linked list, by contrast, is a **noncontiguous** reservation in memory. The items aren't right next to each other, so we can't get from one to the next by adding to our pointer's memory location. Instead, each item is wrapped in a container that holds a pointer to the next item in the list (and possibly to the previous item as well). This container is called a **node**, and a linked list is really just an object that holds and manages a chain of nodes.
 
@@ -1202,7 +1202,7 @@ Linked lists are often just preferred whenever random access doesn't matter, but
 
 ## Types of linked lists
 
-We conceptualize lists as being **stacks** or **queues**. These are called *abstract data types*, which can be a confusing term for programmers because they're neither abstract (as in a base class that you can't substantiate before extending it) nor an actual data type (at least, not usually). It's another way of design a **design pattern**---or mostly broadly, you could just call it a concept.
+We conceptualize lists as being **stacks** or **queues**. These are called *abstract data types*, which can be a confusing term for programmers because they're neither abstract (as in a base class that you can't substantiate before extending it) nor an actual data type (at least, not usually). It's another way of design a **design pattern** --- or mostly broadly, you could just call it a concept.
 
 !image-span
 media/stack-vs-queue.png|A linked list that's organized as a stack vs. a queue
