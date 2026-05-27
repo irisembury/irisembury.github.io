@@ -5,59 +5,48 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
     body {
-    }
-    .mh-top {
-        display: none;
+        --article-width: 775px;
     }
     .main-content {
-        --fs-article-1: 17px;
         max-width: var(--article-width) !important; /* disables full-width toggle */
     }
+    .mh-top { display: none; }
 
-    .article h1.index-title { font-size: 42px; font-family: IBM Plex Serif,Lora,serif; margin: 0; line-height: 1; }
-    .social-icons { margin-block: 1em; display: flex; flex-wrap: wrap; gap: 10px; }
-        .social-icons a { display: block; }
-        .social-icons .inline-icon { display: block; width: 32px; height: unset; }
+    .article h1.index-title { font-size: 44px; font-family: IBM Plex Serif,Lora,serif; margin: 0; line-height: 1; }
+    .social-icons { padding-bottom: 5px; border-bottom: 1px solid var(--theme-grey-e); font-size: 16px; margin: 1em 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0 1rem; font-family: var(--ff-aux-1); }
+        .social-icons a { padding-inline: 3px; }
+            .social-icons .inline-icon { margin-inline: 0 4px; }
 
-    .content-div { line-height: 1; font-size: var(--fs-article-2); font-family: var(--ff-secondary); display: flex; justify-content: center; align-items: stretch; max-width: var(--article-width); margin-inline: auto; }
-        .section-top { align-items: center; display: flex; justify-content: space-between; }
+    .content-div { gap: 44px; margin-top: 36px; line-height: 1; font-size: 16px; font-family: var(--ff-aux-1); display: flex; justify-content: center; align-items: stretch; max-width: var(--article-width); margin-inline: auto; }
+        .section-top { margin-bottom: 2px; align-items: center; display: flex; justify-content: space-between; }
             .section-top h3 { margin: 0; }
             .section-top a { color: var(--theme-grey); }
 
     .page-index { width: 100%; }
-        .page-entry { padding: 8px; margin-inline: -8px; display: flex; justify-content: space-between; gap: 1rem; }
+        .page-entry { padding: 8px 8px; margin-inline: -8px; }
         .page-entry:hover { background-color: var(--bg-light-blue-subtle); }
-        .page-entry .page-date { margin-top: 5px; }
-        .page-entry .page-mirrors { white-space: nowrap; }
-            .page-entry .page-mirrors a { padding: 2px; }
+        .page-entry > * + * { margin-top: 5px; }
+        .page-entry .page-date { }
+        .page-entry .page-mirrors { }
+            .page-entry .page-mirrors a { padding: 2px 3px 1px; border: 1px solid var(--theme-grey-c); border-radius: 3px; background-color: var(--page-bg); }
             .page-entry .page-mirrors .link-text { display: none; }
-            .page-entry .page-mirrors .inline-icon { margin: 0; padding: 1px; }
+            .page-entry .page-mirrors .inline-icon { margin: 0; padding: 1px 2px; }
 
     </style>
 </head>
 <body>
-<div class="gap-10">
-    <div><img width="100" height="100" style="border:1px solid var(--theme-grey-a,gray); padding:3px;" src="assets/002.png"></div>
-    <div>
-        <h1 class="index-title">Iris Embury</h1>
-        <div class="social-icons label-external">
-            <div><a title="YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span></a></div>
-            <div><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span></a></div>
-            <div><a title="Twitter/X" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span></a></div>
-            <div><a title="Tumblr" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span></a></div>
-            <div><a title="Discord" href="https://discord.gg/fGdV7x5dk2"><span class="discord-logo inline-icon"></span></a></div>
-            <div><a title="Patreon" href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span></a></div>
-            <div><a title="Substack" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span></a></div>
-            <div><a title="Medium" href="https://www.medium.com/@irisembury"><span class="medium-logo inline-icon"></span></a></div>
-        </div>
+<div>
+    <h1 class="index-title">Iris Embury</h1>
+    <div class="social-icons label-external">
+        <div><a title="YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span>YouTube</a></div>
+        <div><a title="Twitter/X" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span>Twitter</a></div>
+        <div><a title="Tumblr" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span>Tumblr</a></div>
+        <div><a title="Substack" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span>Substack</a></div>
+        <div><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span>Bluesky</a></div>
+        <div><a title="Discord" href="https://discord.gg/fGdV7x5dk2"><span class="discord-logo inline-icon"></span>Discord</a></div>
+        <div><a title="Patreon" href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span>Patreon</a></div>
     </div>
 </div>
-
-I'm an English Canadian, <span class="age-from">1994-03-07</span>, living in Ontario. I write stuff and make videos, usually about politics. I made this page to be a convergence point for everything I do.
-
-I operate this page and all my profiles solely and independently. I have no association with any other person or organization.
-
----
 
 <div class="content-div">
     <div class="video-index label-external">
@@ -66,7 +55,6 @@ I operate this page and all my profiles solely and independently. I have no asso
             <a title="See all videos on YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all<span class="inline-icon link-icon"></span></a>
         </div>
     </div>
-    <div style="padding: 0 24px;"><div style="background-color:var(--theme-grey-c); height:100%; width:1px;"></div></div>
     <div class="page-index label-external">
         <div class="section-top">
             <h3>Text pages</h3>
@@ -74,5 +62,6 @@ I operate this page and all my profiles solely and independently. I have no asso
     </div>
 </div>
 
-<script src="assets/layout.js"></script></body></html>
+<script src="assets/layout.js"></script>
+</body></html>
 

@@ -1,15 +1,13 @@
 "use strict"
 const HTML = document.documentElement;
 const meta = {
-    flags:[],
-    lastHeading: 0,
-    rowsInToc:[],
-    videoListData:[
+    flags: [],
+    videoListData: [
         { title:"Floor crossers", date:"2026-05-17", url:"EK_MCMiFakA" },
         { title:"Liberalism not Leftism", date:"2026-05-06", url:"DgGf_g4aGYA" },
         { title:"Liberal Conservatism", date:"2026-04-07", url:"Sy33HSFsuu8" },
-        { title:"Elections", date:"2026-03-20", url:"7lw6rO_Pv7I" },
         { title:"Epstein", date:"2026-03-08", url:"5ymc2ePfFR8" },
+        { title:"Our elections", date:"2026-03-20", url:"7lw6rO_Pv7I" },
         { title:"How bad is America, really?", date:"2026-03-04", url:"W0Dmtyyc7FU" },
         { title:"In defense of abortion", date:"2026-02-24", url:"CpjJ8TgOxJY" },
         { title:"American decline", date:"2026-02-11", url:"oUOsAdnK2zs" },
@@ -25,7 +23,8 @@ const meta = {
         { title:"Lies about Ilhan Omar", date:"2025-09-03", url:"zgE4L-e9yg0" },
         { title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
     ],
-    pageListData:[
+    pageListData: [
+        { title:"Pierre Poilievre", url:"poilievre", date:"2026-05-27", mirrors:[""], flags:["citelist","hidden"] },
         { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
         { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
         { title:"Floor crossings", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
@@ -44,7 +43,6 @@ const meta = {
         { title:"Status quo bias & the path of normalization", url:"the-path-of-normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
         { title:"Lies about Ilhan Omar", url:"lies-about-ilhan-omar", date:"2025-08-25", flags:["citelist"], mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
         { title:"Israel & Palestine", url:"israel-palestine", date:"2025-07-27", flags:["wide"] },
-        { title:"The problems with Pierre Poilievre", url:"pierre-poilievre", date:"2025-03-15", mirrors:["tumblr:782079973591760896","substack:pierre-poilievre patreon:155202545"], flags:["citelist"] },
         { title:"Trump & Russia", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
         { title:"Why get bottom surgery?", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
         { title:"Elon Musk & the Nazi Salute", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
@@ -61,22 +59,20 @@ const meta = {
         { title:"Anime reviews", url:"anime-reviews", flags:["hidden","wide"] },
         { title:"Data Structures & Algorithms", url:"data-structures-algorithms", flags:["hidden","wide"] }
     ],
-    pageList:function(){
+    pageList: function() {
         return meta.pageListData.filter(p => !p.flags || !p.flags.includes("hidden"))
     },
-    pageListFull:function(){
+    pageListFull: function() {
         return meta.pageListData
     },
-    videoList:function(){
+    videoList: function() {
         return meta.videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 6)
     },
-    canNavCheck:true,
-    canTocUpdate:true,
-    pageHeadings:[],
     fontDefaults: {
-        "--ff-heading":"Inter,sans-serif",
-        "--ff-body":"Georgia Pro Digits,Georgia,serif",
-        "--ff-secondary":"Segoe UI,system-ui"
+        "--ff-heading":"'IBM Plex Sans',sans-serif",
+        "--ff-article":"'Georgia Pro Digits','Georgia',serif",
+        "--ff-aux-1":"'Segoe UI',system-ui",
+        "--ff-aux-2":"'Roboto',sans-serif"
     }
 }
 meta.pageListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
@@ -134,13 +130,13 @@ function setLightbox(action) {
             img.alt = action;
             lightbox.classList.remove("hidden");
             caption.innerHTML = action;
-            topLeft.innerHTML = `<a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`
+            topLeft.innerHTML = `<div>This image: <a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a></div>`
         }
         else {
             img.src = action.src;
             img.alt = action.alt;
             lightbox.classList.remove("hidden");
-            topLeft.innerHTML = `<a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+            topLeft.innerHTML = `<div>This image: <a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a></div>`;
             caption.innerHTML = action.alt;
         }
     }
@@ -167,7 +163,7 @@ function setCSS(mEle) {
         if (styleOverrides.length > 0) {
             cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
         }
-        if (localStorage.getItem("--ff-heading") == "Georgia Pro,serif") {
+        if (localStorage.getItem("--ff-heading") == "'Georgia Pro',serif") {
             cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important }");
         }
     }
@@ -471,6 +467,9 @@ function linkReplace(chunk, articleLinksArray = []) {
             if (linkUrl.includes("youtube.com") || linkUrl.includes("youtu.be")) {
                 link_inner += '<span class="youtube-logo inline-icon"></span>';
             }
+            else if (linkUrl.includes("twitch.tv/")) {
+                link_inner += '<span class="twitch-logo inline-icon"></span>';
+            }
             else if (linkUrl.includes("bsky.app/")) {
                 link_inner += '<span class="bluesky-logo inline-icon"></span>';
             }
@@ -521,6 +520,7 @@ function interpreter(argValue, linksArr) {
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
         if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
+        if (chunk.startsWith("//")) { return ""; }
         
         let isFine = chunk.startsWith(".");
         if (isFine) chunk = chunk.slice(1).trimStart();
@@ -671,63 +671,6 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 
-/* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                        focus highlight updater                         
-*/
-function toc_update() {
-    let currentHeading = -1;
-    for (let heading = 0; heading < meta.pageHeadings.length; heading += 1) {
-        let elementDistanceFromPageTop = window.scrollY + meta.pageHeadings[heading].getBoundingClientRect().top;
-        if (pageYOffset < elementDistanceFromPageTop - (0.475 * window.innerHeight)) {
-            break;
-        }
-        currentHeading = heading;
-    }
-    if (currentHeading != meta.lastHeading) {
-        meta.rowsInToc.forEach( (row, n) => {
-            if (n == currentHeading && n > 0) {
-                row.classList.add("active-heading");
-                /* ----
-                    After this being in the code for some time, it seems like it's rarely useful at all (on most pages
-                    the TOC isn't even going to scroll) while adding work to every toc page. Disabled for now.
-                */
-                // let rRect = row.getBoundingClientRect();
-                // let tRect = toc.getBoundingClientRect();
-                
-                // if (rRect.bottom + 20 > tRect.bottom) {
-                    // toc.scrollTo(
-                        // { top: row.offsetTop + row.offsetHeight - toc.clientHeight + 20, behavior: "smooth" }
-                    // )
-                // }
-                // else if (rRect.top < tRect.top) {
-                    // toc.scrollTo(
-                        // { top: row.offsetTop - 4, behavior: "smooth" }
-                    // )
-                // }
-            }
-            else {
-                row.classList.remove("active-heading");
-            }
-        })
-    }
-    meta.lastHeading = currentHeading;
-}
-
-function attempt_toc_update() {
-    if (!meta.canTocUpdate) {
-        return;
-    }
-    if (HTML.classList.contains("hide-toc")) {
-        return;
-    }
-    meta.canTocUpdate = false;
-    toc_update();
-    setTimeout(() => {
-        meta.canTocUpdate = true;
-        toc_update();
-    }, 500);
-}
-
 function formattingToggle() {
     const fswitches = Array.from(document.querySelectorAll(".slide-checkbox.formatting"));
     let anyOff = false;
@@ -805,7 +748,7 @@ window.addEventListener("load", function() {
                 <div><div><h3>Layout:</h3></div></div>
                 <div class="push-right"><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
                 <hr>
-                <div><div><h3>Paragraph formatting:</h3></div></div>
+                <div><div><h3>Format preferences:</h3></div></div>
                 <div class="push-right"><label for="justify-text">Justify text</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
                 <div class="push-right"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
                 <div class="push-right"><label for="reduce-margins">Reduce margins</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
@@ -813,44 +756,65 @@ window.addEventListener("load", function() {
                 <div><div style="margin-left:auto; cursor:pointer; color:grey;" onclick="formattingToggle()" title="Flips the above switches">toggle all</div></div>
                 <hr>
                 <div><h3>Fonts override:</h3></div>
-                <div><label>Headings:</label><select class="drop-select" id="--ff-heading" onchange="setCSS(this)">
-                    <option value="Faculty Glyphic,sans-serif">Faculty Glyphic</option>
-                    <option value="Georgia Pro,serif">Georgia</option>
-                    <option value="IBM Plex Sans,system-ui">IBM Plex Sans</option>
-                    <option value="IBM Plex Serif,serif">IBM Plex Serif</option>
-                    <option value="Inter,sans-serif">Inter</option>
-                    <option value="Lora,serif">Lora</option>
-                    <option value="Merriweather,serif">Merriweather</option>
-                    <option value="Open Sans,sans-serif">Open Sans</option>
-                    <option value="PT Serif,serif">PT Serif</option>
-                    <option value="Roboto,sans-serif">Roboto</option>
-                    <option value="Roboto Slab,sans-serif">Roboto Slab</option>
-                    <option value="Segoe UI,system-ui">Segoe UI</option>
-                    <option value="Trebuchet MS,sans-serif">Trebuchet MS</option>
-                </select></div>
-                <div><label>Body:</label><select class="drop-select" id="--ff-body" onchange="setCSS(this)">
-                    <option value="Arial,sans-serif">Arial</option>
-                    <option value="Faculty Glyphic,sans-serif">Faculty Glyphic</option>
-                    <option value="Georgia Pro Digits,Georgia,serif">Georgia</option>
-                    <option value="IBM Plex Sans,system-ui">IBM Plex Sans</option>
-                    <option value="IBM Plex Serif,serif">IBM Plex Serif</option>
-                    <option value="Inter,sans-serif">Inter</option>
-                    <option value="Open Sans,sans-serif">Open Sans</option>
-                    <option value="PT Serif,serif">PT Serif</option>
-                    <option value="Roboto,sans-serif">Roboto</option>
-                    <option value="Segoe UI,system-ui">Segoe UI</option>
-                </select></div>
-                <div><label>Secondary:</label><select class="drop-select" id="--ff-secondary" onchange="setCSS(this)">
-                    <option value="Faculty Glyphic,sans-serif">Faculty Glyphic</option>
-                    <option value="Georgia Pro Digits,Georgia,serif">Georgia</option>
-                    <option value="IBM Plex Sans,system-ui",sans-serif>IBM Plex Sans</option>
-                    <option value="Inter,sans-serif">Inter</option>
-                    <option value="Open Sans,sans-serif">Open Sans</option>
-                    <option value="PT Serif,serif">PT Serif</option>
-                    <option value="Roboto,sans-serif">Roboto</option>
-                    <option value="Segoe UI,system-ui">Segoe UI</option>
-                    <option value="Trebuchet MS,sans-serif">Trebuchet MS</option>
-                </select></div>
+                <div>
+                    <label>Headings:</label>
+                    <select class="drop-select" id="--ff-heading" onchange="setCSS(this)">
+                        <option value="'Faculty Glyphic',sans-serif">Faculty Glyphic</option>
+                        <option value="'Georgia Pro',serif">Georgia</option>
+                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Lora',serif">Lora</option>
+                        <option value="'Merriweather',serif">Merriweather</option>
+                        <option value="'Open Sans',sans-serif">Open Sans</option>
+                        <option value="'PT Serif',serif">PT Serif</option>
+                        <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
+                        <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Body:</label>
+                    <select class="drop-select" id="--ff-article" onchange="setCSS(this)">
+                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="'Faculty Glyphic',sans-serif">Faculty Glyphic</option>
+                        <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
+                        <option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option>
+                        <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Open Sans',sans-serif">Open Sans</option>
+                        <option value="'PT Serif',serif">PT Serif</option>
+                        <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Segoe UI',system-ui">Segoe UI</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Aux 1:</label>
+                    <select class="drop-select" id="--ff-aux-1" onchange="setCSS(this)">
+                        <option value="'Faculty Glyphic',sans-serif">Faculty Glyphic</option>
+                        <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
+                        <option value="'IBM Plex Sans',system-ui",sans-serif>IBM Plex Sans</option>
+                        <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Open Sans',sans-serif">Open Sans</option>
+                        <option value="'PT Serif',serif">PT Serif</option>
+                        <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Aux 2:</label>
+                    <select class="drop-select" id="--ff-aux-2" onchange="setCSS(this)">
+                        <option value="'Faculty Glyphic',sans-serif">Faculty Glyphic</option>
+                        <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
+                        <option value="'IBM Plex Sans',system-ui",sans-serif>IBM Plex Sans</option>
+                        <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Open Sans',sans-serif">Open Sans</option>
+                        <option value="'PT Serif',serif">PT Serif</option>
+                        <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                    </select>
+                </div>
                 <div><div style="margin-left:auto; cursor:pointer; color:grey;" onclick="restoreDefaults()" title="restore font defaults">restore defaults</div></div>
                 <hr>
                 <div><div style="line-height:1.5;color:grey;"><p>These preferences are saved in your browser's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">local storage</a>. To clear your local storage for this site, <a class="pseudo-link" onclick="localStorage.clear()" title="Nothing visible happens when you click this, but I tested it and it works.">click here</a>.</p></div></div>
@@ -877,6 +841,7 @@ window.addEventListener("load", function() {
     const article_links = [];
     interpreter(article, article_links);
     HTML.classList.add("layout");
+
     Array.from(document.getElementsByClassName("drop-select")).forEach(
         select => {
             const s_val = localStorage.getItem(select.id) || meta.fontDefaults[select.id] || "";
@@ -885,27 +850,30 @@ window.addEventListener("load", function() {
         }
     )
     setCSS();
+
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                         non-index                                     
     */
     if (!index) {
-        const entry = meta.pageListFull().find(e => e.url == getDirectory());
-        if (entry) {
-            if (entry.flags && entry.flags.length > 0) {
-                meta.flags = entry.flags;
+        {
+            const entry = meta.pageListFull().find(e => e.url == getDirectory());
+            if (entry) {
+                if (entry.flags && entry.flags.length > 0) {
+                    meta.flags = entry.flags;
+                }
+                if (entry.mirrors && entry.mirrors.length > 0) {
+                    articleFooter(`
+                        <section class="mirror-container column gap-8 label-external">
+                            <div>The text of this page was also posted in other places:</div>
+                            <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div>
+                        </section>
+                    `);
+                }
+                if (entry.title) {
+                    document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
+                }
+                article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title for-toc">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }` :'') + '</div>');
             }
-            if (entry.mirrors && entry.mirrors.length > 0) {
-                articleFooter(`
-                    <section class="mirror-container column gap-8 label-external">
-                        <div>The text of this page was also posted in other places:</div>
-                        <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="rect-link">' + parseSource(m) + '</span>').join('') }</div>
-                    </section>
-                `);
-            }
-            if (entry.title) {
-                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
-            }
-            article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }` :'') + '</div>');
         }
 
         articleFooter(`This is a personal site. I'm not an expert or authority on any relevant topic. I have no association with any other person or organization.`);
@@ -920,7 +888,7 @@ window.addEventListener("load", function() {
                     </ul>
                 </div>
             </div>
-            <style> .page-footer a { filter:grayscale(1); } .page-footer .inline-icon { margin-right: 3px; } .page-footer .twitter-logo, .page-footer .github-logo { filter:invert(0.75); } .page-footer .tumblr-logo { filter:brightness(1.2); } </style>
+            <style> .page-footer a { filter:grayscale(1); } .page-footer .inline-icon { margin-right: 3px; } .page-footer .twitter-logo, .page-footer .github-logo { filter:invert(0.75); } .page-footer .youtube-logo { filter:contrast(1.5); } .page-footer .tumblr-logo { filter:brightness(1.2); } </style>
             <div class='column gap-rem'>
                 <div>External links:</div>
                 <div class='flex label-external'>
@@ -979,6 +947,28 @@ window.addEventListener("load", function() {
         </div>`);
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
+    
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                      #navbar set-up                                  
+    */
+    const navbar = document.querySelector('.gn-top');
+    let canNavCheck = true;
+    function navCheck() {
+        if (!canNavCheck) {
+            return;
+        }
+        canNavCheck = false;
+        setTimeout(
+            function() {
+                canNavCheck = true;
+                navbar.classList.toggle("sticky-active", pageYOffset > 120);
+            },
+            500
+        )
+        navbar.classList.toggle("sticky-active", pageYOffset > 120);
+    }
+    navCheck();
+    window.addEventListener("scroll", navCheck);
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                 #right-panel (gear) set-up                            
@@ -997,15 +987,21 @@ window.addEventListener("load", function() {
     );
     const gearMenu = document.querySelector(".right-panel");
     function gearMenuToggle(option) {
-        if (option == "close" || option == "open") {
-            gearMenu.classList.toggle("closed", option == "close");
+        if (option == "open") {
+            gearMenu.classList.remove("closed");
+            navbar.classList.add("solid");
+        }
+        else if (option == "close") {
+            gearMenu.classList.add("closed");
+            navbar.classList.remove("solid");
         }
         else {
-            gearMenu.classList.toggle("closed", !gearMenu.classList.contains("closed"));
+            gearMenuToggle(gearMenu.classList.contains("closed") ? "open" : "close");
         }
     }
     const gearIcon = document.getElementById("gear");
     gearIcon.addEventListener("click", gearMenuToggle);
+    
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                 menu close, key conditions                            
     */
@@ -1016,7 +1012,6 @@ window.addEventListener("load", function() {
     })
     window.addEventListener("keydown", function(e) {
         if (e.key === "Escape") {
-            hamburgerMenuToggle("close");
             gearMenuToggle("close");
             setLightbox("close");
         }
@@ -1026,23 +1021,16 @@ window.addEventListener("load", function() {
     })
     
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                      #navbar set-up                                  
-    */
-    navCheck();
-    window.addEventListener("scroll", navCheck);
-    
-    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                       index elements                                  
     */
-
     document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", meta.pageList().map(
         entry => `
             <div class="page-entry">
-                <div>
+                <div class="space-between">
                     <div class="page-link"><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
-                    <div class="page-date">${ entry.date }</div>
+                    <div class="page-mirrors">${ Object.hasOwn(entry, "mirrors") && entry.mirrors.length > 0 ? entry.mirrors.map(m => " " + parseSource(m)).join('') :''}</div>
                 </div>
-                <div class="page-mirrors">${ Object.hasOwn(entry, "mirrors") && entry.mirrors.length > 0 ? entry.mirrors.map(m => " " + parseSource(m)).join('') :''}</div>
+                <div class="page-date">${ entry.date }</div>
             </div>
         `
     ).join(''))
@@ -1052,9 +1040,9 @@ window.addEventListener("load", function() {
                 meta.videoList().map(
                     v => `
                         <figure>
-                            <a href="https://www.youtube.com/watch?v=${ v.url }"><img loading="lazy" src="https://i.ytimg.com/vi/${ v.url }/hqdefault.jpg"></a>
+                            <a href="https://youtu.be/${ v.url }"><img loading="lazy" src="https://i.ytimg.com/vi/${ v.url }/hqdefault.jpg"></a>
                             <figcaption>
-                                <div class="yt-title"><a href="https://www.youtube.com/watch?v=${ v.url }">${ v.title }</a></div>
+                                <div class="yt-title"><a href="https://youtu.be/${ v.url }">${ v.title }</a></div>
                                 ${ v.date ?'<div><span class="yt-date">' + v.date + '</span></div>' :'' }
                             </figcaption>
                         </figure>
@@ -1077,9 +1065,14 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                     table of contents                                 
     */
-    meta.pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
-    if (meta.pageHeadings.length > 2) {
-        meta.pageHeadings.forEach(h => { h.classList.remove("for-toc"); if (h.classList.length == 0) { h.removeAttribute('class') } });
+    const pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
+    if (pageHeadings.length > 2) {
+        pageHeadings.forEach(h => {
+            h.classList.remove("for-toc");
+            if (h.classList.length == 0) {
+                h.removeAttribute('class')
+            }
+        });
         
         /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                     create contents                             
@@ -1088,32 +1081,58 @@ window.addEventListener("load", function() {
         const toc = pageGrid.insertBefore(document.createElement("nav"), pageGrid.firstElementChild);
         toc.classList.add("toc");
         pageGrid.classList.add("right-space");
-        toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + meta.pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
+        toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
         toc.scrollTo({ behavior: "instant", top: 0 })
         /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                     attach to window                            
         */
-        meta.rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+        const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+        let lastHeading = 0;
+
+        function toc_update() {
+            let currentHeading = -1;
+            for (let heading = 0; heading < pageHeadings.length; heading += 1) {
+                let elementDistanceFromPageTop = window.scrollY + pageHeadings[heading].getBoundingClientRect().top;
+                if (pageYOffset < elementDistanceFromPageTop - (0.475 * window.innerHeight)) {
+                    break;
+                }
+                currentHeading = heading;
+            }
+            if (currentHeading != lastHeading) {
+                rowsInToc.forEach( (row, n) => {
+                    if (n == currentHeading && n > 0) {
+                        row.classList.add("active-heading");
+                    }
+                    else {
+                        row.classList.remove("active-heading");
+                    }
+                })
+            }
+            lastHeading = currentHeading;
+        }
+
+        let canTocUpdate = true;
+        function attempt_toc_update() {
+            if (!canTocUpdate) {
+                return;
+            }
+            if (HTML.classList.contains("hide-toc")) {
+                return;
+            }
+            canTocUpdate = false;
+            toc_update();
+            setTimeout(() => {
+                canTocUpdate = true;
+                toc_update();
+            }, 500);
+        }
+
         window.addEventListener("scroll", attempt_toc_update);
         attempt_toc_update();
     }
 })
 
-function navCheck() {
-    let navbar = document.querySelector('.gn-top');
-    if (navbar != null) {
-        if (!meta.canNavCheck) {
-            return;
-        }
-        meta.canNavCheck = false;
-        setTimeout(
-            function() {
-                meta.canNavCheck = true;
-                navbar.classList.toggle("sticky-active", pageYOffset > 120);
-            },
-            500
-        )
-        navbar.classList.toggle("sticky-active", pageYOffset > 120);
-    }
-}
+
+
+
 

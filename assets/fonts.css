@@ -57,9 +57,9 @@
 /* @font-face { font-family: "Epilogue"; font-style: normal; font-weight: 100 900; src: url(fonts/epilogue-regular-ext.woff2) format('woff2'); unicode range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; font-style: normal; } */
 /* @font-face { font-family: "Epilogue"; font-style: italic; font-weight: 100 900; src: url(fonts/epilogue-italic.woff2) format('woff2'); } */
 /* @font-face { font-family: "Noto Sans JP"; font-style: normal; font-weight: 400 700; src: url(fonts/noto-sans-jp.woff2) format('woff2'); font-style: normal; } */
-/* @font-face { font-family: "Libre Caslon Text"; src: url(fonts/libre-caslon-text-regular.woff2) format("woff2"); font-weight: 400; font-style: normal; } */
-/* @font-face { font-family: "Libre Caslon Text"; src: url(fonts/libre-caslon-text-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; } */
-/* @font-face { font-family: "Libre Caslon Text"; src: url(fonts/libre-caslon-text-bold.woff2) format("woff2"); font-weight: 700; font-style: normal; } */
+@font-face { font-family: "Libre Caslon Text"; src: url(fonts/libre-caslon-text-regular.woff2) format("woff2"); font-weight: 400; font-style: normal; }
+@font-face { font-family: "Libre Caslon Text"; src: url(fonts/libre-caslon-text-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; }
+@font-face { font-family: "Libre Caslon Text"; src: url(fonts/libre-caslon-text-bold.woff2) format("woff2"); font-weight: 700; font-style: normal; }
 /* @font-face { font-family: "Sora"; font-style: normal; font-weight: 400 700; src: url(fonts/sora-regular.woff2) format('woff2'); font-style: normal; } */
 /* @font-face { font-family: "Roboto Serif"; src: url(fonts/roboto-serif.ttf) format("truetype"); font-weight: 300 900; font-style: normal; } */
 /* @font-face { font-family: "Roboto Serif"; src: url(fonts/roboto-serif-italic.ttf) format("truetype"); font-weight: 300 900; font-style: italic; } */
