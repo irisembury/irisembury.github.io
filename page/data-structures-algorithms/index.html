@@ -98,7 +98,7 @@ What is the value of `b` here? `10 | 7` makes 15, so what's `~15`? The answer (i
 This is because a signed number (like the default `int` data-type, a 32-bit signed integer) uses its first bit to represent whether the number is positive or negative (0 and 1 respectively). That's why the max value is 2<sup>31</sup>-1 instead of 2<sup>32</sup>-1 (but an *unsigned* int does go to 2<sup>32</sup>). The `NOT` operator (`~`) doesn't know what your data represents, because it doesn't see the data-type of its argument, it only sees a string of bits, ergo it indiscriminately flips everything, including the sign bit. This changes how the whole number is interpreted, because negative and positive numbers are stored in binary differently.
 
 - For whatever reason, instead of just having a different sign, a negative number represents value with 0s instead of 1s. It's as though what's being stored is "the difference between this number and the absolute smallest value the data-type can hold" (in this case, -2,147,483,648).
-- There is no 'negative zero', so instead, the binary string that would've been the negative equivalent of zero (a string of all 1s) is interpreted as -1. The positive and negative values are thus misaligned by one position (i.e., the largest value of a standard integer is 2<sup>31</sup>-1, but the smallest value is just -(2<sup>31</sup>).
+- There is no "negative zero," so instead, the binary string that would've been the negative equivalent of zero (a string of all 1s) is interpreted as -1. The positive and negative values are thus misaligned by one position (i.e., the largest value of a standard integer is 2<sup>31</sup>-1, but the smallest value is just -(2<sup>31</sup>).
 
 This can be observed clearly by tracking the binary representation of an int as it crosses the zero line:
 
@@ -593,7 +593,7 @@ A quick sort works by repeating one fundamental action, called **partitioning**.
 There's been many quick sort variations over the years and the code to implement it thus varies widely compared with the other algorithms here. If well written, a quick sort can outperform merge sort while offering the advantage of being in-place. The potential disadvantage is it's not stable, and if not well written for how it's being used the performance can vary widely.
 
 - **IN PLACE?** --- An algorithm is described as "in-place" if it transforms some input directly, not requiring additional memory to be allocated (outside of small storage for, say, a few variables). Merge sort is not in-place because to sort the array it allocates an entire parallel array in which to temporarily store the sorted values. Therefore, a quick sort requires less memory to sort the same data.
-- **NOT STABLE?** --- This means the algorithm doesn't maintain the relative order of equal items. If a quicksort is used to sort customers in a database by surname, then, if two customers with the same surname were in a particular order (e.g. because one registered before the other), the quicksort may swap them around in the final result. (Merge sort and insertion sort are examples of 'stable sorts', meaning they maintain the relative order of equally valued items while sorting.)
+- **NOT STABLE?** --- This means the algorithm doesn't maintain the relative order of equal items. If a quicksort is used to sort customers in a database by surname, then, if two customers with the same surname were in a particular order (e.g. because one registered before the other), the quicksort may swap them around in the final result. (Merge sort and insertion sort are examples of "stable sorts," meaning they maintain the relative order of equally valued items while sorting.)
 
 A popular approach to implement the concept in teaching material is the Lomuto partition scheme. It simply uses a for-loop to scan the array left to right, and when it finds a value greater than the pivot it pushes that value to the left side. It's not the most optimized method, but it was used because of how easy it is to follow.
 
@@ -1225,7 +1225,7 @@ These terms could've been any of their logical equivalents. "Last in, first out"
 The other major distinction to consider is whether the nodes are **singly-linked**, meaning each node holds just one pointer (to the next item), or **doubly-linked**, meaning the nodes hold two pointers (to both the next and previous nodes), allowing two-way traversal. This often isn't needed, though, so you'll commonly just be using singly-linked lists, and that's what a lot of material focuses on.
 
 !info
-In both cases, the word 'linked' is an adjective describing 'list', whereas 'singly' and 'doubly' are adverbs describing how the list is linked. I see some students refer to a "singly-linked linked list," but this is redundant. We can just say "singly-linked list."
+In both cases, the word "linked" is an adjective describing "list," whereas "singly" and "doubly" are adverbs describing how the list is linked. I see some students refer to a "singly-linked linked list," but this is redundant. We can just say "singly-linked list."
 
 !image-span
 media/singly-doubly-linked.png|A visualization of singly- and doubly-linked lists.
@@ -1323,7 +1323,7 @@ And of course, remember that you're responsible for deleting the pointer to the 
 
 #### Queue
 
-Similar code, but pop is replaced with 'dequeue', which takes from the other side.
+Similar code, but pop is replaced with "dequeue," which takes from the other side.
 
 !codeblock cpp Banana Queue LinkNode
 class Banana { };

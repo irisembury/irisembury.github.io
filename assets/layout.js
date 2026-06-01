@@ -2,6 +2,7 @@
 const HTML = document.documentElement;
 const meta = {
     flags: [],
+    links : [],
     videoListData: [
         { title:"Floor crossers", date:"2026-05-17", url:"EK_MCMiFakA" },
         { title:"Liberalism not Leftism", date:"2026-05-06", url:"DgGf_g4aGYA" },
@@ -24,7 +25,7 @@ const meta = {
         { title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
     ],
     pageListData: [
-        { title:"Pierre Poilievre", url:"poilievre", date:"2026-05-27", mirrors:[""], flags:["citelist","hidden"] },
+        { title:"Pierre Poilievre", url:"pierre-poilievre", date:"", mirrors:[""], flags:["citelist","hidden"] },
         { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
         { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
         { title:"Floor crossings", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
@@ -69,8 +70,8 @@ const meta = {
         return meta.videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 6)
     },
     fontDefaults: {
-        "--ff-heading":"'IBM Plex Sans',sans-serif",
-        "--ff-article":"'Georgia Pro Digits','Georgia',serif",
+        "--ff-heading":"'Inter',sans-serif",
+        "--ff-main":"var(--ff-georgia-digits)",
         "--ff-aux-1":"'Segoe UI',system-ui",
         "--ff-aux-2":"'Roboto',sans-serif"
     }
@@ -114,35 +115,38 @@ function parseSource(string_in, separator = ":") {
 
 function setLightbox(action) {
     const lightbox = document.querySelector(".lightbox");
-    let [ topLeft, img, caption ] = Array.from(lightbox.children).slice(0, 3);
-    img = img.children[0];
-    if (lightbox && topLeft && img && caption) {
-        /* action is click from <img> object */
-        if (action == "close") {
-            img.src = "";
-            img.alt = "";
-            topLeft.innerHTML = '';
-            lightbox.classList.add("hidden");
-        }
-        /* action is URLstring passed by function call */
-        else if (typeof action == "string") {
-            img.src = action;
-            img.alt = action;
-            lightbox.classList.remove("hidden");
-            caption.innerHTML = action;
-            topLeft.innerHTML = `<div>This image: <a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a></div>`
-        }
-        else {
-            img.src = action.src;
-            img.alt = action.alt;
-            lightbox.classList.remove("hidden");
-            topLeft.innerHTML = `<div>This image: <a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a></div>`;
-            caption.innerHTML = action.alt;
-        }
+    const lbTopLeft = document.querySelector(".lb-top-left p");
+    const lbImage = document.querySelector(".lb-img-wrapper img")
+    const lbCaption = document.querySelector(".lb-caption-panel p")
+
+    if (lightbox == null || lbTopLeft == null || lbImage == null || lbCaption == null) {
+        return;
     }
+    
+    if (action == "close") {
+        lightbox.classList.add("hidden");
+        lbTopLeft.innerHTML = "";
+        lbImage.src = lbImage.alt = "";
+    }
+    /* function called by <a> with link to image source */
+    else if (typeof action == "string") {
+        lightbox.classList.remove("hidden");
+        lbTopLeft.innerHTML = `This image: <a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+        lbImage.src = lbImage.alt = action;
+        lbCaption.innerHTML = action;
+    }
+    /* function called by <img> passing "this" */
+    else {
+        lightbox.classList.remove("hidden");
+        lbImage.src = action.src;
+        lbImage.alt = action.alt;
+        lbTopLeft.innerHTML = `This image: <a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+        lbCaption.innerHTML = action.alt;
+    }
+    
 }
 
-function setClass(sEle) {
+function classSelector(sEle) {
     if (sEle != null && sEle instanceof Node) {
         let sValue = sEle.value;
         HTML.classList.remove(...Array.from(sEle.children).map(o => o.value).filter(o => o != sValue));
@@ -159,30 +163,39 @@ function setCSS(mEle) {
     if (cssPanel) {
         cssPanel.replaceChildren();
         const styleOverrides = [];
-        Array.from(document.getElementsByClassName("drop-select")).forEach(select => styleOverrides.push(select.id + ":" + (localStorage.getItem(select.id) || meta.fontDefaults[select.id])))
+        Array.from(document.getElementsByClassName("drop-select")).forEach(
+            _select => {
+                let _select_value = localStorage.getItem(_select.id) || _select.value;
+                if (_select_value != meta.fontDefaults[_select.id]) {
+                    styleOverrides.push(_select.id + ':' + _select_value)
+                }
+            }
+        );
         if (styleOverrides.length > 0) {
             cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
         }
         if (localStorage.getItem("--ff-heading") == "'Georgia Pro',serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important }");
+            cssPanel.insertAdjacentHTML("afterbegin", ".article h1, .article h2 { font-weight: 600 !important }");
+        }
+        
+        /* for bold letter-spacing */
+        let bodyff = localStorage.getItem("--ff-main") || meta.fontDefaults["--ff-main"];
+        if (bodyff == "var(--ff-georgia-digits)") {
+            cssPanel.insertAdjacentHTML("afterbegin", ".article .body-text strong { letter-spacing: -0.3px; }");
+        }
+        else if (bodyff == "'Roboto',sans-serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", ".article .body-text strong { letter-spacing: -0.1px; }");
         }
     }
 }
 
-function restoreDefaults() {
+function restoreFontDefaults() {
     document.getElementById("__css_user_set")?.replaceChildren();
-    Array.from(document.querySelectorAll(".slide-checkbox.formatting")).forEach(
-        checkbox => {
-            checkbox.checked = false;
-            HTML.classList.toggle(checkbox.id, false);
-            localStorage.setItem(checkbox.id, false);
-        }
-    )
     Array.from(document.getElementsByClassName("drop-select")).forEach(
-        sel => {
-            if (meta.fontDefaults[sel.id]) {
-                sel.value = meta.fontDefaults[sel.id];
-                localStorage.removeItem(sel.id);
+        _select => {
+            if (meta.fontDefaults[_select.id]) {
+                _select.value = meta.fontDefaults[_select.id];
+                localStorage.removeItem(_select.id);
             }
         }
     )
@@ -194,7 +207,6 @@ function imageFloat(chunk) {
         const direction = firstRow.split(" ").shift().endsWith("left") ?"float-left" :"float-right";
             firstRow = firstRow.substring(firstRow.indexOf(" "));
         const lazy = !firstRow.includes("nolazy");
-        const maxHeight = firstRow.replace(/\D/g, "") ||150;
     
     return `<div class="image-float ${ direction }">${ rows.map(
         row => {
@@ -204,7 +216,7 @@ function imageFloat(chunk) {
             let altText = autoFormat(parts[2].replace(/"/g,"&quot;"));
             if (caption && !altText) { altText = caption }
             if (caption) { caption = `<figcaption>${ caption }</figcaption>`; }
-            return `<figure><img ${ lazy ?'load="lazy"' :""} style="max-height:${ maxHeight }px" onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }">${ caption }</figure>`;
+            return `<figure><img ${ lazy ?'load="lazy"' :""} onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }">${ caption }</figure>`;
         }
     ).join('') }</div>`;
 }
@@ -249,23 +261,32 @@ function gallery(chunk) {
 }
 
 function squareGallery(chunk) {
-    const rows = chunk.split("\n");
-        let firstRow = rows.shift();
-            firstRow = firstRow.substring(firstRow.indexOf(" "));
-        const lazy = !firstRow.includes("nolazy");
-        const maxHeight = firstRow.replace(/\D/g, "");
+    let rows = chunk.split("\n").slice(1);
     
-    return `<div class="square-gallery">${ rows.map(
+    rows = rows.map(
         row => {
-            const parts = row.split("|");
-            while (parts.length < 3) { parts.push(""); }
-            let caption = autoFormat(parts[1]);
-            let altText = autoFormat(parts[2].replace(/"/g,"&quot;"));
-            if (!altText) { altText = caption; }
-            if (caption) { caption = `<figcaption>${ caption }</figcaption>`; }
-            return `<figure><div class="img-wrapper"><img loading="lazy" onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }"></div>${ caption }</figure>`;
+            row = auxf(row, false);
+            try {
+                row = JSON.parse(row);
+            }
+            catch (error) {
+                console.error('square-gallery input error');
+                console.error(row)
+                return "";
+            }
+            row.src ||= ""; row.caption ||= ""; row.alt ||= "";
+            
+            if (row.alt == "" && row.caption != "") { row.caption = row.alt; }
+            if (row.caption == "" && row.alt != "") { row.alt = row.caption; }
+            row.alt = row.alt.replaceAll('"', "&quot;").replaceAll('---','\u2014').replaceAll('--','\u2013');
+            return `<figure>
+                <img loading="lazy" onclick="setLightbox(this)" src="${ row.src }" title="${ row.caption }" alt="${ row.alt }">
+                ${ row.caption ? '<figcaption>' + row.caption + '</figcaption>' : "" }
+            </figure>`
         }
-    ).join('') }</div>`;
+    );
+    
+    return `<div class="square-gallery">${ rows.join('') }</div>`;
 }
 
 function autoVideo(chunk) {
@@ -312,7 +333,7 @@ function autoTable(chunk, table_number) {
                                         p = p.trim();
                                         if (p == "---") { return '<hr>'; }
                                         if (p.startsWith("#.") || p.startsWith(".#")) { p = '<blockquote><p class="fine">' + p.substring(2).trimStart() + '</p></blockquote>'; }
-                                        else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
+                                        else if (p.startsWith("#")) { p = '<blockquote><p class="body-text">' + p.substring(1).trimStart() + '</p></blockquote>'; }
                                         else if (p.startsWith(".")) { p = '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
                                         else p = '<p>' + p + '</p>';
                                         return autoFormat(p);
@@ -366,13 +387,13 @@ function autoList(list, fine) {
     list = list.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
-            li = autoFormat(li.substring(initpad));
+            li = (li.substring(initpad));
             const indent = Math.floor(initpad * 0.25);
-            const liType = /^[\*\-] /.test(li) ?"ul" :(/^\d+\. /.test(li) ?"ol" :"none");
+            const liType = /^[\*\-] /.test(li) ?"ul" :(/^\d+\. /.test(li) ? "ol" : "none");
             const listType = (liType =="ol") ?"ol" :"ul";
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
-            li = (liType) =="none" ?li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
-            li = " ".repeat(indent * 4) + ( liType =="none" ?"<p>"+li+"</p>\n" :"<li>"+li+"</li>\n");
+            li = (liType) == "none" ? li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
+            li = " ".repeat(indent * 4) + ( liType =='none' ?'<p>' + li + '</p>\n' :'<li>'+li+'</li>\n');
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
                 closeTags.push(" ".repeat(indent * 4) + "</"+ listType +">\n");
@@ -383,8 +404,8 @@ function autoList(list, fine) {
             return li;
         }
     ).join("") + closeTags.join("");
-    let lclass = fine ?' class="auto-list fine"' :' class="auto-list"';
-    return list.substring(0, 3) + lclass + list.substring(3);
+    let lclass = fine ?' class="auto-list fine body-text"' :' class="auto-list body-text"';
+    return autoFormat(list.substring(0, 3) + lclass + list.substring(3));
 }
 
 function autoIndent(chunk) {
@@ -396,7 +417,7 @@ function autoIndent(chunk) {
                 if (line.startsWith("---")) {
                     return `<p class="attribution">${ autoFormat(line) }</p>`;
                 }
-                return "<p>"+ autoFormat(line) +"</p>";
+                return "<p class='body-text'>"+ autoFormat(line) +"</p>";
             }
         }
     ).join('') }</blockquote>`;
@@ -423,14 +444,24 @@ function isoFormat(datestring, shortMonths = false) {
 
 function autoHeading(chunk) {
     let headingNum = chunk.indexOf(" ");
+    if (headingNum > 4) {
+        headinNum = 4;
+    }
+    
     let tag = "h" + headingNum;
-    chunk = chunk.slice(headingNum + 1);
+    chunk = chunk.slice(headingNum).trim();
     let id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g, "");
     chunk = autoFormat(chunk);
-    return `<${ tag + (headingNum <=3 ?' class="for-toc"' :'') } id="${ id }">${ chunk }</${ tag }>`;
+    
+    if (headingNum == 4) {
+        return `<h4>${ chunk }</h4>`;
+    }
+    else {
+        return `<${ tag } class="for-toc" id="${ id }">${ chunk }</${ tag }>`
+    }
 }
 
-function linkReplace(chunk, articleLinksArray = []) {
+function linkReplace(chunk) {
     return chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
         linkUrl = linkUrl.replaceAll("\\)", ")");
         displayText = displayText.trim();
@@ -439,9 +470,9 @@ function linkReplace(chunk, articleLinksArray = []) {
         
         let link_index = '[res]';
         if (linkUrl.startsWith("http")) {
-            link_index = articleLinksArray.indexOf(linkUrl);
+            link_index = meta.links.indexOf(linkUrl);
             if (link_index == -1) {
-                link_index = articleLinksArray.push(linkUrl);
+                link_index = meta.links.push(linkUrl);
             }
             link_index = '[' + link_index + ']';
         }
@@ -494,9 +525,9 @@ function linkReplace(chunk, articleLinksArray = []) {
 }
 
 /* ------------------------------- main interpreter for #article content ------------------------------- */
-function interpreter(argValue, linksArr) {
+function interpreter(argValue) {
     if (argValue instanceof Node) {
-        argValue.innerHTML = interpreter(argValue.innerHTML, linksArr);
+        argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
     let input = argValue.replace(/\n\n+/g, "\n\n")
@@ -529,7 +560,7 @@ function interpreter(argValue, linksArr) {
         /*
             [text to be displayed](https://irisembury.github.io/)
         */
-        chunk = linkReplace(chunk, linksArr);
+        chunk = linkReplace(chunk);
 
         if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
         if (chunk.startsWith("!rows")) { return autoRows(chunk, tableNum++); }
@@ -541,7 +572,7 @@ function interpreter(argValue, linksArr) {
         chunk = autoFormat(chunk);
         
         if (isFine) { return `<p class="fine">${ chunk.replace(/\n/g,"<br>") }</p>`; }
-        return `<p>${ chunk.replace(/  \n/g,"<br>") }</p>`;
+        return `<p class='body-text'>${ chunk }</p>`;
     })
     return input.join("");
 }
@@ -570,9 +601,9 @@ function ageFromISO(argDate) {
     return age;
 }
 
-function auxf(str_in) {
+function auxf(str_in, quote_replace = true) {
     str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
-    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
+    if (quote_replace && (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1)) {
         str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/(,|\.)"/g, "$1<span style='margin-left:-1px'>&rdquo;</span>").replaceAll(/"/g, "&rdquo;")
     }
     return str_in.replaceAll("---", '&mdash;').replace(/\-\-/g, "&ndash;");
@@ -588,7 +619,8 @@ function autoFormat(_string) {
         output += auxf(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
         _string = _string.substring(closeTag);
     }
-    return (output + auxf(_string)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>")
+    output = (output + auxf(_string)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>");
+    return output;
 }
 
 /*
@@ -709,27 +741,47 @@ function getPathToRoot() {
     
     return '../'.repeat(path.length);
 }
-function pageFooter(_content) {
-    let node = document.querySelector(".page-footer");
+function elePush(query, content) {
+    let node = document.querySelector(query);
     if (node != null) {
-        node.insertAdjacentHTML("beforeend", `<div>${ autoFormat(_content) }</div>`);
+        node.insertAdjacentHTML("beforeend", autoFormat(content))
     }
 }
-function articleFooter(_content) {
-    let node = document.querySelector(".article-footer");
-    if (node != null) {
-        node.insertAdjacentHTML("beforeend", `<div>${ autoFormat(_content) }</div>`);
-    }
+
+/*
+var userSession = {
+    "theme":"light",
+    "--ff-heading":"",
+    "--ff-main":"",
+    "--ff-aux-1":"",
+    "--ff-aux-2":"",
+    "justify-text":"",
+    "indent-text":"",
+    "reduce-margins":""
 }
+*/
 
 window.addEventListener("load", function() {
     const pathToRoot = getPathToRoot();
     const index = pathToRoot == "";
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
-
+    
+    /*
+    css-color-scheme
+    --ff-heading
+    --ff-main
+    --ff-aux-1
+    --ff-aux-2
+    full-width
+    justify-text
+    indent-text
+    reduce-margins
+    */
+    console.log(localStorage)
+    
     document.body.innerHTML = `
         <header class="mh-top"></header>
-        <nav class="gn-top">
+        <nav class="top-nav">
             <div class="gn-segment">
                 <div class="page-id">
                     ${ index ?'<span>Index Page</span>' :'<span><a href="' + pathToRoot + 'index.html">Index Page</a></span>' }
@@ -749,20 +801,21 @@ window.addEventListener("load", function() {
                 <div class="push-right"><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
                 <hr>
                 <div><div><h3>Format preferences:</h3></div></div>
-                <div class="push-right"><label for="justify-text">Justify text</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
                 <div class="push-right"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
+                <div class="push-right"><label for="justify-text">Justify text</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
                 <div class="push-right"><label for="reduce-margins">Reduce margins</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
-                <div class="push-right"><label for="increase-line-height">Increase line height</label><input type="checkbox" class="slide-checkbox formatting auto" id="increase-line-height"></div>
-                <div><div style="margin-left:auto; cursor:pointer; color:grey;" onclick="formattingToggle()" title="Flips the above switches">toggle all</div></div>
+                <div><div class="reset-button no-select" onclick="formattingToggle()" title="Flip text formatting switches (above) all on or all off">toggle these</div></div>
                 <hr>
-                <div><h3>Fonts override:</h3></div>
+                <div><h3>Font family:</h3></div>
                 <div>
                     <label>Headings:</label>
                     <select class="drop-select" id="--ff-heading" onchange="setCSS(this)">
-                        <option value="'Faculty Glyphic',sans-serif">Faculty Glyphic</option>
+                        <option value="'Arial',sans-serif">Arial</option>
                         <option value="'Georgia Pro',serif">Georgia</option>
                         <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
                         <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
                         <option value="'Lora',serif">Lora</option>
                         <option value="'Merriweather',serif">Merriweather</option>
                         <option value="'Open Sans',sans-serif">Open Sans</option>
@@ -775,28 +828,38 @@ window.addEventListener("load", function() {
                 </div>
                 <div>
                     <label>Body:</label>
-                    <select class="drop-select" id="--ff-article" onchange="setCSS(this)">
+                    <select class="drop-select" id="--ff-main" onchange="setCSS(this)">
                         <option value="'Arial',sans-serif">Arial</option>
-                        <option value="'Faculty Glyphic',sans-serif">Faculty Glyphic</option>
-                        <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
-                        <option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option>
+                        <option value="var(--ff-georgia-digits)">Georgia</option>
+                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
                         <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
+                        <option value="'Lora',serif">Lora</option>
+                        <option value="'Merriweather',serif">Merriweather</option>
                         <option value="'Open Sans',sans-serif">Open Sans</option>
                         <option value="'PT Serif',serif">PT Serif</option>
                         <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
                         <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                     </select>
                 </div>
                 <div>
                     <label>Aux 1:</label>
                     <select class="drop-select" id="--ff-aux-1" onchange="setCSS(this)">
-                        <option value="'Faculty Glyphic',sans-serif">Faculty Glyphic</option>
-                        <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
-                        <option value="'IBM Plex Sans',system-ui",sans-serif>IBM Plex Sans</option>
+                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="var(--ff-georgia-digits)">Georgia</option>
+                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
                         <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
+                        <option value="'Lora',serif">Lora</option>
+                        <option value="'Merriweather',serif">Merriweather</option>
                         <option value="'Open Sans',sans-serif">Open Sans</option>
                         <option value="'PT Serif',serif">PT Serif</option>
                         <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
                         <option value="'Segoe UI',system-ui">Segoe UI</option>
                         <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                     </select>
@@ -804,42 +867,45 @@ window.addEventListener("load", function() {
                 <div>
                     <label>Aux 2:</label>
                     <select class="drop-select" id="--ff-aux-2" onchange="setCSS(this)">
-                        <option value="'Faculty Glyphic',sans-serif">Faculty Glyphic</option>
-                        <option value="'Georgia Pro Digits','Georgia',serif">Georgia</option>
-                        <option value="'IBM Plex Sans',system-ui",sans-serif>IBM Plex Sans</option>
+                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="var(--ff-georgia-digits)">Georgia</option>
+                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
                         <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
+                        <option value="'Lora',serif">Lora</option>
+                        <option value="'Merriweather',serif">Merriweather</option>
                         <option value="'Open Sans',sans-serif">Open Sans</option>
-                        <option value="'PT Serif',serif">PT Serif</option>
+                            <option value="'PT Serif',serif">PT Serif</option>
                         <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
                         <option value="'Segoe UI',system-ui">Segoe UI</option>
                         <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                     </select>
                 </div>
-                <div><div style="margin-left:auto; cursor:pointer; color:grey;" onclick="restoreDefaults()" title="restore font defaults">restore defaults</div></div>
+                <div><span class="reset-button no-select" onclick="restoreFontDefaults()" title="Set font family overrides (above) to their default values">restore defaults</span></div>
                 <hr>
-                <div><div style="line-height:1.5;color:grey;"><p>These preferences are saved in your browser's <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">local storage</a>. To clear your local storage for this site, <a class="pseudo-link" onclick="localStorage.clear()" title="Nothing visible happens when you click this, but I tested it and it works.">click here</a>.</p></div></div>
+                <div><div style="line-height:1.5;color:var(--theme-grey-6,dimgrey);"><p>These preferences are saved in your browser's local storage. To clear your local storage for this site, <a class="pseudo-link" onclick="localStorage.clear()" title="Nothing visible happens when you click this, but I tested it and it works.">click here</a>.</p></div></div>
             </div>
-            <div class="screen"></div>
         </div>
-        <div class="page-box">
-            <div class="page-grid">
-                <div class="main-content">
-                    <div class="article">${ document.body.innerHTML }</div>
-                    <footer class="article-footer"></footer>
-                </div>
+        <div class="page-grid">
+            <nav class="toc"></nav>
+            <div class="main-container">
+                <article class="article">${ document.body.innerHTML }</article>
+                <footer class="article-footer"></footer>
             </div>
-            <footer class="page-footer"></footer>
+            <div class="right-spacer"></div>
         </div>
+        <footer class="page-footer"></footer>
         <div class="lightbox hidden">
-            <div class="lb-top-left"></div>
-            <div class="lb-img_wrapper" onclick="setLightbox('close')"><img></div>
-            <div class="lb-caption-panel"><div></div></div>
+            <div class="lb-top-left"><p></p></div>
+            <div class="lb-img-wrapper" onclick="setLightbox('close')"><img></div>
+            <div class="lb-caption-panel"><p></p></div>
         </div>
         <style id="__css_user_set"></style>`;
 
     const article = document.querySelector(".article");
-    const article_links = [];
-    interpreter(article, article_links);
+    interpreter(article);
     HTML.classList.add("layout");
 
     Array.from(document.getElementsByClassName("drop-select")).forEach(
@@ -862,7 +928,7 @@ window.addEventListener("load", function() {
                     meta.flags = entry.flags;
                 }
                 if (entry.mirrors && entry.mirrors.length > 0) {
-                    articleFooter(`
+                    elePush('.article-footer', `
                         <section class="mirror-container column gap-8 label-external">
                             <div>The text of this page was also posted in other places:</div>
                             <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div>
@@ -876,9 +942,9 @@ window.addEventListener("load", function() {
             }
         }
 
-        articleFooter(`This is a personal site. I'm not an expert or authority on any relevant topic. I have no association with any other person or organization.`);
+        elePush('.article-footer', `This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.`);
 
-        pageFooter(`
+        document.querySelector(".page-footer")?.insertAdjacentHTML("beforeend",`
         <div class='space-evenly'>
             <div class='column gap-rem' style="max-width:calc(var(--article-width) - 390px)">
                 <div>Pages recently added:</div>
@@ -930,28 +996,24 @@ window.addEventListener("load", function() {
                                         other flags                                   
     */
     if (meta.flags.includes("wide")) {
-        HTML.classList.add("page-wide")
+        HTML.classList.add("page-wide");
     }
-    if (meta.flags.includes("citelist") && article_links.length > 0) {
-        articleFooter(`<div>
-            <div>Links on this page:</div>
-            <table class="citelist">
-                ${
-                    article_links.map((x, n) => `
-                        <tr>
-                            <td class="no-select">${ n + 1 }.</td><td><a href="${ x }">${ x }</a></td>
-                        </tr>
-                    `).join("")
-                }
-            </table>
-        </div>`);
+    meta.links = meta.links.filter(a => a.startsWith("http"));
+    if (meta.links.length > 0) {
+        elePush('.article-footer', `
+            <div class="citelist-box">
+                <div class="space-between"><span>External resources referenced:</span><span style="opacity:0.75; font-size:14px; cursor:pointer;" onclick="let citelist = document.querySelector('.citelist'); if (citelist) { let expanded = citelist.classList.contains('expanded'); this.innerHTML = expanded? 'expand':'collapse'; citelist.classList.toggle('expanded',!expanded); }">expand</span></div>
+                <div class="citelist">
+                    ${ meta.links.map((x, n) => `<div class="no-select">${ n + 1 }.</div><div><a href="${ x }">${ x }</a></div>`).join("") }
+                </div>
+            </div>`);
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
-    
+
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                       #navbar set-up                                  
     */
-    const navbar = document.querySelector('.gn-top');
+    const navbar = document.querySelector('.top-nav');
     let canNavCheck = true;
     function navCheck() {
         if (!canNavCheck) {
@@ -989,11 +1051,9 @@ window.addEventListener("load", function() {
     function gearMenuToggle(option) {
         if (option == "open") {
             gearMenu.classList.remove("closed");
-            navbar.classList.add("solid");
         }
         else if (option == "close") {
             gearMenu.classList.add("closed");
-            navbar.classList.remove("solid");
         }
         else {
             gearMenuToggle(gearMenu.classList.contains("closed") ? "open" : "close");
@@ -1001,7 +1061,7 @@ window.addEventListener("load", function() {
     }
     const gearIcon = document.getElementById("gear");
     gearIcon.addEventListener("click", gearMenuToggle);
-    
+
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                 menu close, key conditions                            
     */
@@ -1019,15 +1079,15 @@ window.addEventListener("load", function() {
             scrollToTop();
         }
     })
-    
+
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                       index elements                                  
     */
     document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", meta.pageList().map(
         entry => `
             <div class="page-entry">
-                <div class="space-between">
-                    <div class="page-link"><a href="page/${ entry.url }/index.html">${ entry.title }</a></div>
+                <div class="space-between align-center">
+                    <a href="page/${ entry.url }/index.html">${ entry.title }</a>
                     <div class="page-mirrors">${ Object.hasOwn(entry, "mirrors") && entry.mirrors.length > 0 ? entry.mirrors.map(m => " " + parseSource(m)).join('') :''}</div>
                 </div>
                 <div class="page-date">${ entry.date }</div>
@@ -1056,7 +1116,7 @@ window.addEventListener("load", function() {
                                      display figgling                                 
     */
     if (document.title == "") {
-        document.title = "Iris Embury";
+        document.title = "Iris Embury | GitHub";
     }
     else if (!document.title.endsWith("Iris Embury")) {
         document.title += " | Iris Embury";
@@ -1066,26 +1126,22 @@ window.addEventListener("load", function() {
                                     table of contents                                 
     */
     const pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
-    if (pageHeadings.length > 2) {
-        pageHeadings.forEach(h => {
-            h.classList.remove("for-toc");
-            if (h.classList.length == 0) {
-                h.removeAttribute('class')
-            }
-        });
-        
-        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                    create contents                             
-        */
-        const pageGrid = document.querySelector(".page-grid");
-        const toc = pageGrid.insertBefore(document.createElement("nav"), pageGrid.firstElementChild);
-        toc.classList.add("toc");
-        pageGrid.classList.add("right-space");
+    pageHeadings.forEach(h => {
+        h.classList.remove("for-toc");
+        if (h.classList.length == 0) {
+            h.removeAttribute('class');
+        }
+    });
+
+    if (pageHeadings.length < 2) {
+        document.querySelector(".toc")?.remove();
+        document.querySelector(".right-spacer")?.remove();
+    }
+    else {
+        const toc = document.querySelector(".toc");
         toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
         toc.scrollTo({ behavior: "instant", top: 0 })
-        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                    attach to window                            
-        */
+        
         const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
         let lastHeading = 0;
 
@@ -1131,8 +1187,5 @@ window.addEventListener("load", function() {
         attempt_toc_update();
     }
 })
-
-
-
 
 
