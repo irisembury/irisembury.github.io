@@ -780,7 +780,7 @@ window.addEventListener("load", function() {
         <nav class="top-nav">
             <div class="gn-segment">
                 <div class="page-id">
-                    ${ index ?'<span>Index Page</span>' :'<span><a href="' + pathToRoot + 'index.html">Index</a></span>' }
+                    ${ index ?'<span>Index Page</span>' :'<span><a href="' + pathToRoot + 'index.html">Back to Index</a></span>' }
                 </div>
             </div>
             <div class="gn-segment">
@@ -999,7 +999,7 @@ window.addEventListener("load", function() {
                     }
                 }
                 if (entry.title) {
-                    document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> &rarr; </span><span>'+entry.title+'</span>');
+                    document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
                 }
                 article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title for-toc">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }` :'') + '</div>');
             }
