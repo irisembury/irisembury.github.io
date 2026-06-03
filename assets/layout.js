@@ -25,6 +25,7 @@ const meta = {
         { title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
     ],
     pageListData: [
+        { title:"The Siege of Ottawa", url:"freedom-convoy", date:"", mirrors:[""], flags:["citelist","hidden",""] },
         { title:"Pierre Poilievre", url:"pierre-poilievre", date:"", mirrors:[""], flags:["citelist","hidden"] },
         { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
         { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
@@ -70,10 +71,13 @@ const meta = {
         return meta.videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 6)
     },
     fontDefaults: {
-        "--ff-heading":"'Inter',sans-serif",
+        "--ff-heading-1":"'Lora',sans-serif",
+        "--ff-heading-2":"'IBM Plex Serif',sans-serif",
+        "--ff-heading-3":"'Inter',sans-serif",
         "--ff-main":"var(--ff-georgia-digits)",
         "--ff-aux-1":"'Segoe UI',system-ui",
-        "--ff-aux-2":"'Roboto',sans-serif"
+        "--ff-aux-2":"'Roboto',system-ui",
+        "--ff-nav":"'Trebuchet MS',system-ui"
     }
 }
 meta.pageListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
@@ -174,22 +178,25 @@ function setCSS(mEle) {
         if (styleOverrides.length > 0) {
             cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
         }
-        if (localStorage.getItem("--ff-heading") == "'Georgia Pro',serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article h1, .article h2 { font-weight: 600 !important }");
+        if (localStorage.getItem("--ff-heading-1") == "'Georgia Pro',sans-serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important; }");
+        }
+        if (localStorage.getItem("--ff-heading-2") == "'Georgia Pro',sans-serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", ".article h2 { font-weight: 600 !important; }");
         }
         
         /* for bold letter-spacing */
         let bodyff = localStorage.getItem("--ff-main") || meta.fontDefaults["--ff-main"];
         if (bodyff == "var(--ff-georgia-digits)") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article .body-text strong { letter-spacing: -0.3px; }");
+            cssPanel.insertAdjacentHTML("afterbegin", ".article p strong, .article li strong { letter-spacing: -0.3px; }");
         }
         else if (bodyff == "'Roboto',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article .body-text strong { letter-spacing: -0.1px; }");
+            cssPanel.insertAdjacentHTML("afterbegin", ".article p strong, .article li strong { letter-spacing: -0.1px; }");
         }
     }
 }
 
-function restoreFontDefaults() {
+function restoreDefaults() {
     document.getElementById("__css_user_set")?.replaceChildren();
     Array.from(document.getElementsByClassName("drop-select")).forEach(
         _select => {
@@ -199,6 +206,7 @@ function restoreFontDefaults() {
             }
         }
     )
+    setCSS();
 }
 
 function imageFloat(chunk) {
@@ -276,8 +284,8 @@ function squareGallery(chunk) {
             }
             row.src ||= ""; row.caption ||= ""; row.alt ||= "";
             
-            if (row.alt == "" && row.caption != "") { row.caption = row.alt; }
-            if (row.caption == "" && row.alt != "") { row.alt = row.caption; }
+            if (row.alt == "" && row.caption != "") { row.alt = row.caption; }
+            if (row.caption == "" && row.alt != "") { row.caption = row.alt; }
             row.alt = row.alt.replaceAll('"', "&quot;").replaceAll('---','\u2014').replaceAll('--','\u2013');
             return `<figure>
                 <img loading="lazy" onclick="setLightbox(this)" src="${ row.src }" title="${ row.caption }" alt="${ row.alt }">
@@ -333,7 +341,7 @@ function autoTable(chunk, table_number) {
                                         p = p.trim();
                                         if (p == "---") { return '<hr>'; }
                                         if (p.startsWith("#.") || p.startsWith(".#")) { p = '<blockquote><p class="fine">' + p.substring(2).trimStart() + '</p></blockquote>'; }
-                                        else if (p.startsWith("#")) { p = '<blockquote><p class="body-text">' + p.substring(1).trimStart() + '</p></blockquote>'; }
+                                        else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
                                         else if (p.startsWith(".")) { p = '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
                                         else p = '<p>' + p + '</p>';
                                         return autoFormat(p);
@@ -404,7 +412,7 @@ function autoList(list, fine) {
             return li;
         }
     ).join("") + closeTags.join("");
-    let lclass = fine ?' class="auto-list fine body-text"' :' class="auto-list body-text"';
+    let lclass = fine ?' class="auto-list fine"' :' class="auto-list"';
     return autoFormat(list.substring(0, 3) + lclass + list.substring(3));
 }
 
@@ -417,7 +425,7 @@ function autoIndent(chunk) {
                 if (line.startsWith("---")) {
                     return `<p class="attribution">${ autoFormat(line) }</p>`;
                 }
-                return "<p class='body-text'>"+ autoFormat(line) +"</p>";
+                return "<p>"+ autoFormat(line) +"</p>";
             }
         }
     ).join('') }</blockquote>`;
@@ -539,7 +547,7 @@ function interpreter(argValue) {
         chunk = chunk.replace(/\t/g, "    "); /* probably no effect */
         if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
         else if (chunk.startsWith("<")) { return chunk; }
-        if (chunk == "---") { return "<hr>"; }
+        if (chunk == "----") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         if (chunk.startsWith("!image-float")) { return imageFloat(chunk); }
         if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
@@ -572,7 +580,7 @@ function interpreter(argValue) {
         chunk = autoFormat(chunk);
         
         if (isFine) { return `<p class="fine">${ chunk.replace(/\n/g,"<br>") }</p>`; }
-        return `<p class='body-text'>${ chunk }</p>`;
+        return `<p>${ chunk }</p>`;
     })
     return input.join("");
 }
@@ -751,7 +759,7 @@ function elePush(query, content) {
 /*
 var userSession = {
     "theme":"light",
-    "--ff-heading":"",
+    "--ff-heading-1":"",
     "--ff-main":"",
     "--ff-aux-1":"",
     "--ff-aux-2":"",
@@ -766,25 +774,13 @@ window.addEventListener("load", function() {
     const index = pathToRoot == "";
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
     
-    /*
-    css-color-scheme
-    --ff-heading
-    --ff-main
-    --ff-aux-1
-    --ff-aux-2
-    full-width
-    justify-text
-    indent-text
-    reduce-margins
-    */
-    console.log(localStorage)
     
     document.body.innerHTML = `
         <header class="mh-top"></header>
         <nav class="top-nav">
             <div class="gn-segment">
                 <div class="page-id">
-                    ${ index ?'<span>Index Page</span>' :'<span><a href="' + pathToRoot + 'index.html">Index Page</a></span>' }
+                    ${ index ?'<span>Index Page</span>' :'<span><a href="' + pathToRoot + 'index.html">Index</a></span>' }
                 </div>
             </div>
             <div class="gn-segment">
@@ -795,37 +791,18 @@ window.addEventListener("load", function() {
         <div class="panel-wrapper">
             <div class="right-panel closed">
                 <div><div><h3>Display:</h3></div></div>
-                <div class="push-right"><label for="lightswitch">Dark mode</label><input type="checkbox" class="slide-checkbox" id="lightswitch"></div>
+                <div class="push-right"><label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch"></div>
                 <hr>
                 <div><div><h3>Layout:</h3></div></div>
-                <div class="push-right"><label for="full-width">Full page width</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
+                <div class="push-right"><label for="full-width">Full page width:</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
                 <hr>
                 <div><div><h3>Format preferences:</h3></div></div>
-                <div class="push-right"><label for="indent-text">Indent paragraphs</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
-                <div class="push-right"><label for="justify-text">Justify text</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
-                <div class="push-right"><label for="reduce-margins">Reduce margins</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
+                <div style="padding-left:1rem"><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"><label for="indent-text">Indent paragraphs:</label></div>
+                <div style="padding-left:1rem"><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"><label for="justify-text">Text-align justify:</label></div>
+                <div style="padding-left:1rem"><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"><label for="reduce-margins">Reduce margins:</label></div>
                 <div><div class="reset-button no-select" onclick="formattingToggle()" title="Flip text formatting switches (above) all on or all off">toggle these</div></div>
                 <hr>
                 <div><h3>Font family:</h3></div>
-                <div>
-                    <label>Headings:</label>
-                    <select class="drop-select" id="--ff-heading" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option>
-                        <option value="'Georgia Pro',serif">Georgia</option>
-                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
-                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
-                        <option value="'Inter',sans-serif">Inter</option>
-                        <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
-                        <option value="'Lora',serif">Lora</option>
-                        <option value="'Merriweather',serif">Merriweather</option>
-                        <option value="'Open Sans',sans-serif">Open Sans</option>
-                        <option value="'PT Serif',serif">PT Serif</option>
-                        <option value="'Roboto',sans-serif">Roboto</option>
-                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
-                        <option value="'Segoe UI',system-ui">Segoe UI</option>
-                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
-                    </select>
-                </div>
                 <div>
                     <label>Body:</label>
                     <select class="drop-select" id="--ff-main" onchange="setCSS(this)">
@@ -834,56 +811,139 @@ window.addEventListener("load", function() {
                         <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
                         <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
                         <option value="'Inter',sans-serif">Inter</option>
-                        <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
-                        <option value="'Lora',serif">Lora</option>
-                        <option value="'Merriweather',serif">Merriweather</option>
+                        <option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option>
+                        <option value="'Lora',sans-serif">Lora</option>
+                        <option value="'Merriweather',sans-serif">Merriweather</option>
                         <option value="'Open Sans',sans-serif">Open Sans</option>
-                        <option value="'PT Serif',serif">PT Serif</option>
+                        <option value="'PT Serif',sans-serif">PT Serif</option>
                         <option value="'Roboto',sans-serif">Roboto</option>
                         <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
-                        <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Segoe UI',sans-serif">Segoe UI</option>
                         <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                        <option value="'Verdana',sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Headings 1:</label>
+                    <select class="drop-select" id="--ff-heading-1" onchange="setCSS(this)">
+                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="'Georgia Pro',sans-serif">Georgia</option>
+                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
+                        <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option>
+                        <option value="'Lora',sans-serif">Lora</option>
+                        <option value="'Merriweather',sans-serif">Merriweather</option>
+                        <option value="'Open Sans',sans-serif">Open Sans</option>
+                        <option value="'PT Serif',sans-serif">PT Serif</option>
+                        <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
+                        <option value="'Segoe UI',sans-serif">Segoe UI</option>
+                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                        <option value="'Verdana',sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Headings 2:</label>
+                    <select class="drop-select" id="--ff-heading-2" onchange="setCSS(this)">
+                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="'Georgia Pro',sans-serif">Georgia</option>
+                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
+                        <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option>
+                        <option value="'Lora',sans-serif">Lora</option>
+                        <option value="'Merriweather',sans-serif">Merriweather</option>
+                        <option value="'Open Sans',sans-serif">Open Sans</option>
+                        <option value="'PT Serif',sans-serif">PT Serif</option>
+                        <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
+                        <option value="'Segoe UI',sans-serif">Segoe UI</option>
+                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                        <option value="'Verdana',sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Headings 3:</label>
+                    <select class="drop-select" id="--ff-heading-3" onchange="setCSS(this)">
+                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="'Georgia Pro',sans-serif">Georgia</option>
+                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
+                        <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option>
+                        <option value="'Lora',sans-serif">Lora</option>
+                        <option value="'Merriweather',sans-serif">Merriweather</option>
+                        <option value="'Open Sans',sans-serif">Open Sans</option>
+                        <option value="'PT Serif',sans-serif">PT Serif</option>
+                        <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
+                        <option value="'Segoe UI',sans-serif">Segoe UI</option>
+                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                        <option value="'Verdana',sans-serif">Verdana</option>
                     </select>
                 </div>
                 <div>
                     <label>Aux 1:</label>
                     <select class="drop-select" id="--ff-aux-1" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="'Arial',system-ui">Arial</option>
                         <option value="var(--ff-georgia-digits)">Georgia</option>
-                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
-                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
-                        <option value="'Inter',sans-serif">Inter</option>
-                        <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
-                        <option value="'Lora',serif">Lora</option>
-                        <option value="'Merriweather',serif">Merriweather</option>
-                        <option value="'Open Sans',sans-serif">Open Sans</option>
-                        <option value="'PT Serif',serif">PT Serif</option>
-                        <option value="'Roboto',sans-serif">Roboto</option>
-                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
+                        <option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option>
+                        <option value="'Inter',system-ui">Inter</option>
+                        <option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option>
+                        <option value="'Lora',system-ui">Lora</option>
+                        <option value="'Merriweather',system-ui">Merriweather</option>
+                        <option value="'Open Sans',system-ui">Open Sans</option>
+                        <option value="'PT Serif',system-ui">PT Serif</option>
+                        <option value="'Roboto',system-ui">Roboto</option>
+                        <option value="'Roboto Slab',system-ui">Roboto Slab</option>
                         <option value="'Segoe UI',system-ui">Segoe UI</option>
-                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                        <option value="'Trebuchet MS',system-ui">Trebuchet MS</option>
+                        <option value="'Verdana',system-ui">Verdana</option>
                     </select>
                 </div>
                 <div>
                     <label>Aux 2:</label>
                     <select class="drop-select" id="--ff-aux-2" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="'Arial',system-ui">Arial</option>
                         <option value="var(--ff-georgia-digits)">Georgia</option>
-                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
-                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
-                        <option value="'Inter',sans-serif">Inter</option>
-                        <option value="'Libre Caslon Text',serif">Libre Caslon Text</option>
-                        <option value="'Lora',serif">Lora</option>
-                        <option value="'Merriweather',serif">Merriweather</option>
-                        <option value="'Open Sans',sans-serif">Open Sans</option>
-                            <option value="'PT Serif',serif">PT Serif</option>
-                        <option value="'Roboto',sans-serif">Roboto</option>
-                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
+                        <option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option>
+                        <option value="'Inter',system-ui">Inter</option>
+                        <option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option>
+                        <option value="'Lora',system-ui">Lora</option>
+                        <option value="'Merriweather',system-ui">Merriweather</option>
+                        <option value="'Open Sans',system-ui">Open Sans</option>
+                            <option value="'PT Serif',system-ui">PT Serif</option>
+                        <option value="'Roboto',system-ui">Roboto</option>
+                        <option value="'Roboto Slab',system-ui">Roboto Slab</option>
                         <option value="'Segoe UI',system-ui">Segoe UI</option>
-                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                        <option value="'Trebuchet MS',system-ui">Trebuchet MS</option>
+                        <option value="'Verdana',system-ui">Verdana</option>
                     </select>
                 </div>
-                <div><span class="reset-button no-select" onclick="restoreFontDefaults()" title="Set font family overrides (above) to their default values">restore defaults</span></div>
+                <div>
+                    <label>Nav:</label>
+                    <select class="drop-select" id="--ff-nav" onchange="setCSS(this)">
+                        <option value="'Arial',system-ui">Arial</option>
+                        <option value="var(--ff-georgia-digits)">Georgia</option>
+                        <option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option>
+                        <option value="'Inter',system-ui">Inter</option>
+                        <option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option>
+                        <option value="'Lora',system-ui">Lora</option>
+                        <option value="'Merriweather',system-ui">Merriweather</option>
+                        <option value="'Open Sans',system-ui">Open Sans</option>
+                            <option value="'PT Serif',system-ui">PT Serif</option>
+                        <option value="'Roboto',system-ui">Roboto</option>
+                        <option value="'Roboto Slab',system-ui">Roboto Slab</option>
+                        <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Trebuchet MS',system-ui">Trebuchet MS</option>
+                        <option value="'Verdana',system-ui">Verdana</option>
+                    </select>
+                </div>
+                <div><span class="reset-button no-select" onclick="restoreDefaults()" title="Set font family overrides (above) to their default values">restore defaults</span></div>
                 <hr>
                 <div><div style="line-height:1.5;color:var(--theme-grey-6,dimgrey);"><p>These preferences are saved in your browser's local storage. To clear your local storage for this site, <a class="pseudo-link" onclick="localStorage.clear()" title="Nothing visible happens when you click this, but I tested it and it works.">click here</a>.</p></div></div>
             </div>
@@ -927,16 +987,19 @@ window.addEventListener("load", function() {
                 if (entry.flags && entry.flags.length > 0) {
                     meta.flags = entry.flags;
                 }
-                if (entry.mirrors && entry.mirrors.length > 0) {
-                    elePush('.article-footer', `
+                if (entry.mirrors) {
+                    entry.mirrors = entry.mirrors.filter(x => x);
+                    if (entry.mirrors.length > 0) {
+                        elePush('.article-footer', `
                         <section class="mirror-container column gap-8 label-external">
                             <div>The text of this page was also posted in other places:</div>
                             <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div>
                         </section>
                     `);
+                    }
                 }
                 if (entry.title) {
-                    document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
+                    document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> &rarr; </span><span>'+entry.title+'</span>');
                 }
                 article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title for-toc">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }` :'') + '</div>');
             }
