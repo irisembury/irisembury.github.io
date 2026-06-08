@@ -25,7 +25,7 @@ const meta = {
         { title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
     ],
     pageListData: [
-        { title:"The Siege of Ottawa", url:"freedom-convoy", date:"", mirrors:[""], flags:["citelist","hidden",""] },
+        { title:"What was the Freedom Convoy?", url:"freedom-convoy", date:"", mirrors:[""], flags:["citelist","hidden","wide"] },
         { title:"Pierre Poilievre", url:"pierre-poilievre", date:"", mirrors:[""], flags:["citelist","hidden"] },
         { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
         { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
@@ -71,8 +71,8 @@ const meta = {
         return meta.videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 6)
     },
     fontDefaults: {
-        "--ff-heading-1":"'Lora',sans-serif",
-        "--ff-heading-2":"'IBM Plex Serif',sans-serif",
+        "--ff-heading-1":"'Roboto Slab',sans-serif",
+        "--ff-heading-2":"'IBM Plex Sans',sans-serif",
         "--ff-heading-3":"'Inter',sans-serif",
         "--ff-main":"var(--ff-georgia-digits)",
         "--ff-aux-1":"'Segoe UI',system-ui",
@@ -412,8 +412,13 @@ function autoList(list, fine) {
             return li;
         }
     ).join("") + closeTags.join("");
-    let lclass = fine ?' class="auto-list fine"' :' class="auto-list"';
-    return autoFormat(list.substring(0, 3) + lclass + list.substring(3));
+    
+    let output = list.substring(0, 3) + ' class="auto-list"' + list.substring(3);
+    output = autoFormat(output);
+    if (fine) {
+        output = '<div class="fine">' + output + '</div>';
+    }
+    return output;
 }
 
 function autoIndent(chunk) {
@@ -545,6 +550,7 @@ function interpreter(argValue) {
     let tableNum = 1;
     input = input.map( chunk => {
         chunk = chunk.replace(/\t/g, "    "); /* probably no effect */
+        if (chunk.startsWith("//")) { return ""; }
         if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
         else if (chunk.startsWith("<")) { return chunk; }
         if (chunk == "----") { return "<hr>"; }
@@ -552,17 +558,18 @@ function interpreter(argValue) {
         if (chunk.startsWith("!image-float")) { return imageFloat(chunk); }
         if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
         if (chunk.startsWith("!gallery")) { return gallery(chunk); }
-        if (chunk.startsWith("!loadtoc")) { meta.loadTOC = true; return; }
         if (chunk.startsWith("!square-gallery")) { return squareGallery(chunk); }
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         chunk = chunk.replaceAll("\\`", "&#96;");
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
         if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
-        if (chunk.startsWith("//")) { return ""; }
         
-        let isFine = chunk.startsWith(".");
-        if (isFine) chunk = chunk.slice(1).trimStart();
+        let isFine = false;
+        if (chunk.startsWith(".")) {
+            isFine = true;
+            chunk = chunk.slice(1).trimStart();
+        }
 
         /* ------------------------------------- links ------------------------------------- */
         /*
@@ -579,7 +586,7 @@ function interpreter(argValue) {
 
         chunk = autoFormat(chunk);
         
-        if (isFine) { return `<p class="fine">${ chunk.replace(/\n/g,"<br>") }</p>`; }
+        if (isFine) { return `<div class="fine"><p>${ chunk.replace(/\n/g,"<br>") }</p></div>`; }
         return `<p>${ chunk }</p>`;
     })
     return input.join("");
@@ -796,33 +803,13 @@ window.addEventListener("load", function() {
                 <div><div><h3>Layout:</h3></div></div>
                 <div class="push-right"><label for="full-width">Full page width:</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
                 <hr>
-                <div><div><h3>Format preferences:</h3></div></div>
-                <div style="padding-left:1rem"><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"><label for="indent-text">Indent paragraphs:</label></div>
-                <div style="padding-left:1rem"><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"><label for="justify-text">Text-align justify:</label></div>
-                <div style="padding-left:1rem"><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"><label for="reduce-margins">Reduce margins:</label></div>
+                <div><div><h3>Paragraph formatting:</h3></div></div>
+                <div class="push-right"><label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
+                <div class="push-right"><label for="justify-text">Text-align justify:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
+                <div class="push-right"><label for="reduce-margins">Reduce paragraph margins:</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
                 <div><div class="reset-button no-select" onclick="formattingToggle()" title="Flip text formatting switches (above) all on or all off">toggle these</div></div>
                 <hr>
                 <div><h3>Font family:</h3></div>
-                <div>
-                    <label>Body:</label>
-                    <select class="drop-select" id="--ff-main" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option>
-                        <option value="var(--ff-georgia-digits)">Georgia</option>
-                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
-                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
-                        <option value="'Inter',sans-serif">Inter</option>
-                        <option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option>
-                        <option value="'Lora',sans-serif">Lora</option>
-                        <option value="'Merriweather',sans-serif">Merriweather</option>
-                        <option value="'Open Sans',sans-serif">Open Sans</option>
-                        <option value="'PT Serif',sans-serif">PT Serif</option>
-                        <option value="'Roboto',sans-serif">Roboto</option>
-                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
-                        <option value="'Segoe UI',sans-serif">Segoe UI</option>
-                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
-                        <option value="'Verdana',sans-serif">Verdana</option>
-                    </select>
-                </div>
                 <div>
                     <label>Headings 1:</label>
                     <select class="drop-select" id="--ff-heading-1" onchange="setCSS(this)">
@@ -839,6 +826,7 @@ window.addEventListener("load", function() {
                         <option value="'Roboto',sans-serif">Roboto</option>
                         <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
                         <option value="'Segoe UI',sans-serif">Segoe UI</option>
+                        <option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option>
                         <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                         <option value="'Verdana',sans-serif">Verdana</option>
                     </select>
@@ -859,12 +847,13 @@ window.addEventListener("load", function() {
                         <option value="'Roboto',sans-serif">Roboto</option>
                         <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
                         <option value="'Segoe UI',sans-serif">Segoe UI</option>
+                        <option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option>
                         <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                         <option value="'Verdana',sans-serif">Verdana</option>
                     </select>
                 </div>
                 <div>
-                    <label>Headings 3:</label>
+                    <label>Headings (other):</label>
                     <select class="drop-select" id="--ff-heading-3" onchange="setCSS(this)">
                         <option value="'Arial',sans-serif">Arial</option>
                         <option value="'Georgia Pro',sans-serif">Georgia</option>
@@ -879,6 +868,28 @@ window.addEventListener("load", function() {
                         <option value="'Roboto',sans-serif">Roboto</option>
                         <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
                         <option value="'Segoe UI',sans-serif">Segoe UI</option>
+                        <option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option>
+                        <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                        <option value="'Verdana',sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Body:</label>
+                    <select class="drop-select" id="--ff-main" onchange="setCSS(this)">
+                        <option value="'Arial',sans-serif">Arial</option>
+                        <option value="var(--ff-georgia-digits)">Georgia</option>
+                        <option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option>
+                        <option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option>
+                        <option value="'Inter',sans-serif">Inter</option>
+                        <option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option>
+                        <option value="'Lora',sans-serif">Lora</option>
+                        <option value="'Merriweather',sans-serif">Merriweather</option>
+                        <option value="'Open Sans',sans-serif">Open Sans</option>
+                        <option value="'PT Serif',sans-serif">PT Serif</option>
+                        <option value="'Roboto',sans-serif">Roboto</option>
+                        <option value="'Roboto Slab',sans-serif">Roboto Slab</option>
+                        <option value="'Segoe UI',sans-serif">Segoe UI</option>
+                        <option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option>
                         <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
                         <option value="'Verdana',sans-serif">Verdana</option>
                     </select>
@@ -899,6 +910,7 @@ window.addEventListener("load", function() {
                         <option value="'Roboto',system-ui">Roboto</option>
                         <option value="'Roboto Slab',system-ui">Roboto Slab</option>
                         <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option>
                         <option value="'Trebuchet MS',system-ui">Trebuchet MS</option>
                         <option value="'Verdana',system-ui">Verdana</option>
                     </select>
@@ -919,6 +931,7 @@ window.addEventListener("load", function() {
                         <option value="'Roboto',system-ui">Roboto</option>
                         <option value="'Roboto Slab',system-ui">Roboto Slab</option>
                         <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option>
                         <option value="'Trebuchet MS',system-ui">Trebuchet MS</option>
                         <option value="'Verdana',system-ui">Verdana</option>
                     </select>
@@ -939,6 +952,7 @@ window.addEventListener("load", function() {
                         <option value="'Roboto',system-ui">Roboto</option>
                         <option value="'Roboto Slab',system-ui">Roboto Slab</option>
                         <option value="'Segoe UI',system-ui">Segoe UI</option>
+                        <option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option>
                         <option value="'Trebuchet MS',system-ui">Trebuchet MS</option>
                         <option value="'Verdana',system-ui">Verdana</option>
                     </select>
@@ -1005,7 +1019,7 @@ window.addEventListener("load", function() {
             }
         }
 
-        elePush('.article-footer', `This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.`);
+        elePush('.article-footer', `<div><p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p></div>`);
 
         document.querySelector(".page-footer")?.insertAdjacentHTML("beforeend",`
         <div class='space-evenly'>
