@@ -72,7 +72,7 @@ const meta = {
     },
     fontDefaults: {
         "--ff-heading-1":"'Roboto Slab',sans-serif",
-        "--ff-heading-2":"'IBM Plex Sans',sans-serif",
+        "--ff-heading-2":"'Inter',sans-serif",
         "--ff-heading-3":"'Inter',sans-serif",
         "--ff-main":"var(--ff-georgia-digits)",
         "--ff-aux-1":"'Segoe UI',system-ui",
@@ -187,10 +187,7 @@ function setCSS(mEle) {
         
         /* for bold letter-spacing */
         let bodyff = localStorage.getItem("--ff-main") || meta.fontDefaults["--ff-main"];
-        if (bodyff == "var(--ff-georgia-digits)") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article p strong, .article li strong { letter-spacing: -0.3px; }");
-        }
-        else if (bodyff == "'Roboto',sans-serif") {
+        if (bodyff == "var(--ff-georgia-digits)" || bodyff == "'Roboto',sans-serif") {
             cssPanel.insertAdjacentHTML("afterbegin", ".article p strong, .article li strong { letter-spacing: -0.1px; }");
         }
     }
@@ -772,7 +769,7 @@ var userSession = {
     "--ff-aux-2":"",
     "justify-text":"",
     "indent-text":"",
-    "reduce-margins":""
+    "reduce-block":""
 }
 */
 
@@ -806,7 +803,7 @@ window.addEventListener("load", function() {
                 <div><div><h3>Paragraph formatting:</h3></div></div>
                 <div class="push-right"><label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
                 <div class="push-right"><label for="justify-text">Text-align justify:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
-                <div class="push-right"><label for="reduce-margins">Reduce paragraph margins:</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-margins"></div>
+                <div class="push-right"><label for="reduce-block">Reduce paragraph margins:</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-block"></div>
                 <div><div class="reset-button no-select" onclick="formattingToggle()" title="Flip text formatting switches (above) all on or all off">toggle these</div></div>
                 <hr>
                 <div><h3>Font family:</h3></div>
@@ -853,7 +850,7 @@ window.addEventListener("load", function() {
                     </select>
                 </div>
                 <div>
-                    <label>Headings (other):</label>
+                    <label>Headings 3+:</label>
                     <select class="drop-select" id="--ff-heading-3" onchange="setCSS(this)">
                         <option value="'Arial',sans-serif">Arial</option>
                         <option value="'Georgia Pro',sans-serif">Georgia</option>
