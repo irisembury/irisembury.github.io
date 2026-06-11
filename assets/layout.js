@@ -52,7 +52,7 @@ const meta = {
         { title:"Mark Robinson", url:"mark-robinson", date:"2024-12-15", mirrors:["tumblr:769962893917798400"] },
         { title:"The Trump appeal", url:"the-trump-appeal", date:"2024-12-03", mirrors:["tumblr:770270265635667968"] },
         { title:"The normal white man bias", url:"the-normal-white-man-bias", date:"2024-11-26", mirrors:["substack:153823028","tumblr:770305075441778688","medium:0c508d4c51b5"] },
-        { title:"Sex, gender, & transsexuals", url:"sex-gender-transsexuals", date:"2024-11-19" },
+        { title:"Sex, gender, & transsexuals", url:"sex-gender-transsexuals", date:"2024-11-19", flags:["wide"] },
         { title:"Bernie Sanders & the military industrial complex", url:"bernie-sanders-and-the-military-industrial-complex", date:"2024-12-16", mirrors:["tumblr:770070077409214464"] },
         { title:"Types of masculinity", url:"types-of-masculinity", date:"2024-11-08", mirrors:["tumblr:770310861444300800"] },
         { title:"Poor Things (2023 film)", url:"poor-things", date:"2024-10-31", mirrors:["tumblr:769969807464464384"] },
@@ -71,7 +71,7 @@ const meta = {
         return meta.videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 6)
     },
     fontDefaults: {
-        "--ff-heading-1":"'Roboto Slab',sans-serif",
+        "--ff-heading-1":"'Inter',sans-serif",
         "--ff-heading-2":"'Inter',sans-serif",
         "--ff-heading-3":"'Inter',sans-serif",
         "--ff-main":"var(--ff-georgia-digits)",
@@ -117,7 +117,7 @@ function parseSource(string_in, separator = ":") {
     return "";
 }
 
-function setLightbox(action) {
+function setlightbox(action) {
     const lightbox = document.querySelector(".lightbox");
     const lbTopLeft = document.querySelector(".lb-top-left p");
     const lbImage = document.querySelector(".lb-img-wrapper img")
@@ -192,7 +192,6 @@ function setCSS(mEle) {
         }
     }
 }
-
 function restoreDefaults() {
     document.getElementById("__css_user_set")?.replaceChildren();
     Array.from(document.getElementsByClassName("drop-select")).forEach(
@@ -206,92 +205,45 @@ function restoreDefaults() {
     setCSS();
 }
 
-function imageFloat(chunk) {
-    const rows = chunk.split("\n");
-        let firstRow = rows.shift();
-        const direction = firstRow.split(" ").shift().endsWith("left") ?"float-left" :"float-right";
-            firstRow = firstRow.substring(firstRow.indexOf(" "));
-        const lazy = !firstRow.includes("nolazy");
-    
-    return `<div class="image-float ${ direction }">${ rows.map(
-        row => {
-            const parts = row.split("|");
-            while (parts.length < 3) { parts.push(""); }
-            let caption = autoFormat(parts[1]);
-            let altText = autoFormat(parts[2].replace(/"/g,"&quot;"));
-            if (caption && !altText) { altText = caption }
-            if (caption) { caption = `<figcaption>${ caption }</figcaption>`; }
-            return `<figure><img ${ lazy ?'load="lazy"' :""} onclick="setLightbox(this)" src="${ parts[0].trim() }" title="${ altText }" alt="${ altText }">${ caption }</figure>`;
-        }
-    ).join('') }</div>`;
-}
-
-function imageSpan(chunk) {
-    const rows = chunk.split("\n");
-        let firstRow = rows.shift();
-            firstRow = firstRow.substring(firstRow.indexOf(" "));
-        const lazy = !firstRow.includes("nolazy");
-        const maxHeight = firstRow.replace(/\D/g, "");
-    
-    return `<div class="image-span">${ rows.map(
-        row => {
-            const parts = row.split("|");
-            while (parts.length < 3) { parts.push(""); }
-            let imgUrl = parts[0].trim();
-            let altText = autoFormat(parts[1].replace(/"/g,"&quot;"));
-            return `<div><img ${ lazy ?'load="lazy"' :""} style="max-height: ${ maxHeight || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"></div>`;
-        }
-    ).join('') }</div>`;
-}
-
-function gallery(chunk) {
-    const rows = chunk.split("\n");
-        let firstRow = rows.shift();
-            firstRow = firstRow.substring(firstRow.indexOf(" "));
-        const lazy = !firstRow.includes("nolazy");
-        const maxHeight = firstRow.replace(/\D/g, "");
-    
-    return `<div class="captioned-gallery">${ rows.map(
-        row => {
-            const parts = row.split("|");
-            while (parts.length < 3) {
-                parts.push("");
+function parseObj(entry, ...requiredFields) {
+    entry = entry.replaceAll("\\|", "&#124;").replaceAll("\\:", "&#58;").replaceAll('"', "&quot;").replaceAll('---','\u2014').replaceAll('--','\u2013');
+    const obj = {};
+    entry.split("|").forEach(
+        cell => {
+            cell = cell.split(":");
+            if (cell.length == 2) {
+                obj[cell[0].trim()] = cell[1].trim();
             }
-            let imgUrl = parts[0].trim();
-            let caption = autoFormat(parts[1]);
-            let altText = autoFormat(parts[2].replace(/"/g,"&quot;"));
-            return `<figure><img ${ lazy ?'load="lazy"' :""} style="max-height: ${ maxHeight || 300 }px;" onclick="setLightbox(this)" src="${ imgUrl }" title="${ altText }" alt="${ altText }"><figcaption>${ caption }</figcaption></figure>`;
-        }
-    ).join('') }</div>`;
-}
-
-function squareGallery(chunk) {
-    let rows = chunk.split("\n").slice(1);
-    
-    rows = rows.map(
-        row => {
-            row = auxf(row, false);
-            try {
-                row = JSON.parse(row);
+            else {
+                console.error(`parseObj: "${cell.join('').trim()}"`)
             }
-            catch (error) {
-                console.error('square-gallery input error');
-                console.error(row)
-                return "";
-            }
-            row.src ||= ""; row.caption ||= ""; row.alt ||= "";
-            
-            if (row.alt == "" && row.caption != "") { row.alt = row.caption; }
-            if (row.caption == "" && row.alt != "") { row.caption = row.alt; }
-            row.alt = row.alt.replaceAll('"', "&quot;").replaceAll('---','\u2014').replaceAll('--','\u2013');
-            return `<figure>
-                <img loading="lazy" onclick="setLightbox(this)" src="${ row.src }" title="${ row.caption }" alt="${ row.alt }">
-                ${ row.caption ? '<figcaption>' + row.caption + '</figcaption>' : "" }
-            </figure>`
         }
     );
-    
-    return `<div class="square-gallery">${ rows.join('') }</div>`;
+    requiredFields.forEach(
+        r => {
+            if (!Object.hasOwn(obj,r)) {
+                obj[r] = "";
+            }
+        }
+    );
+    return obj;
+}
+
+function makeFigures(info, galleryClass) {
+    return `<div class="${ galleryClass }">${ info.split("\n").slice(1).map(
+        row => {
+            row = parseObj(row,"src","caption","alt");
+            if (row.src == "") return "";
+            
+            row.caption = row.caption || row.alt;
+            row.alt = row.alt || row.caption;
+            
+            return `<figure>
+                <img loading="lazy" onclick="setlightbox(this)" src="${ row.src }" alt="${ row.alt }" title="Click to pop out">
+                ${ row.caption ? `<figcaption>${ autoFormat(row.caption) }</figcaption>` :"" }
+            </figure>`
+        }
+    ).join("")}</div>`;
 }
 
 function autoVideo(chunk) {
@@ -424,6 +376,7 @@ function autoIndent(chunk) {
             line = line.trim();
             if (line != "") {
                 if (line == "---") { return "<hr>"; }
+                line = line.replace(/\[(\[.+?\])\]/g,"<span class='editor-note'>$1</span>")
                 if (line.startsWith("---")) {
                     return `<p class="attribution">${ autoFormat(line) }</p>`;
                 }
@@ -496,7 +449,7 @@ function linkReplace(chunk) {
         let link_inner = displayText || link_index;
         if (!external) {
             if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg")) {
-                a_tag = `<a onclick="setLightbox('${ linkUrl }')"`;
+                a_tag = `<a onclick="setlightbox('${ linkUrl }')"`;
                 link_class.push("pseudo-link");
                 link_inner += '<span class="inline-icon lightbox-link"></span>';
                 link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
@@ -552,10 +505,12 @@ function interpreter(argValue) {
         else if (chunk.startsWith("<")) { return chunk; }
         if (chunk == "----") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
-        if (chunk.startsWith("!image-float")) { return imageFloat(chunk); }
-        if (chunk.startsWith("!image-span")) { return imageSpan(chunk); }
-        if (chunk.startsWith("!gallery")) { return gallery(chunk); }
-        if (chunk.startsWith("!square-gallery")) { return squareGallery(chunk); }
+        /* image galleries */
+        if (chunk.startsWith("!image-float")) { return makeFigures(chunk,"image-float"); }
+        if (chunk.startsWith("!image-span")) { return makeFigures(chunk,"image-span"); }
+        if (chunk.startsWith("!gallery")) { return makeFigures(chunk,"captioned-gallery"); }
+        if (chunk.startsWith("!square-gallery")) { return makeFigures(chunk,"square-gallery"); }
+        /* ---- ---- */
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         chunk = chunk.replaceAll("\\`", "&#96;");
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
@@ -616,7 +571,7 @@ function ageFromISO(argDate) {
 function auxf(str_in, quote_replace = true) {
     str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
     if (quote_replace && (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1)) {
-        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/(,|\.)"/g, "$1<span style='margin-left:-1px'>&rdquo;</span>").replaceAll(/"/g, "&rdquo;")
+        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/(,|\.)"/g, "$1<span class='quote-offset-left'>&rdquo;</span>").replaceAll(/"/g, "&rdquo;")
     }
     return str_in.replaceAll("---", '&mdash;').replace(/\-\-/g, "&ndash;");
 }
@@ -970,7 +925,7 @@ window.addEventListener("load", function() {
         <footer class="page-footer"></footer>
         <div class="lightbox hidden">
             <div class="lb-top-left"><p></p></div>
-            <div class="lb-img-wrapper" onclick="setLightbox('close')"><img></div>
+            <div class="lb-img-wrapper" onclick="setlightbox('close')"><img></div>
             <div class="lb-caption-panel"><p></p></div>
         </div>
         <style id="__css_user_set"></style>`;
@@ -1070,7 +1025,7 @@ window.addEventListener("load", function() {
                                         other flags                                   
     */
     if (meta.flags.includes("wide")) {
-        HTML.classList.add("page-wide");
+        HTML.classList.add("page-wider");
     }
     meta.links = meta.links.filter(a => a.startsWith("http"));
     if (meta.links.length > 0) {
@@ -1083,6 +1038,7 @@ window.addEventListener("load", function() {
             </div>`);
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
+    Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                       #navbar set-up                                  
@@ -1147,7 +1103,7 @@ window.addEventListener("load", function() {
     window.addEventListener("keydown", function(e) {
         if (e.key === "Escape") {
             gearMenuToggle("close");
-            setLightbox("close");
+            setlightbox("close");
         }
         else if (e.key === "Home") {
             scrollToTop();
