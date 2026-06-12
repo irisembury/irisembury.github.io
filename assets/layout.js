@@ -288,6 +288,7 @@ function autoTable(chunk, table_number) {
                                 cell.split("<br>").map(
                                     p => {
                                         p = p.trim();
+                                        if (p == "") return;
                                         if (p == "---") { return '<hr>'; }
                                         if (p.startsWith("#.") || p.startsWith(".#")) { p = '<blockquote><p class="fine">' + p.substring(2).trimStart() + '</p></blockquote>'; }
                                         else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
@@ -350,7 +351,9 @@ function autoList(list, fine) {
             const listType = (liType =="ol") ?"ol" :"ul";
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
             li = (liType) == "none" ? li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
-            li = " ".repeat(indent * 4) + ( liType =='none' ?'<p>' + li + '</p>\n' :'<li>'+li+'</li>\n');
+            if (liType =='none') { if (li.startsWith("#")) { li = '<blockquote class="auto-indent"><p>' + li.slice(1).trimStart() + '</p></blockquote>\n' }
+            else { li = '<p>' + li + '</p>\n'; } } else { li = '<li>' + li + '</li>' };
+            li = " ".repeat(indent * 4) + li;
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
                 closeTags.push(" ".repeat(indent * 4) + "</"+ listType +">\n");
@@ -358,32 +361,28 @@ function autoList(list, fine) {
                 li = closeTags.splice(-(prevIndent - indent)).reverse().join('') + li;
             }
             prevIndent = indent;
+            console.log(li)
             return li;
         }
     ).join("") + closeTags.join("");
-    
     let output = list.substring(0, 3) + ' class="auto-list"' + list.substring(3);
     output = autoFormat(output);
     if (fine) {
-        output = '<div class="fine">' + output + '</div>';
+        return '<div class="fine">' + output + '</div>';
     }
+    console.log(output)
     return output;
 }
-
 function autoIndent(chunk) {
-    return `<blockquote>${ chunk.split("\n").map(
+    return `<blockquote class="auto-indent">${chunk.split("\n").map(
         line => {
             line = line.trim();
-            if (line != "") {
-                if (line == "---") { return "<hr>"; }
-                line = line.replace(/\[(\[.+?\])\]/g,"<span class='editor-note'>$1</span>")
-                if (line.startsWith("---")) {
-                    return `<p class="attribution">${ autoFormat(line) }</p>`;
-                }
-                return "<p>"+ autoFormat(line) +"</p>";
+            if (line.startsWith("---")) {
+                return '<p class="attribution">' + autoFormat(line) + '</p>';
             }
+            return '<p>' + autoFormat(line) + '</p>';
         }
-    ).join('') }</blockquote>`;
+    ).join('')}</blockquote>`
 }
 
 /* converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
@@ -568,14 +567,6 @@ function ageFromISO(argDate) {
     return age;
 }
 
-function auxf(str_in, quote_replace = true) {
-    str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
-    if (quote_replace && (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1)) {
-        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/(,|\.)"/g, "$1<span class='quote-offset-left'>&rdquo;</span>").replaceAll(/"/g, "&rdquo;")
-    }
-    return str_in.replaceAll("---", '&mdash;').replace(/\-\-/g, "&ndash;");
-}
-
 function autoFormat(_string) {
     _string = _string.trim();
     let output = "";
@@ -586,8 +577,16 @@ function autoFormat(_string) {
         output += auxf(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
         _string = _string.substring(closeTag);
     }
-    output = (output + auxf(_string)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>");
+    output = (output + auxf(_string)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>").replace(/\[(\[.+?\])\]/g,"<span class='inline-note'>$1</span>");
     return output;
+}
+
+function auxf(str_in, quote_replace = true) {
+    str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
+    if (quote_replace && (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1)) {
+        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/(,|\.)"/g, "$1<span class='quote-offset-left'>&rdquo;</span>").replaceAll(/"/g, "&rdquo;")
+    }
+    return str_in.replaceAll("---", '&mdash;').replace(/\-\-/g, "&ndash;");
 }
 
 /*
