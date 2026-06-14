@@ -25,7 +25,7 @@ const meta = {
         { title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
     ],
     pageListData: [
-        { title:"What was the Freedom Convoy?", url:"freedom-convoy", date:"", mirrors:[""], flags:["citelist","hidden","wide"] },
+        { title:"What was the Freedom Convoy?", url:"freedom-convoy", date:"2026-06-14", mirrors:[""], flags:["citelist","wide"] },
         { title:"Pierre Poilievre", url:"pierre-poilievre", date:"", mirrors:[""], flags:["citelist","hidden"] },
         { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
         { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
@@ -361,7 +361,6 @@ function autoList(list, fine) {
                 li = closeTags.splice(-(prevIndent - indent)).reverse().join('') + li;
             }
             prevIndent = indent;
-            console.log(li)
             return li;
         }
     ).join("") + closeTags.join("");
@@ -370,11 +369,10 @@ function autoList(list, fine) {
     if (fine) {
         return '<div class="fine">' + output + '</div>';
     }
-    console.log(output)
     return output;
 }
 function autoIndent(chunk) {
-    return `<blockquote class="auto-indent">${chunk.split("\n").map(
+    return `<blockquote class="auto-indent">${ chunk.split("\n").map(
         line => {
             line = line.trim();
             if (line.startsWith("---")) {
@@ -430,13 +428,16 @@ function linkReplace(chunk) {
         const external = linkUrl.startsWith("http");
         const blankDisplay = displayText == "";
         
-        let link_index = '[res]';
+        let linkIndex = '[res]';
         if (linkUrl.startsWith("http")) {
-            link_index = meta.links.indexOf(linkUrl);
-            if (link_index == -1) {
-                link_index = meta.links.push(linkUrl);
+            let _linkUrl = linkUrl;
+            if (_linkUrl.indexOf("#") != -1) {
+                _linkUrl = _linkUrl.substring(0, _linkUrl.indexOf("#"))
             }
-            link_index = '[' + link_index + ']';
+            linkIndex = meta.links.indexOf(_linkUrl);
+            if (linkIndex == -1) {
+                linkIndex = meta.links.push(_linkUrl);
+            }
         }
 
         if (linkUrl.startsWith('#')) {
@@ -445,7 +446,7 @@ function linkReplace(chunk) {
         let a_tag = '<a href="' + linkUrl + '"';
         let link_title = linkUrl;
         let link_class = [];
-        let link_inner = displayText || link_index;
+        let link_inner = displayText || '[' + linkIndex + ']';
         if (!external) {
             if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg")) {
                 a_tag = `<a onclick="setlightbox('${ linkUrl }')"`;
@@ -499,9 +500,10 @@ function interpreter(argValue) {
     let tableNum = 1;
     input = input.map( chunk => {
         chunk = chunk.replace(/\t/g, "    "); /* probably no effect */
+        chunk = chunk.replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("...", "&#8230;").replaceAll("\\.","&#46;").replaceAll("\\", "&#92;");
+        
         if (chunk.startsWith("//")) { return ""; }
-        if (chunk.startsWith("\\")) { chunk = chunk.substring(1); }
-        else if (chunk.startsWith("<")) { return chunk; }
+        if (chunk.startsWith("<")) { return chunk; }
         if (chunk == "----") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         /* image galleries */
@@ -574,35 +576,18 @@ function autoFormat(_string) {
         const openTag = _string.indexOf("<");
         const closeTag = _string.substring(openTag).indexOf(">") + openTag;
         if (openTag == -1 || closeTag - openTag == -1) { break; }
-        output += auxf(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
+        output += aufoaux(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
         _string = _string.substring(closeTag);
     }
-    output = (output + auxf(_string)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>").replace(/\[(\[.+?\])\]/g,"<span class='inline-note'>$1</span>");
+    output = (output + aufoaux(_string)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>").replace(/\[(\[.+?\])\]/g,"<span class='inline-note'>$1</span>");
     return output;
 }
-
-function auxf(str_in, quote_replace = true) {
-    str_in = str_in.replaceAll("\\*", "&ast;").replaceAll('\\"', "&quot;").replaceAll("\\'", "&apos;").replaceAll("\|", "&verbar;").replaceAll("\\(", "&lpar;").replaceAll("\\)", "&rpar;").replaceAll("\\[", "&lbrack;").replaceAll("\\]", "&rbrack;").replaceAll("\\", "&#92;").replaceAll("\\^", "&Hat;").replaceAll("...", "&hellip;");
-    if (quote_replace && (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1)) {
-        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/(,|\.)"/g, "$1<span class='quote-offset-left'>&rdquo;</span>").replaceAll(/"/g, "&rdquo;")
+    function aufoaux(str_in, quote_replace = true) {
+        if (quote_replace && (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1)) {
+            str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
+        }
+        return str_in.replaceAll("---", '&mdash;').replace(/\-\-/g, "&ndash;");
     }
-    return str_in.replaceAll("---", '&mdash;').replace(/\-\-/g, "&ndash;");
-}
-
-/*
-    explanation for myself in case I'm ever trying to salvage and reuse this code (autoFormat):
-    The substring values I use to define the text content and attributes are so this captures the tag characters (<, >) as part of the text content. This means if given the string `a b <c> d e`, this will read that as `"a b <", "c", "> d e"`. The reason I do this is so auxf(function) can tell "b" is not the end of a string and "d" is not the beginning of one, since that affects how the curly quotes are applied. If this isn't desired and you want the tags to be part of the attributes variable, you could modify the while-true like so:
-    
-    while (true) {
-        const openTag = stringInput.indexOf("<");
-        const closeTag = stringInput.substring(openTag).indexOf(">") + openTag;
-        if (openTag == -1 || closeTag - openTag == -1) { break; }
-        const textContent = stringInput.substring(0, openTag);
-        const attributes = stringInput.substring(openTag, closeTag + 1);
-        output += auxf(textContent) + attributes;
-        stringInput = stringInput.substring(closeTag + 1);
-    }
-*/
 
 function tokenizeByWordChar(stringData) {
     const result = [];
