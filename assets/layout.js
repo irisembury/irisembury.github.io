@@ -25,8 +25,8 @@ const meta = {
         { title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
     ],
     pageListData: [
-        { title:"What was the Freedom Convoy?", url:"freedom-convoy", date:"2026-06-14", mirrors:[""], flags:["citelist","wide"] },
-        { title:"Pierre Poilievre", url:"pierre-poilievre", date:"", mirrors:[""], flags:["citelist","hidden"] },
+        { title:"What was the Freedom Convoy?", url:"freedom-convoy", date:"2026-06-14", mirrors:[""], flags:["wide"] },
+        { title:"Pierre Poilievre", url:"pierre-poilievre", date:"", mirrors:[""], flags:["wide","hidden"] },
         { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
         { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
         { title:"Floor crossings", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
@@ -35,7 +35,7 @@ const meta = {
         { title:"The case for abortion", url:"abortion", date:"2026-02-18", mirrors:["substack:the-case-for-abortion","tumblr:809547051047272448","patreon:155199340"] },
         { title:"A synopsis of American decline", url:"a-synopsis-of-american-decline", date:"2026-01-28", mirrors:["substack:186165875","patreon:155201485"] },
         { title:"Fetishism & politics", url:"fetishism-politics", date:"2024-11-14", mirrors:["tumblr:770364766791352320"] },
-        { title:"Nick Shirley & the Somali day cares", url:"somali-day-cares", date:"2026-01-02", mirrors:["substack:183243480","patreon:155200604"], flags:["citelist"] },
+        { title:"Nick Shirley & the Somali day cares", url:"somali-day-cares", date:"2026-01-02", mirrors:["substack:183243480","patreon:155200604"]},
         { title:"Why is Reddit so hated?", subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it", url:"why-is-reddit-so-hated", date:"2025-12-30", mirrors:["substack:why-is-reddit-so-hated"] },
         { title:"Stay the trenches", url:"stay-the-trenches", date:"2025-12-17", mirrors:["substack:stay-the-trenches"] },
         { title:"Immigration", url:"immigration", date:"2025-11-06", mirrors:["substack:183229652"] },
@@ -43,12 +43,12 @@ const meta = {
         { title:"Notes on India", url:"notes-on-india", date:"2025-10-24", mirrors:["substack:india","tumblr:798351257128615936"] },
         { title:"Liberalism not leftism", subtitle:"An overview of leftist historical revisionism and a warning for liberals", url:"liberalism-not-leftism", date:"2025-09-19", mirrors:["substack:liberalism-not-extremism","tumblr:795164683319574528","patreon:155199811"] },
         { title:"Status quo bias & the path of normalization", url:"the-path-of-normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
-        { title:"Lies about Ilhan Omar", url:"lies-about-ilhan-omar", date:"2025-08-25", flags:["citelist"], mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
+        { title:"Lies about Ilhan Omar", url:"lies-about-ilhan-omar", date:"2025-08-25", mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
         { title:"Israel & Palestine", url:"israel-palestine", date:"2025-07-27", flags:["wide"] },
         { title:"Trump & Russia", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
         { title:"Why get bottom surgery?", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
         { title:"Elon Musk & the Nazi Salute", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
-        { title:"Lies about Elizabeth Warren & Hillary Clinton", url:"lies-about-warren-clinton", date:"2024-12-19", mirrors:["tumblr:770730090759946240","substack:153821886"], flags:["citelist"] },
+        { title:"Lies about Elizabeth Warren & Hillary Clinton", url:"lies-about-warren-clinton", date:"2024-12-19", mirrors:["tumblr:770730090759946240","substack:153821886"] },
         { title:"Mark Robinson", url:"mark-robinson", date:"2024-12-15", mirrors:["tumblr:769962893917798400"] },
         { title:"The Trump appeal", url:"the-trump-appeal", date:"2024-12-03", mirrors:["tumblr:770270265635667968"] },
         { title:"The normal white man bias", url:"the-normal-white-man-bias", date:"2024-11-26", mirrors:["substack:153823028","tumblr:770305075441778688","medium:0c508d4c51b5"] },
@@ -206,17 +206,15 @@ function restoreDefaults() {
 }
 
 function parseObj(entry, ...requiredFields) {
-    entry = entry.replaceAll("\\|", "&#124;").replaceAll("\\:", "&#58;").replaceAll('"', "&quot;").replaceAll('---','\u2014').replaceAll('--','\u2013');
-    const obj = {};
+    entry = entry.replaceAll('---','\u2014').replaceAll('--','\u2013').replaceAll("\"", "&quot;");
+    const obj = { };
     entry.split("|").forEach(
         cell => {
             cell = cell.split(":");
             if (cell.length == 2) {
                 obj[cell[0].trim()] = cell[1].trim();
             }
-            else {
-                console.error(`parseObj: "${cell.join('').trim()}"`)
-            }
+            else { console.error("parseObj: \"" + cell.join("") + "\""); }
         }
     );
     requiredFields.forEach(
@@ -229,22 +227,51 @@ function parseObj(entry, ...requiredFields) {
     return obj;
 }
 
-function makeFigures(info, galleryClass) {
-    return `<div class="${ galleryClass }">${ info.split("\n").slice(1).map(
-        row => {
-            row = parseObj(row,"src","caption","alt");
-            if (row.src == "") return "";
-            
-            row.caption = row.caption || row.alt;
-            row.alt = row.alt || row.caption;
-            
-            return `<figure>
-                <img loading="lazy" onclick="setlightbox(this)" src="${ row.src }" alt="${ row.alt }" title="Click to pop out">
-                ${ row.caption ? `<figcaption>${ autoFormat(row.caption) }</figcaption>` :"" }
-            </figure>`
-        }
-    ).join("")}</div>`;
+function imageGallery(chunk) {
+    chunk = chunk.split("\n");
+    let meta = chunk.shift() + " ";
+    meta = ("image-gallery " + meta.substring(meta.indexOf(" "))).trim();
+    let galleryClass = "image-gallery";
+    ["grid","float"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; } )
+    let maxHeight = meta.replace(/\D/g, "") || '250';
+    
+    return `<div class="${ galleryClass }">${ chunk.map( row => {
+        row = parseObj(row,"src","caption","alt","title");
+        if (row.src == "") { return ""; }
+        
+        row.alt = row.alt || row.caption;
+        row.caption = row.caption || row.alt;
+        if (row.caption) { row.caption = '<figcaption>' + row.caption + '</figcaption>'; }
+        row.title = row.title || row.alt || "Click to expand";
+        
+        return `<figure>
+            <img src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)" style="max-height:${ maxHeight }px;">
+            ${ row.caption }
+        </figure>`
+    }).join("")}</div>`;
 }
+
+    /*
+    const space = galleryMeta.indexOf(" ");
+    if (space != -1) {
+        galleryMeta = galleryMeta.substring(space);
+        galleryMeta = parseObj(galleryMeta, "class");
+        galleryClass = galleryMeta["class"];
+        
+        galleryMeta.deleteProperty("class");
+        galleryMeta = Object.entries(galleryMeta);
+        if (galleryMeta.length > 0) {
+        
+        
+    }
+    
+    if (galleryMeta.length > 0) {
+        
+    }
+    else {
+        galleryMeta = "";
+    }
+    */
 
 function autoVideo(chunk) {
     let data = chunk.split("\n").slice(1)[0].split("|").map(c => c.trim());
@@ -294,7 +321,7 @@ function autoTable(chunk, table_number) {
                                         else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
                                         else if (p.startsWith(".")) { p = '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
                                         else p = '<p>' + p + '</p>';
-                                        return autoFormat(p);
+                                        return p;
                                     }
                                 ).join('').replaceAll('</blockquote><blockquote>', '')
                             }</td>`
@@ -311,38 +338,10 @@ function autoTable(chunk, table_number) {
     }
     return table;
 }
-    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-        above (autoTable): The even and odd looks 'backwards'
-        because row_index/cell_index are converting from
-        being 0-indexed to being 1-indexed (rows[0] is the 1st row,
-        rows[1] is the 2nd row, etc.)
-    */
 
-function autoRows(chunk, tnum) {
-    let rows = chunk.replaceAll("\\|", "&verbar;").split("\n");
-    let firstRow = rows.shift().substring("!rows".length).trim();
-    /* make tbody cells */
-    for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
-        let cells = rows[rowIndex].split("|");
-        for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 1) {
-            let cellNum = cellIndex + 1;
-            cells[cellIndex] = `<div class="cell col-${ cellNum + " col-" + (cellNum % 2 ? "odd" : "even") }">${ autoFormat(cells[cellIndex]) }</div>`;
-        }
-        rows[rowIndex] = `<div class="row row-${ (rowIndex + 1) + " row-" + (rowIndex % 2 ? "even" : "odd") }">${ cells.join("") }</div>`;
-    }
-    /* if !rows declaration had styling included (same as !table logic): */
-    let customTableStyle = "";
-    if (firstRow.replace(/\s/g, "").length > 1) {
-        customTableStyle = `<style>${ firstRow.replace(/this/g, ".auto-rows-"+tnum).replace(/;/g, " !important;") }</style>`;
-    }
-    let table = `${ customTableStyle }<div class="table-wrapper"><div class="auto-rows auto-rows-${ tnum }">${ rows.join("") }</div></div>`;
-    return table;
-}
-
-function autoList(list, fine) {
-    const closeTags = [];
-    let prevIndent = -1;
-    list = list.split("\n").map(
+function autoList(chunk) {
+    const closeTags = []; let prevIndent = -1; let isFine = false; if (chunk.startsWith(".")) { isFine = true; chunk = chunk.substring(1).trimStart(); }
+    const list = chunk.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
             li = (li.substring(initpad));
@@ -351,8 +350,11 @@ function autoList(list, fine) {
             const listType = (liType =="ol") ?"ol" :"ul";
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
             li = (liType) == "none" ? li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
-            if (liType =='none') { if (li.startsWith("#")) { li = '<blockquote class="auto-indent"><p>' + li.slice(1).trimStart() + '</p></blockquote>\n' }
-            else { li = '<p>' + li + '</p>\n'; } } else { li = '<li>' + li + '</li>' };
+            if (liType =='none') {
+                if (li.startsWith("#")) { li = '<blockquote class="auto-indent"><p>' + li.slice(1).trimStart() + '</p></blockquote>\n' }
+                if (li.startsWith(".")) { li = '<div class="fine"><p>' + li.slice(1).trimStart() + '</p></div>\n' }
+                else { li = '<p>' + li + '</p>\n'; }
+            } else { li = '<li>' + li + '</li>' };
             li = " ".repeat(indent * 4) + li;
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
@@ -365,10 +367,7 @@ function autoList(list, fine) {
         }
     ).join("") + closeTags.join("");
     let output = list.substring(0, 3) + ' class="auto-list"' + list.substring(3);
-    output = autoFormat(output);
-    if (fine) {
-        return '<div class="fine">' + output + '</div>';
-    }
+    if (isFine) { output = '<div class="fine">' + output + '</div>'; }
     return output;
 }
 function autoIndent(chunk) {
@@ -376,9 +375,15 @@ function autoIndent(chunk) {
         line => {
             line = line.trim();
             if (line.startsWith("---")) {
-                return '<p class="attribution">' + autoFormat(line) + '</p>';
+                line = '<p class="attribution">' + line + '</p>';
             }
-            return '<p>' + autoFormat(line) + '</p>';
+            else if (line.startsWith(".")) {
+                line = '<div class="fine"><p>' + line.substring(1).trimStart() + '</p></div>'
+            }
+            else {
+                line = '<p>' + line + '</p>';
+            }
+            return line;
         }
     ).join('')}</blockquote>`
 }
@@ -404,14 +409,10 @@ function isoFormat(datestring, shortMonths = false) {
 
 function autoHeading(chunk) {
     let headingNum = chunk.indexOf(" ");
-    if (headingNum > 4) {
-        headinNum = 4;
-    }
-    
-    let tag = "h" + headingNum;
+    let tag = "h" + Math.min(headingNum, 4);
     chunk = chunk.slice(headingNum).trim();
     let id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g, "");
-    chunk = autoFormat(chunk);
+    chunk = chunk;
     
     if (headingNum == 4) {
         return `<h4>${ chunk }</h4>`;
@@ -423,7 +424,7 @@ function autoHeading(chunk) {
 
 function linkReplace(chunk) {
     return chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
-        linkUrl = linkUrl.replaceAll("\\)", ")");
+        linkUrl = linkUrl.replaceAll('&#41;', ')');
         displayText = displayText.trim();
         const external = linkUrl.startsWith("http");
         const blankDisplay = displayText == "";
@@ -493,56 +494,45 @@ function interpreter(argValue) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
-    let input = argValue.replace(/\n\n+/g, "\n\n")
-        .replace(/\r/g, "") /* for safety, probably no effect */
-        .trim().split("\n\n");
+    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("...", "&#8230;").replaceAll("\\.","&#46;").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
 
     let tableNum = 1;
     input = input.map( chunk => {
-        chunk = chunk.replace(/\t/g, "    "); /* probably no effect */
-        chunk = chunk.replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("...", "&#8230;").replaceAll("\\.","&#46;").replaceAll("\\", "&#92;");
+        chunk = chunk;
         
         if (chunk.startsWith("//")) { return ""; }
         if (chunk.startsWith("<")) { return chunk; }
         if (chunk == "----") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         /* image galleries */
-        if (chunk.startsWith("!image-float")) { return makeFigures(chunk,"image-float"); }
-        if (chunk.startsWith("!image-span")) { return makeFigures(chunk,"image-span"); }
-        if (chunk.startsWith("!gallery")) { return makeFigures(chunk,"captioned-gallery"); }
-        if (chunk.startsWith("!square-gallery")) { return makeFigures(chunk,"square-gallery"); }
+        if (chunk.startsWith("!image-gallery")) { return imageGallery(chunk); }
         /* ---- ---- */
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
-        chunk = chunk.replaceAll("\\`", "&#96;");
+        /* codeblock and inline `code` */
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-        if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
-        
-        let isFine = false;
-        if (chunk.startsWith(".")) {
-            isFine = true;
-            chunk = chunk.slice(1).trimStart();
-        }
+        if (chunk.startsWith("!info")) { return `<div class="info">${ chunk.substring(chunk.indexOf("\n")) }</div>`; }
 
-        /* ------------------------------------- links ------------------------------------- */
-        /*
-            [text to be displayed](https://irisembury.github.io/)
+        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                           anchor links                                   
         */
         chunk = linkReplace(chunk);
+        chunk = chunk.replace(/(?<=^|\s)(https?:\/\/\S+)(?=\s|$)/g, '<a href="$1">$1</a>');
 
-        if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
-        if (chunk.startsWith("!rows")) { return autoRows(chunk, tableNum++); }
+        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                     table, blockquote, ul/ol                             
+        */
+        if (chunk.startsWith("!table")) { chunk = autoTable(chunk, tableNum); tableNum += 1; return chunk; }
         if (chunk.startsWith("    ") || chunk.startsWith("!indent")) { return autoIndent(chunk); }
+        if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { return autoList(chunk); }
 
-        if (chunk.startsWith("!list")) { chunk = "- " + chunk.split("\n").slice(1).join("\n- "); }
-        if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { return autoList(chunk, isFine); }
-
-        chunk = autoFormat(chunk);
-        
-        if (isFine) { return `<div class="fine"><p>${ chunk.replace(/\n/g,"<br>") }</p></div>`; }
-        return `<p>${ chunk }</p>`;
+        let isFine = false; if (chunk.startsWith(".")) { isFine = true; chunk = chunk.slice(1).trimStart(); }
+        chunk = '<p>' + chunk + '</p>';
+        if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
+        return chunk;
     })
-    return input.join("");
+    input = autoFormat(input.join(""))
+    return input;
 }
 
 function ageFromISO(argDate) {
@@ -586,7 +576,7 @@ function autoFormat(_string) {
         if (quote_replace && (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1)) {
             str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
         }
-        return str_in.replaceAll("---", '&mdash;').replace(/\-\-/g, "&ndash;");
+        return str_in.replaceAll("---", '&mdash;').replace("--", "&ndash;");
     }
 
 function tokenizeByWordChar(stringData) {
@@ -621,7 +611,6 @@ function colorizeKeywords(stringInput, syntaxClass, customKeywords) {
 
 function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     let output = "";
-    let overflow = 0;
     /* strings in code: */
     stringInput = stringInput.replace(/"(.+?)"/g, "<span class=\"code-string\">\"$1\"</span>")
     
@@ -640,10 +629,6 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
         output += tag_and_attributes;
 
         stringInput = stringInput.substring(closeTag + 1);
-        /* prevents recursion while testing */
-        if (overflow++ > 199) {
-            break;
-        }
     }
     output += colorizeKeywords(stringInput, syntaxClass, customKeywords);
     
@@ -692,12 +677,6 @@ function getPathToRoot() {
     
     return '../'.repeat(path.length);
 }
-function elePush(query, content) {
-    let node = document.querySelector(query);
-    if (node != null) {
-        node.insertAdjacentHTML("beforeend", autoFormat(content))
-    }
-}
 
 /*
 var userSession = {
@@ -716,7 +695,6 @@ window.addEventListener("load", function() {
     const pathToRoot = getPathToRoot();
     const index = pathToRoot == "";
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
-    
     
     document.body.innerHTML = `
         <header class="mh-top"></header>
@@ -810,7 +788,7 @@ window.addEventListener("load", function() {
                     </select>
                 </div>
                 <div>
-                    <label>Body:</label>
+                    <label>Main body text:</label>
                     <select class="drop-select" id="--ff-main" onchange="setCSS(this)">
                         <option value="'Arial',sans-serif">Arial</option>
                         <option value="var(--ff-georgia-digits)">Georgia</option>
@@ -906,7 +884,6 @@ window.addEventListener("load", function() {
             </div>
             <div class="right-spacer"></div>
         </div>
-        <footer class="page-footer"></footer>
         <div class="lightbox hidden">
             <div class="lb-top-left"><p></p></div>
             <div class="lb-img-wrapper" onclick="setlightbox('close')"><img></div>
@@ -931,35 +908,34 @@ window.addEventListener("load", function() {
                                         non-index                                     
     */
     if (!index) {
-        {
-            const entry = meta.pageListFull().find(e => e.url == getDirectory());
-            if (entry) {
-                if (entry.flags && entry.flags.length > 0) {
-                    meta.flags = entry.flags;
-                }
-                if (entry.mirrors) {
-                    entry.mirrors = entry.mirrors.filter(x => x);
-                    if (entry.mirrors.length > 0) {
-                        elePush('.article-footer', `
-                        <section class="mirror-container column gap-8 label-external">
-                            <div>The text of this page was also posted in other places:</div>
-                            <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div>
-                        </section>
-                    `);
-                    }
-                }
-                if (entry.title) {
-                    document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
-                }
-                article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title for-toc">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ autoFormat(entry.subtitle) }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }` :'') + '</div>');
+        const entry = meta.pageListFull().find(e => e.url == getDirectory());
+        if (entry) {
+            if (entry.flags && entry.flags.length > 0) {
+                meta.flags = entry.flags;
             }
+            if (entry.mirrors) {
+                entry.mirrors = entry.mirrors.filter(x => x);
+                if (entry.mirrors.length > 0) {
+                    document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
+                    <section class="mirror-container column gap-8 label-external">
+                        <div>The text of this page was also posted in other places:</div>
+                        <div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div>
+                    </section>
+                `);
+                }
+            }
+            if (entry.title) {
+                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
+            }
+            /* .article-top (title, subtitle, date) */
+            article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title for-toc">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ entry.subtitle }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }` :'') + '</div>');
         }
-
-        elePush('.article-footer', `<div><p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p></div>`);
-
-        document.querySelector(".page-footer")?.insertAdjacentHTML("beforeend",`
-        <div class='space-evenly'>
-            <div class='column gap-rem' style="max-width:calc(var(--article-width) - 390px)">
+        document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
+        <div>
+            <p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
+        </div>
+        <div class='footer-links-area'>
+            <div>
                 <div>Pages recently added:</div>
                 <div>
                     <ul class='label-external'>
@@ -967,8 +943,7 @@ window.addEventListener("load", function() {
                     </ul>
                 </div>
             </div>
-            <style> .page-footer a { filter:grayscale(1); } .page-footer .inline-icon { margin-right: 3px; } .page-footer .twitter-logo, .page-footer .github-logo { filter:invert(0.75); } .page-footer .youtube-logo { filter:contrast(1.5); } .page-footer .tumblr-logo { filter:brightness(1.2); } </style>
-            <div class='column gap-rem'>
+            <div>
                 <div>External links:</div>
                 <div class='flex label-external'>
                     <ul>
@@ -984,9 +959,21 @@ window.addEventListener("load", function() {
                     </ul>
                 </div>
             </div>
-        </div>`)
+        </div>`);
     }
-
+    meta.links = meta.links.filter(a => a.startsWith("http"));
+    if (meta.links.length > 0) {
+        document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
+            <div style="padding-top: 10px; border-bottom: 1px solid var(--theme-grey-c,silver);">
+                <div>
+                    <div class="space-between"><span>External resources referenced:</span><span style="opacity:0.75; font-size:14px; cursor:pointer;" onclick="let citelist = document.querySelector('.citelist'); if (citelist) { let expanded = citelist.classList.contains('expanded'); this.innerHTML = expanded? 'expand':'collapse'; citelist.classList.toggle('expanded',!expanded); }">expand</span></div>
+                    <div class="citelist">
+                        ${ meta.links.map((x, n) => `<div class="no-select">${ n + 1 }.</div><div><a href="${ x }">${ x }</a></div>`).join("") }
+                    </div>
+                </div>
+            </div>`);
+    }
+    
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                         dark theme                                    
     */
@@ -1006,20 +993,10 @@ window.addEventListener("load", function() {
     }
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                        other flags                                   
+                                         other                                   
     */
     if (meta.flags.includes("wide")) {
         HTML.classList.add("page-wider");
-    }
-    meta.links = meta.links.filter(a => a.startsWith("http"));
-    if (meta.links.length > 0) {
-        elePush('.article-footer', `
-            <div class="citelist-box">
-                <div class="space-between"><span>External resources referenced:</span><span style="opacity:0.75; font-size:14px; cursor:pointer;" onclick="let citelist = document.querySelector('.citelist'); if (citelist) { let expanded = citelist.classList.contains('expanded'); this.innerHTML = expanded? 'expand':'collapse'; citelist.classList.toggle('expanded',!expanded); }">expand</span></div>
-                <div class="citelist">
-                    ${ meta.links.map((x, n) => `<div class="no-select">${ n + 1 }.</div><div><a href="${ x }">${ x }</a></div>`).join("") }
-                </div>
-            </div>`);
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
