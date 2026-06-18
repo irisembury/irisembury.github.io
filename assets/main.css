@@ -342,20 +342,23 @@
                             .yt-date { color: var(--theme-grey-8,grey); }
                 
                 .image-gallery { display: flex; gap: 10px; justify-content: center; align-items: baseline; font-family: var(--ff-aux-1); font-size: 15px; max-width: var(--main-width); margin-inline: auto; }
-                    .image-gallery figure { display: flex; flex-direction: column; gap: 3px; align-items: center; }
-                        .image-gallery img { border: 1px solid var(--theme-grey-c,silver); cursor: pointer; }
-                        .image-gallery figcaption { display: none; text-align: center; color: var(--theme-grey-6,dimgrey); }
+                    .image-gallery figure { display: flex; flex-direction: column; align-items: center; }
+                        .image-gallery img { object-fit: cover; aspect-ratio: 4 / 3; border: 1px solid var(--theme-grey-c,silver); cursor: pointer; }
+                        .image-gallery figcaption { display: none; text-align: center; color: var(--theme-grey-6,dimgrey); padding: 3px 5px; }
                 .image-gallery + .image-gallery { margin-top: 10px; }
                 
                 .image-gallery.float { max-width: var(--grid-5); float: right; display: flex; flex-direction: column; margin-bottom: 15px; margin-left: 20px; }
-                    .image-gallery.float img { aspect-ratio: unset; max-height: 220px; }
-                    .image-gallery.float figcaption { display: block; padding: 0 5px; }
-                
+                    .image-gallery.float figcaption,
+                    .image-gallery.grid figcaption,
+                    .image-gallery.captioned figcaption { display: block; }
                 .image-gallery.grid { grid-template-columns: repeat(auto-fit, var(--grid-4)); display: grid; justify-content: space-evenly; gap: 10px var(--article-grid-gap); padding-bottom: 5px; margin-inline: auto; }
-                    .image-gallery.grid img { aspect-ratio: 4 / 3; object-fit: cover; }
-                    .image-gallery.grid figcaption { display: block; padding: 0 5px; }
+                    .image-gallery.oar img { object-fit: contain; }
+                .image-gallery.banner figure { width: 100%; }
+                .image-gallery.banner img { width: 100%; aspect-ratio: unset; }
+                
                 
                 /*
+                
                 .image-gallery.no-caption figcaption { display: none; }
                 .image-gallery.float { max-width: 180px; float: right; display: flex; flex-direction: column; margin-bottom: 15px; margin-left: 20px; }
                     .image-gallery.float img { aspect-ratio: unset; max-height: 220px; }

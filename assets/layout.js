@@ -232,8 +232,8 @@ function imageGallery(chunk) {
     let meta = chunk.shift() + " ";
     meta = ("image-gallery " + meta.substring(meta.indexOf(" "))).trim();
     let galleryClass = "image-gallery";
-    ["grid","float"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; } )
-    let maxHeight = meta.replace(/\D/g, "") || '250';
+    ["grid","banner","oar","float","captioned"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; } )
+    let maxHeight = meta.replace(/[^\d]/g, "") || (meta.includes("float") ?'200' :'250');
     
     return `<div class="${ galleryClass }">${ chunk.map( row => {
         row = parseObj(row,"src","caption","alt","title");
@@ -245,7 +245,7 @@ function imageGallery(chunk) {
         row.title = row.title || row.alt || "Click to expand";
         
         return `<figure>
-            <img src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)" style="max-height:${ maxHeight }px;">
+            <img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)">
             ${ row.caption }
         </figure>`
     }).join("")}</div>`;
@@ -995,7 +995,7 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                          other                                   
     */
-    if (meta.flags.includes("wide")) {
+    if (meta.flags.includes("wide") || index) {
         HTML.classList.add("page-wider");
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
