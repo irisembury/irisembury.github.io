@@ -329,11 +329,12 @@
                     .auto-table td { padding: 0.4em 0.5em; vertical-align: top; }
                     .auto-table blockquote { line-height: inherit; padding: 0.25em 0.5em; border-left: 2px solid var(--theme-grey-c,silver); background-color: var(--theme-grey-f,whitesmoke); }
                 
-                .file-box { background-color: light-dark(#fafafa, #242424); border: 1px dashed grey; display: flex; gap: 8px; font-size: 14px; margin: 20px; line-height: 1.15; width: min-content; padding: 8px 7px 4px; font-family: var(--ff-aux-2); }
-                    .file-box figure { width: 102px; display: flex; flex-direction: column; align-items: center; }
+                .file-box { background-color: light-dark(#fff0, #242424); border: 1px dashed grey; display: flex; gap: 3px; font-size: 14px; margin: 15px 0 15px 20px; line-height: 1.15; width: min-content; padding: 6px 6px 4px; font-family: var(--ff-aux-2); float: right; }
+                    .file-box .files-title { ; }
+                    .file-box figure { gap: 1px; width: 102px; display: flex; flex-direction: column; align-items: center; }
                         .file-box .pdf-icon { width: 35px; aspect-ratio: 1; background: url(pdf-icon.png); background-size: contain; }
                         .file-box figcaption { padding: 3px; }
-                        .file-box figcaption a { text-decoration: none; }
+                            .file-box figcaption a { word-break: break-word; text-decoration: none; }
                 
                 .image-gallery { display: flex; gap: 10px; justify-content: center; align-items: baseline; font-family: var(--ff-aux-1); font-size: 15px; max-width: var(--main-width); margin-inline: auto; }
                     .image-gallery figure { display: flex; flex-direction: column; align-items: stretch; }
