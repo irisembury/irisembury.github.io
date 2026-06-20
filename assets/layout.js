@@ -657,7 +657,7 @@ window.addEventListener("load", function() {
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
     
     document.body.innerHTML = `
-        <header class="mh-top"></header>
+        <header class="mh-top align-center center"></header>
         <nav class="top-nav">
             <div class="nav-segment">
                 <div class="page-id">
