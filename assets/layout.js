@@ -25,42 +25,43 @@ const meta = {
         { title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
     ],
     pageListData: [
-        { title:"What was the Freedom Convoy?", url:"freedom-convoy", date:"2026-06-14", mirrors:[""], flags:["wide"] },
-        { title:"Pierre Poilievre", url:"pierre-poilievre", date:"", mirrors:[""], flags:["wide","hidden"] },
-        { title:"The Conservative Party's hard problem", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
-        { title:"Canada's plan for a sovereign wealth fund", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
-        { title:"Floor crossings", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
-        { title:"Rational ignorance", url:"rational-ignorance", date:"2026-04-09", mirrors:["substack:rational-ignorance","tumblr:813419185909727232","patreon:155199122"] },
-        { title:"Liberal conservatism", subtitle:"A philosophy of prudence and humility", url:"liberal-conservatism", date:"2026-03-24", mirrors:["substack:foundations-of-liberal-conservatism"], flags:["wide"] },
-        { title:"The case for abortion", url:"abortion", date:"2026-02-18", mirrors:["substack:the-case-for-abortion","tumblr:809547051047272448","patreon:155199340"] },
-        { title:"A synopsis of American decline", url:"a-synopsis-of-american-decline", date:"2026-01-28", mirrors:["substack:186165875","patreon:155201485"] },
-        { title:"Fetishism & politics", url:"fetishism-politics", date:"2024-11-14", mirrors:["tumblr:770364766791352320"] },
-        { title:"Nick Shirley & the Somali day cares", url:"somali-day-cares", date:"2026-01-02", mirrors:["substack:183243480","patreon:155200604"]},
-        { title:"Why is Reddit so hated?", subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it", url:"why-is-reddit-so-hated", date:"2025-12-30", mirrors:["substack:why-is-reddit-so-hated"] },
-        { title:"Stay the trenches", url:"stay-the-trenches", date:"2025-12-17", mirrors:["substack:stay-the-trenches"] },
-        { title:"Immigration", url:"immigration", date:"2025-11-06", mirrors:["substack:183229652"] },
-        { title:"Prejudice", url:"what-is-prejudice", date:"2025-10-30", mirrors:["substack:prejudice"] },
-        { title:"Notes on India", url:"notes-on-india", date:"2025-10-24", mirrors:["substack:india","tumblr:798351257128615936"] },
-        { title:"Liberalism not leftism", subtitle:"An overview of leftist historical revisionism and a warning for liberals", url:"liberalism-not-leftism", date:"2025-09-19", mirrors:["substack:liberalism-not-extremism","tumblr:795164683319574528","patreon:155199811"] },
-        { title:"Status quo bias & the path of normalization", url:"the-path-of-normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
-        { title:"Lies about Ilhan Omar", url:"lies-about-ilhan-omar", date:"2025-08-25", mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
-        { title:"Israel & Palestine", url:"israel-palestine", date:"2025-07-27", flags:["wide"] },
-        { title:"Trump & Russia", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
-        { title:"Why get bottom surgery?", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
-        { title:"Elon Musk & the Nazi Salute", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
-        { title:"Lies about Elizabeth Warren & Hillary Clinton", url:"lies-about-warren-clinton", date:"2024-12-19", mirrors:["tumblr:770730090759946240","substack:153821886"] },
-        { title:"Mark Robinson", url:"mark-robinson", date:"2024-12-15", mirrors:["tumblr:769962893917798400"] },
-        { title:"The Trump appeal", url:"the-trump-appeal", date:"2024-12-03", mirrors:["tumblr:770270265635667968"] },
-        { title:"The normal white man bias", url:"the-normal-white-man-bias", date:"2024-11-26", mirrors:["substack:153823028","tumblr:770305075441778688","medium:0c508d4c51b5"] },
-        { title:"Sex, gender, & transsexuals", url:"sex-gender-transsexuals", date:"2024-11-19", flags:["wide"] },
-        { title:"Bernie Sanders & the military industrial complex", url:"bernie-sanders-and-the-military-industrial-complex", date:"2024-12-16", mirrors:["tumblr:770070077409214464"] },
-        { title:"Types of masculinity", url:"types-of-masculinity", date:"2024-11-08", mirrors:["tumblr:770310861444300800"] },
+        { title:"What was the Freedom Convoy?", url:"freedom-convoy", preview:"In January 2022, a bunch of people drove into Ottawa in big trucks, parked them in the road, and started honking. Its participants and proponents called", date:"2026-06-15", mirrors:[""], flags:["wide"] },
+        { title:"Pierre Poilievre", preview:"In the post-Harper years, the Conservative Party of Canada had some time to figure out what it wanted to be. Andrew Scheer took over the party in 2017", url:"pierre-poilievre", date:"", mirrors:[""], flags:["hidden"] },
+        { title:"The Conservative Party's hard problem", preview:"In Canadian political discourse, it's become somewhat common for the right wing to say the LPC and CPC are near-evenly matched, citing charts kind of", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
+        { title:"Canada's plan for a sovereign wealth fund", preview:"The government of Canada has announced we're going to develop a general sovereign wealth fund. A sovereign wealth fund just means a bunch of financial", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
+        { title:"Floor crossings", preview:"In the 2025 general election, the Liberal Party won 169 House seats of the 172 needed for a majority. For being the largest party in the House, the Liberal", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
+        { title:"Rational ignorance", preview:"Rational ignorance is when you don't know or understand something, but it's not irrational for you to not bother learning it. It's not worth the time", url:"rational-ignorance", date:"2026-04-09", mirrors:["substack:rational-ignorance","tumblr:813419185909727232","patreon:155199122"] },
+        { title:"Liberal conservatism", subtitle:"A philosophy of prudence and humility", preview:"In the first sense that is often spoken of, conservatism is not directly a political position or platform. It doesn't tell us what the government should", url:"liberal-conservatism", date:"2026-03-24", mirrors:["substack:foundations-of-liberal-conservatism"], flags:["wide"] },
+        { title:"The case for abortion", preview:"The way I propose we think about questions of legality is to consider the most direct implications of the question. Do you endorse violence being used", url:"abortion", date:"2026-02-18", mirrors:["substack:the-case-for-abortion","tumblr:809547051047272448","patreon:155199340"] },
+        { title:"A synopsis of American decline", preview:"The United States of America might not be a perfect country, but it's long been a bulwark against other, competing countries that were clearly even worse", url:"a-synopsis-of-american-decline", date:"2026-01-28", mirrors:["substack:186165875","patreon:155201485"] },
+        { title:"Fetishism & politics", preview:"A strange reality I've made peace with is that people's political views on certain topics can be affected by their sexual attraction. The most obvious", url:"fetishism-politics", date:"2024-11-14", mirrors:["tumblr:770364766791352320"] },
+        { title:"Nick Shirley & the Somali day cares", preview:"After the regime of the U.S.-backed dictator Siad Barre collapsed in 1991, Somalia fell into a chaotic civil war, and many Somalis fled the region as", url:"somali-day-cares", date:"2026-01-02", mirrors:["substack:183243480","patreon:155200604"]},
+        { title:"Why is Reddit so hated?", subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it", preview:"Reddit today is enduringly popular, despite how many times the company has gone forward with unpopular changes. It's weathered many storms. The people", url:"why-is-reddit-so-hated", date:"2025-12-30", mirrors:["substack:why-is-reddit-so-hated"] },
+        { title:"Stay the trenches", preview:"In 2014, being online and trying to use social media as a right-winger felt oppressive. It felt like all the big social media websites were dominated", url:"stay-the-trenches", date:"2025-12-17", mirrors:["substack:stay-the-trenches"] },
+        { title:"Immigration", preview:"In recent years, we've been seeing the rise of political parties full of liars, incompetents, and racists, the sort of people I wouldn't trust with", url:"immigration", date:"2025-11-06", mirrors:["substack:183229652"] },
+        { title:"Prejudice", preview:"What is prejudice? This might seem like a weird prompt, but we so often take for granted that prejudice is bad that we might never stop and think about", url:"what-is-prejudice", date:"2025-10-30", mirrors:["substack:prejudice"] },
+        { title:"Notes on India", preview:"There's been a lot of racism directed at Indians in recent years. In Canada, they're one of the main immigrant groups that our country has been receiving", url:"notes-on-india", date:"2025-10-24", mirrors:["substack:india","tumblr:798351257128615936"] },
+        { title:"Liberalism not leftism", preview:"In the French Revolutionary period, supporters of the monarchy sat on the right side of the National Assembly, while supporters of the revolution sat", subtitle:"An overview of leftist historical revisionism and a warning for liberals", url:"liberalism-not-leftism", date:"2025-09-19", mirrors:["substack:174062936","tumblr:795164683319574528","patreon:155199811"] },
+        { title:"Normalization", preview:"The example I remember was about bans on smoking in restaurants: surveys indicated the public was generally against such bans while the matter was being", url:"normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
+        { title:"Lies about Ilhan Omar", preview:"After she was elected in 2019 as one of the first two Muslim Congresswoman (tied with Rashida Tlaib), there were quickly lies and smears shared about", url:"lies-about-ilhan-omar", date:"2025-08-25", mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
+        { title:"Israel & Palestine", preview:"Israel--Palestine can feel like the most divisive, polarizing issue ever. It's one where you can't just agree to disagree; you're either on my side or", url:"israel-palestine", date:"2025-07-27", flags:["wide"] },
+        { title:"Trump & Russia", preview:"Americans used to be resolutely against Russia. They all identified and understood Russia to be an enemy of their interests, a bad actor on the world", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
+        { title:"Why get bottom surgery?", preview:"In the past, if you wanted legal recognition as a trans woman, you had to get a vaginoplasty. No dicks in the lady's room. That was the rule. In some", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
+        { title:"Elon Musk & the Nazi Salute", preview:"Did Elon Musk do a Nazi salute, or did it just look like one? It's an insulting stupid question, but one that Mr. Musk himself is betting on people", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
+        { title:"Lies about Elizabeth Warren & Hillary Clinton", preview:"It's generally more work to refute a false claim than to perpetuate it. And by the time somebody's got around to figuring out why a claim is false, the", url:"lies-about-warren-clinton", date:"2024-12-19", mirrors:["tumblr:770730090759946240","substack:153821886"] },
+        { title:"Mark Robinson", preview:"For posterity, I'd like to write about Mark Robinson. He was elected to be the lieutenant governor of North Carolina in 2021. That's sort of like being", url:"mark-robinson", date:"2024-12-15", mirrors:["tumblr:769962893917798400"] },
+        { title:"The Trump appeal", preview:"What does anybody like about Donald Trump? It's a question many people ask theirselves, and no answer comes to mind. But it's something that for me has", url:"the-trump-appeal", date:"2024-12-03", mirrors:["tumblr:770270265635667968"] },
+        { title:"The normal white man bias", preview:"Now that the U.S. election season is over and that country has once again walked down the orange brick road, let's talk about something I was putting", url:"the-normal-white-man-bias", date:"2024-11-26", mirrors:["substack:153823028","tumblr:770305075441778688","medium:0c508d4c51b5"] },
+        { title:"Sex, gender, & transsexuals", preview: "This is an informational post intended to help people better navigate the sometimes-confusing dialogue surrounding sex, gender, and transsexuals. I made", url:"sex-gender-transsexuals", date:"2024-11-19", flags:["wide"] },
+        { title:"Bernie Sanders & the military industrial complex", preview:"This tweet by Sanders was broadly celebrated by the American right wing, not only because he opens it with positivity about Elon Musk, but because conspiracy", url:"bernie-sanders-and-the-military-industrial-complex", date:"2024-12-16", mirrors:["tumblr:770070077409214464"] },
+        { title:"Types of masculinity", preview:"For my purposes here, let's just summarize masculinity as strong, confident, assertive, dominant. That seems good enough. From there, you can recognize", url:"types-of-masculinity", date:"2024-11-08", mirrors:["tumblr:770310861444300800"] },
         { title:"Poor Things (2023 film)", url:"poor-things", date:"2024-10-31", mirrors:["tumblr:769969807464464384"] },
-        { title:"The trans prison stats argument", url:"the-trans-prison-stats-argument", date:"2024-10-19", mirrors:["substack:the-trans-prison-stats-argument","tumblr:771501478599868416"] },
+        { title:"The trans prison stats argument", preview:"An argument I've been seeing online for a while now is that trans people are statistically more likely than the general population to be sex offenders", url:"the-trans-prison-stats-argument", date:"2024-10-19", mirrors:["substack:the-trans-prison-stats-argument","tumblr:771501478599868416"] },
         { title:"Record of statements by select public figures", url:"public-record", flags:["hidden","wide"] },
-        { title:"Anime reviews", url:"anime-reviews", flags:["hidden","wide"] },
+        { title:"Anime reviews", preview:"I'm not that into anime, so it doesn't make a lot of sense for me to rate and review every anime series that I've ever seen, but I'm going to do it anyway", url:"anime-reviews", flags:["hidden","wide"] },
         { title:"Data Structures & Algorithms", url:"data-structures-algorithms", flags:["hidden","wide"] }
     ],
+    
     pageList: function() {
         return meta.pageListData.filter(p => !p.flags || !p.flags.includes("hidden"))
     },
@@ -118,36 +119,30 @@ function parseSource(string_in, separator = ":") {
 }
 
 function setlightbox(action) {
-    const lightbox = document.querySelector(".lightbox");
-    const lbTopLeft = document.querySelector(".lb-top-left p");
-    const lbImage = document.querySelector(".lb-img-wrapper img")
-    const lbCaption = document.querySelector(".lb-caption-panel p")
-
-    if (lightbox == null || lbTopLeft == null || lbImage == null || lbCaption == null) {
-        return;
+    if (action instanceof HTMLElement) {
+        document.querySelector(".lightbox").classList.remove("hidden");
+        let img = document.querySelector(".lightbox .lb-img-wrapper img")
+        img.src = action.src;
+        img.alt = action.alt;
+        img.title = action.title;
+        document.querySelector(".lightbox .lb-top-left p").innerHTML = `This image: <a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+        document.querySelector(".lightbox .lb-caption-panel p").innerHTML = action.alt;
     }
-    
-    if (action == "close") {
-        lightbox.classList.add("hidden");
-        lbTopLeft.innerHTML = "";
-        lbImage.src = lbImage.alt = "";
-    }
-    /* function called by <a> with link to image source */
     else if (typeof action == "string") {
-        lightbox.classList.remove("hidden");
-        lbTopLeft.innerHTML = `This image: <a href="${ action }">${ action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
-        lbImage.src = lbImage.alt = action;
-        lbCaption.innerHTML = action;
+        if (action == "close") {
+            document.querySelector(".lightbox").classList.add("hidden");
+        }
+        else {
+            document.querySelector(".lightbox").classList.remove("hidden");
+            let fileName = action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;");
+            document.querySelector(".lightbox .lb-top-left p").innerHTML = `This image: <a href="${ action }">${ fileName }</a>`;
+            let img = document.querySelector(".lightbox .lb-img-wrapper img");
+            img.src = action;
+            img.alt = action;
+            delete img.title;
+            document.querySelector(".lightbox .lb-caption-panel p").innerHTML = fileName + " (no description)";
+        }
     }
-    /* function called by <img> passing "this" */
-    else {
-        lightbox.classList.remove("hidden");
-        lbImage.src = action.src;
-        lbImage.alt = action.alt;
-        lbTopLeft.innerHTML = `This image: <a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
-        lbCaption.innerHTML = action.alt;
-    }
-    
 }
 
 function classSelector(sEle) {
@@ -232,46 +227,23 @@ function imageGallery(chunk) {
     let meta = chunk.shift() + " ";
     meta = ("image-gallery " + meta.substring(meta.indexOf(" "))).trim();
     let galleryClass = "image-gallery";
-    ["grid","banner","oar","float","captioned"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; } )
+    ["grid","float","oar","banner","contain","captioned"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; } )
     let maxHeight = meta.replace(/[^\d]/g, "") || (meta.includes("float") ?'200' :'250');
     
-    return `<div class="${ galleryClass }">${ chunk.map( row => {
+    chunk = `<div class="${ galleryClass }">${ chunk.map( row => {
         row = parseObj(row,"src","caption","alt","title");
         if (row.src == "") { return ""; }
-        
         row.alt = row.alt || row.caption;
         row.caption = row.caption || row.alt;
-        if (row.caption) { row.caption = '<figcaption>' + row.caption + '</figcaption>'; }
         row.title = row.title || row.alt || "Click to expand";
-        
+        if (row.caption) { row.caption = '<figcaption>' + row.caption + '</figcaption>'; }
         return `<figure>
             <img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)">
             ${ row.caption }
-        </figure>`
+        </figure>`;
     }).join("")}</div>`;
+    return autoFormat(chunk);
 }
-
-    /*
-    const space = galleryMeta.indexOf(" ");
-    if (space != -1) {
-        galleryMeta = galleryMeta.substring(space);
-        galleryMeta = parseObj(galleryMeta, "class");
-        galleryClass = galleryMeta["class"];
-        
-        galleryMeta.deleteProperty("class");
-        galleryMeta = Object.entries(galleryMeta);
-        if (galleryMeta.length > 0) {
-        
-        
-    }
-    
-    if (galleryMeta.length > 0) {
-        
-    }
-    else {
-        galleryMeta = "";
-    }
-    */
 
 function autoVideo(chunk) {
     let data = chunk.split("\n").slice(1)[0].split("|").map(c => c.trim());
@@ -316,12 +288,11 @@ function autoTable(chunk, table_number) {
                                     p => {
                                         p = p.trim();
                                         if (p == "") return;
-                                        if (p == "---") { return '<hr>'; }
                                         if (p.startsWith("#.") || p.startsWith(".#")) { p = '<blockquote><p class="fine">' + p.substring(2).trimStart() + '</p></blockquote>'; }
                                         else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
                                         else if (p.startsWith(".")) { p = '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
                                         else p = '<p>' + p + '</p>';
-                                        return p;
+                                        return autoFormat(p);
                                     }
                                 ).join('').replaceAll('</blockquote><blockquote>', '')
                             }</td>`
@@ -363,7 +334,7 @@ function autoList(chunk) {
                 li = closeTags.splice(-(prevIndent - indent)).reverse().join('') + li;
             }
             prevIndent = indent;
-            return li;
+            return autoFormat(li);
         }
     ).join("") + closeTags.join("");
     let output = list.substring(0, 3) + ' class="auto-list"' + list.substring(3);
@@ -383,24 +354,19 @@ function autoIndent(chunk) {
             else {
                 line = '<p>' + line + '</p>';
             }
-            return line;
+            return autoFormat(line);
         }
     ).join('')}</blockquote>`
 }
 
 /* converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
-function isoFormat(datestring, shortMonths = false) {
+function isoFormat(datestring) {
     let input = datestring.replace(/\D/g, "")
     if (input.length == 8) {
         const iso = input.substring(0,4) + "-" + input.substring(4,6) + "-" + input.substring(6,8);
         let [year,month,day] = iso.split("-").map(Number);
         if (month >= 1 && month <= 12) {
-            if (shortMonths) {
-                month = { 1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June", 7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec" }[month]
-            }
-            else {
-                month = { 1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December" }[month]
-            }
+            month = { 1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June", 7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec" }[month]
         }
         datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ year + " " + month + " " + day +'</time>';
     }
@@ -408,18 +374,13 @@ function isoFormat(datestring, shortMonths = false) {
 }
 
 function autoHeading(chunk) {
-    let headingNum = chunk.indexOf(" ");
-    let tag = "h" + Math.min(headingNum, 4);
-    chunk = chunk.slice(headingNum).trim();
-    let id = chunk.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g, "");
-    chunk = chunk;
-    
-    if (headingNum == 4) {
-        return `<h4>${ chunk }</h4>`;
-    }
-    else {
-        return `<${ tag } class="for-toc" id="${ id }">${ chunk }</${ tag }>`
-    }
+    let headingNumber = chunk.indexOf(" ");
+    let tag = "h" + Math.min(headingNumber, 4);
+    let heading = chunk.slice(headingNumber + 1).trim();
+    let id = heading.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g, "");
+    heading = autoFormat(heading);
+    heading = (headingNumber == 4) ?`<h4>${ heading }</h4>` :`<${ tag } class="for-toc" id="${ id }">${ heading }</${ tag }>`;
+    return heading;
 }
 
 function linkReplace(chunk) {
@@ -522,17 +483,16 @@ function interpreter(argValue) {
         /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                      table, blockquote, ul/ol                             
         */
-        if (chunk.startsWith("!table")) { chunk = autoTable(chunk, tableNum); tableNum += 1; return chunk; }
+        if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
         if (chunk.startsWith("    ") || chunk.startsWith("!indent")) { return autoIndent(chunk); }
         if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { return autoList(chunk); }
 
         let isFine = false; if (chunk.startsWith(".")) { isFine = true; chunk = chunk.slice(1).trimStart(); }
         chunk = '<p>' + chunk + '</p>';
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
-        return chunk;
+        return autoFormat(chunk);
     })
-    input = autoFormat(input.join(""))
-    return input;
+    return input.join('');
 }
 
 function ageFromISO(argDate) {
@@ -572,12 +532,12 @@ function autoFormat(_string) {
     output = (output + aufoaux(_string)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>").replace(/\[(\[.+?\])\]/g,"<span class='inline-note'>$1</span>");
     return output;
 }
-    function aufoaux(str_in, quote_replace = true) {
-        if (quote_replace && (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1)) {
-            str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
-        }
-        return str_in.replaceAll("---", '&mdash;').replace("--", "&ndash;");
+function aufoaux(str_in) {
+    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
+        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
     }
+    return str_in.replaceAll("---", '&mdash;').replaceAll("--", "&ndash;");
+}
 
 function tokenizeByWordChar(stringData) {
     const result = [];
@@ -699,12 +659,12 @@ window.addEventListener("load", function() {
     document.body.innerHTML = `
         <header class="mh-top"></header>
         <nav class="top-nav">
-            <div class="gn-segment">
+            <div class="nav-segment">
                 <div class="page-id">
                     ${ index ?'<span>Index Page</span>' :'<span><a href="' + pathToRoot + 'index.html">Back to Index</a></span>' }
                 </div>
             </div>
-            <div class="gn-segment">
+            <div class="nav-segment">
                 <div class="jump-arrow icon" onclick="scrollToTop()"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" height="24" viewBox="0 0 24 24" width="24"><path d="M5.293 15.207a1 1 0 001.414 0L12 9.914l5.293 5.293a1 1 0 101.414-1.414L12 7.086l-6.707 6.707a1 1 0 000 1.414Z"></path></svg></div>
                 <div id="gear" class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="28"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
             </div>
@@ -767,7 +727,7 @@ window.addEventListener("load", function() {
                     </select>
                 </div>
                 <div>
-                    <label>Headings 3+:</label>
+                    <label>Headings 3:</label>
                     <select class="drop-select" id="--ff-heading-3" onchange="setCSS(this)">
                         <option value="'Arial',sans-serif">Arial</option>
                         <option value="'Georgia Pro',sans-serif">Georgia</option>
@@ -995,7 +955,7 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                          other                                   
     */
-    if (meta.flags.includes("wide") || index) {
+    if (index || meta.flags.includes("wide")) {
         HTML.classList.add("page-wider");
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
@@ -1074,33 +1034,29 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                       index elements                                  
     */
+    //.replaceAll('---','\u2014').replaceAll('--','\u2013')
     document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", meta.pageList().map(
-        entry => `
-            <div class="page-entry">
-                <div class="space-between align-center">
-                    <a href="page/${ entry.url }/index.html">${ entry.title }</a>
-                    <div class="page-mirrors">${ Object.hasOwn(entry, "mirrors") && entry.mirrors.length > 0 ? entry.mirrors.map(m => " " + parseSource(m)).join('') :''}</div>
-                </div>
-                <div class="page-date">${ entry.date }</div>
-            </div>
-        `
-    ).join(''))
-    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", 
-        `<div class="video-gallery">
-            ${
-                meta.videoList().map(
-                    v => `
-                        <figure>
-                            <a href="https://youtu.be/${ v.url }"><img loading="lazy" src="https://i.ytimg.com/vi/${ v.url }/hqdefault.jpg"></a>
-                            <figcaption>
-                                <div class="yt-title"><a href="https://youtu.be/${ v.url }">${ v.title }</a></div>
-                                ${ v.date ?'<div><span class="yt-date">' + v.date + '</span></div>' :'' }
-                            </figcaption>
-                        </figure>
-                        `
-                ).join('')
+        entry => {
+            let li = '<p><span class="title"><a href="page/' + entry.url + '/index.html">' + entry.title + (entry.subtitle?': '+entry.subtitle:'') + '</a></span> <span class="date">: ' + entry.date + '</span></p>';
+            if (entry.preview) {
+                li += '<p class="preview">' + autoFormat(entry.preview) + '&#8230;</p>';
             }
-        </div>`
+            if (entry.mirrors && entry.mirrors.filter(m => m).length > 0) {
+                li += '<p class="mirrors label-external">' + entry.mirrors.map(m => parseSource(m)).join('') + '</p>';
+            }
+            return '<li>' + li + '</li>'
+        }
+    ).join(''))
+    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend",
+        meta.videoList().slice(0, 4).map(
+            v => `<figure>
+                    <a href="https://youtu.be/${ v.url }"><img loading="lazy" src="https://i.ytimg.com/vi/${ v.url }/hqdefault.jpg"></a>
+                    <figcaption>
+                        <div class="video-title"><a href="https://youtu.be/${ v.url }">${ v.title }</a></div>
+                        ${ v.date ?'<div><span class="video-date">' + v.date + '</span></div>' :'' }
+                    </figcaption>
+                </figure>`
+        ).join('')
     );
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
