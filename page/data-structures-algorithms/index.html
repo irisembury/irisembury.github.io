@@ -1379,11 +1379,11 @@ In a queue, the root node's `.next` starts null. Then when you add a second node
 
 So `next` always means pointing away from your access point (top in a stack, front in a queue). And in a stack, `next` leads away from the root node, whereas in a queue `next` goes towards it.
 
-!image-gallery
-media/stack-structure.png|A stack structure with four nodes
-media/stack-push.png|Adding a node to a stack
-media/stack-structure.png|A stack structure with four nodes
-media/queue-enqueue.png|Adding a node to a queue
+!image-gallery captioned contain
+src: media/stack-structure.png | caption: A stack structure with four nodes
+src: media/stack-push.png | caption: Adding a node to a stack
+src: media/stack-structure.png | caption: A stack structure with four nodes
+src: media/queue-enqueue.png | caption: Adding a node to a queue
 
 #### Testing some code
 
@@ -1425,10 +1425,7 @@ int main()
 
 ## Traversing a list
 
-One way to go through the items of a list is to pop or dequeue them all, but sometimes you want to search through a list without doing that. Take a pointer to the starting node and move it forward by reässigning it to its own `next` property until it comes back null.
-
-!info
-If you change the entry node-pointer held by the list itself, all data in the list is effectively lost.
+One way to go through the items of a list is to pop or dequeue them all, but sometimes you want to search through a list without doing that. Take a pointer to the starting node and move it forward by reässigning it to its own `next` property until it comes back null. (If you change the entry node-pointer held by the list itself, all data in the list is effectively lost.)
 
 !codeblock cpp Stack
 class Stack {

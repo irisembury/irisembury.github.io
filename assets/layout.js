@@ -222,6 +222,22 @@ function parseObj(entry, ...requiredFields) {
     return obj;
 }
 
+function fileBox(chunk) {
+    chunk = chunk.split("\n").slice(1).map(
+        row => {
+            row = parseObj(row,"src","name");
+            row.name = row.name || row.src.split("/").slice(-1).join("");
+            return `<figure>
+                <a title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }" class="pdf-icon"></a>
+                <figcaption>
+                    <a title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }">${ row.name }</a>
+                </figcaption>
+            </figure>`;
+        }
+    )
+    return `<div class="file-box">${ chunk.join('') }</div>`;
+}
+
 function imageGallery(chunk) {
     chunk = chunk.split("\n");
     let meta = chunk.shift() + " ";
@@ -455,7 +471,7 @@ function interpreter(argValue) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
-    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("...", "&#8230;").replaceAll("\\.","&#46;").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
+    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
 
     let tableNum = 1;
     input = input.map( chunk => {
@@ -467,12 +483,13 @@ function interpreter(argValue) {
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         /* image galleries */
         if (chunk.startsWith("!image-gallery")) { return imageGallery(chunk); }
+        if (chunk.startsWith("!file-box")) { return fileBox(chunk); }
         /* ---- ---- */
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         /* codeblock and inline `code` */
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-        if (chunk.startsWith("!info")) { return `<div class="info">${ chunk.substring(chunk.indexOf("\n")) }</div>`; }
+        if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
 
         /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                            anchor links                                   
@@ -536,7 +553,7 @@ function aufoaux(str_in) {
     if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
         str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
     }
-    return str_in.replaceAll("---", '&mdash;').replaceAll("--", "&ndash;");
+    return str_in.replaceAll("---", '\u2014').replaceAll("--", "\u2013").replaceAll("...", "\u2026");
 }
 
 function tokenizeByWordChar(stringData) {
@@ -657,7 +674,7 @@ window.addEventListener("load", function() {
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
     
     document.body.innerHTML = `
-        <header class="mh-top align-center center"></header>
+        <header class="top-header align-center center"></header>
         <nav class="top-nav">
             <div class="nav-segment">
                 <div class="page-id">
