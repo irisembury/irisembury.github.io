@@ -58,10 +58,9 @@ const meta = {
         { title:"Poor Things (2023 film)", url:"poor-things", date:"2024-10-31", mirrors:["tumblr:769969807464464384"] },
         { title:"The trans prison stats argument", preview:"An argument I've been seeing online for a while now is that trans people are statistically more likely than the general population to be sex offenders", url:"the-trans-prison-stats-argument", date:"2024-10-19", mirrors:["substack:the-trans-prison-stats-argument","tumblr:771501478599868416"] },
         { title:"Record of statements by select public figures", url:"public-record", flags:["hidden","wide"] },
-        { title:"Anime reviews", preview:"I'm not that into anime, so it doesn't make a lot of sense for me to rate and review every anime series that I've ever seen, but I'm going to do it anyway", url:"anime-reviews", flags:["hidden","wide"] },
+        { title:"Anime reviews", preview:"I'm not that into anime, so it doesn't make a lot of sense for me to rate and review every anime series that I've ever seen, but I'm going to do it anyway", url:"anime-reviews", date:"2024-12-17" },
         { title:"Data Structures & Algorithms", url:"data-structures-algorithms", flags:["hidden","wide"] }
     ],
-    
     pageList: function() {
         return meta.pageListData.filter(p => !p.flags || !p.flags.includes("hidden"))
     },
@@ -81,9 +80,6 @@ const meta = {
         "--ff-nav":"'Trebuchet MS',system-ui"
     }
 }
-meta.pageListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
-meta.videoListData.sort((a, b) => parseInt(b.date?.replace(/\D/g, "")) - parseInt(a.date?.replace(/\D/g,"")))
-meta.pageListData.forEach(p => { if (p.title) { p.title = autoFormat(p.title); } })
 
 function scrollToTop() {
     window.scrollTo({
@@ -144,72 +140,21 @@ function setlightbox(action) {
         }
     }
 }
-
-function classSelector(sEle) {
-    if (sEle != null && sEle instanceof Node) {
-        let sValue = sEle.value;
-        HTML.classList.remove(...Array.from(sEle.children).map(o => o.value).filter(o => o != sValue));
-        HTML.classList.add(sValue);
-        localStorage.setItem(sEle.id, sEle.value);
-    }
-}
-
-function setCSS(mEle) {
-    if (mEle != null && mEle instanceof Node) {
-        localStorage.setItem(mEle.id, mEle.value);
-    }
-    const cssPanel = document.getElementById("__css_user_set");
-    if (cssPanel) {
-        cssPanel.replaceChildren();
-        const styleOverrides = [];
-        Array.from(document.getElementsByClassName("drop-select")).forEach(
-            _select => {
-                let _select_value = localStorage.getItem(_select.id) || _select.value;
-                if (_select_value != meta.fontDefaults[_select.id]) {
-                    styleOverrides.push(_select.id + ':' + _select_value)
-                }
-            }
-        );
-        if (styleOverrides.length > 0) {
-            cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
-        }
-        if (localStorage.getItem("--ff-heading-1") == "'Georgia Pro',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important; }");
-        }
-        if (localStorage.getItem("--ff-heading-2") == "'Georgia Pro',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article h2 { font-weight: 600 !important; }");
-        }
-        
-        /* for bold letter-spacing */
-        let bodyff = localStorage.getItem("--ff-main") || meta.fontDefaults["--ff-main"];
-        if (bodyff == "var(--ff-georgia-digits)" || bodyff == "'Roboto',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article p strong, .article li strong { letter-spacing: -0.1px; }");
-        }
-    }
-}
-function restoreDefaults() {
-    document.getElementById("__css_user_set")?.replaceChildren();
-    Array.from(document.getElementsByClassName("drop-select")).forEach(
-        _select => {
-            if (meta.fontDefaults[_select.id]) {
-                _select.value = meta.fontDefaults[_select.id];
-                localStorage.removeItem(_select.id);
-            }
-        }
-    )
-    setCSS();
-}
-
 function parseObj(entry, ...requiredFields) {
-    entry = entry.replaceAll('---','\u2014').replaceAll('--','\u2013').replaceAll("\"", "&quot;");
+    entry = entry.trim().replaceAll('---','\u2014').replaceAll('--','\u2013').replaceAll("\"", "&quot;");
     const obj = { };
     entry.split("|").forEach(
         cell => {
-            cell = cell.split(":");
-            if (cell.length == 2) {
-                obj[cell[0].trim()] = cell[1].trim();
+            cell = cell.trim();
+            const colon = cell.indexOf(":");
+            if (colon != -1) {
+                const key = cell.substring(0, colon);
+                const value = cell.substring(colon + 1);
+                obj[key] = value;
             }
-            else { console.error("parseObj: \"" + cell.join("") + "\""); }
+            else {
+                console.error(`parseObj: "${ cell }"`);
+            }
         }
     );
     requiredFields.forEach(
@@ -227,10 +172,11 @@ function fileBox(chunk) {
         row => {
             row = parseObj(row,"src","name");
             row.name = row.name || row.src.split("/").slice(-1).join("");
+            let iconType = row.src.endsWith("pdf") ?"pdf-icon" :"html-icon";
             return `<figure>
-                <a title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }" class="pdf-icon"></a>
+                <a target="_blank" title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }" class="${ iconType }"></a>
                 <figcaption>
-                    <a title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }">${ row.name }</a>
+                    <a target="_blank" title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }">${ row.name }</a>
                 </figcaption>
             </figure>`;
         }
@@ -243,18 +189,17 @@ function imageGallery(chunk) {
     let meta = chunk.shift() + " ";
     meta = ("image-gallery " + meta.substring(meta.indexOf(" "))).trim();
     let galleryClass = "image-gallery";
-    ["grid","float","oar","banner","contain","captioned"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; } )
-    let maxHeight = meta.replace(/[^\d]/g, "") || (meta.includes("float") ?'200' :'250');
+    ["float","oar","contain"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; } )
+    let maxHeight = meta.replace(/[^\d]/g, "") || meta.includes("float") ?200 :300;
     
     chunk = `<div class="${ galleryClass }">${ chunk.map( row => {
         row = parseObj(row,"src","caption","alt","title");
         if (row.src == "") { return ""; }
-        row.alt = row.alt || row.caption;
-        row.caption = row.caption || row.alt;
         row.title = row.title || row.alt || "Click to expand";
+        row.alt = row.alt || row.caption;
         if (row.caption) { row.caption = '<figcaption>' + row.caption + '</figcaption>'; }
         return `<figure>
-            <img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)">
+            <div><img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)"></div>
             ${ row.caption }
         </figure>`;
     }).join("")}</div>`;
@@ -327,7 +272,8 @@ function autoTable(chunk, table_number) {
 }
 
 function autoList(chunk) {
-    const closeTags = []; let prevIndent = -1; let isFine = false; if (chunk.startsWith(".")) { isFine = true; chunk = chunk.substring(1).trimStart(); }
+    const closeTags = [];
+    let prevIndent = -1;
     const list = chunk.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
@@ -354,7 +300,6 @@ function autoList(chunk) {
         }
     ).join("") + closeTags.join("");
     let output = list.substring(0, 3) + ' class="auto-list"' + list.substring(3);
-    if (isFine) { output = '<div class="fine">' + output + '</div>'; }
     return output;
 }
 function autoIndent(chunk) {
@@ -400,7 +345,7 @@ function autoHeading(chunk) {
 }
 
 function linkReplace(chunk) {
-    return chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
+    chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
         linkUrl = linkUrl.replaceAll('&#41;', ')');
         displayText = displayText.trim();
         const external = linkUrl.startsWith("http");
@@ -417,7 +362,6 @@ function linkReplace(chunk) {
                 linkIndex = meta.links.push(_linkUrl);
             }
         }
-
         if (linkUrl.startsWith('#')) {
             linkUrl = linkUrl.replaceAll(' ', '_');
         }
@@ -432,7 +376,6 @@ function linkReplace(chunk) {
                 link_inner += '<span class="inline-icon lightbox-link"></span>';
                 link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
             }
-            
         }
         else {
             link_class.push("external-link");
@@ -463,6 +406,22 @@ function linkReplace(chunk) {
         
         return a_tag;
     })
+    chunk = chunk.replace(/(?<=^|\s)(https?:\/\/\S+)(?=\s|$)/g, (match, linkUrl) => {
+        let linkEnd = "";
+        if (/[.,?!;]$/.test(linkUrl)) {
+            linkEnd = linkUrl.at(-1);
+            linkUrl = linkUrl.slice(0, -1);
+        }
+        let _linkUrl = linkUrl;
+        if (_linkUrl.indexOf("#") != -1) {
+            _linkUrl = _linkUrl.substring(0, _linkUrl.indexOf("#"))
+        }
+        if (meta.links.indexOf(_linkUrl) == -1) {
+            meta.links.push(_linkUrl);
+        }
+        return '<a href="' + linkUrl + '">' + linkUrl + '</a>' + linkEnd;
+    });
+    return chunk;
 }
 
 /* ------------------------------- main interpreter for #article content ------------------------------- */
@@ -482,8 +441,8 @@ function interpreter(argValue) {
         if (chunk == "----") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         /* image galleries */
-        if (chunk.startsWith("!image-gallery")) { return imageGallery(chunk); }
-        if (chunk.startsWith("!file-box")) { return fileBox(chunk); }
+        if (chunk.startsWith("!images")) { return imageGallery(chunk); }
+        if (chunk.startsWith("!files")) { return fileBox(chunk); }
         /* ---- ---- */
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         /* codeblock and inline `code` */
@@ -495,19 +454,32 @@ function interpreter(argValue) {
                                            anchor links                                   
         */
         chunk = linkReplace(chunk);
-        chunk = chunk.replace(/(?<=^|\s)(https?:\/\/\S+)(?=\s|$)/g, '<a href="$1">$1</a>');
 
         /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                      table, blockquote, ul/ol                             
         */
         if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
         if (chunk.startsWith("    ") || chunk.startsWith("!indent")) { return autoIndent(chunk); }
-        if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { return autoList(chunk); }
-
-        let isFine = false; if (chunk.startsWith(".")) { isFine = true; chunk = chunk.slice(1).trimStart(); }
-        chunk = '<p>' + chunk + '</p>';
-        if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
-        return autoFormat(chunk);
+        
+        let isFine = false;
+            if (chunk.startsWith(".")) {
+                isFine = true;
+                chunk = chunk.slice(1).trimStart();
+            }
+        
+        if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
+                chunk = autoList(chunk);
+            }
+            else {
+                chunk = '<p>' + autoFormat(chunk) + '</p>';
+            }
+        
+        if (isFine) {
+                chunk = '<div class="fine">' + chunk + '</div>';
+            }
+        
+        return chunk;
+        
     })
     return input.join('');
 }
@@ -672,6 +644,9 @@ window.addEventListener("load", function() {
     const pathToRoot = getPathToRoot();
     const index = pathToRoot == "";
     document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + pathToRoot + 'assets/fonts.css">');
+    meta.pageListData.sort((a, b) => (parseInt(b.date?.replace(/\D/g, ""))||0) - (parseInt(a.date?.replace(/\D/g,""))||0))
+    meta.videoListData.sort((a, b) => (parseInt(b.date?.replace(/\D/g, ""))||0) - (parseInt(a.date?.replace(/\D/g,""))||0))
+    meta.pageListData.forEach(p => { if (p.title) { p.title = autoFormat(p.title); } })
     
     document.body.innerHTML = `
         <header class="top-header align-center center"></header>
@@ -690,9 +665,6 @@ window.addEventListener("load", function() {
             <div class="right-panel closed">
                 <div><div><h3>Display:</h3></div></div>
                 <div class="push-right"><label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch"></div>
-                <hr>
-                <div><div><h3>Layout:</h3></div></div>
-                <div class="push-right"><label for="full-width">Full page width:</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
                 <hr>
                 <div><div><h3>Paragraph formatting:</h3></div></div>
                 <div class="push-right"><label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
@@ -850,6 +822,9 @@ window.addEventListener("load", function() {
                 </div>
                 <div><span class="reset-button no-select" onclick="restoreDefaults()" title="Set font family overrides (above) to their default values">restore defaults</span></div>
                 <hr>
+                <div><div><h3>Layout:</h3></div></div>
+                <div class="push-right"><label for="full-width">Full page width:</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
+                <hr>
                 <div><div style="line-height:1.5;color:var(--theme-grey-6,dimgrey);"><p>These preferences are saved in your browser's local storage. To clear your local storage for this site, <a class="pseudo-link" onclick="localStorage.clear()" title="Nothing visible happens when you click this, but I tested it and it works.">click here</a>.</p></div></div>
             </div>
         </div>
@@ -902,7 +877,7 @@ window.addEventListener("load", function() {
                 }
             }
             if (entry.title) {
-                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>'+entry.title+'</span>');
+                document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>' + entry.title + '</span>');
             }
             /* .article-top (title, subtitle, date) */
             article.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (entry.title ?`<h1 class="article-title for-toc">${ entry.title }</h1>` :'') + (entry.subtitle ?`<h2 class="article-subtitle">${ entry.subtitle }</h2>` :'') + (entry.date ?`<div class="article-date">${ entry.date }` :'') + '</div>');
@@ -1077,7 +1052,7 @@ window.addEventListener("load", function() {
     );
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                     display figgling                                 
+                                     display fiddling                                 
     */
     if (document.title == "") {
         document.title = "Iris Embury | GitHub";
@@ -1096,7 +1071,6 @@ window.addEventListener("load", function() {
             h.removeAttribute('class');
         }
     });
-
     if (pageHeadings.length < 2) {
         document.querySelector(".toc")?.remove();
         document.querySelector(".right-spacer")?.remove();
@@ -1152,4 +1126,63 @@ window.addEventListener("load", function() {
     }
 })
 
+
+
+/*
+    ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+                 functions for letting user change fonts, styles              
+*/
+function setCSS(mEle) {
+    if (mEle != null && mEle instanceof Node) {
+        localStorage.setItem(mEle.id, mEle.value);
+    }
+    const cssPanel = document.getElementById("__css_user_set");
+    if (cssPanel) {
+        cssPanel.replaceChildren();
+        const styleOverrides = [];
+        Array.from(document.getElementsByClassName("drop-select")).forEach(
+            _select => {
+                let _select_value = localStorage.getItem(_select.id) || _select.value;
+                if (_select_value != meta.fontDefaults[_select.id]) {
+                    styleOverrides.push(_select.id + ':' + _select_value)
+                }
+            }
+        );
+        if (styleOverrides.length > 0) {
+            cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
+        }
+        if (localStorage.getItem("--ff-heading-1") == "'Georgia Pro',sans-serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important; }");
+        }
+        if (localStorage.getItem("--ff-heading-2") == "'Georgia Pro',sans-serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", ".article h2 { font-weight: 600 !important; }");
+        }
+        
+        /* for bold letter-spacing */
+        let bodyff = localStorage.getItem("--ff-main") || meta.fontDefaults["--ff-main"];
+        if (bodyff == "var(--ff-georgia-digits)" || bodyff == "'Roboto',sans-serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", ".article p strong, .article li strong { letter-spacing: -0.1px; }");
+        }
+    }
+}
+function classSelector(sEle) {
+    if (sEle != null && sEle instanceof Node) {
+        let sValue = sEle.value;
+        HTML.classList.remove(...Array.from(sEle.children).map(o => o.value).filter(o => o != sValue));
+        HTML.classList.add(sValue);
+        localStorage.setItem(sEle.id, sEle.value);
+    }
+}
+function restoreDefaults() {
+    document.getElementById("__css_user_set")?.replaceChildren();
+    Array.from(document.getElementsByClassName("drop-select")).forEach(
+        _select => {
+            if (meta.fontDefaults[_select.id]) {
+                _select.value = meta.fontDefaults[_select.id];
+                localStorage.removeItem(_select.id);
+            }
+        }
+    )
+    setCSS();
+}
 
