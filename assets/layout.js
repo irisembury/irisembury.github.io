@@ -1,4 +1,5 @@
 "use strict"
+
 const HTML = document.documentElement;
 const meta = {
     flags: [],
@@ -887,15 +888,15 @@ window.addEventListener("load", function() {
             <p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
         </div>
         <div class='footer-links-area'>
-            <div>
+            <div class="recent-pages">
                 <div>Pages recently added:</div>
                 <div>
                     <ul class='label-external'>
-                        ${ meta.pageList().slice(0, 4).map( entry => `<li><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></li>` ).join("") }
+                        ${ meta.pageList().slice(0, 6).map( entry => `<li><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></li>` ).join("") }
                     </ul>
                 </div>
             </div>
-            <div>
+            <div class="external-links">
                 <div>External links:</div>
                 <div class='flex label-external'>
                     <ul>
@@ -947,7 +948,7 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                          other                                   
     */
-    if (index || meta.flags.includes("wide")) {
+    if (meta.flags.includes("wide")) {
         HTML.classList.add("page-wider");
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
@@ -988,6 +989,7 @@ window.addEventListener("load", function() {
                 localStorage.setItem(c.id, c.checked);
                 HTML.classList.toggle(c.id, c.checked);
             });
+            attempt_toc_update();
         }
     );
     const gearMenu = document.querySelector(".right-panel");
@@ -1029,12 +1031,15 @@ window.addEventListener("load", function() {
     //.replaceAll('---','\u2014').replaceAll('--','\u2013')
     document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", meta.pageList().map(
         entry => {
-            let li = '<p><span class="title"><a href="page/' + entry.url + '/index.html">' + entry.title + (entry.subtitle?': '+entry.subtitle:'') + '</a></span> <span class="date">: ' + entry.date + '</span></p>';
+            let li = '<p class="entry"><span class="title"><a href="page/' + entry.url + '/index.html">' + entry.title + (entry.subtitle?' | '+entry.subtitle+'':'') + '</a></span> <span class="date"> | ' + entry.date + '</span></p>';
             if (entry.preview) {
                 li += '<p class="preview">' + autoFormat(entry.preview) + '&#8230;</p>';
             }
             if (entry.mirrors && entry.mirrors.filter(m => m).length > 0) {
-                li += '<p class="mirrors label-external">' + entry.mirrors.map(m => parseSource(m)).join('') + '</p>';
+                li += '<p class="mirrors bubble-link label-external">' + entry.mirrors.map(m => parseSource(m)).join('') + '</p>';
+            }
+            else {
+                li += '<p style="color:var(--theme-grey-8); font-style:italic; margin-top:7px;">Only available here (no external mirrors)</p>'
             }
             return '<li>' + li + '</li>'
         }
@@ -1064,7 +1069,7 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                     table of contents                                 
     */
-    const pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
+    pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
     pageHeadings.forEach(h => {
         h.classList.remove("for-toc");
         if (h.classList.length == 0) {
@@ -1080,53 +1085,57 @@ window.addEventListener("load", function() {
         toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
         toc.scrollTo({ behavior: "instant", top: 0 })
         
-        const rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-        let lastHeading = 0;
-
-        function toc_update() {
-            let currentHeading = -1;
-            for (let heading = 0; heading < pageHeadings.length; heading += 1) {
-                let elementDistanceFromPageTop = window.scrollY + pageHeadings[heading].getBoundingClientRect().top;
-                if (pageYOffset < elementDistanceFromPageTop - (0.475 * window.innerHeight)) {
-                    break;
-                }
-                currentHeading = heading;
-            }
-            if (currentHeading != lastHeading) {
-                rowsInToc.forEach( (row, n) => {
-                    if (n == currentHeading && n > 0) {
-                        row.classList.add("active-heading");
-                    }
-                    else {
-                        row.classList.remove("active-heading");
-                    }
-                })
-            }
-            lastHeading = currentHeading;
-        }
-
-        let canTocUpdate = true;
-        function attempt_toc_update() {
-            if (!canTocUpdate) {
-                return;
-            }
-            if (HTML.classList.contains("hide-toc")) {
-                return;
-            }
-            canTocUpdate = false;
-            toc_update();
-            setTimeout(() => {
-                canTocUpdate = true;
-                toc_update();
-            }, 500);
-        }
-
+        rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+        
         window.addEventListener("scroll", attempt_toc_update);
         attempt_toc_update();
     }
 })
 
+/*
+    ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                          for table of contents left nav                      
+*/
+let canTocUpdate = true;
+function attempt_toc_update() {
+    if (!canTocUpdate) {
+        return;
+    }
+    if (HTML.classList.contains("hide-toc")) {
+        return;
+    }
+    canTocUpdate = false;
+    toc_update();
+    setTimeout(() => {
+        canTocUpdate = true;
+        toc_update();
+    }, 500);
+}
 
+let tocLastHeading = 0;
+let rowsInToc = [];
+let pageHeadings = [];
+function toc_update() {
+    let currentHeading = -1;
+    for (let heading = 0; heading < pageHeadings.length; heading += 1) {
+        let elementDistanceFromPageTop = window.scrollY + pageHeadings[heading].getBoundingClientRect().top;
+        if (pageYOffset < elementDistanceFromPageTop - (0.475 * window.innerHeight)) {
+            break;
+        }
+        currentHeading = heading;
+    }
+    if (currentHeading != tocLastHeading) {
+        rowsInToc.forEach( (row, n) => {
+            if (n == currentHeading && n > 0) {
+                row.classList.add("active-heading");
+            }
+            else {
+                row.classList.remove("active-heading");
+            }
+        })
+    }
+    tocLastHeading = currentHeading;
+}
 
 /*
     ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
