@@ -60,7 +60,8 @@ const meta = {
         { title:"The trans prison stats argument", preview:"An argument I've been seeing online for a while now is that trans people are statistically more likely than the general population to be sex offenders", url:"the-trans-prison-stats-argument", date:"2024-10-19", mirrors:["substack:the-trans-prison-stats-argument","tumblr:771501478599868416"] },
         { title:"Record of statements by select public figures", url:"public-record", flags:["hidden","wide"] },
         { title:"Anime reviews", preview:"I'm not that into anime, so it doesn't make a lot of sense for me to rate and review every anime series that I've ever seen, but I'm going to do it anyway", url:"anime-reviews", date:"2024-12-17" },
-        { title:"Data Structures & Algorithms", url:"data-structures-algorithms", flags:["hidden","wide"] }
+        { title:"Data Structures & Algorithms", url:"data-structures-algorithms", flags:["hidden","wide"] },
+        { title:"Testing page", url:"testing", flags:["hidden"] }
     ],
     pageList: function() {
         return meta.pageListData.filter(p => !p.flags || !p.flags.includes("hidden"))
@@ -238,37 +239,32 @@ function codeReplace(match, captured) {
     return `<code>${ captured.replaceAll("\"", "&quot;").replaceAll("'", "&apos;").replaceAll("-", "&hyphen;").replaceAll("(", "&lpar;").replaceAll(")", "&rpar;").replaceAll("[", "&lbrack;").replaceAll("]", "&rbrack;").replaceAll("*", "&ast;").replaceAll("\n", "<br>") }</code>`;
 }
 
-function autoTable(chunk, table_number) {
-    const table = `<div class="table-wrapper"><table class="auto-table auto-table-${ table_number }"><tbody>${
-        chunk.replace(/\n +/g, "<br>").split("\n").slice(1).map(
-            (row, row_index) => {
-                return `<tr class="row row-${ (row_index + 1) + " row-" + (row_index % 2 ?"even" :"odd") }">${
-                    row.replaceAll("\\|", "&verbar;").split("|").map(
+let table_number = 1;
+function autoTable(chunk) {
+    let table = `<div class="table-wrapper"><table class="auto-table auto-table-${ table_number }"><tbody>${
+        chunk.split(/\n(?! )/g).slice(1).map(
+            (tableRow, row_index) => {
+                tableRow = tableRow.split('\n').map( c => { c = c.trim(); return c.startsWith("!") ? '\n' + c : c; } ).join('\n').split('\n\n').map(c => { if (!c.startsWith("!")) { c = c.replace(/\n/g,'\n\n') } return c; }).join('\n\n');
+                return `<tr class="row row-${ (row_index + 1) + ' row-' + (row_index % 2 ?'even' :'odd') }">${
+                    tableRow.replaceAll('\\|', '&verbar;').split('|').map(
                         (cell, cell_index) => {
-                            return `<td class="cell col-${ cell_index + 1 } col-${ cell_index % 2 ?"even" :"odd" }">${
-                                cell.split("<br>").map(
-                                    p => {
-                                        p = p.trim();
-                                        if (p == "") return;
-                                        if (p.startsWith("#.") || p.startsWith(".#")) { p = '<blockquote><p class="fine">' + p.substring(2).trimStart() + '</p></blockquote>'; }
-                                        else if (p.startsWith("#")) { p = '<blockquote><p>' + p.substring(1).trimStart() + '</p></blockquote>'; }
-                                        else if (p.startsWith(".")) { p = '<p class="fine">' + p.substring(1).trimStart() + '</p>'; }
-                                        else p = '<p>' + p + '</p>';
-                                        return autoFormat(p);
-                                    }
-                                ).join('').replaceAll('</blockquote><blockquote>', '')
+                            return `<td class="cell col-${ cell_index + 1 } col-${ cell_index % 2 ?'even' :'odd' }">${
+                                interpreter(cell)
                             }</td>`
                         }
                     ).join('')
-                }</tr>`;
-            }
-        ).join('')
-    }</tbody></table></div>`
+                }</tr>`
+        }).join('')
+    }</tbody></table></div>`;
     
-    const firstRow = chunk.substring("!table".length, chunk.indexOf("\n")).trim();
-    if (firstRow.replace(/\s/g, "").length > 1) {
-        return table + `<style>${ firstRow.replace(/this/g, ".auto-table-" + table_number).replace(/;/g, " !important;") }</style>`;
+    let first_row = chunk.substring(0, chunk.indexOf('\n'));
+    if (first_row.indexOf(' ') != -1) {
+        first_row = first_row.substring(first_row.indexOf(' ')).trim();
     }
+    if (first_row.replace(/\s/g, '').length > 0) {
+        table += `<style>${ first_row.replace(/this/g, ".auto-table-" + table_number).replace(/;/g, "!important;") }</style>`
+    }
+    table_number += 1;
     return table;
 }
 
@@ -304,6 +300,7 @@ function autoList(chunk) {
     return output;
 }
 function autoIndent(chunk) {
+    if (chunk.startsWith("!indent\n")) { chunk = chunk.substring(chunk.indexOf('\n')) }
     return `<blockquote class="auto-indent">${ chunk.split("\n").map(
         line => {
             line = line.trim();
@@ -438,56 +435,28 @@ function interpreter(argValue) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
-    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("\\`", "&#96;").replaceAll("...", "\u2026").replaceAll("\\:", "&#58;").trim().split("\n\n");
+    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
 
-    let tableNum = 1;
     input = input.map( chunk => {
-        chunk = chunk;
-        
         if (chunk.startsWith("//")) { return ""; }
-        if (chunk.startsWith("<")) { return chunk; }
         if (chunk == "----") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
-        /* image galleries */
         if (chunk.startsWith("!images")) { return imageGallery(chunk); }
         if (chunk.startsWith("!files")) { return fileBox(chunk); }
-        /* ---- ---- */
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
-        /* codeblock and inline `code` */
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
         if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
-
-        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                           anchor links                                   
-        */
         chunk = linkReplace(chunk);
-
-        /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-                                     table, blockquote, ul/ol                             
-        */
-        if (chunk.startsWith("!table")) { return autoTable(chunk, tableNum++); }
-        if (chunk.startsWith("    ") || chunk.startsWith("!indent")) { return autoIndent(chunk); }
-        
-        let isFine = false;
-            if (chunk.startsWith(".")) {
-                isFine = true;
-                chunk = chunk.slice(1).trimStart();
-            }
-        
-        if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
-                chunk = autoList(chunk);
-            }
-            else {
-                chunk = '<p>' + autoFormat(chunk) + '</p>';
-            }
-        
-        if (isFine) {
-                chunk = '<div class="fine">' + chunk + '</div>';
-            }
-        
+        if (chunk.startsWith("!table")) { return autoTable(chunk); }
+        if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
+        let isFine = chunk.startsWith(".")
+        if (isFine) { chunk = chunk.slice(1).trimStart(); }
+        if (chunk.startsWith("!list")) { chunk = autoList(chunk.substring(chunk.indexOf('\n') + 1)); }
+        else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { chunk = autoList(chunk); }
+        else { chunk = '<p>' + autoFormat(chunk) + '</p>'; }
+        if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
-        
     })
     return input.join('');
 }
