@@ -374,29 +374,36 @@ function linkReplace(chunk) {
             if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg")) {
                 a_tag = `<a onclick="setlightbox('${ linkUrl }')"`;
                 link_class.push("pseudo-link");
-                link_inner += '<span class="inline-icon lightbox-link"></span>';
                 link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
+                let s_ = link_inner.lastIndexOf(" ") + 1;
+                link_inner = link_inner.substring(0, s_) + '<span class="icon-hugger">' + link_inner.substring(s_) + '<span class="inline-icon lightbox-link"></span></span>';
             }
         }
         else {
             link_class.push("external-link");
+            
+            let icon;
             if (linkUrl.includes("youtube.com") || linkUrl.includes("youtu.be")) {
-                link_inner += '<span class="youtube-logo inline-icon"></span>';
+                icon = '<span class="youtube-logo inline-icon"></span>';
             }
             else if (linkUrl.includes("twitch.tv/")) {
-                link_inner += '<span class="twitch-logo inline-icon"></span>';
+                icon = '<span class="twitch-logo inline-icon"></span>';
             }
             else if (linkUrl.includes("bsky.app/")) {
-                link_inner += '<span class="bluesky-logo inline-icon"></span>';
+                icon = '<span class="bluesky-logo inline-icon"></span>';
             }
             else if (linkUrl.includes("x.com") || linkUrl.includes("twitter.com")) {
-                link_inner += '<span class="twitter-logo inline-icon"></span>';
+                icon = '<span class="twitter-logo inline-icon"></span>';
             }
             else if (linkUrl.includes("facebook.com")) {
-                link_inner += '<span class="facebook-logo inline-icon"></span>';
+                icon = '<span class="facebook-logo inline-icon"></span>';
             }
             else if (linkUrl.includes("substack.com")) {
-                link_inner += '<span class="substack-logo inline-icon"></span>';
+                icon = '<span class="substack-logo inline-icon"></span>';
+            }
+            if (icon) {
+                let s_ = link_inner.lastIndexOf(" ") + 1;
+                link_inner = link_inner.substring(0, s_) + '<span class="icon-hugger">' + link_inner.substring(s_) + icon + '</span>';
             }
         }
         
@@ -431,7 +438,7 @@ function interpreter(argValue) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
-    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
+    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("\\`", "&#96;").replaceAll("...", "\u2026").replaceAll("\\:", "&#58;").trim().split("\n\n");
 
     let tableNum = 1;
     input = input.map( chunk => {
@@ -526,7 +533,7 @@ function aufoaux(str_in) {
     if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
         str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
     }
-    return str_in.replaceAll("---", '\u2014').replaceAll("--", "\u2013").replaceAll("...", "\u2026");
+    return str_in.replaceAll("---", '\u2014').replaceAll("--", "\u2013");
 }
 
 function tokenizeByWordChar(stringData) {
@@ -892,7 +899,7 @@ window.addEventListener("load", function() {
                 <div>Pages recently added:</div>
                 <div>
                     <ul class='label-external'>
-                        ${ meta.pageList().slice(0, 6).map( entry => `<li><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></li>` ).join("") }
+                        ${ meta.pageList().slice(0, 4).map( entry => `<li><a href="${ pathToRoot }page/${ entry.url }/index.html">${ entry.title }</a></li>` ).join("") }
                     </ul>
                 </div>
             </div>
@@ -948,7 +955,7 @@ window.addEventListener("load", function() {
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
                                          other                                   
     */
-    if (meta.flags.includes("wide")) {
+    if (meta.flags.includes("wide") || index) {
         HTML.classList.add("page-wider");
     }
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
@@ -1039,13 +1046,13 @@ window.addEventListener("load", function() {
                 li += '<p class="mirrors bubble-link label-external">' + entry.mirrors.map(m => parseSource(m)).join('') + '</p>';
             }
             else {
-                li += '<p style="color:var(--theme-grey-8); font-style:italic; margin-top:7px;">Only available here (no external mirrors)</p>'
+                li += '<p class="note">Only available here (no external mirrors)</p>'
             }
             return '<li>' + li + '</li>'
         }
     ).join(''))
     document.querySelector(".video-index")?.insertAdjacentHTML("beforeend",
-        meta.videoList().slice(0, 4).map(
+        meta.videoList().slice(0, 8).map(
             v => `<figure>
                     <a href="https://youtu.be/${ v.url }"><img loading="lazy" src="https://i.ytimg.com/vi/${ v.url }/hqdefault.jpg"></a>
                     <figcaption>
