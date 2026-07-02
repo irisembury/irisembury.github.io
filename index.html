@@ -7,8 +7,9 @@
     
     html.indent-text .article .auto-list p { text-indent: 0 !important; }
     
-    .article a { text-decoration: none; }
-    .article h1 { margin: 0 !important; font-size: 32px; font-family: 'Lora','Georgia','Inter',sans-serif; text-align: center; }
+    .article a { text-decoration: none !important; }
+    .article a:hover { text-decoration: underline !important; }
+    .article h1 { margin: 0 !important; font-size: 32px; font-family: 'Lora','Georgia','Inter',sans-serif; text-align: center !important; }
     
     .video-index { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); font-family: var(--ff-aux-2); margin-top: 10px !important; }
         .video-index :nth-child(n + 5) { display: none; }
@@ -19,40 +20,19 @@
                 .video-index figcaption .video-date { color: var(--theme-grey-6); }
     
     .page-index { max-width: 700px; margin-inline: auto; }
-    .page-index * { line-height: 1.3 !important; }
-        .page-index li + li { margin-top: 20px !important; }
-            .page-index li p { margin-top: 0; }
-                .page-index .entry { }
-                .page-index .date { color: var(--theme-grey-3); font-family: var(--ff-aux-1); font-size: calc(1em - 1px); }
-                .page-index .preview { padding-block: 1px; margin-top: 7px; margin-left: 10px; padding-left: 1em; border-left: 1px solid var(--theme-grey-a); color: var(--theme-grey-3); font-size: calc(1em - 1px); color: var(--theme-grey-4); }
-                .page-index .note { color: var(--theme-grey-7); margin-top: 7px; font-family: 'Segoe UI',system-ui; font-size: 16px; }
-                .page-index .mirrors { margin-top: 7px; display: flex; gap: 7px; }
-                    .page-index .mirrors a { color: var(--theme-grey-3); display: inline-flex; align-items: center; }
+    .page-index * { line-height: 1.4 !important; text-align: center; }
+        .page-index > div { margin-top: 15px !important; }
+            .page-index .date { color: var(--theme-grey-5); font-family: var(--ff-aux-1); font-size: calc(1em - 2px); }
+            .mirrors { }
+                .page-index .mirrors a { margin-left: 5px; padding-bottom: 2px; border: 1px solid var(--theme-grey-d); border-radius: 3px; }
+                .page-index .mirrors a .link-text { display: none; }
     </style>
 </head>
-<body>
-
-//
-<div>
-    <h1 class="index-title">Iris Embury</h1>
-    <div class="social-icons label-external">
-        <div><a title="YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span>YouTube</a></div>
-        <div><a title="Twitter/X" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span>Twitter</a></div>
-        <div><a title="Tumblr" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span>Tumblr</a></div>
-        <div><a title="Substack" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span>Substack</a></div>
-        <div><a title="Bluesky" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span>Bluesky</a></div>
-        <div><a title="Discord" href="https://discord.gg/fGdV7x5dk2"><span class="discord-logo inline-icon"></span>Discord</a></div>
-        <div><a title="Patreon" href="https://www.patreon.com/irisembury"><span class="patreon-logo inline-icon"></span>Patreon</a></div>
-    </div>
-</div>
-
-<h1>Recent videos</h1>
+<body><h1>Recent videos</h1>
 <div class="video-index"></div>
 <div class="label-external" style="text-align:right"><a style="color:var(--theme-grey-5)" title="See all videos on YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="inline-icon link-icon"></span></a></div>
-
 <h1>Text pages</h1>
 <ul class="auto-list page-index"></ul>
-
 <script src="assets/layout.js"></script>
 </body></html>
 
