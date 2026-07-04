@@ -7,8 +7,7 @@
     
     html.indent-text .article .auto-list p { text-indent: 0 !important; }
     
-    .article a { text-decoration: none !important; }
-    .article a:hover { text-decoration: underline !important; }
+    .article a { text-decoration: none; }
     .article h1 { margin: 0 !important; font-size: 32px; font-family: 'Lora','Georgia','Inter',sans-serif; text-align: center !important; }
     
     .video-index { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); font-family: var(--ff-aux-2); margin-top: 10px !important; }
@@ -19,16 +18,17 @@
             .video-index figcaption { text-align: center; padding: 3px; }
                 .video-index figcaption .video-date { color: var(--theme-grey-6); }
     
-    .page-index { max-width: 700px; margin-inline: auto; }
-    .page-index * { line-height: 1.4 !important; text-align: center; }
-        .page-index > div { margin-top: 15px !important; }
-            .page-index .date { color: var(--theme-grey-5); font-family: var(--ff-aux-1); font-size: calc(1em - 2px); }
-            .mirrors { }
-                .page-index .mirrors a { margin-left: 5px; padding-bottom: 2px; border: 1px solid var(--theme-grey-d); border-radius: 3px; }
+    .page-index { display: grid; justify-content: center; gap: 20px; }
+    .page-index * { line-height: 1.4 !important; }
+        .page-index .date { color: var(--theme-grey-5); font-family: var(--ff-aux-1); font-size: calc(1em - 2px); }
+        .mirrors { }
+            .page-index .mirrors a { margin-left: 5px; padding-block: 1px 2px; border: 1px solid var(--theme-grey-d); border-radius: 3px; }
+            .page-index .mirrors a:hover { background-color: var(--theme-grey-f); border-color: var(--theme-grey-a); }
                 .page-index .mirrors a .link-text { display: none; }
     </style>
 </head>
-<body><h1>Recent videos</h1>
+<body>
+<h1>Recent videos</h1>
 <div class="video-index"></div>
 <div class="label-external" style="text-align:right"><a style="color:var(--theme-grey-5)" title="See all videos on YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="inline-icon link-icon"></span></a></div>
 <h1>Text pages</h1>

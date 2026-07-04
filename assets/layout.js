@@ -480,7 +480,7 @@ var userSession = {
 */
 function loadBody() {
     HTML.lang = "en";
-    document.head.insertAdjacentHTML("beforeend", '<meta charset="utf-8"><link rel="stylesheet" href="' + rootPath + 'assets/main.css"><link rel="icon" type="image/x-icon" href="' + rootPath + 'favicon.ico"><link rel="stylesheet" href="' + rootPath + 'assets/fonts.css">');
+    document.head.insertAdjacentHTML("beforeend",'<meta charset="utf-8"><link rel="stylesheet" href="'+rootPath+'assets/main.css"><link rel="icon" type="image/x-icon" href="'+rootPath+'favicon.ico"><link rel="stylesheet" href="'+rootPath+'assets/fonts.css">');
     document.body.innerHTML = `
         <header class="top-header align-center center"></header>
         <nav class="top-nav">
@@ -702,7 +702,7 @@ function loadEntryMeta() {
         if (page.mirrors) {
             let mirrors_ = page.mirrors.filter(m => m);
             if (mirrors_.length > 0) {
-                document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-8 label-external"><div>The text of this page was also posted in other places:</div><div class="align-center gap-5">${ entry.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
+                document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-8 label-external"><div>The text of this page was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
             }
         }
         if (page.title) {
@@ -884,9 +884,8 @@ function init() {
     })
     document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", pageList().map(
         page => {
-            
-            let entry = '<a href="page/' + page.url + '/index.html">' + page.title;
-            if (page.subtitle) { entry += ' | ' + page.subtitle; }
+            let entry = '<a title="'+page.title+'" href="page/' + page.url + '/index.html">' + page.title;
+            //if (page.subtitle) { entry += ' | ' + page.subtitle; }
             entry += '</a>';
             if (page.date) { entry += ' <span class="date">' + page.date + '</span>'; }
             if (page.mirrors && page.mirrors.filter(m => m).length > 0) {
