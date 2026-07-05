@@ -52,7 +52,7 @@
         --page-top-pad: 44px;
         color-scheme: light dark;
         --footer-bg: light-dark(#2f3238, #161616);
-        --page-bg: light-dark(#eee, #181818);
+        --page-bg: light-dark(#f0f0f0, #1a1a1a);
         --article-bg: light-dark(#fafafa, #202020);
         --theme-grey-0: light-dark(#000, #ddd);
         --theme-grey-1: light-dark(#111, #dadada);
@@ -60,19 +60,17 @@
         --theme-grey-3: light-dark(#333, #b4b4b4);
         --theme-grey-4: light-dark(#444, #a7a7a7);
         --theme-grey-5: light-dark(#555, #999);
-        --theme-grey-6: light-dark(#666, #8b8b8b);
-        --theme-grey-7: light-dark(#777, #7e7e7e);
-        --theme-grey-8: light-dark(#888, #707070);
-        --theme-grey-9: light-dark(#999, #636363);
-        --theme-grey-a: light-dark(#aaa, #555);
-        --theme-grey-b: light-dark(#bababa, #474747);
-        --theme-grey-c: light-dark(#cacaca, #3a3a3a);
-        --theme-grey-d: light-dark(#dadada, #2c2c2c);
-        --theme-grey-e: light-dark(#eaeaea, #1f1f1f);
-        --theme-grey-f: light-dark(#f8f8f8, #171717);
-        --theme-white: light-dark(white, black);
-        --theme-black: light-dark(black, white);
-        --link-color: light-dark(#224490, #97add6); /*88224e*/
+        --theme-grey-6: light-dark(#666, #8c8c8c);
+        --theme-grey-7: light-dark(#777, #7d7d7d);
+        --theme-grey-8: light-dark(#888, #717171);
+        --theme-grey-9: light-dark(#999, #666);
+        --theme-grey-a: light-dark(#aaa, #575757);
+        --theme-grey-b: light-dark(#bababa, #4a4a4a);
+        --theme-grey-c: light-dark(#cacaca, #3c3c3c);
+        --theme-grey-d: light-dark(#dadada, #333);
+        --theme-grey-e: light-dark(#eaeaea, #212121);
+        --theme-grey-f: light-dark(#f8f8f8, #1b1b1b);
+        --link-color: light-dark(hsl(220, 60%, 35%), hsl(220, 70%, 75%)); /*88224e*/
         /* syntax highlighting */
         --c-code-blue: light-dark(#4761af, #8da2d4);
         --c-code-orange: light-dark(#9c691b, #bd8b49);
@@ -81,7 +79,7 @@
         --c-code-green: light-dark(#3c7d39, #709e6e);
         --c-code-red: light-dark(#a66, #b06f6f);
         /* for text, borders, etc. */
-        --c-red: light-dark(#aa2227, #d64149);
+        --c-red: light-dark(#aa2227, #c05157);
         --c-blue: light-dark(#434ab8, #676fb8);
         --c-green: light-dark(#387332, #729c74);
         --c-iris: light-dark(#7761d1, #6757a8);
@@ -297,7 +295,7 @@
                 .auto-video { background-color: #111; }
                     .auto-video video { display: block; margin-inline: auto; }
                 .table-wrapper { text-align: left; font-family: var(--ff-aux-1); line-height: 1.5; font-size: 16px; }
-                .auto-table { border-collapse: collapse; }
+                .auto-table { }
                     .auto-table ul,
                     .auto-table ol { margin-top: 0.625em; }
                         .auto-table ul li,
