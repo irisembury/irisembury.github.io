@@ -203,13 +203,13 @@ function autoIndent(chunk) {
     return `<blockquote class="auto-indent">${ chunk }</blockquote>`
 }
 /* converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
-function isoFormat(datestring) {
+function dateFromISO(datestring) {
     let input = datestring.replace(/\D/g, "")
     if (input.length == 8) {
         const iso = input.substring(0,4) + "-" + input.substring(4,6) + "-" + input.substring(6,8);
         let [year,month,day] = iso.split("-").map(Number);
         if (month >= 1 && month <= 12) {
-            month = { 1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June", 7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec" }[month]
+            month = {1:"Jan",2:"Feb",3:"Mar",4:"Apr",5:"May",6:"June",7:"July",8:"Aug",9:"Sept",10:"Oct",11:"Nov",12:"Dec",}[month]
         }
         datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ year + " " + month + " " + day +'</time>';
     }
@@ -224,6 +224,7 @@ function autoHeading(chunk) {
     heading = (headingNumber == 4) ?`<h4>${ heading }</h4>` :`<${ tag } class="for-toc" id="${ id }">${ heading }</${ tag }>`;
     return heading;
 }
+const siteIcons = { 'youtube.com': 'youtube', 'youtu.be': 'youtube', 'twitch.tv': 'twitch', 'bsky.app/': 'bluesky', 'x.com': 'twitter', 'twitter.com': 'twitter', 'facebook.com': 'facebook', 'substack.com': 'substack', 'instagram.com': 'instagram', 'reddit.com': 'reddit', 'medium.com': 'medium', 'wikipedia.org': 'wikipedia' };
 function linkReplace(chunk) {
     chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
         linkUrl = linkUrl.replaceAll('&#41;', ')');
@@ -248,40 +249,21 @@ function linkReplace(chunk) {
         let link_title = linkUrl;
         let link_class = [];
         let link_inner = displayText || '[' + linkIndex + ']';
-        if (!external) {
-            if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg")) {
-                a_tag = `<a onclick="setlightbox('${ linkUrl }')"`;
-                link_class.push("pseudo-link");
-                link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
-                let s_ = link_inner.lastIndexOf(" ") + 1;
-                link_inner = link_inner.substring(0, s_) + '<span class="nowrap">' + link_inner.substring(s_) + '<span class="inline-icon lightbox-link"></span></span>';
+        
+        if (external) {
+            link_class.push("external-link");
+            const linkedSite = Object.keys(siteIcons).find(site => linkUrl.includes(site));
+            if (linkedSite) {
+                let spaceIndex = link_inner.lastIndexOf(" ") + 1;
+                link_inner = link_inner.substring(0, spaceIndex) + '<span class="nowrap">' + link_inner.substring(spaceIndex) + '<span class="' + siteIcons[linkedSite] + '-logo inline-icon"></span>' + '</span>';
             }
         }
-        else {
-            link_class.push("external-link");
-            let icon;
-            if (linkUrl.includes("youtube.com") || linkUrl.includes("youtu.be")) {
-                icon = '<span class="youtube-logo inline-icon"></span>';
-            }
-            else if (linkUrl.includes("twitch.tv/")) {
-                icon = '<span class="twitch-logo inline-icon"></span>';
-            }
-            else if (linkUrl.includes("bsky.app/")) {
-                icon = '<span class="bluesky-logo inline-icon"></span>';
-            }
-            else if (linkUrl.includes("x.com") || linkUrl.includes("twitter.com")) {
-                icon = '<span class="twitter-logo inline-icon"></span>';
-            }
-            else if (linkUrl.includes("facebook.com")) {
-                icon = '<span class="facebook-logo inline-icon"></span>';
-            }
-            else if (linkUrl.includes("substack.com")) {
-                icon = '<span class="substack-logo inline-icon"></span>';
-            }
-            if (icon) {
-                let spaceIndex = link_inner.lastIndexOf(" ") + 1;
-                link_inner = link_inner.substring(0, spaceIndex) + '<span class="nowrap">' + link_inner.substring(spaceIndex) + icon + '</span>';
-            }
+        else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg")) {
+            a_tag = `<a onclick="setlightbox('${ linkUrl }')"`;
+            link_class.push("pseudo-link");
+            link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
+            let s_ = link_inner.lastIndexOf(" ") + 1;
+            link_inner = link_inner.substring(0, s_) + '<span class="nowrap">' + link_inner.substring(s_) + '<span class="inline-icon lightbox-link"></span></span>';
         }
         a_tag += ' title="' + link_title + '" class="' + link_class.join(' ') + '">' + link_inner + '</a>';
         if (blankDisplay) {
@@ -302,7 +284,13 @@ function linkReplace(chunk) {
         if (page_links.indexOf(_linkUrl) == -1) {
             page_links.push(_linkUrl);
         }
-        return '<a href="' + linkUrl + '">' + linkUrl + '</a>' + linkEnd;
+        let linkInner = linkUrl;
+        const linkedSite = Object.keys(siteIcons).find(site => linkUrl.includes(site));
+        if (linkedSite) {
+            let spaceIndex = linkInner.lastIndexOf(" ") + 1;
+            linkInner = linkInner.substring(0, spaceIndex) + '<span class="nowrap">' + linkInner.substring(spaceIndex) + '<span class="' + siteIcons[linkedSite] + '-logo inline-icon"></span>' + '</span>';
+        }
+        return '<a href="' + linkUrl + '">' + linkInner + '</a>' + linkEnd;
     });
     return chunk;
 }
@@ -336,6 +324,27 @@ function interpreter(argValue) {
     })
     return input.join('');
 }
+function convertSeconds(secNum) {
+    secNum = parseInt(secNum);
+    if (!isNaN(secNum)) {
+        let seconds = secNum % 60;
+        if (secNum < 60) {
+            return seconds;
+        }
+        if (seconds.length == 1) {
+            seconds = '0' + seconds;
+        }
+        let minutes = ((secNum - seconds) % 3600) / 60;
+        if (secNum < 3600) {
+            return minutes + ':' + seconds;
+        }
+        let hours = (secNum - minutes - hours) / 3600;
+        if (minutes.length == 1) {
+            minutes = '0' + minutes;
+        }
+        return hours + ':' + minutes + ':' + seconds;
+    }
+}
 function ageFromISO(argDate) {
     argDate = argDate.replace(/\D/g, "");
     if (argDate.length < 8) {
@@ -365,16 +374,16 @@ function autoFormat(_string) {
         const openTag = _string.indexOf("<");
         const closeTag = _string.substring(openTag).indexOf(">") + openTag;
         if (openTag == -1 || closeTag - openTag == -1) { break; }
-        output += aufoaux(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
+        output += afAux(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
         _string = _string.substring(closeTag);
     }
-    output = (output + aufoaux(_string))
+    output = (output + afAux(_string))
         .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
-        .replace(/\*(.+?)\*/g, '<i>$1</i>')
-        .replace(/\[([^:]+):([^\]]+)\]/g, '<span class="$1">$2</span>');
+        .replace(/\*(.+?)\*/g, '<i>$1</i>');
+    output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>')
     return output;
 }
-function aufoaux(str_in) {
+function afAux(str_in) { //curly quotes, dashes
     if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
         str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
     }
@@ -469,10 +478,10 @@ function getRootPath() {
 /*
 var userSession = {
     "theme":"light",
-    "--ff-heading-1":"",
-    "--ff-main":"",
-    "--ff-aux-1":"",
-    "--ff-aux-2":"",
+    "--heading-font-1":"",
+    "--article-main-font":"",
+    "--aux-font-1":"",
+    "--aux-font-2":"",
     "justify-text":"",
     "indent-text":"",
     "reduce-block":""
@@ -482,14 +491,12 @@ function loadBody() {
     HTML.lang = "en";
     document.head.insertAdjacentHTML("beforeend",'<meta charset="utf-8"><link rel="stylesheet" href="'+rootPath+'assets/main.css"><link rel="icon" type="image/x-icon" href="'+rootPath+'favicon.ico"><link rel="stylesheet" href="'+rootPath+'assets/fonts.css">');
     document.body.innerHTML = `
-        <header class="top-header align-center center"></header>
-        <nav class="top-nav">
+        <header class="header-main-top"></header>
+        <nav class="navbar">
             <div class="nav-segment">
-                <div class="page-id">
-                    ${ index ?'<span>Index Page</span>' :'<span><a href="' + rootPath + 'index.html">Back to Index</a></span>' }
-                </div>
+                <div class="page-id">${ index ?'' :'<a href="../../">Index</a>' }</div>
             </div>
-            <div class="nav-segment">
+            <div class="nav-segment flex-end">
                 <div class="jump-arrow nav-icon" onclick="scrollToTop()"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" height="24" viewBox="0 0 24 24" width="24"><path d="M5.293 15.207a1 1 0 001.414 0L12 9.914l5.293 5.293a1 1 0 101.414-1.414L12 7.086l-6.707 6.707a1 1 0 000 1.414Z"></path></svg></div>
                 <div id="gear" class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="28"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
             </div>
@@ -507,45 +514,45 @@ function loadBody() {
                 <hr>
                 <div><h3>Font family:</h3></div>
                 <div>
+                    <label>Main article font:</label>
+                    <select class="drop-select" id="--article-main-font" onchange="setCSS(this)">
+                        <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
                     <label>Headings 1:</label>
-                    <select class="drop-select" id="--ff-heading-1" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
+                    <select class="drop-select" id="--heading-font-1" onchange="setCSS(this)">
+                        <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
                     </select>
                 </div>
                 <div>
                     <label>Headings 2:</label>
-                    <select class="drop-select" id="--ff-heading-2" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
+                    <select class="drop-select" id="--heading-font-2" onchange="setCSS(this)">
+                        <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
                     </select>
                 </div>
                 <div>
                     <label>Headings 3:</label>
-                    <select class="drop-select" id="--ff-heading-3" onchange="setCSS(this)">
-                    <option value="'Arial',sans-serif">Arial</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
+                    <select class="drop-select" id="--heading-font-3" onchange="setCSS(this)">
+                    <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
                     </select>
                 </div>
                 <div>
-                    <label>Main body text:</label>
-                    <select class="drop-select" id="--ff-main" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
+                    <label>Aux font 1:</label>
+                    <select class="drop-select" id="--aux-font-1" onchange="setCSS(this)">
+                        <option value="'Arial',system-ui">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
                     </select>
                 </div>
                 <div>
-                    <label>Aux 1:</label>
-                    <select class="drop-select" id="--ff-aux-1" onchange="setCSS(this)">
-                        <option value="'Arial',system-ui">Arial</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
+                    <label>Aux font 2:</label>
+                    <select class="drop-select" id="--aux-font-2" onchange="setCSS(this)">
+                        <option value="'Arial',system-ui">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
                     </select>
                 </div>
                 <div>
-                    <label>Aux 2:</label>
-                    <select class="drop-select" id="--ff-aux-2" onchange="setCSS(this)">
-                        <option value="'Arial',system-ui">Arial</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Nav:</label>
-                    <select class="drop-select" id="--ff-nav" onchange="setCSS(this)">
-                        <option value="'Arial',system-ui">Arial</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
+                    <label>Nav font:</label>
+                    <select class="drop-select" id="--nav-font" onchange="setCSS(this)">
+                        <option value="'Arial',system-ui">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
                     </select>
                 </div>
                 <div><span class="reset-button no-select" onclick="restoreDefaults()" title="Set font family overrides (above) to their default values">restore defaults</span></div>
@@ -574,17 +581,17 @@ function loadBody() {
     HTML.classList.add("layout");
 }
 let canTocUpdate = true, tocLastHeading = 0, rowsInToc = [], pageHeadings = [];
-function attempt_toc_update() {
+function tocUpdate() {
     if (!canTocUpdate) { return; }
     if (HTML.classList.contains("hide-toc")) { return; }
     canTocUpdate = false;
     setTimeout(() => {
         canTocUpdate = true;
-        toc_update();
+        tocUpdate_();
     }, 500);
-    toc_update();
+    tocUpdate_();
 }
-function toc_update() {
+function tocUpdate_() {
     let currentHeading = -1;
     for (let heading = 0; heading < pageHeadings.length; heading += 1) {
         let elementDistanceFromPageTop = window.scrollY + pageHeadings[heading].getBoundingClientRect().top;
@@ -624,15 +631,21 @@ function setCSS(mEle) {
         if (styleOverrides.length > 0) {
             cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
         }
-        if (localStorage.getItem("--ff-heading-1") == "'Georgia Pro',sans-serif") {
+        if (localStorage.getItem("--heading-font-1") == "'Georgia Pro',sans-serif") {
             cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important; }");
         }
-        if (localStorage.getItem("--ff-heading-2") == "'Georgia Pro',sans-serif") {
+        if (localStorage.getItem("--heading-font-2") == "'Georgia Pro',sans-serif") {
             cssPanel.insertAdjacentHTML("afterbegin", ".article h2 { font-weight: 600 !important; }");
+        }
+        if (localStorage.getItem("--article-main-font") == "'Trebuchet MS',sans-serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", "body { --fs-article: 16.4px !important; }");
+        }
+        if (localStorage.getItem("--article-main-font") == "'Calibri',sans-serif") {
+            cssPanel.insertAdjacentHTML("afterbegin", "body { --fs-article: 18px !important; }");
         }
         
         /* for bold letter-spacing */
-        let bodyff = localStorage.getItem("--ff-main") || font_defaults["--ff-main"];
+        let bodyff = localStorage.getItem("--article-main-font") || font_defaults["--article-main-font"];
         if (bodyff == "var(--ff-georgia-digits)" || bodyff == "'Roboto',sans-serif") {
             cssPanel.insertAdjacentHTML("afterbegin", ".article p strong, .article li strong { letter-spacing: -0.1px; }");
         }
@@ -674,24 +687,27 @@ function restoreDefaults() {
     )
     setCSS();
 }
-let navbar = null, canNavCheck = true, navIsSticky = false;
+let navbar = null, canNavCheck = true, navSticky = false, navThreshold = 150;
 function navCheck() {
-    if (!canNavCheck) { return; }
+    if (!canNavCheck) {
+        return;
+    }
     canNavCheck = false;
-    setTimeout(
-        function() {
-            canNavCheck = true;
-            if (!navIsSticky && pageYOffset > 150) {
-                navbar.classList.add("sticky-active")
-                navIsSticky = true;
-            }
-            else if (navIsSticky && pageYOffset < 150) {
-                navbar.classList.remove("sticky-active")
-                navIsSticky = false;
-            }
-        }, 500
-    )
-    navbar.classList.toggle("sticky-active", pageYOffset > 150);
+    navCheck_();
+    setTimeout(() => {
+        canNavCheck = true;
+        navCheck_();
+    }, 500);
+}
+function navCheck_() {
+    if (!navSticky && pageYOffset > navThreshold) {
+        navbar.classList.add("sticky-active");
+        navSticky = true;
+    }
+    else if (navSticky && pageYOffset < navThreshold) {
+        navbar.classList.remove("sticky-active");
+        navSticky = false;
+    }
 }
 function loadEntryMeta() {
     const page = pageListFull().find(e => e.url==getDirectory());
@@ -708,7 +724,7 @@ function loadEntryMeta() {
         if (page.title) {
             document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>' + page.title + '</span>');
         }
-        document.querySelector(".article")?.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (page.title ?`<h1 class="article-title for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-date">${ page.date }` :'') + '</div>');
+        document.querySelector(".article")?.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (page.title ?`<h1 class="article-title for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + `<div class="article-byline">Iris Embury${ page.date ?' / '+page.date:'' }</div>`);
         document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
         <div>
             <p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
@@ -807,14 +823,14 @@ const videoListData = [
 ];
 function pageList() { return pageListData.filter(p => !p.flags || !p.flags.includes("hidden")) }
 function pageListFull() { return pageListData }
-function videoList() { return videoListData.filter(p => !p.flags || !p.flags.includes("hidden")).slice(0, 6) }
-const font_defaults = { "--ff-heading-1":"'Inter',sans-serif", "--ff-heading-2":"'Inter',sans-serif", "--ff-heading-3":"'Inter',sans-serif", "--ff-main":"var(--ff-georgia-digits)", "--ff-aux-1":"'Segoe UI',system-ui", "--ff-aux-2":"'Roboto',system-ui", "--ff-nav":"'Trebuchet MS',system-ui" }
+function videoList() { return videoListData.filter(p => !p.flags || !p.flags.includes("hidden")) }
+const font_defaults = { "--heading-font-1":"'Inter',sans-serif", "--heading-font-2":"'Inter',sans-serif", "--heading-font-3":"'Inter',sans-serif", "--article-main-font":"var(--ff-georgia-digits)", "--aux-font-1":"'Segoe UI',system-ui", "--aux-font-2":"'Roboto',system-ui", "--nav-font":"'Trebuchet MS',system-ui" }
 let page_links = [];
 function init() {
     loadBody();
-    if (navbar == null) { navbar = document.querySelector('.top-nav'); }
-    pageListData.sort((a, b) => (parseInt(b.date?.replace(/\D/g, ""))||0) - (parseInt(a.date?.replace(/\D/g,""))||0))
-    videoListData.sort((a, b) => (parseInt(b.date?.replace(/\D/g, ""))||0) - (parseInt(a.date?.replace(/\D/g,""))||0))
+    navbar = document.querySelector('.navbar');
+    pageListData.sort((a, b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
+    videoListData.sort((a, b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
     pageListData.forEach(p => { if (p.title) { p.title = autoFormat(p.title); } })
     Array.from(document.getElementsByClassName("drop-select")).forEach( select => { select.value = (localStorage.getItem(select.id) || font_defaults[select.id] || ""); Array.from(select.children).forEach(option => option.style.fontFamily = option.value + ",system-ui" ); } )
     setCSS();
@@ -831,14 +847,17 @@ function init() {
                     </div>
                 </div>
             </div>`);
-        
         const citelist = document.querySelector(".citelist");
         if (citelist.offsetHeight > parseInt(window.getComputedStyle(citelist).maxHeight)) {
             citelist.previousElementSibling.insertAdjacentHTML('beforeend', `<span style="opacity:0.75; font-size:14px; cursor:pointer;" onclick="let citelist = document.querySelector('.citelist'); if (citelist) { let expanded = citelist.classList.contains('expanded'); this.innerHTML = expanded? 'expand':'collapse'; citelist.classList.toggle('expanded',!expanded); }">expand</span>`);
         }
     }
-    navCheck();
+    setTimeout(function() {
+        navThreshold = parseInt(window.getComputedStyle(HTML).getPropertyValue("--header-height")) + 1;
+        navCheck();
+    }, 100)
     window.addEventListener("scroll", navCheck);
+    Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = convertSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
     Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
@@ -851,7 +870,7 @@ function init() {
                 localStorage.setItem(c.id, c.checked);
                 HTML.classList.toggle(c.id, c.checked);
             });
-            attempt_toc_update();
+            tocUpdate();
         }
     )
     const gearMenu = document.querySelector(".right-panel");
@@ -929,8 +948,8 @@ function init() {
         
         rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
         
-        window.addEventListener("scroll", attempt_toc_update);
-        attempt_toc_update();
+        window.addEventListener("scroll", tocUpdate);
+        tocUpdate();
     }
 }
 window.addEventListener("load", init);

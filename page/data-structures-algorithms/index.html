@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="../../assets/main.css">
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <style>
     body {
         --lh-article: 1.5;
     }
     .auto-table .cell {
-        border: 1px solid var(--theme-grey-a);
+        border: 1px solid var(--grey-a);
     }
     
     </style>
@@ -145,20 +143,20 @@ These operators return a number with their bits shifted in the direction specifi
 
 The long story short is that shifting to the left will double the value of a number while shifting to the right halves it (and rounds down odd number results, because the last bit just falls off).
 
-!table this { text-align: center; width: 100%; } this td:nth-child(2n) { vertical-align: middle; } this span { color: var(--c-blue); }
+!table this { text-align: center; width: 100%; } this td:nth-child(2n) { vertical-align: middle; } this span { color: var(--blue); }
 <span>94</span><br>01011110 | >> | <span>47</span><br>00101111 | >> | <span>23</span><br>00010111
 
 Shifting by multiple places is the same as doubling or halving that many times. This means a shift is the same as dividing or multiplying by 2 to the power of the places shifted by.
 
 <div class="align-center gap-15">
 
-!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--theme-grey-f) }
+!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
 shifting by x places | is the same as multiplying
 << 1 | * 2
 << 2 | * 2<sup>2</sup> (i.e. \*2\*2)
 << 3 | * 2<sup>3</sup> (i.e. \*2\*2\*2)
 
-!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--theme-grey-f) }
+!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
 shifting by x places | is the same as multiplying
 >> 1 | / 2
 >> 2 | / 2<sup>2</sup> (i.e. \*2\*2)
