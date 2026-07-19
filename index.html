@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
     <style>
-    html.indent-text .article .auto-list p { text-indent: 0 !important; }
-    
     .article a { text-decoration: none; }
     .article h1 { margin: 0 !important; font-size: 32px; font-family: 'Lora','Georgia','Inter',sans-serif; text-align: center !important; }
     
-    .video-index { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); font-family: var(--ff-aux-2); margin-top: 10px !important; }
+    .video-index { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); font-family: system-ui; margin-top: 10px !important; }
         .video-index :nth-child(n + 5) { display: none; }
         .video-index figure { max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
             .video-index img { box-sizing: border-box; border: 1px solid var(--grey-c); aspect-ratio: 1.8; object-fit: cover; }
@@ -15,13 +13,14 @@
             .video-index figcaption { text-align: center; padding: 3px; }
                 .video-index figcaption .video-date { color: var(--grey-6); }
     
-    .page-index { font-family: 'Roboto','Open Sans',sans-serif; display: grid; justify-content: center; gap: 20px; }
-    .page-index * { line-height: 1.4 !important; }
-        .page-index .date { margin-inline: 4px; color: var(--grey-5); font-size: calc(1em - 2px); }
-        .mirrors { }
-            .page-index .mirrors a { margin-left: 5px; padding-block: 1px 2px; border: 1px solid var(--grey-d); border-radius: 3px; }
-            .page-index .mirrors a:hover { background-color: var(--grey-f); border-color: var(--grey-a); }
-                .page-index .mirrors a .link-text { display: none; }
+    .page-index { display: grid; justify-content: center; gap: 20px; line-height: 1.35; }
+        .page-index .page-title { font-family: 'Rubik',sans-serif; font-size: 18px; }
+        .page-index .date { font-family: 'Roboto',system-ui; font-size: calc(1em - 1px); color: var(--grey-5); margin-left: 1em; }
+        .mirrors {  }
+            .page-index .mirrors a + a { margin-left: 3px; }
+            .page-index .mirrors a:hover {  }
+                .page-index .mirrors a .inline-icon { }
+                .page-index .mirrors a .link-text { display: none; color: var(--grey-3); }
     </style>
 </head>
 <body>
@@ -29,7 +28,6 @@
 <div class="video-index"></div>
 <div class="label-external" style="text-align:right"><a style="color:var(--grey-5)" title="See all videos on YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="inline-icon link-icon"></span></a></div>
 <h1>Text pages</h1>
-<ul class="auto-list page-index"></ul>
+<ul class="page-index"></ul>
 <script src="assets/layout.js"></script>
 </body></html>
-

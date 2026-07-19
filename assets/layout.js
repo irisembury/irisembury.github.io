@@ -67,11 +67,11 @@ function parseObj(entry, ...requiredFields) {
 function fileBox(chunk) {
     chunk = chunk.split("\n").slice(1).map(
         row => {
-            row = parseObj(row,"src","name");
+            row = parseObj(row,"src","name","icon");
             row.name = row.name || row.src.split("/").slice(-1).join("");
-            let iconType = row.src.endsWith("pdf") ?"pdf-icon" :"html-icon";
+            row.icon = row.icon ||'pdf';
             return `<figure>
-                <a target="_blank" title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }" class="${ iconType }"></a>
+                <a target="_blank" title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }" class="${ row.icon }"></a>
                 <figcaption>
                     <a target="_blank" title="${ row.src.split("/").slice(-1).join("") }" href="${ row.src }">${ row.name }</a>
                 </figcaption>
@@ -94,7 +94,7 @@ function imageGallery(chunk) {
         row.alt = row.alt || row.caption;
         if (row.caption) { row.caption = '<figcaption>' + row.caption + '</figcaption>'; }
         return `<figure>
-            <div><img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)"></div>
+            <div><img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)">
             ${ row.caption }
         </figure>`;
     }).join("")}</div>`;
@@ -131,7 +131,22 @@ function autoTable(chunk) {
     let table = `<div class="table-wrapper"><table class="auto-table auto-table-${ table_number }"><tbody>${
         chunk.split(/\n(?! )/g).slice(1).map(
             (tableRow, row_index) => {
-                tableRow = tableRow.split('\n').map( c => { c = c.trim(); return c.startsWith("!") ? '\n' + c : c; } ).join('\n').split('\n\n').map(c => { if (!c.startsWith("!")) { c = c.replace(/\n/g,'\n\n') } return c; }).join('\n\n');
+                tableRow = tableRow.split('\n').map(
+                    c => {
+                        c = c.trim();
+                        if (c.startsWith('!')) {
+                            c = '\n' + c;
+                        }
+                        return c;
+                    }
+                ).join('\n').split('\n\n').map(
+                    c => {
+                        if (!c.startsWith("!")) {
+                            c = c.replace(/\n/g, '\n\n')
+                        }
+                        return c;
+                    }
+                ).join('\n\n');
                 return `<tr class="row row-${ (row_index + 1) + ' row-' + (row_index % 2 ?'even' :'odd') }">${
                     tableRow.replaceAll('\\|', '&verbar;').split('|').map(
                         (cell, cell_index) => {
@@ -167,10 +182,10 @@ function autoList(chunk) {
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
             li = (liType) == "none" ? li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
             if (liType =='none') {
-                if (li.startsWith("#")) { li = '<blockquote class="auto-indent"><p>' + li.slice(1).trimStart() + '</p></blockquote>\n' }
-                if (li.startsWith(".")) { li = '<div class="fine"><p>' + li.slice(1).trimStart() + '</p></div>\n' }
-                else { li = '<p>' + li + '</p>\n'; }
-            } else { li = '<li>' + li + '</li>' };
+                if (li.startsWith("#")) { li = '<blockquote class="auto-indent"><div class="text-block">' + li.slice(1).trimStart() + '</div></blockquote>\n' }
+                if (li.startsWith(".")) { li = '<div class="fine">' + li.slice(1).trimStart() + '</div>\n' }
+                else { li = '<div class="text-block">' + li + '</div>\n'; }
+            } else { li = '<li class="text-block">' + li + '</li>' };
             li = " ".repeat(indent * 4) + li;
             if (indent > prevIndent) {
                 li = " ".repeat(indent * 4) + "<" + listType + (liType =="ol" ?' start="'+startNum+'"' :'') + ">\n" + li;
@@ -216,15 +231,18 @@ function dateFromISO(datestring) {
     return datestring;
 }
 function autoHeading(chunk) {
-    let headingNumber = chunk.indexOf(" ");
-    let tag = "h" + Math.min(headingNumber, 4);
-    let heading = chunk.slice(headingNumber + 1).trim();
-    let id = heading.replaceAll(" ", "_").replaceAll("---", "&mdash;").replaceAll("--", "&ndash;").replace(/[\*<>]/g, "");
+    let number = chunk.indexOf(" ");
+    let heading = chunk.slice(number + 1).trim();
+    if (number > 4) {
+        number = 4;
+    }
+    const tag = 'h' + number;
+    const id = heading.replaceAll(" ", "_").replaceAll("---", '\u2014').replaceAll("--", "\u2013").replace(/[\*<>]/g, "");
+    
     heading = autoFormat(heading);
-    heading = (headingNumber == 4) ?`<h4>${ heading }</h4>` :`<${ tag } class="for-toc" id="${ id }">${ heading }</${ tag }>`;
-    return heading;
+    return `<${ tag } class="auto-heading${ number == 4 ? '' : ' for-toc' }" id="${ id }">${ heading }</${ tag }>`;
 }
-const siteIcons = { 'youtube.com': 'youtube', 'youtu.be': 'youtube', 'twitch.tv': 'twitch', 'bsky.app/': 'bluesky', 'x.com': 'twitter', 'twitter.com': 'twitter', 'facebook.com': 'facebook', 'substack.com': 'substack', 'instagram.com': 'instagram', 'reddit.com': 'reddit', 'medium.com': 'medium', 'wikipedia.org': 'wikipedia' };
+const siteIcons = { 'youtube.com': 'youtube-logo', 'youtu.be': 'youtube-logo', 'twitch.tv': 'twitch-logo', 'bsky.app': 'bluesky-logo', 'x.com': 'twitter-logo', 'twitter.com': 'twitter-logo', 'facebook.com': 'facebook-logo', 'substack.com': 'substack-logo', 'instagram.com': 'instagram-logo', 'reddit.com': 'reddit-logo', 'medium.com': 'medium-logo', 'wikipedia.org': 'wikipedia-logo' };
 function linkReplace(chunk) {
     chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
         linkUrl = linkUrl.replaceAll('&#41;', ')');
@@ -252,18 +270,21 @@ function linkReplace(chunk) {
         
         if (external) {
             link_class.push("external-link");
-            const linkedSite = Object.keys(siteIcons).find(site => linkUrl.includes(site));
-            if (linkedSite) {
+            const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
+            if (iconName) {
                 let spaceIndex = link_inner.lastIndexOf(" ") + 1;
-                link_inner = link_inner.substring(0, spaceIndex) + '<span class="nowrap">' + link_inner.substring(spaceIndex) + '<span class="' + siteIcons[linkedSite] + '-logo inline-icon"></span>' + '</span>';
+                link_inner = link_inner.substring(0, spaceIndex) + '<span class="nowrap">' + link_inner.substring(spaceIndex) + '<span class="' + iconName + ' inline-icon"></span>' + '</span>';
             }
         }
-        else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg")) {
+        else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg")) {
             a_tag = `<a onclick="setlightbox('${ linkUrl }')"`;
             link_class.push("pseudo-link");
             link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
             let s_ = link_inner.lastIndexOf(" ") + 1;
             link_inner = link_inner.substring(0, s_) + '<span class="nowrap">' + link_inner.substring(s_) + '<span class="inline-icon lightbox-link"></span></span>';
+        }
+        if (blankDisplay) {
+            link_class.push('super');
         }
         a_tag += ' title="' + link_title + '" class="' + link_class.join(' ') + '">' + link_inner + '</a>';
         if (blankDisplay) {
@@ -272,9 +293,9 @@ function linkReplace(chunk) {
         return a_tag;
     })
     chunk = chunk.replace(/(?<=^|\s)(https?:\/\/\S+)(?=\s|$)/g, (match, linkUrl) => {
-        let linkEnd = "";
+        let linkAfter = "";
         if (/[.,?!;]$/.test(linkUrl)) {
-            linkEnd = linkUrl.at(-1);
+            linkAfter = linkUrl.at(-1);
             linkUrl = linkUrl.slice(0, -1);
         }
         let _linkUrl = linkUrl;
@@ -285,12 +306,14 @@ function linkReplace(chunk) {
             page_links.push(_linkUrl);
         }
         let linkInner = linkUrl;
-        const linkedSite = Object.keys(siteIcons).find(site => linkUrl.includes(site));
-        if (linkedSite) {
+        const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
+        let a_tag = '<a';
+        if (iconName) {
+            a_tag += ' class="has-icon"';
             let spaceIndex = linkInner.lastIndexOf(" ") + 1;
-            linkInner = linkInner.substring(0, spaceIndex) + '<span class="nowrap">' + linkInner.substring(spaceIndex) + '<span class="' + siteIcons[linkedSite] + '-logo inline-icon"></span>' + '</span>';
+            linkInner = linkInner.substring(0, spaceIndex) + '<span class="nowrap">' + linkInner.substring(spaceIndex) + '<span class="' + iconName + ' inline-icon"></span>' + '</span>';
         }
-        return '<a href="' + linkUrl + '">' + linkInner + '</a>' + linkEnd;
+        return a_tag + ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
     });
     return chunk;
 }
@@ -303,7 +326,8 @@ function interpreter(argValue) {
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
-        if (chunk == "----") { return "<hr>"; }
+        if (chunk.startsWith("<")) { return chunk; }
+        if (chunk == "---") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         if (chunk.startsWith("!images")) { return imageGallery(chunk); }
         if (chunk.startsWith("!files")) { return fileBox(chunk); }
@@ -314,8 +338,9 @@ function interpreter(argValue) {
         chunk = linkReplace(chunk);
         if (chunk.startsWith("!table")) { return autoTable(chunk); }
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
-        let isFine = chunk.startsWith(".")
+        let isFine = chunk.startsWith(".");
         if (isFine) { chunk = chunk.slice(1).trimStart(); }
+        if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li>' + (l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
         if (chunk.startsWith("!list")) { chunk = autoList(chunk.substring(chunk.indexOf('\n') + 1)); }
         else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { chunk = autoList(chunk); }
         else { chunk = '<p>' + autoFormat(chunk) + '</p>'; }
@@ -344,6 +369,7 @@ function convertSeconds(secNum) {
         }
         return hours + ':' + minutes + ':' + seconds;
     }
+    return secNum;
 }
 function ageFromISO(argDate) {
     argDate = argDate.replace(/\D/g, "");
@@ -378,8 +404,8 @@ function autoFormat(_string) {
         _string = _string.substring(closeTag);
     }
     output = (output + afAux(_string))
-        .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
-        .replace(/\*(.+?)\*/g, '<i>$1</i>');
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>');
     output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>')
     return output;
 }
@@ -439,21 +465,6 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     output = output.replace(/(\/\/.*)/, "<span class=\"code-comment\">$1</span>").replace(/(#.*)/, "<span class=\"code-macro\">$1</span>")
     return output;
 }
-function formattingToggle() {
-    const fswitches = Array.from(document.querySelectorAll(".slide-checkbox.formatting"));
-    let anyOff = false;
-    fswitches.forEach(
-        s => {
-            if (s.checked == false) { anyOff = true; }
-        }
-    )
-    fswitches.forEach(
-        s => {
-            s.checked = anyOff;
-            s.dispatchEvent(new Event('change'));
-        }
-    )
-}
 /* irisembury.github.io/page/RETURN_VALUE/index.html */
 function getDirectory() {
     let path = window.location.pathname.replace(/index\.html$/, "");
@@ -478,10 +489,10 @@ function getRootPath() {
 /*
 var userSession = {
     "theme":"light",
-    "--heading-font-1":"",
+    "--headings-font":"",
     "--article-main-font":"",
-    "--aux-font-1":"",
     "--aux-font-2":"",
+    "--aux-font-1":"",
     "justify-text":"",
     "indent-text":"",
     "reduce-block":""
@@ -494,7 +505,7 @@ function loadBody() {
         <header class="header-main-top"></header>
         <nav class="navbar">
             <div class="nav-segment">
-                <div class="page-id">${ index ?'' :'<a href="../../">Index</a>' }</div>
+                <div class="page-id">${ index ?'' :'<a href="../../index.html">Index (back to front)</a>' }</div>
             </div>
             <div class="nav-segment flex-end">
                 <div class="jump-arrow nav-icon" onclick="scrollToTop()"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" height="24" viewBox="0 0 24 24" width="24"><path d="M5.293 15.207a1 1 0 001.414 0L12 9.914l5.293 5.293a1 1 0 101.414-1.414L12 7.086l-6.707 6.707a1 1 0 000 1.414Z"></path></svg></div>
@@ -503,64 +514,62 @@ function loadBody() {
         </nav>
         <div class="panel-wrapper">
             <div class="right-panel closed">
-                <div><div><h3>Display:</h3></div></div>
-                <div class="push-right"><label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch"></div>
-                <hr>
-                <div><div><h3>Paragraph formatting:</h3></div></div>
-                <div class="push-right"><label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
-                <div class="push-right"><label for="justify-text">Text-align justify:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
-                <div class="push-right"><label for="reduce-block">Reduce paragraph margins:</label><input type="checkbox" class="slide-checkbox formatting auto" id="reduce-block"></div>
-                <div><div class="reset-button no-select" onclick="formattingToggle()" title="Flip text formatting switches (above) all on or all off">toggle these</div></div>
-                <hr>
-                <div><h3>Font family:</h3></div>
-                <div>
-                    <label>Main article font:</label>
+                <h3>Display:</h3>
+                <div class="switches-area">
+                    <label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch">
+                    <label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text">
+                    <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
+                    <label for="reduce-margin">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margin">
+                    <label for="full-width">Full page width:</label><input type="checkbox" class="slide-checkbox auto" id="full-width">
+                </div>
+                <div style="margin-top:17px;display:grid;grid-template-columns:auto auto;gap:9px 12px;align-items:flex-start;">
+                    <label>--main-font</label>
                     <select class="drop-select" id="--article-main-font" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Tahoma',sans-serif">Tahoma</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
+                        <option value="var(--Arial)">Arial</option>
+                        <option value="var(--Calibri)">Calibri</option>
+                        <option value="var(--Georgia)">Georgia</option>
+                        <option value="var(--Lato)">Lato</option>
+                        <option value="var(--OpenSans)">Open Sans</option>
+                        <option value="var(--PTSerif)">PT Serif</option>
+                        <option value="var(--Roboto)">Roboto</option>
+                        <option value="var(--RobotoSlab)">Roboto Slab</option>
+                        <option value="var(--Rubik)">Rubik</option>
+                        <option value="var(--SegoeUI)">Segoe UI</option>
+                        <option value="var(--Sitka)">Sitka</option>
+                        <option value="var(--Tahoma)">Tahoma</option>
+                        <option value="var(--TrebuchetMS)">Trebuchet MS</option>
+                        <option value="var(--Verdana)">Verdana</option>
                     </select>
-                </div>
-                <div>
-                    <label>Headings 1:</label>
-                    <select class="drop-select" id="--heading-font-1" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Tahoma',sans-serif">Tahoma</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
+                    <label>--headings-font</label>
+                    <select class="drop-select" id="--headings-font" onchange="setCSS(this)">
+                        <option value="var(--GeorgiaHeading)">Georgia</option>
+                        <option value="var(--InterHeading)">Inter</option>
+                        <option value="var(--LoraHeading)">Lora</option>
+                        <option value="var(--PTSerifHeading)">PT Serif</option>
+                        <option value="var(--RobotoSlab)">Roboto Slab</option>
                     </select>
-                </div>
-                <div>
-                    <label>Headings 2:</label>
-                    <select class="drop-select" id="--heading-font-2" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Tahoma',sans-serif">Tahoma</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Headings 3:</label>
-                    <select class="drop-select" id="--heading-font-3" onchange="setCSS(this)">
-                    <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="'Georgia Pro',sans-serif">Georgia</option><option value="'IBM Plex Sans',sans-serif">IBM Plex Sans</option><option value="'IBM Plex Serif',sans-serif">IBM Plex Serif</option><option value="'Inter',sans-serif">Inter</option><option value="'Libre Caslon Text',sans-serif">Libre Caslon Text</option><option value="'Lora',sans-serif">Lora</option><option value="'Merriweather',sans-serif">Merriweather</option><option value="'Open Sans',sans-serif">Open Sans</option><option value="'PT Serif',sans-serif">PT Serif</option><option value="'Roboto',sans-serif">Roboto</option><option value="'Roboto Slab',sans-serif">Roboto Slab</option><option value="'Segoe UI',sans-serif">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Tahoma',sans-serif">Tahoma</option><option value="'Trebuchet MS',sans-serif">Trebuchet MS</option><option value="'Verdana',sans-serif">Verdana</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Aux font 1:</label>
+                    <div>
+                        <label title="small body, tables">--aux-font-1</label>
+                    </div>
                     <select class="drop-select" id="--aux-font-1" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Tahoma',sans-serif">Tahoma</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
+                        <option value="var(--IBMPlexSansAux)">IBM Plex Sans</option>
+                        <option value="var(--PTSerifAux)">PT Serif</option>
+                        <option value="var(--RobotoAux)">Roboto</option>
+                        <option value="var(--SegoeUIAux)">Segoe UI</option>
+                        <option value="var(--TrebuchetMSAux)">Trebuchet MS</option>
                     </select>
-                </div>
-                <div>
-                    <label>Aux font 2:</label>
+                    <label title="captions, labels, etc.">--aux-font-2</label>
                     <select class="drop-select" id="--aux-font-2" onchange="setCSS(this)">
-                        <option value="'Arial',sans-serif">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Tahoma',sans-serif">Tahoma</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
+                        <option value="var(--IBMPlexSansAux)">IBM Plex Sans</option>
+                        <option value="var(--PTSerifAux)">PT Serif</option>
+                        <option value="var(--RobotoAux)">Roboto</option>
+                        <option value="var(--SegoeUIAux)">Segoe UI</option>
+                        <option value="var(--TrebuchetMSAux)">Trebuchet MS</option>
                     </select>
                 </div>
-                <div>
-                    <label>Nav font:</label>
-                    <select class="drop-select" id="--nav-font" onchange="setCSS(this)">
-                        <option value="'Arial',system-ui">Arial</option><option value="'Calibri',sans-serif">Calibri</option><option value="var(--ff-georgia-digits)">Georgia</option><option value="'IBM Plex Sans',system-ui">IBM Plex Sans</option><option value="'IBM Plex Serif',system-ui">IBM Plex Serif</option><option value="'Inter',system-ui">Inter</option><option value="'Libre Caslon Text',system-ui">Libre Caslon Text</option><option value="'Lora',system-ui">Lora</option><option value="'Merriweather',system-ui">Merriweather</option><option value="'Open Sans',system-ui">Open Sans</option><option value="'PT Serif',system-ui">PT Serif</option><option value="'Roboto',system-ui">Roboto</option><option value="'Roboto Slab',system-ui">Roboto Slab</option><option value="'Segoe UI',system-ui">Segoe UI</option><option value="'Sitka','Sitka Text',sans-serif">Sitka Text</option><option value="'Tahoma',sans-serif">Tahoma</option><option value="'Trebuchet MS',system-ui">Trebuchet MS</option><option value="'Verdana',system-ui">Verdana</option>
-                    </select>
+                <div style="display:grid;text-align:right;gap:8px;margin-top:15px;color:var(--grey-6,dimgrey)">
+                    <div class="no-select"><span class="pseudo-link" onclick="restoreDefaults()">restore defaults</span></div>
                 </div>
-                <div><span class="reset-button no-select" onclick="restoreDefaults()" title="Set font family overrides (above) to their default values">restore defaults</span></div>
-                <hr>
-                <div><div><h3>Layout:</h3></div></div>
-                <div class="push-right"><label for="full-width">Full page width:</label><input type="checkbox" class="slide-checkbox auto" id="full-width"></div>
-                <hr>
-                <div><div style="line-height:1.5;color:var(--theme-grey-6,dimgrey);"><p>These preferences are saved in your browser's local storage. To clear your local storage for this site, <a class="pseudo-link" onclick="localStorage.clear()" title="Nothing visible happens when you click this, but I tested it and it works.">click here</a>.</p></div></div>
             </div>
         </div>
         <div class="page-grid">
@@ -569,7 +578,7 @@ function loadBody() {
                 <article class="article">${ document.body.innerHTML }</article>
                 <footer class="article-footer"></footer>
             </div>
-            <div class="right-spacer"></div>
+            <div class="right-spacer">
         </div>
         <div class="lightbox hidden">
             <div class="lb-top-left"><p></p></div>
@@ -631,24 +640,8 @@ function setCSS(mEle) {
         if (styleOverrides.length > 0) {
             cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
         }
-        if (localStorage.getItem("--heading-font-1") == "'Georgia Pro',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article h1 { font-weight: 600 !important; }");
-        }
-        if (localStorage.getItem("--heading-font-2") == "'Georgia Pro',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article h2 { font-weight: 600 !important; }");
-        }
-        if (localStorage.getItem("--article-main-font") == "'Trebuchet MS',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", "body { --fs-article: 16.4px !important; }");
-        }
-        if (localStorage.getItem("--article-main-font") == "'Calibri',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", "body { --fs-article: 18px !important; }");
-        }
-        
         /* for bold letter-spacing */
         let bodyff = localStorage.getItem("--article-main-font") || font_defaults["--article-main-font"];
-        if (bodyff == "var(--ff-georgia-digits)" || bodyff == "'Roboto',sans-serif") {
-            cssPanel.insertAdjacentHTML("afterbegin", ".article p strong, .article li strong { letter-spacing: -0.1px; }");
-        }
     }
 }
 function setupLightswitch() {
@@ -667,25 +660,29 @@ function setupLightswitch() {
         })
     }
 }
-function classSelector(sEle) {
-    if (sEle != null && sEle instanceof Node) {
-        let sValue = sEle.value;
-        HTML.classList.remove(...Array.from(sEle.children).map(o => o.value).filter(o => o != sValue));
-        HTML.classList.add(sValue);
-        localStorage.setItem(sEle.id, sEle.value);
-    }
-}
+// function classSelector(sEle) {
+    // if (sEle != null && sEle instanceof Node) {
+        // let sValue = sEle.value;
+        // HTML.classList.remove(...Array.from(sEle.children).map(o => o.value).filter(o => o != sValue));
+        // HTML.classList.add(sValue);
+        // localStorage.setItem(sEle.id, sEle.value);
+    // }
+// }
 function restoreDefaults() {
+    localStorage.clear();
     document.getElementById("__css_user_set")?.replaceChildren();
     Array.from(document.getElementsByClassName("drop-select")).forEach(
         _select => {
             if (font_defaults[_select.id]) {
                 _select.value = font_defaults[_select.id];
-                localStorage.removeItem(_select.id);
             }
         }
     )
     setCSS();
+    Array.from(document.querySelectorAll(".slide-checkbox")).forEach(c => {
+        c.checked = false;
+        c.dispatchEvent(new Event('change'))
+    });
 }
 let navbar = null, canNavCheck = true, navSticky = false, navThreshold = 150;
 function navCheck() {
@@ -718,13 +715,13 @@ function loadEntryMeta() {
         if (page.mirrors) {
             let mirrors_ = page.mirrors.filter(m => m);
             if (mirrors_.length > 0) {
-                document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-8 label-external"><div>The text of this page was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
+                document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-10 label-external"><div>The text of this page was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
             }
         }
         if (page.title) {
-            document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> | </span><span>' + page.title + '</span>');
+            document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> » </span><span>' + page.title + '</span>');
         }
-        document.querySelector(".article")?.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (page.title ?`<h1 class="article-title for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-byline">${ page.date} </div>` :'' ));
+        document.querySelector(".article")?.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-byline">${ page.date} </div>` :'' ));
         document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
         <div>
             <p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
@@ -782,7 +779,7 @@ const pageListData = [
 { title:"Liberalism not leftism", preview:"In the French Revolutionary period, supporters of the monarchy sat on the right side of the National Assembly, while supporters of the revolution sat", subtitle:"An overview of leftist historical revisionism and a warning for liberals", url:"liberalism-not-leftism", date:"2025-09-19", mirrors:["substack:174062936","tumblr:795164683319574528","patreon:155199811"] },
 { title:"Normalization", preview:"The example I remember was about bans on smoking in restaurants: surveys indicated the public was generally against such bans while the matter was being", url:"normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
 { title:"Lies about Ilhan Omar", preview:"After she was elected in 2019 as one of the first two Muslim Congresswoman (tied with Rashida Tlaib), there were quickly lies and smears shared about", url:"lies-about-ilhan-omar", date:"2025-08-25", mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
-{ title:"Israel & Palestine", preview:"Israel--Palestine can feel like the most divisive, polarizing issue ever. It's one where you can't just agree to disagree; you're either on my side or", url:"israel-palestine", date:"2025-07-27", flags:["wide"] },
+{ title:"Israel & Palestine", preview:"Israel--Palestine can feel like the most divisive, polarizing issue ever. It's one where you can't just agree to disagree; you're either on my side or", url:"israel-palestine", date:"2025-07-27" },
 { title:"Trump & Russia", preview:"Americans used to be resolutely against Russia. They all identified and understood Russia to be an enemy of their interests, a bad actor on the world", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
 { title:"Why get bottom surgery?", preview:"In the past, if you wanted legal recognition as a trans woman, you had to get a vaginoplasty. No dicks in the lady's room. That was the rule. In some", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
 { title:"Elon Musk & the Nazi Salute", preview:"Did Elon Musk do a Nazi salute, or did it just look like one? It's an insulting stupid question, but one that Mr. Musk himself is betting on people", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
@@ -824,7 +821,7 @@ const videoListData = [
 function pageList() { return pageListData.filter(p => !p.flags || !p.flags.includes("hidden")) }
 function pageListFull() { return pageListData }
 function videoList() { return videoListData.filter(p => !p.flags || !p.flags.includes("hidden")) }
-const font_defaults = { "--heading-font-1":"'Inter',sans-serif", "--heading-font-2":"'Inter',sans-serif", "--heading-font-3":"'Inter',sans-serif", "--article-main-font":"var(--ff-georgia-digits)", "--aux-font-1":"'Segoe UI',system-ui", "--aux-font-2":"'Roboto',system-ui", "--nav-font":"'Trebuchet MS',system-ui" }
+const font_defaults = { "--headings-font":"var(--InterHeading)", "--article-main-font":"var(--Georgia)", "--aux-font-2":"var(--SegoeUIAux)", "--aux-font-1":"var(--RobotoAux)" }
 let page_links = [];
 function init() {
     loadBody();
@@ -839,7 +836,7 @@ function init() {
     page_links = page_links.filter(a => a.startsWith("http"));
     if (page_links.length > 0) {
         document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
-            <div style="padding-top: 10px; border-bottom: 1px solid var(--theme-grey-c,silver);">
+            <div style="padding-top: 10px; border-bottom: 1px solid var(--grey-c,silver);">
                 <div class="citelist-container">
                     <div class="space-between"><span>External resources referenced:</span></div>
                     <div class="citelist">
@@ -903,13 +900,13 @@ function init() {
     })
     document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", pageList().map(
         page => {
-            let entry = '<a title="'+page.title+'" href="page/' + page.url + '/index.html">' + page.title;
+            let entry = '<span class="page-title"><a title="'+page.title+'" href="page/' + page.url + '/index.html">' + page.title;
             //if (page.subtitle) { entry += ' | ' + page.subtitle; }
-            entry += '</a>';
-            if (page.date) { entry += ' <span class="date">' + page.date + '</span>'; }
+            entry += '</a></span>';
             if (page.mirrors && page.mirrors.filter(m => m).length > 0) {
-                entry += '<span class="mirrors label-external">' + page.mirrors.map(m => parseSource(m)).join('') + '</span>';
+                entry += ' <span class="mirrors label-external">' + page.mirrors.map(m => parseSource(m)).join('') + '</span>';
             }
+            if (page.date) { entry += '<br><span class="date">posted ' + page.date + '</span>'; }
             return '<div>' + entry + '</div>'
         }
     ).join(''))
@@ -953,3 +950,4 @@ function init() {
     }
 }
 window.addEventListener("load", init);
+
