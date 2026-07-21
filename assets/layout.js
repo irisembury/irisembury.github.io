@@ -33,17 +33,12 @@ function setlightbox(action) {
 }
 function parseSource(string_in, separator = ":") {
     let [site, id] = string_in.split(separator, 2);
-    if (site == "tumblr") {
-        return '<a class="external-link tumblr-link" href="https://irisembury.tumblr.com/post/' + id + '" title="Read this page on Tumblr"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>'
-    }
-    if (site == "substack") {
-        return '<a class="external-link substack-link" href="https://irisembury.substack.com/p/' + id + '" title="Read this page on Substack"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>'
-    }
-    if (site == "patreon") {
-        return '<a class="external-link patreon-link" href="https://www.patreon.com/posts/' + id + '" title="Read this page on Patreon"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a>'
-    }
-    if (site == "medium") {
-        return '<a class="external-link medium-link" href="https://medium.com/@irisembury/' + id + '" title="Read this page on Medium"><span class="medium-logo inline-icon"></span><span class="link-text">Medium</span></a>'
+    switch (site) {
+        case 'tumblr': return '<a class="external-link tumblr-link" href="https://irisembury.tumblr.com/post/' + id + '" title="https://irisembury.tumblr.com/post/' + id + '"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>';
+        case 'youtube': return '<a class="external-link youtube-link" href="https://youtu.be/' + id + '" title="https://youtu.be/' + id + '"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a>';
+        case 'substack': return '<a class="external-link substack-link" href="https://irisembury.substack.com/p/' + id + '" title="https://irisembury.substack.com/p/' + id + '"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>';
+        case 'patreon': return '<a class="external-link patreon-link" href="https://www.patreon.com/posts/' + id + '" title="https://www.patreon.com/posts/' + id + '"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a>';
+        case 'medium': return '<a class="external-link medium-link" href="https://medium.com/@irisembury/' + id + '" title="https://medium.com/@irisembury/' + id + '"><span class="medium-logo inline-icon"></span><span class="link-text">Medium</span></a>';
     }
     return "";
 }
@@ -486,89 +481,25 @@ function getRootPath() {
     path = path.replace(/[^/]/g,'');
     return '../'.repeat(path.length);
 }
-/*
-var userSession = {
-    "theme":"light",
-    "--headings-font":"",
-    "--article-main-font":"",
-    "--aux-font-2":"",
-    "--aux-font-1":"",
-    "justify-text":"",
-    "indent-text":"",
-    "reduce-block":""
-}
-*/
 function loadBody() {
     HTML.lang = "en";
-    document.head.insertAdjacentHTML("beforeend",'<meta charset="utf-8"><link rel="stylesheet" href="'+rootPath+'assets/main.css"><link rel="icon" type="image/x-icon" href="'+rootPath+'favicon.ico"><link rel="stylesheet" href="'+rootPath+'assets/fonts.css">');
+    document.head.insertAdjacentHTML("beforeend",'<meta charset="utf-8"><link rel="stylesheet" href="/assets/main.css"><link rel="icon" type="image/x-icon" href="'/'favicon.ico"><link rel="stylesheet" href="/assets/fonts.css">');
     document.body.innerHTML = `
-        <header class="header-main-top"></header>
-        <nav class="navbar">
-            <div class="nav-segment">
-                <div class="page-id">${ index ?'' :'<a href="../../index.html">Index (back to front)</a>' }</div>
-            </div>
-            <div class="nav-segment flex-end">
-                <div class="jump-arrow nav-icon" onclick="scrollToTop()"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" height="24" viewBox="0 0 24 24" width="24"><path d="M5.293 15.207a1 1 0 001.414 0L12 9.914l5.293 5.293a1 1 0 101.414-1.414L12 7.086l-6.707 6.707a1 1 0 000 1.414Z"></path></svg></div>
-                <div id="gear" class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="28"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
-            </div>
+        <nav class="top-nav">
+            <div class="page-name gap-5">${ index ?'' :'<a href="/">Index (back to front)</a>' }</div>
         </nav>
-        <div class="panel-wrapper">
+        <div class="top-right">
+            <div id="gear"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
             <div class="right-panel closed">
                 <h3>Display:</h3>
                 <div class="switches-area">
                     <label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch">
+                </div>
+                <h3>Text formatting:</h3>
+                <div class="switches-area">
                     <label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text">
                     <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
-                    <label for="reduce-margin">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margin">
-                    <label for="full-width">Full page width:</label><input type="checkbox" class="slide-checkbox auto" id="full-width">
-                </div>
-                <div style="margin-top:17px;display:grid;grid-template-columns:auto auto;gap:9px 12px;align-items:flex-start;">
-                    <label>--main-font</label>
-                    <select class="drop-select" id="--article-main-font" onchange="setCSS(this)">
-                        <option value="var(--Arial)">Arial</option>
-                        <option value="var(--Calibri)">Calibri</option>
-                        <option value="var(--Georgia)">Georgia</option>
-                        <option value="var(--Lato)">Lato</option>
-                        <option value="var(--OpenSans)">Open Sans</option>
-                        <option value="var(--PTSerif)">PT Serif</option>
-                        <option value="var(--Roboto)">Roboto</option>
-                        <option value="var(--RobotoSlab)">Roboto Slab</option>
-                        <option value="var(--Rubik)">Rubik</option>
-                        <option value="var(--SegoeUI)">Segoe UI</option>
-                        <option value="var(--Sitka)">Sitka</option>
-                        <option value="var(--Tahoma)">Tahoma</option>
-                        <option value="var(--TrebuchetMS)">Trebuchet MS</option>
-                        <option value="var(--Verdana)">Verdana</option>
-                    </select>
-                    <label>--headings-font</label>
-                    <select class="drop-select" id="--headings-font" onchange="setCSS(this)">
-                        <option value="var(--GeorgiaHeading)">Georgia</option>
-                        <option value="var(--InterHeading)">Inter</option>
-                        <option value="var(--LoraHeading)">Lora</option>
-                        <option value="var(--PTSerifHeading)">PT Serif</option>
-                        <option value="var(--RobotoSlab)">Roboto Slab</option>
-                    </select>
-                    <div>
-                        <label title="small body, tables">--aux-font-1</label>
-                    </div>
-                    <select class="drop-select" id="--aux-font-1" onchange="setCSS(this)">
-                        <option value="var(--IBMPlexSansAux)">IBM Plex Sans</option>
-                        <option value="var(--PTSerifAux)">PT Serif</option>
-                        <option value="var(--RobotoAux)">Roboto</option>
-                        <option value="var(--SegoeUIAux)">Segoe UI</option>
-                        <option value="var(--TrebuchetMSAux)">Trebuchet MS</option>
-                    </select>
-                    <label title="captions, labels, etc.">--aux-font-2</label>
-                    <select class="drop-select" id="--aux-font-2" onchange="setCSS(this)">
-                        <option value="var(--IBMPlexSansAux)">IBM Plex Sans</option>
-                        <option value="var(--PTSerifAux)">PT Serif</option>
-                        <option value="var(--RobotoAux)">Roboto</option>
-                        <option value="var(--SegoeUIAux)">Segoe UI</option>
-                        <option value="var(--TrebuchetMSAux)">Trebuchet MS</option>
-                    </select>
-                </div>
-                <div style="display:grid;text-align:right;gap:8px;margin-top:15px;color:var(--grey-6,dimgrey)">
-                    <div class="no-select"><span class="pseudo-link" onclick="restoreDefaults()">restore defaults</span></div>
+                    <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
                 </div>
             </div>
         </div>
@@ -587,7 +518,8 @@ function loadBody() {
         </div>
         <style id="__css_user_set"></style>`;
     interpreter(document.querySelector(".article"));
-    HTML.classList.add("layout");
+    HTML.classList.add("js");
+    navbar = document.querySelector('.top-nav');
 }
 let canTocUpdate = true, tocLastHeading = 0, rowsInToc = [], pageHeadings = [];
 function tocUpdate() {
@@ -621,29 +553,6 @@ function tocUpdate_() {
     }
     tocLastHeading = currentHeading;
 }
-function setCSS(mEle) {
-    if (mEle != null && mEle instanceof Node) {
-        localStorage.setItem(mEle.id, mEle.value);
-    }
-    const cssPanel = document.getElementById("__css_user_set");
-    if (cssPanel) {
-        cssPanel.replaceChildren();
-        const styleOverrides = [];
-        Array.from(document.getElementsByClassName("drop-select")).forEach(
-            _select => {
-                let _select_value = localStorage.getItem(_select.id) || _select.value;
-                if (_select_value != font_defaults[_select.id]) {
-                    styleOverrides.push(_select.id + ':' + _select_value)
-                }
-            }
-        );
-        if (styleOverrides.length > 0) {
-            cssPanel.insertAdjacentHTML("afterbegin", ":root{" + styleOverrides.join(";") + "}");
-        }
-        /* for bold letter-spacing */
-        let bodyff = localStorage.getItem("--article-main-font") || font_defaults["--article-main-font"];
-    }
-}
 function setupLightswitch() {
     const lightswitch = document.getElementById("lightswitch");
     if (lightswitch) {
@@ -651,7 +560,6 @@ function setupLightswitch() {
         lightswitch.checked = (scheme == "dark");
         HTML.style.colorScheme = scheme;
         HTML.classList.toggle("dark", scheme == "dark");
-
         lightswitch.addEventListener("change", function() {
             let val = this.checked ?"dark" :"light";
             localStorage.setItem("css-color-scheme", val);
@@ -660,31 +568,7 @@ function setupLightswitch() {
         })
     }
 }
-// function classSelector(sEle) {
-    // if (sEle != null && sEle instanceof Node) {
-        // let sValue = sEle.value;
-        // HTML.classList.remove(...Array.from(sEle.children).map(o => o.value).filter(o => o != sValue));
-        // HTML.classList.add(sValue);
-        // localStorage.setItem(sEle.id, sEle.value);
-    // }
-// }
-function restoreDefaults() {
-    localStorage.clear();
-    document.getElementById("__css_user_set")?.replaceChildren();
-    Array.from(document.getElementsByClassName("drop-select")).forEach(
-        _select => {
-            if (font_defaults[_select.id]) {
-                _select.value = font_defaults[_select.id];
-            }
-        }
-    )
-    setCSS();
-    Array.from(document.querySelectorAll(".slide-checkbox")).forEach(c => {
-        c.checked = false;
-        c.dispatchEvent(new Event('change'))
-    });
-}
-let navbar = null, canNavCheck = true, navSticky = false, navThreshold = 150;
+let navbar = null, canNavCheck = true, navSticky = false;
 function navCheck() {
     if (!canNavCheck) {
         return;
@@ -694,44 +578,38 @@ function navCheck() {
     setTimeout(() => {
         canNavCheck = true;
         navCheck_();
-    }, 500);
+    }, 50);
 }
 function navCheck_() {
-    if (!navSticky && pageYOffset > navThreshold) {
+    if (!navSticky && pageYOffset > 50) {
         navbar.classList.add("sticky-active");
         navSticky = true;
     }
-    else if (navSticky && pageYOffset < navThreshold) {
+    else if (navSticky && pageYOffset < 50) {
         navbar.classList.remove("sticky-active");
         navSticky = false;
     }
 }
 function loadEntryMeta() {
-    const page = pageListFull().find(e => e.url==getDirectory());
+    const page = allEntries().find(e => e.url==getDirectory());
     if (!index && page) {
         if (page.flags && page.flags.includes("wide")) {
             HTML.classList.add("wide");
         }
         if (page.mirrors) {
-            let mirrors_ = page.mirrors.filter(m => m);
-            if (mirrors_.length > 0) {
-                document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-10 label-external"><div>The text of this page was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
-            }
+            document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-10 label-external"><div>The text of this page was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.split(",").map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
         }
         if (page.title) {
-            document.querySelector('.page-id')?.insertAdjacentHTML('beforeend','<span> » </span><span>' + page.title + '</span>');
+            document.querySelector('.page-name')?.insertAdjacentHTML('beforeend','<span> > </span><span>' + page.title + '</span>');
         }
-        document.querySelector(".article")?.insertAdjacentHTML('afterbegin', '<div class="article-top">' + (page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-byline">${ page.date} </div>` :'' ));
+        document.querySelector(".article")?.insertAdjacentHTML('afterbegin', autoFormat('<div class="article-top">' + (page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-byline">${ page.date} </div>` :'' )));
         document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
-        <div>
-            <p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
-        </div>
         <div class='footer-links-area'>
             <div class="recent-pages">
                 <div>Pages recently added:</div>
                 <div>
                     <ul class='label-external'>
-                        ${ pageList().slice(0, 4).map( entry => `<li><a href="${ rootPath }page/${ entry.url }/index.html">${ entry.title }</a></li>` ).join("") }
+                        ${ pageList().slice(0, 4).map( entry => `<li><a href="/page/${ entry.url }">${ entry.title }</a></li>` ).join("") }
                     </ul>
                 </div>
             </div>
@@ -751,96 +629,22 @@ function loadEntryMeta() {
                     </ul>
                 </div>
             </div>
+        </div>
+        <div>
+            <p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
         </div>`);
     }
 }
-const HTML = document.documentElement;
-const rootPath = getRootPath();
-const index = (rootPath == "");
-const pageListData = [
-{ title:"The Chilean coup", url:"allende-and-pinochet", date:"2026-07-02", mirrors:[""],flags:["hidden"] },
-{ title:"How bad is America?", url:"how-bad-is-america", preview:"I recently made an aside, while talking about something else, that America has been a net force for good in the world. The phrasing --- a *net* force for good --- doesn't", date:"2026-07-01", mirrors:[""] },
-{ title:"What was the Freedom Convoy?", url:"freedom-convoy", preview:"In January 2022, a bunch of people drove into Ottawa in big trucks, parked them in the road, and started honking. Its participants and proponents called", date:"2026-06-15", mirrors:[""], flags:["wide"] },
-{ title:"Pierre Poilievre", preview:"In the post-Harper years, the Conservative Party of Canada had some time to figure out what it wanted to be. Andrew Scheer took over the party in 2017", url:"pierre-poilievre", date:"", mirrors:[""], flags:["hidden"] },
-{ title:"The Conservative Party's hard problem", preview:"In Canadian political discourse, it's become somewhat common for the right wing to say the LPC and CPC are near-evenly matched, citing charts kind of", url:"conservative-party-hard-problem", date:"2026-05-01", mirrors:["substack:196152041","tumblr:815438258908643328","medium:e59c21f8095a"] },
-{ title:"Canada's plan for a sovereign wealth fund", preview:"The government of Canada has announced we're going to develop a general sovereign wealth fund. A sovereign wealth fund just means a bunch of financial", url:"canada-sovereign-wealth-fund", date:"2026-04-29", mirrors:["substack:195885575","tumblr:815245873447649280"] },
-{ title:"Floor crossings", preview:"In the 2025 general election, the Liberal Party won 169 House seats of the 172 needed for a majority. For being the largest party in the House, the Liberal", url:"floor-crossings", date:"2026-04-17", mirrors:["substack:floor-crossings","medium:dfe93bb23bdd"] },
-{ title:"Rational ignorance", preview:"Rational ignorance is when you don't know or understand something, but it's not irrational for you to not bother learning it. It's not worth the time", url:"rational-ignorance", date:"2026-04-09", mirrors:["substack:rational-ignorance","tumblr:813419185909727232","patreon:155199122"] },
-{ title:"Liberal conservatism", subtitle:"A philosophy of prudence and humility", preview:"In the first sense that is often spoken of, conservatism is not directly a political position or platform. It doesn't tell us what the government should", url:"liberal-conservatism", date:"2026-03-24", mirrors:["substack:foundations-of-liberal-conservatism"], flags:["wide"] },
-{ title:"The case for abortion", preview:"The way I propose we think about questions of legality is to consider the most direct implications of the question. Do you endorse violence being used", url:"abortion", date:"2026-02-18", mirrors:["substack:the-case-for-abortion","tumblr:809547051047272448","patreon:155199340"] },
-{ title:"A synopsis of American decline", preview:"The United States of America might not be a perfect country, but it's long been a bulwark against other, competing countries that were clearly even worse", url:"a-synopsis-of-american-decline", date:"2026-01-28", mirrors:["substack:186165875","patreon:155201485"] },
-{ title:"Fetishism & politics", preview:"A strange reality I've made peace with is that people's political views on certain topics can be affected by their sexual attraction. The most obvious", url:"fetishism-politics", date:"2024-11-14", mirrors:["tumblr:770364766791352320"] },
-{ title:"Nick Shirley & the Somali day cares", preview:"After the regime of the U.S.-backed dictator Siad Barre collapsed in 1991, Somalia fell into a chaotic civil war, and many Somalis fled the region as", url:"somali-day-cares", date:"2026-01-02", mirrors:["substack:183243480","patreon:155200604"]},
-{ title:"Why is Reddit so hated?", subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it", preview:"Reddit today is enduringly popular, despite how many times the company has gone forward with unpopular changes. It's weathered many storms. The people", url:"why-is-reddit-so-hated", date:"2025-12-30", mirrors:["substack:why-is-reddit-so-hated"] },
-{ title:"Stay the trenches", preview:"In 2014, being online and trying to use social media as a right-winger felt oppressive. It felt like all the big social media websites were dominated", url:"stay-the-trenches", date:"2025-12-17", mirrors:["substack:stay-the-trenches"] },
-{ title:"Immigration", preview:"In recent years, we've been seeing the rise of political parties full of liars, incompetents, and racists, the sort of people I wouldn't trust with", url:"immigration", date:"2025-11-06", mirrors:["substack:183229652"] },
-{ title:"Prejudice", preview:"What is prejudice? This might seem like a weird prompt, but we so often take for granted that prejudice is bad that we might never stop and think about", url:"what-is-prejudice", date:"2025-10-30", mirrors:["substack:prejudice"] },
-{ title:"Notes on India", preview:"There's been a lot of racism directed at Indians in recent years. In Canada, they're one of the main immigrant groups that our country has been receiving", url:"notes-on-india", date:"2025-10-24", mirrors:["substack:india","tumblr:798351257128615936"] },
-{ title:"Liberalism not leftism", preview:"In the French Revolutionary period, supporters of the monarchy sat on the right side of the National Assembly, while supporters of the revolution sat", subtitle:"An overview of leftist historical revisionism and a warning for liberals", url:"liberalism-not-leftism", date:"2025-09-19", mirrors:["substack:174062936","tumblr:795164683319574528","patreon:155199811"] },
-{ title:"Normalization", preview:"The example I remember was about bans on smoking in restaurants: surveys indicated the public was generally against such bans while the matter was being", url:"normalization", date:"2025-09-08", mirrors:["substack:normalization-and-status-quo-bias"] },
-{ title:"Lies about Ilhan Omar", preview:"After she was elected in 2019 as one of the first two Muslim Congresswoman (tied with Rashida Tlaib), there were quickly lies and smears shared about", url:"lies-about-ilhan-omar", date:"2025-08-25", mirrors:["substack:ilhan-omar","tumblr:794091916138594304","medium:46de1629e138"] },
-{ title:"Israel & Palestine", preview:"Israel--Palestine can feel like the most divisive, polarizing issue ever. It's one where you can't just agree to disagree; you're either on my side or", url:"israel-palestine", date:"2025-07-27" },
-{ title:"Trump & Russia", preview:"Americans used to be resolutely against Russia. They all identified and understood Russia to be an enemy of their interests, a bad actor on the world", url:"trump-and-russia", date:"2025-03-06", mirrors:["tumblr:777321996757450752","substack:trump-and-russia"] },
-{ title:"Why get bottom surgery?", preview:"In the past, if you wanted legal recognition as a trans woman, you had to get a vaginoplasty. No dicks in the lady's room. That was the rule. In some", url:"why-get-bottom-surgery", date:"2025-02-09", mirrors:["tumblr:775036555284856832"] },
-{ title:"Elon Musk & the Nazi Salute", preview:"Did Elon Musk do a Nazi salute, or did it just look like one? It's an insulting stupid question, but one that Mr. Musk himself is betting on people", url:"elon-musk-nazi-salute", date:"2025-01-24", mirrors:["substack:the-nazi-salute","tumblr:773565389405847552"] },
-{ title:"Lies about Elizabeth Warren & Hillary Clinton", preview:"It's generally more work to refute a false claim than to perpetuate it. And by the time somebody's got around to figuring out why a claim is false, the", url:"lies-about-warren-clinton", date:"2024-12-19", mirrors:["tumblr:770730090759946240","substack:153821886"] },
-{ title:"Mark Robinson", preview:"For posterity, I'd like to write about Mark Robinson. He was elected to be the lieutenant governor of North Carolina in 2021. That's sort of like being", url:"mark-robinson", date:"2024-12-15", mirrors:["tumblr:769962893917798400"] },
-{ title:"The Trump appeal", preview:"What does anybody like about Donald Trump? It's a question many people ask theirselves, and no answer comes to mind. But it's something that for me has", url:"the-trump-appeal", date:"2024-12-03", mirrors:["tumblr:770270265635667968"] },
-{ title:"The normal white man bias", preview:"Now that the U.S. election season is over and that country has once again walked down the orange brick road, let's talk about something I was putting", url:"the-normal-white-man-bias", date:"2024-11-26", mirrors:["substack:153823028","tumblr:770305075441778688","medium:0c508d4c51b5"] },
-{ title:"Sex, gender, & transsexuals", preview: "This is an informational post intended to help people better navigate the sometimes-confusing dialogue surrounding sex, gender, and transsexuals. I made", url:"sex-gender-transsexuals", date:"2024-11-19", flags:["wide"] },
-{ title:"Bernie Sanders & the military industrial complex", preview:"This tweet by Sanders was broadly celebrated by the American right wing, not only because he opens it with positivity about Elon Musk, but because conspiracy", url:"bernie-sanders-and-the-military-industrial-complex", date:"2024-12-16", mirrors:["tumblr:770070077409214464"] },
-{ title:"Types of masculinity", preview:"For my purposes here, let's just summarize masculinity as strong, confident, assertive, dominant. That seems good enough. From there, you can recognize", url:"types-of-masculinity", date:"2024-11-08", mirrors:["tumblr:770310861444300800"] },
-{ title:"Poor Things (2023 film)", url:"poor-things", date:"2024-10-31", mirrors:["tumblr:769969807464464384"] },
-{ title:"The trans prison stats argument", preview:"An argument I've been seeing online for a while now is that trans people are statistically more likely than the general population to be sex offenders", url:"the-trans-prison-stats-argument", date:"2024-10-19", mirrors:["substack:the-trans-prison-stats-argument","tumblr:771501478599868416"] },
-{ title:"Public record", url:"public-record", flags:["hidden","wide"] },
-{ title:"Anime reviews", preview:"I'm not that into anime, so it doesn't make a lot of sense for me to rate and review every anime series that I've ever seen, but I'm going to do it anyway", url:"anime-reviews", date:"2024-12-17" },
-{ title:"Data Structures & Algorithms", url:"data-structures-algorithms", flags:["hidden","wide"] },
-{ title:"Testing page", url:"testing", flags:["hidden"] }
-];
-const videoListData = [
-{ title:"Floor crossers", date:"2026-05-17", url:"EK_MCMiFakA" },
-{ title:"Liberalism not Leftism", date:"2026-05-06", url:"DgGf_g4aGYA" },
-{ title:"Liberal Conservatism", date:"2026-04-07", url:"Sy33HSFsuu8" },
-{ title:"Epstein", date:"2026-03-08", url:"5ymc2ePfFR8" },
-{ title:"Our elections", date:"2026-03-20", url:"7lw6rO_Pv7I" },
-{ title:"How bad is America, really?", date:"2026-03-04", url:"W0Dmtyyc7FU" },
-{ title:"In defense of abortion", date:"2026-02-24", url:"CpjJ8TgOxJY" },
-{ title:"American decline", date:"2026-02-11", url:"oUOsAdnK2zs" },
-{ title:"give yourself credit", date:"2026-01-23", url:"mM5fcuJnfZQ" },
-{ title:"Why is Reddit so hated?", date:"2026-01-13", url:"jPVl5cfVP1k" },
-{ title:"Pride 2025 in Toronto", date:"2025-07-05", url:"PL3u9OOGxew" },
-{ title:"Immigration", date:"2025-11-23", url:"6MEkIZQFV6w" },
-{ title:"Notes on India", date:"2025-10-24", url:"Pz0Oq1rb14E" },
-{ title:"Sex, gender, & transsexuals", date:"2025-10-17", url:"Hgh3r7gJoWU" },
-{ title:"Notes on Saudi Arabia", date:"2025-10-17", url:"9RhaYU21Qag" },
-{ title:"Ilhan Omar making waves after Charlie Kirk's death", date:"2025-10-04", url:"JDseBrbtp6E" },
-{ title:"Why do people like Trump?", date:"2025-09-14", url:"tcF0f-Dtgic" },
-{ title:"Lies about Ilhan Omar", date:"2025-09-03", url:"zgE4L-e9yg0" },
-{ title:"Lies about Elizabeth Warren and Hillary Clinton", date:"2025-04-09", url:"LPQD6sxlWOs" }
-];
-function pageList() { return pageListData.filter(p => !p.flags || !p.flags.includes("hidden")) }
-function pageListFull() { return pageListData }
-function videoList() { return videoListData.filter(p => !p.flags || !p.flags.includes("hidden")) }
-const font_defaults = { "--headings-font":"var(--InterHeading)", "--article-main-font":"var(--Georgia)", "--aux-font-2":"var(--SegoeUIAux)", "--aux-font-1":"var(--RobotoAux)" }
-let page_links = [];
-function init() {
-    loadBody();
-    navbar = document.querySelector('.navbar');
-    pageListData.sort((a, b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
-    videoListData.sort((a, b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
-    pageListData.forEach(p => { if (p.title) { p.title = autoFormat(p.title); } })
-    Array.from(document.getElementsByClassName("drop-select")).forEach( select => { select.value = (localStorage.getItem(select.id) || font_defaults[select.id] || ""); Array.from(select.children).forEach(option => option.style.fontFamily = option.value + ",system-ui" ); } )
-    setCSS();
-    setupLightswitch();
-    loadEntryMeta();
-    page_links = page_links.filter(a => a.startsWith("http"));
-    if (page_links.length > 0) {
+function loadCitelist() {
+    if (index) { return; }
+    let ext_links = page_links.filter(a => a.startsWith("http"));
+    if (ext_links.length > 0) {
         document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
             <div style="padding-top: 10px; border-bottom: 1px solid var(--grey-c,silver);">
                 <div class="citelist-container">
                     <div class="space-between"><span>External resources referenced:</span></div>
                     <div class="citelist">
-                        ${ page_links.map((x, n) => `<div class="no-select">${ n + 1 }.</div><div><a href="${ x }">${ x }</a></div>`).join("") }
+                        ${ ext_links.map((x, n) => `<div class="no-select">${ n + 1 }.</div><div><a href="${ x }">${ x }</a></div>`).join("") }
                     </div>
                 </div>
             </div>`);
@@ -849,14 +653,8 @@ function init() {
             citelist.previousElementSibling.insertAdjacentHTML('beforeend', `<span style="opacity:0.75; font-size:14px; cursor:pointer;" onclick="let citelist = document.querySelector('.citelist'); if (citelist) { let expanded = citelist.classList.contains('expanded'); this.innerHTML = expanded? 'expand':'collapse'; citelist.classList.toggle('expanded',!expanded); }">expand</span>`);
         }
     }
-    setTimeout(function() {
-        navThreshold = parseInt(window.getComputedStyle(HTML).getPropertyValue("--header-height")) + 1;
-        navCheck();
-    }, 100)
-    window.addEventListener("scroll", navCheck);
-    Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = convertSeconds(a.innerHTML));
-    Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
-    Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
+}
+function rightMenuSetup() {
     Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
         c => {
             if (localStorage.getItem(c.id) == "true") {
@@ -883,12 +681,14 @@ function init() {
         }
     }
     const gearIcon = document.getElementById("gear");
-    gearIcon.addEventListener("click", gearMenuToggle);
-    window.addEventListener("click", function(e) {
-        if (!gearMenu.contains(e.target) && !gearIcon.contains(e.target)) {
-            gearMenuToggle("close");
-        }
-    })
+    if (gearIcon) {
+        gearIcon.addEventListener("click", gearMenuToggle);
+        window.addEventListener("click", function(e) {
+            if (!gearMenu.contains(e.target) && !gearIcon.contains(e.target)) {
+                gearMenuToggle("close");
+            }
+        })
+    }
     window.addEventListener("keydown", function(e) {
         if (e.key === "Escape") {
             gearMenuToggle("close");
@@ -898,35 +698,8 @@ function init() {
             scrollToTop();
         }
     })
-    document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", pageList().map(
-        page => {
-            let entry = '<span class="page-title"><a title="'+page.title+'" href="page/' + page.url + '/index.html">' + page.title;
-            //if (page.subtitle) { entry += ' | ' + page.subtitle; }
-            entry += '</a></span>';
-            if (page.mirrors && page.mirrors.filter(m => m).length > 0) {
-                entry += ' <span class="mirrors label-external">' + page.mirrors.map(m => parseSource(m)).join('') + '</span>';
-            }
-            if (page.date) { entry += '<br><span class="date">posted ' + page.date + '</span>'; }
-            return '<div>' + entry + '</div>'
-        }
-    ).join(''))
-    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend",
-        videoList().slice(0, 8).map(
-            v => `<figure>
-                    <a href="https://youtu.be/${ v.url }"><img loading="lazy" src="https://i.ytimg.com/vi/${ v.url }/hqdefault.jpg"></a>
-                    <figcaption>
-                        <div class="video-title"><a href="https://youtu.be/${ v.url }">${ v.title }</a></div>
-                        ${ v.date ?'<div><span class="video-date">' + v.date + '</span></div>' :'' }
-                    </figcaption>
-                </figure>`
-        ).join('')
-    );
-    if (document.title == "") {
-        document.title = "Iris Embury | GitHub";
-    }
-    else if (!document.title.endsWith("Iris Embury")) {
-        document.title += " | Iris Embury";
-    }
+}
+function tocSetup() {
     pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
     pageHeadings.forEach(h => {
         h.classList.remove("for-toc");
@@ -947,6 +720,103 @@ function init() {
         
         window.addEventListener("scroll", tocUpdate);
         tocUpdate();
+    }
+}
+const HTML = document.documentElement;
+const rootPath = getRootPath();
+const index = (rootPath == "");
+const entries = `title:The Chilean coup |url:allende-and-pinochet |date:2026-07-02 |flags:hidden |type:page
+title:How bad is America? |url:how-bad-is-america |date:2026-07-01 |type:page
+title:What was the Freedom Convoy? |url:freedom-convoy |date:2026-06-15 |flags:wide |type:page
+title:Pierre Poilievre |url:pierre-poilievre |date: |flags:hidden |type:page
+title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01 |mirrors:substack:196152041,tumblr:815438258908643328,medium:e59c21f8095a |type:page
+title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29 |mirrors:substack:195885575,tumblr:815245873447649280 |type:page
+title:Floor crossings |url:floor-crossings |date:2026-04-17 |mirrors:substack:floor-crossings,medium:dfe93bb23bdd |type:page
+title:Rational ignorance |url:rational-ignorance |date:2026-04-09 |mirrors:substack:rational-ignorance,tumblr:813419185909727232,patreon:155199122 |type:page
+title:Liberal conservatism |subtitle:A philosophy of prudence and humility |url:liberal-conservatism |date:2026-03-24 |mirrors:substack:foundations-of-liberal-conservatism |flags:wide |type:page
+title:The case for abortion |url:abortion |date:2026-02-18 |mirrors:substack:the-case-for-abortion,tumblr:809547051047272448,patreon:155199340 |type:page
+title:A synopsis of American decline |url:a-synopsis-of-american-decline |date:2026-01-28 |mirrors:substack:186165875,patreon:155201485 |type:page
+title:Fetishism & politics |url:fetishism-politics |date:2024-11-14 |mirrors:tumblr:770364766791352320 |type:page
+title:Nick Shirley & the Somali day cares |url:somali-day-cares |date:2026-01-02 |mirrors:substack:183243480,patreon:155200604}, |type:page
+title:Why is Reddit so hated? |subtitle:On the website's history, what makes it unique, and the intense hatred many people seem to have for it |url:why-is-reddit-so-hated |date:2025-12-30 |mirrors:substack:why-is-reddit-so-hated |type:page
+title:Stay the trenches |url:stay-the-trenches |date:2025-12-17 |mirrors:substack:stay-the-trenches |type:page
+title:Immigration |url:immigration |date:2025-11-06 |mirrors:substack:183229652 |type:page
+title:Prejudice |url:what-is-prejudice |date:2025-10-30 |mirrors:substack:prejudice |type:page
+title:Notes on India |url:notes-on-india |date:2025-10-24 |mirrors:substack:india,tumblr:798351257128615936 |type:page
+title:Liberalism not leftism |url:liberalism-not-leftism |date:2025-09-19 |mirrors:substack:174062936,tumblr:795164683319574528,patreon:155199811 |type:page
+title:Normalization |url:normalization |date:2025-09-08 |mirrors:substack:normalization-and-status-quo-bias |type:page
+title:Lies about Ilhan Omar |url:lies-about-ilhan-omar |date:2025-08-25 |mirrors:substack:ilhan-omar,tumblr:794091916138594304,medium:46de1629e138 |type:page
+title:Israel & Palestine |url:israel-palestine |date:2025-07-27 |type:page
+title:Trump & Russia |url:trump-and-russia |date:2025-03-06 |mirrors:tumblr:777321996757450752,substack:trump-and-russia |type:page
+title:Why get bottom surgery? |url:why-get-bottom-surgery |date:2025-02-09 |mirrors:tumblr:775036555284856832 |type:page
+title:Elon Musk & the Nazi Salute |url:elon-musk-nazi-salute |date:2025-01-24 |mirrors:substack:the-nazi-salute,tumblr:773565389405847552 |type:page
+title:Lies about Elizabeth Warren & Hillary Clinton |url:lies-about-warren-clinton |date:2024-12-19 |mirrors:tumblr:770730090759946240,substack:153821886 |type:page
+title:Mark Robinson |url:mark-robinson |date:2024-12-15 |mirrors:tumblr:769962893917798400 |type:page
+title:The Trump appeal |url:the-trump-appeal |date:2024-12-03 |mirrors:tumblr:770270265635667968 |type:page
+title:The normal white man bias |url:the-normal-white-man-bias |date:2024-11-26 |mirrors:substack:153823028,tumblr:770305075441778688,medium:0c508d4c51b5 |type:page
+title:Sex, gender, & transsexuals |url:sex-gender-transsexuals |date:2024-11-19 |flags:wide |type:page
+title:Bernie Sanders & the military industrial complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16 |mirrors:tumblr:770070077409214464 |type:page
+title:Types of masculinity |url:types-of-masculinity |date:2024-11-08 |mirrors:tumblr:770310861444300800 |type:page
+title:Poor Things (2023 film) |url:poor-things |date:2024-10-31 |mirrors:tumblr:769969807464464384 |type:page
+title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19 |mirrors:substack:the-trans-prison-stats-argument,tumblr:771501478599868416 |type:page
+title:Public record |url:public-record |flags:hidden,wide |type:page
+title:Anime reviews |url:anime-reviews |date:2024-12-17 |type:page
+title:Data Structures & Algorithms |url:data-structures-algorithms |flags:hidden,wide |type:page
+title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18 |type:video
+title:Floor crossers |date:2026-05-17 |src:youtube:EPfcpuLYeOg,patreon:158476239 |thumb:158476239.jpg |length:56:42 |type:video
+title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15 |type:video
+title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13 |type:video
+title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04 |type:video
+title:How bad is America? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04 |type:video
+title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:oUOsAdnK2zs.jpg |length:39:47 |type:video
+title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:TYoe1jxBYPY.jpg |length:12:08 |type:video
+title:India |thumb:Pz0Oq1rb14E.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17 |type:video
+title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50 |type:video
+title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39 |type:video
+title:Why do people like Trump? |date:2025-09-13 |src:youtube:tcF0f-Dtgic |thumb:WhyTrump.jpg |length:11:33 |type:video
+title:Lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02 |type:video
+title:Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg |type:video
+title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14 |type:video`;
+function allEntries() { return entries.split("\n").map(e => parseObj(e,'title','date','thumb','length','src','type','url','flags')).filter(e=>e).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)); }
+function pageList() { return allEntries().filter(p => p.type=='page' && (!p.flags||!p.flags.includes('hidden'))) }
+function videoList() { return allEntries().filter(e => e.type=='video') }
+
+const page_links = [];
+function init() {
+    loadBody();
+    setupLightswitch();
+    loadEntryMeta();
+    rightMenuSetup();
+    tocSetup();
+    window.addEventListener("scroll", navCheck);
+    Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = convertSeconds(a.innerHTML));
+    Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
+    Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
+    if (document.title == "") { document.title = "Iris Embury | GitHub"; }
+    else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
+    if (index) {
+        document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", videoList().map( v => {
+            v.src = v.src.split(",").map(m => parseSource(m)).join(" | ");
+            return `<figure>
+                <div><img style="max-width:300px;max-height:200px;" loading="lazy" src="assets/video-thumbnails/${ v.thumb }"><div class="timecard no-select"><div>${ v.length }</div></div></div>
+                <figcaption>
+                    <div class="video-title">${ v.title }</div>
+                    <div>${ v.src }</div>
+                    <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
+                </figcaption>
+            </figure>`
+        }).join(''));
+        document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", pageList().map(
+            page => {
+                let entry = '<div class="page-title"><a title="'+page.title+'" href="page/' + page.url + '">' + autoFormat(page.title) + '</a></div>';
+                if (page.date) { entry += '<div><span class="date">' + page.date + '</span>'; }
+                if (page.mirrors) {
+                    entry += '<span class="mirrors label-external">' + page.mirrors.split(",").map(m => parseSource(m)).join('') + '</span>';
+                }
+                entry += '</div>';
+                return '<div>' + entry + '</div>'
+            }
+        ).join(''))
     }
 }
 window.addEventListener("load", init);

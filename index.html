@@ -2,32 +2,82 @@
 <html lang="en">
 <head>
     <style>
-    .article a { text-decoration: none; }
-    .article h1 { margin: 0 !important; font-size: 32px; font-family: 'Lora','Georgia','Inter',sans-serif; text-align: center !important; }
     
-    .video-index { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); font-family: system-ui; margin-top: 10px !important; }
-        .video-index :nth-child(n + 5) { display: none; }
-        .video-index figure { max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
-            .video-index img { box-sizing: border-box; border: 1px solid var(--grey-c); aspect-ratio: 1.8; object-fit: cover; }
-            .video-index img:hover { filter: brightness(1.05); }
-            .video-index figcaption { text-align: center; padding: 3px; }
-                .video-index figcaption .video-date { color: var(--grey-6); }
+    .profile-top { line-height: 1.3; display: flex; align-items: center; gap: 13px; padding: 8px;  }
+        .profile-img { background-image: url(assets/pfp.jpg); background-size: contain; width: 150px; height: 180px; aspect-ratio: 5 / 6; background-color: grey; border: 1px solid var(--grey-9); }
+        .profile-top p { margin-block: 0.5em; margin-left: 2px; }
+        
+    #container > section { display: none; }
+        #container p { line-height: 1.4; color: var(--grey-7); text-align: center; margin-block: 1em; }
+        #container.recent > .recent { display: block; }
+        #container.about > .about { display: block; }
+        #container.text > .text { display: block; }
+        #container.videos > .videos { display: block; }
+        
+        .tabs { border-bottom: 1px solid var(--grey-c); padding-bottom: 2px; display: flex; align-items: flex-start; margin-bottom: 14px; justify-content: center; gap: 20px; font-family: 'Roboto',sans-serif; font-size: 17px; }
+            .tab { color: var(--grey-5); text-align: center; padding: 4px 3px; }
+            .tab.selected { color: var(--grey-2); font-weight: 700; }
+                .dummy { width: 100%; font-weight: 700; visibility: hidden; height: 0; }
+        
+        .video-index { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); font-family: system-ui; }
+            .video-index figure { max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
+                .video-index img { width: 100%; height: 100%; box-sizing: border-box; border: 1px solid var(--grey-c); object-fit: cover; }
+                .video-index .timecard { width: calc(100% - 2px); margin-inline: auto; text-align: right; height: 18px; margin-bottom: -18px; transform: translate(-2px,-21px); line-height: 1; display: flex; justify-content: flex-end; }
+                    .video-index .timecard div { border-radius: 4px; color: #ccc; background-color: #0009; padding: 1px 4px; font-size: 14px; }
+                .video-index figcaption { line-height: 1.1 !important; font-size: 17px; padding: 5px 3px; font-family: 'Roboto',sans-serif; }
+                    .video-index figcaption > div + div { margin-top: 0.25em; }
+                    .video-index .video-title { color: var(--grey-2); }
+                    .video-index .video-date { color: var(--grey-7); }
+        
+        .page-index { text-align: center; gap: 10px; display: grid; grid-template-columns: auto; line-height: 1.5; }
+            .page-index .page-title { font-family: 'Roboto',sans-serif; font-size: 18px; }
+            .page-index .date { font-family: 'Roboto',system-ui; color: var(--grey-6); }
+            .page-index .mirrors { margin-left: 5px; }
+                .page-index .mirrors a + a { margin-left: 3px; }
+                .page-index .mirrors a:hover {  }
+                    .page-index .mirrors a .inline-icon { }
+                    .page-index .mirrors a .link-text { display: none; color: var(--grey-3); }
     
-    .page-index { display: grid; justify-content: center; gap: 20px; line-height: 1.35; }
-        .page-index .page-title { font-family: 'Rubik',sans-serif; font-size: 18px; }
-        .page-index .date { font-family: 'Roboto',system-ui; font-size: calc(1em - 1px); color: var(--grey-5); margin-left: 1em; }
-        .mirrors {  }
-            .page-index .mirrors a + a { margin-left: 3px; }
-            .page-index .mirrors a:hover {  }
-                .page-index .mirrors a .inline-icon { }
-                .page-index .mirrors a .link-text { display: none; color: var(--grey-3); }
     </style>
 </head>
 <body>
-<h1>Recent videos</h1>
-<div class="video-index"></div>
-<div class="label-external" style="text-align:right"><a style="color:var(--grey-5)" title="See all videos on YouTube" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos">see all videos<span class="inline-icon link-icon"></span></a></div>
-<h1>Text pages</h1>
-<ul class="page-index"></ul>
+
+<div class="profile-top">
+    <div class="profile-img"></div>
+    <div>
+        <h1>Iris Embury</h1>
+        <p>Liberal traditionalist against misinformation and extremism. Not associated with any other person or organization.</p>
+    </div>
+</div>
+<div id="container" class="recent">
+    <div class="tabs">
+        <div class="no-select pseudo-link recent tab selected" onclick="setTab('recent')"><div>Recent</div><div class="dummy"></div></div>
+        <div class="no-select pseudo-link text tab" onclick="setTab('text')"><div>Text</div><div class="dummy"></div></div>
+        <div class="no-select pseudo-link videos tab" onclick="setTab('videos')"><div>Videos</div><div class="dummy"></div></div>
+        <div class="no-select pseudo-link about tab" onclick="setTab('about')"><div>About</div><div class="dummy"></div></div>
+    </div>
+    <section class="recent">
+        <div class="recent-index">
+        </div>
+    </section>
+    <section class="videos">
+        <p>I use Patreon as an alternate content host. The content there is not paywalled.</p>
+        <div class="video-index"></div>
+    </section>
+    <section class="text">
+        <div class="page-index"></div>
+    </section>
+    <section class="about">
+    </section>
+</div>
+
 <script src="assets/layout.js"></script>
+<script>
+function setTab(x) {
+    document.getElementById('container').className = x;
+    document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('selected'));
+    document.querySelector('.tabs .'+x).classList.add('selected');
+}
+Array.from(document.querySelectorAll('.dummy')).forEach(x => x.innerHTML=x.previousElementSibling.innerHTML);
+</script>
 </body></html>
