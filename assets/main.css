@@ -49,6 +49,7 @@
     html.reduce-margins .article .auto-list div.text-block { margin-top: 0; }
 
     html:not(.js) { padding: 2em; white-space: pre-wrap; font-family: monospace; font-size: 15px; }
+    html.js { opacity: unset; }
     html { color: var(--grey-2); background-color: var(--page-bg); font: 16px/1.5 'Segoe UI',system-ui; scroll-padding-top: calc(var(--nav-height) + 17px); scrollbar-color: light-dark(#6f90ba, #888) light-dark(#ddd, #222); padding: 0; min-width: 350px; min-height: 100vh; }
         body { min-height: 100vh; margin: 0; }
         ::selection { background-color: light-dark(#e7d3ff, #343942); color: light-dark(#111, #ddd); }
