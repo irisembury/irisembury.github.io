@@ -9,10 +9,7 @@
         
     #container > section { display: none; }
         #container p { line-height: 1.4; color: var(--grey-7); text-align: center; margin-block: 1em; }
-        #container.recent > .recent { display: block; }
-        #container.about > .about { display: block; }
-        #container.text > .text { display: block; }
-        #container.videos > .videos { display: block; }
+        #container section.selected { display: block; }
         
         .tabs { border-bottom: 1px solid var(--grey-c); padding-bottom: 2px; display: flex; align-items: flex-start; margin-bottom: 14px; justify-content: center; gap: 20px; font-family: 'Roboto',sans-serif; font-size: 17px; }
             .tab { color: var(--grey-5); text-align: center; padding: 4px 3px; }
@@ -74,9 +71,10 @@
 <script src="assets/layout.js"></script>
 <script>
 function setTab(x) {
-    document.getElementById('container').className = x;
     document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('selected'));
     document.querySelector('.tabs .'+x).classList.add('selected');
+    document.querySelectorAll('#container section').forEach(t => t.classList.remove('selected'));
+    document.querySelector('#container section.'+x).classList.add('selected');
 }
 Array.from(document.querySelectorAll('.dummy')).forEach(x => x.innerHTML=x.previousElementSibling.innerHTML);
 </script>
