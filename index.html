@@ -7,7 +7,7 @@
         .profile-top p { margin-block: 0.5em; margin-left: 2px; }
         
     #container > section { display: none; }
-        .tabs { border-bottom: 1px solid var(--grey-c); padding-bottom: 2px; display: flex; align-items: flex-start; margin-bottom: 14px; justify-content: center; gap: 20px; font-family: 'Roboto',sans-serif; font-size: 17px; }
+        .tabs { border-bottom: 1px solid var(--grey-c); padding-bottom: 2px; display: flex; align-items: flex-start; margin-bottom: 17px; justify-content: center; gap: 20px; font-family: 'Roboto',sans-serif; font-size: 17px; font-variant-caps: small-caps; }
             .tab { color: var(--grey-5); text-align: center; padding: 4px 5px; }
                 .dummy { width: 100%; font-weight: 700; visibility: hidden; height: 0; }
         #container.recent .recent { display: block; } #container.recent .tab.recent { color: var(--grey-2); font-weight: 700; }
@@ -26,16 +26,12 @@
                     .video-index .video-title { color: var(--grey-2); }
                     .video-index .video-date { color: var(--grey-7); }
         
-        .page-index { gap: 10px; display: grid; grid-template-columns: auto; line-height: 1.4; }
-            .page-index > div { border: 1px solid var(--grey-c); padding: 5px 10px 4px; }
-            .page-index > div:hover { background-color: var(--grey-f); }
-                .page-index .page-title { font-family: 'Roboto',sans-serif; font-size: 18px; }
-                .page-index .date { font-family: 'Roboto',system-ui; color: var(--grey-6); }
-                .page-index .mirrors { margin-left: 5px; }
-                    .page-index .mirrors a + a { margin-left: 3px; }
-                    .page-index .mirrors a:hover {  }
-                        .page-index .mirrors a .inline-icon { }
-                        .page-index .mirrors a .link-text { display: none; color: var(--grey-3); }
+        .page-index { font: 17px/1.4 'Roboto',sans-serif; }
+        .page-index li + li { margin-top: 14px; }
+        .page-index li > span { color: var(--grey-2); }
+            .page-index .entry-title { font-family: 'Georgia',serif; font-size: 18px; }
+            .page-index .entry-date { color: var(--grey-4); }
+            .page-index .entry-mirrors a { font-variant-caps: small-caps; text-underline-offset: 2px; color: var(--grey-4); text-decoration: dotted underline var(--grey-8); }
     
     </style>
 </head>
@@ -48,23 +44,17 @@
         <p>Liberal traditionalist against misinformation and extremism. Not associated with any other person or organization.</p>
     </div>
 </div>
-<div id="container" class="recent">
+<div id="container" class="text">
     <div class="tabs">
-        <div class="no-select pseudo-link recent tab" onclick="setTab('recent')"><div>Recent</div><div class="dummy"></div></div>
-        <div class="no-select pseudo-link text tab" onclick="setTab('text')"><div>Text</div><div class="dummy"></div></div>
-        <div class="no-select pseudo-link videos tab" onclick="setTab('videos')"><div>Videos</div><div class="dummy"></div></div>
+        <div class="no-select pseudo-link text tab" onclick="setTab('text')"><div>Text</div></div>
+        <div class="no-select pseudo-link videos tab" onclick="setTab('videos')"><div>Videos</div></div>
     </div>
-    <section class="recent">
-        <div class="recent-index">
-        I'm redesigning some of this. Placeholder text. See other tabs.
-        </div>
-    </section>
     <section class="videos">
         <p>I use Patreon as an alternate content host. The content there is not paywalled.</p>
         <div class="video-index"></div>
     </section>
     <section class="text">
-        <div class="page-index"></div>
+        <ul class="page-index"></ul>
     </section>
     <section class="about">
     </section>
@@ -75,6 +65,6 @@
 function setTab(x) {
     document.getElementById('container').className = x;
 }
-Array.from(document.querySelectorAll('.dummy')).forEach(x => x.innerHTML=x.previousElementSibling.innerHTML);
+Array.from(document.querySelectorAll('.dummy')).forEach(x => x.innerHTML = x.previousElementSibling.innerHTML);
 </script>
 </body></html>

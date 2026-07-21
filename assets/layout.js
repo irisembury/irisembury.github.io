@@ -808,13 +808,10 @@ function init() {
         }).join(''));
         document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", pageList().map(
             page => {
-                let entry = '<div class="page-title"><a title="'+page.title+'" href="page/' + page.url + '">' + autoFormat(page.title) + '</a></div>';
-                if (page.date) { entry += '<div><span class="date">' + page.date + '</span>'; }
-                if (page.mirrors) {
-                    entry += '<span class="mirrors label-external">' + page.mirrors.split(",").map(m => parseSource(m)).join('') + '</span>';
-                }
-                entry += '</div>';
-                return '<div>' + entry + '</div>'
+                let li = `<span><span class="entry-title"><a title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a></span>`;
+                if (page.date) li += ` &mdash; posted <span class="entry-date">${ page.date }</span>`;
+                if (page.mirrors) li += ` &mdash; mirrors: <span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(", ") }</span></span>`;
+                return '<li>' + li + '</li>'
             }
         ).join(''))
     }
