@@ -577,14 +577,14 @@ function navCheck() {
     setTimeout(() => {
         canNavCheck = true;
         navCheck_();
-    }, 50);
+    }, 250);
 }
 function navCheck_() {
-    if (!navSticky && pageYOffset > 50) {
+    if (!navSticky && pageYOffset > 1) {
         navbar.classList.add("sticky-active");
         navSticky = true;
     }
-    else if (navSticky && pageYOffset < 50) {
+    else if (navSticky && pageYOffset < 2) {
         navbar.classList.remove("sticky-active");
         navSticky = false;
     }
