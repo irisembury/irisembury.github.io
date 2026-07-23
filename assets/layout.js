@@ -486,7 +486,9 @@ function loadBody() {
     document.head.insertAdjacentHTML("beforeend",`<meta charset="utf-8"><link rel="stylesheet" href="${rootPath}assets/main.css"><link rel="icon" type="image/x-icon" href="${rootPath}favicon.ico"><link rel="stylesheet" href="${rootPath}assets/fonts.css"><meta name="viewport" content="width=device-width, initial-scale=1.0">`);
     document.body.innerHTML = `
         <nav class="navbar">
-            <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79    L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></a>' }</div><div><div style="text-align:center;width:100%;"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div><div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
+            <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79    L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></a>' }</div>
+            <div><div style="text-align:center;width:100%;"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div>
+            <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
         </nav>
         <div class="page-grid">
             <nav class="toc"></nav>
@@ -506,6 +508,7 @@ function loadBody() {
             <div class="switches-area">
                 <label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch">
             </div>
+            <hr>
             <h3>Text formatting:</h3>
             <div class="switches-area">
                 <label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text">
@@ -621,7 +624,6 @@ function loadEntryMeta() {
                     <ul>
                         <li><a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a></li>
                         <li><a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></li>
-                        <li><a href="https://github.com/irisembury/irisembury.github.io"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></li>
                     </ul>
                 </div>
             </div>
