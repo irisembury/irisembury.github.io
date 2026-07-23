@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html style="opacity:0">
-<head>
-    <title>Movie list</title>
-    <style>
-    .table-wrapper { max-height: 700px; overflow-y: scroll; background-color: var(--grey-f); padding: 10px 15px; }
-    .auto-table td { padding: 1px 13px 1px 0 !important; }
-    </style>
-</head>
 <body>
+# Movies
 
-Here's a list of every movie I've ever seen, sorted by release date.
+Here's a list of every movie I've ever seen.
 
-<!-- Note to self: this table self-sorts by date; you don't have to do it yourself. -->
-
-!table
+!table this { line-height: 1; margin-inline: auto; }
 My Neighbor Totoro | 1988
 The Princess Bride | 1987
 The Cat Returns | 2002
@@ -250,7 +242,7 @@ Harry Potter and the Goblet of Fire | 2005
 Harry Potter and the Order of the Phoenix | 2007
 Harry Potter and the Half-Blood Prince | 2009
 Harry Potter and the Deathly Hallows – Part 1 | 2010
-V for Vendetta (2005)
+V for Vendetta | 2005
 Harry Potter and the Deathly Hallows – Part 2 | 2011
 The Jungle Book | 1967
 Twilight | 2008
@@ -260,6 +252,7 @@ The Twilight Saga: Eclipse | 2010
 Monty Python and the Holy Grail | 1975
 One Flew Over the Cuckoo's Nest | 1975
 Captain Phillips | 2013
+Raiders of the Lost Ark | 1981
 The Hunchback of Notre Dame | 1996
 Frozen | 2013
 Space Jam | 1996
@@ -267,28 +260,26 @@ Back to the Future | 1985
 Back to the Future Part II | 1989
 Back to the Future Part III | 1990
 
----
+That's {movie-count} movies.
 
-Total count: <span id="movie-count"></span> movies.
+I grew up without television. I only went to theatres a few times, which I didn't enjoy. So I mostly only saw movies when my parents occasionally bought home VHS tapes or DVDs. I remember our livingroom having a few Disney movies like Lion King, a random movie called Mouse Hunt. In my late 20s, I noticed I was missing a lot of cultural touchpoints when talking to other people and movie references were a big part of the broader culture, so I made a concerted effort to patch that by going back and watching a lot of the movies that it feels like "everybody knows" --- Back to the Future, Star Wars, Harry Potter, Pirates of the Caribbean, Top Gun. I'm not going to do a rating for every movie, but here are some of my favourites that I want to highlight:
 
-I grew up without television and seldom ever went to theatres, which I didn't enjoy, so I basically only saw movies when my parents bought VHS tapes or DVDs, which wasn't many. A few Disney flicks, a random movie called Mouse Hunt. Then in my late 20s I had noticed I was losing track of too many cultural touchpoints when talking to other people and that movie references were a big part of the broader culture, so I should make a concerted effort to go patch that knowledge by going back and watching a lot of the movies that it feels like "everybody knows" (e.g. Back to the Future, Star Wars, Harry Potter, Pirates of the Caribbean, Top Gun, Mission: Impossible). I'm not going to do a rating for every movie, but here are some of my favourites that I want to highlight:
-
-- Poor Things
-- Dial M for Murder
-- Twelve Angry Men
-- Edge of Tomorrow
-- Pride and Prejudice (the 2005 version starring Keira Knightley)
-- Taken
-- A Few Good Men
+* Poor Things
+* Dial M for Murder
+* Twelve Angry Men
+* Edge of Tomorrow
+* Pride and Prejudice (the 2005 version starring Keira Knightley)
+* Taken
+* A Few Good Men
 
 *Dial M for Murder* was my favourite movie until I saw *Poor Things*. I don't know how to rate things other than those being the top two. I apparently dialogue-heavy dramas. Interesting characters, talking in rooms.
 
 A few negative notes:
 
-- **Star Trek: Section 31**. This was shockingly bad. *Star Trek* already didn't translate that well into movies anyway --- the TNG movies had some good moments, but were overall badly written --- but this one somehow blew all previous attempts away. *Nothing* worked. They shouldn't have even released it.
-- **Whiplash**. This movie was actually just dumb as shit. I understand why people like the idea that it's *trying* to convey about rising to the occasion and becoming great under pressure, but the way it tried to convey that was not good. The teacher was just an idiot. I'd have cracked up laughing at him. I don't know how people took it seriously.
-- **Elf**. Fuck this stupid, unfunny movie. Oh my god.
-- **Zoolander**. It's not the worst, but I had to accept Ben Stiller's sense of comedy just doesn't do it for me. Every silly movie he's in, I'm just waiting for him to stop.
+* **Star Trek: Section 31**. This was shockingly bad. *Star Trek* already didn't translate that well into movies anyway --- the TNG movies had some good moments, but were overall badly written --- but this one somehow blew all previous attempts away. *Nothing* worked. They shouldn't have even released it.
+* **Whiplash**. This movie was fucking stupid. I understand why people like the idea that it's *trying* to convey about rising to the occasion and becoming great under pressure, but the way it tried to convey that was not good. The teacher was just an idiot. I'd have cracked up laughing at him. I don't know how people took it seriously.
+* **Elf**. Fuck this stupid, unfunny movie. Oh my god.
+* **Zoolander**. It's not the worst, but I had to accept Ben Stiller's sense of comedy just doesn't do it for me. Every silly movie he's in, I'm just waiting for him to stop.
 
 Why haven't I seen a single movie released in 2020 or 2021? Just a coincidence? I don't know.
 
@@ -299,7 +290,7 @@ Anyway.
 window.addEventListener("load", function() {
     let table = document.querySelector(".auto-table tbody");
     let rows = Array.from(table.rows);
-    document.getElementById("movie-count").innerHTML = rows.length;
+    document.querySelector(".movie-count").innerHTML = rows.length;
     rows.sort((a, b) => parseInt(a.cells[1].textContent) - parseInt(b.cells[1].textContent));
     rows.forEach(row => table.appendChild(row));
 });

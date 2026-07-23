@@ -335,7 +335,7 @@ function interpreter(argValue) {
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
         let isFine = chunk.startsWith(".");
         if (isFine) { chunk = chunk.slice(1).trimStart(); }
-        if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li>' + (l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
+        if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + (l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
         if (chunk.startsWith("!list")) { chunk = autoList(chunk.substring(chunk.indexOf('\n') + 1)); }
         else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { chunk = autoList(chunk); }
         else { chunk = '<p>' + autoFormat(chunk) + '</p>'; }
@@ -401,14 +401,14 @@ function autoFormat(_string) {
     output = (output + afAux(_string))
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>');
-    output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>')
+    output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
     return output;
 }
 function afAux(str_in) { //curly quotes, dashes
     if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
         str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
     }
-    return str_in.replaceAll("---", '\u2014').replaceAll("--", "\u2013");
+    return str_in.replaceAll("---", '&mdash;').replaceAll("--", "&ndash;");
 }
 function tokenizeByWordChar(stringData) {
     const result = [];
@@ -483,26 +483,11 @@ function getRootPath() {
 }
 function loadBody() {
     HTML.lang = "en";
-    document.head.insertAdjacentHTML("beforeend",'<meta charset="utf-8"><link rel="stylesheet" href="'+rootPath+'assets/main.css"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="stylesheet" href="'+rootPath+'assets/fonts.css">');
+    document.head.insertAdjacentHTML("beforeend",`<meta charset="utf-8"><link rel="stylesheet" href="${rootPath}assets/main.css"><link rel="icon" type="image/x-icon" href="${rootPath}favicon.ico"><link rel="stylesheet" href="${rootPath}assets/fonts.css"><meta name="viewport" content="width=device-width, initial-scale=1.0">`);
     document.body.innerHTML = `
         <nav class="navbar">
-            <div class="page-name gap-5">${ index ?'' :'<a href="'+rootPath+'">Index (back to front)</a>' }</div>
+            <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79    L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></a>' }</div><div><div style="text-align:center;width:100%;"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div><div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
         </nav>
-        <div class="top-right">
-            <div id="gear"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
-            <div class="right-panel closed">
-                <h3>Display:</h3>
-                <div class="switches-area">
-                    <label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch">
-                </div>
-                <h3>Text formatting:</h3>
-                <div class="switches-area">
-                    <label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text">
-                    <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
-                    <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
-                </div>
-            </div>
-        </div>
         <div class="page-grid">
             <nav class="toc"></nav>
             <div class="main-container">
@@ -516,10 +501,21 @@ function loadBody() {
             <div class="lb-img-wrapper" onclick="setlightbox('close')"><img></div>
             <div class="lb-caption-panel"><p></p></div>
         </div>
-        <style id="__css_user_set"></style>`;
+        <div class="right-panel">
+            <h3>Display:</h3>
+            <div class="switches-area">
+                <label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch">
+            </div>
+            <h3>Text formatting:</h3>
+            <div class="switches-area">
+                <label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text">
+                <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
+                <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
+            </div>
+        </div>`;
     interpreter(document.querySelector(".article"));
-    HTML.classList.add("js");
     navbar = document.querySelector(".navbar");
+    HTML.classList.add("js");
 }
 let canTocUpdate = true, tocLastHeading = 0, rowsInToc = [], pageHeadings = [];
 function tocUpdate() {
@@ -600,7 +596,7 @@ function loadEntryMeta() {
             document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-10 label-external"><div>The text of this page was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.split(",").map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
         }
         if (page.title) {
-            document.querySelector('.page-name')?.insertAdjacentHTML('beforeend','<span> > </span><span>' + page.title + '</span>');
+            document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', page.title);
         }
         document.querySelector(".article")?.insertAdjacentHTML('afterbegin', autoFormat('<div class="article-top">' + (page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-byline">${ page.date} </div>` :'' )));
         document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
@@ -625,7 +621,7 @@ function loadEntryMeta() {
                     <ul>
                         <li><a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a></li>
                         <li><a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></li>
-                        <li><a href="https://github.com/irisembury"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></li>
+                        <li><a href="https://github.com/irisembury/irisembury.github.io"><span class="github-logo inline-icon"></span><span>This repo on GitHub</span></a></li>
                     </ul>
                 </div>
             </div>
@@ -668,30 +664,30 @@ function rightMenuSetup() {
             tocUpdate();
         }
     )
-    const gearMenu = document.querySelector(".right-panel");
-    function gearMenuToggle(option) {
+    const rightMenu = document.querySelector(".right-panel");
+    function rightMenuToggle(option) {
         if (option == "open") {
-            gearMenu.classList.remove("closed");
+            rightMenu.classList.add("open");
         }
         else if (option == "close") {
-            gearMenu.classList.add("closed");
+            rightMenu.classList.remove("open");
         }
         else {
-            gearMenuToggle(gearMenu.classList.contains("closed") ? "open" : "close");
+            rightMenuToggle(!rightMenu.classList.contains("open") ? "open" : "close");
         }
     }
-    const gearIcon = document.getElementById("gear");
-    if (gearIcon) {
-        gearIcon.addEventListener("click", gearMenuToggle);
+    const menuBtn = document.querySelector(".menu-button");
+    if (menuBtn) {
+        menuBtn.addEventListener("click", rightMenuToggle);
         window.addEventListener("click", function(e) {
-            if (!gearMenu.contains(e.target) && !gearIcon.contains(e.target)) {
-                gearMenuToggle("close");
+            if (!rightMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                rightMenuToggle("close");
             }
         })
     }
     window.addEventListener("keydown", function(e) {
         if (e.key === "Escape") {
-            gearMenuToggle("close");
+            rightMenuToggle("close");
             setlightbox("close");
         }
         else if (e.key === "Home") {
@@ -788,7 +784,7 @@ function init() {
     loadEntryMeta();
     rightMenuSetup();
     tocSetup();
-    window.addEventListener("scroll", navCheck);
+    window.addEventListener("scroll", navCheck); navCheck();
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = convertSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
@@ -806,16 +802,16 @@ function init() {
                 </figcaption>
             </figure>`
         }).join(''));
-        document.querySelector(".page-index")?.insertAdjacentHTML("beforeend", pageList().map(
+        document.querySelector(".text-index")?.insertAdjacentHTML("beforeend", pageList().map(
             page => {
-                let li = `<span><span class="entry-title"><a title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a></span>`;
-                if (page.date) li += ` &mdash; posted <span class="entry-date">${ page.date }</span>`;
-                if (page.mirrors) li += ` &mdash; mirrors: <span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(", ") }</span></span>`;
-                return '<li>' + li + '</li>'
+                let title = `<a class="entry-title" title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a>`;
+                let date = `<span class="entry-date">posted ${ page.date }</span>`;
+                let mirrors = page.mirrors ?`<span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(" ") }</span>` :'';
+                return `<div><div>${ title }</div><div><div class="meta-row">${ date }${ mirrors }</div></div></div>`
             }
         ).join(''))
     }
-    setTimeout(() => HTML.style.removeProperty("opacity"), 100);
+    setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
 }
 window.addEventListener("load", init);
 
