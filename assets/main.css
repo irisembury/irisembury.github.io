@@ -53,7 +53,7 @@
         body { min-height: 100vh; margin: 0; }
         ::selection { background-color: light-dark(#fff2a2, #343942); color: light-dark(#111, #ddd); }
     
-    html {  }
+    body,html { width: 100%; }
     
     .navbar { position: sticky; top: 0; height: var(--nav-height); font: 15px/1 'Roboto',system-ui; background-color: var(--page-bg); color: light-dark(#6a6a6a, #7d7d7d); transition: box-shadow 0.5s; padding-top: 1px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 1em; z-index: 3; width: 100%; }
     .navbar.sticky-active { box-shadow: 0 1px 8px light-dark(#0002, #000a); }
@@ -166,12 +166,8 @@
                         .file-box figcaption { padding: 3px; }
                             .file-box figcaption a { word-break: break-word; text-decoration: none; }
                 
-                .image-gallery { margin: 20px auto; display: grid; grid-template-columns: 1fr; justify-content: space-evenly; gap: 8px; align-items: baseline; font-size: 15px; max-width: var(--main-width); }
-                .image-gallery:has(> :nth-child(2):last-child ) { grid-template-columns: repeat(2, 1fr); justify-content: center; }
-                .image-gallery:has(> :nth-child(2) ) img { aspect-ratio: 1.7; }
-                .image-gallery:has(> :nth-child(3)) { grid-template-columns: repeat(3, 1fr); }
-                .image-gallery:has(> :nth-child(3) ) img { aspect-ratio: 1.2; }
-                .image-gallery:has(> :nth-child(4)) { grid-template-columns: repeat(4, 1fr); }
+                .image-gallery { margin: 20px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); justify-content: space-evenly; gap: 8px; align-items: baseline; font-size: 15px; max-width: var(--main-width); }
+                .image-gallery:has(> :nth-child(2) ) img { aspect-ratio: 1.2; }
                 .image-gallery figure { }
                     .image-gallery figcaption { color: var(--grey-6,dimgrey); padding: 3px 6px; }
                     .image-gallery img { object-fit: cover; margin-inline: auto; border: 1px solid var(--grey-c,silver); cursor: pointer; }
