@@ -30,8 +30,8 @@
                 .article .text-index .meta-row { padding-left: 1em; color: var(--grey-3); display: flex; gap: 10px; margin-top: 2px; }
                     .article .text-index .entry-date {  }
                     .article .text-index .entry-mirrors .link-text { display: none; }
-        .home .links-panel { line-height: 1; display: flex; flex-wrap: wrap; justify-content: center; gap: 1em; }
-            .links-panel a { text-decoration: none; border-radius: 4px; display: flex; align-items: center; cursor: pointer; border: 1px solid var(--grey-c); padding: 6px 9px 6px 2px; }
+        .home .links-panel { line-height: 1; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.65em 1em; max-width: 700px; padding: 0 45px; margin-inline: auto; }
+            .links-panel a { font-size: 17px; text-decoration: none; border-radius: 4px; display: flex; align-items: center; cursor: pointer; border: 1px solid var(--grey-c); padding: 6px 9px 6px 2px; }
             .links-panel a:hover { text-decoration: none; border-color: var(--grey-9); }
                 .links-panel a .inline-icon { margin-inline: 5px; width: 18px; height: 18px; }
     </style>
@@ -58,10 +58,6 @@
     <section class="text">
         <div class="text-index label-external"></div>
     </section>
-
-
-<style>
-</style>
     <section class="home">
         <div class="links-panel label-external">
             <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span>YouTube</span></a>
@@ -71,9 +67,21 @@
             <a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a>
             <a href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span>Bluesky</span></a>
             <a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a>
-            <a href="https://github.com/irisembury/irisembury.github.io"><span class="github-logo inline-icon"></span><span>This website on GitHub</span></a>
+            <a href="https://github.com/irisembury/irisembury.github.io"><span class="github-logo inline-icon"></span><span>This site on GitHub</span></a>
         </div>
-    </section>
+
+<div class="space-evenly margin-top-em">
+    <div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+
+
+
+
+
+</section>
 </div>
 
 <script src="assets/layout.js"></script>
