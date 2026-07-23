@@ -180,7 +180,7 @@
                 .image-gallery.oar img { aspect-ratio: unset !important; }
                 .image-gallery.contain img { object-fit: contain; }
             
-            .article-footer { color: var(--grey-4,dimgrey); font: 15px/1.5 'Roboto','Arial',sans-serif; display: grid; gap: 2em; margin-top: 3em; clear: both; }
+            .article-footer { color: var(--grey-5,dimgrey); font: 15px/1.5 'Roboto','Arial',sans-serif; display: grid; gap: 2em; margin-top: 3em; clear: both; }
                 .mirror-container .link-text { color: var(--grey-3); }
                 .footer-links-area { display: flex; justify-content: space-evenly; padding-bottom: 0.5em; }
                     .footer-links-area a { color: var(--grey-6); }
