@@ -496,12 +496,7 @@ function loadBody() {
                 <article class="article">${ document.body.innerHTML }</article>
                 <footer class="article-footer"></footer>
             </div>
-            <div class="right-spacer">
-        </div>
-        <div class="lightbox hidden">
-            <div class="lb-top-left"><p></p></div>
-            <div class="lb-img-wrapper" onclick="setlightbox('close')"><img></div>
-            <div class="lb-caption-panel"><p></p></div>
+            <div class="right-spacer"></div>
         </div>
         <div class="right-panel">
             <h3>Display:</h3>
@@ -515,6 +510,11 @@ function loadBody() {
                 <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
                 <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
             </div>
+        </div>
+        <div class="lightbox hidden">
+            <div class="lb-top-left"><p></p></div>
+            <div class="lb-img-wrapper" onclick="setlightbox('close')"><img></div>
+            <div class="lb-caption-panel"><p></p></div>
         </div>`;
     interpreter(document.querySelector(".article"));
     navbar = document.querySelector(".navbar");
