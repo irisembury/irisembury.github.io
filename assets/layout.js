@@ -761,7 +761,7 @@ title:Public record |url:public-record |flags:hidden,wide |type:page
 title:Anime reviews |url:anime-reviews |date:2024-12-17 |type:page
 title:Data Structures & Algorithms |url:data-structures-algorithms |flags:hidden,wide |type:page
 title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18 |type:video
-title:Floor crossers |date:2026-05-17 |src:youtube:EPfcpuLYeOg,patreon:158476239 |thumb:158476239.jpg |length:56:42 |type:video
+title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34 |type:video
 title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15 |type:video
 title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13 |type:video
 title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04 |type:video
@@ -806,10 +806,10 @@ function init() {
         }).join(''));
         document.querySelector(".text-index")?.insertAdjacentHTML("beforeend", pageList().map(
             page => {
-                let title = `<a class="entry-title" title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a>`;
-                let date = `<span class="entry-date">${ page.date }</span>`;
-                let mirrors = page.mirrors ?`<span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(" ") }</span>` :'';
-                return `<div><div>${ title }</div><div class="meta-row">${ date }${ mirrors }</div></div>`
+                let title = `<div><a class="entry-title" title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a></div>`;
+                let date = `<div><span class="entry-date">${ page.date }</span></div>`;
+                let mirrors = page.mirrors ?`<div><span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(" ") }</span></div>` :'';
+                return `<div class="entry">${ title }${ mirrors }${ date }</div>`
             }
         ).join(''))
     }
