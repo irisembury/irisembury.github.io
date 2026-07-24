@@ -69,8 +69,8 @@
             .menu-button { margin-inline: auto 14px; display: flex; object-fit: contain; background-repeat: no-repeat; background-size: contain; background-position: center; opacity: 0.65; cursor: pointer; padding: 2px; }
             .menu-button:hover { opacity: 0.8; }
     
-    .right-panel { display: grid; gap: 15px 0; font-size: 14px; position: fixed; right: 0; top: calc(var(--nav-height) + 1px); z-index: 2; line-height: 1.15; background-color: light-dark(#f8f8f8, #292929); color: light-dark(#555, #999); border-left: 1px solid var(--grey-d); padding: 25px 23px; transform: translateY(-101%); box-sizing: border-box; border-bottom: 1px solid var(--grey-d); transition: transform 0.15s; }
-    .right-panel.open { transform: translateY(0); }
+    .right-panel { display: grid; gap: 15px 0; font-size: 14px; position: fixed; right: 0; top: calc(var(--nav-height) + 1px); z-index: 2; line-height: 1.15; background-color: light-dark(#f8f8f8, #292929); color: light-dark(#555, #999); border-left: 1px solid var(--grey-d); padding: 25px 23px; transform: translateY(calc(-101% - var(--nav-height))); box-sizing: border-box; border-bottom: 1px solid var(--grey-d); transition: transform 0.25s; opacity: 0; }
+    .right-panel.open { transform: translateY(0); opacity: 1; }
         .right-panel .reset-button { margin-left: auto; font-weight: 400; cursor: pointer; color: var(--grey-6,dimgrey); }
         .right-panel hr { margin: 0; }
         .right-panel h3 { font-size: 1em; color: var(--grey-4); }
@@ -166,8 +166,11 @@
                         .file-box figcaption { padding: 3px; }
                             .file-box figcaption a { word-break: break-word; text-decoration: none; }
                 
-                .image-gallery { margin: 20px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); justify-content: space-evenly; gap: 8px; align-items: baseline; font-size: 15px; max-width: var(--main-width); }
+                .image-gallery { margin: 20px auto; display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px; align-items: baseline; font-size: 15px; max-width: var(--main-width); }
                 .image-gallery:has(> :nth-child(2) ) img { aspect-ratio: 1.2; }
+                .image-gallery:has(> :nth-child(2) ) figure { max-width: calc((var(--main-width) - 8px) * 0.499); }
+                .image-gallery:has(> :nth-child(3) ) figure { max-width: calc((var(--main-width) - 16px) * 0.33); }
+                .image-gallery:has(> :nth-child(4) ) figure { max-width: calc((var(--main-width) - 24px) * 0.2499); }
                 .image-gallery figure { }
                     .image-gallery figcaption { color: var(--grey-6,dimgrey); padding: 3px 6px; }
                     .image-gallery img { object-fit: cover; margin-inline: auto; border: 1px solid var(--grey-c,silver); cursor: pointer; }

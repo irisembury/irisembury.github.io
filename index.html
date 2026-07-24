@@ -15,7 +15,7 @@
             .tab.selected { color: var(--grey-2); font-weight: 700; border-color: var(--grey-3); }
                 .dummy { width: 100%; font-weight: 700; visibility: hidden; height: 0; }
         
-            .links-panel { display: flex; gap: 4px; background-color: var(--page-bg); line-height: 1; flex-wrap: wrap; margin-block: 10px; }
+            .links-panel { justify-content: center; display: flex; gap: 4px; background-color: var(--page-bg); line-height: 1; flex-wrap: wrap; margin-block: 10px; }
                 .links-panel a { padding: 5px 6px; border: 1px solid var(--grey-c); font-size: 16px; text-decoration: none; border-radius: 4px; display: flex; align-items: center; cursor: pointer; }
                 .links-panel a:hover { text-decoration: none !important; border-color: var(--grey-8); }
                     .links-panel .link-text { display: none; }
@@ -41,20 +41,22 @@
 </head>
 <body>
 
-<div class="profile-top">
-    <div class="profile-img"></div>
-    <div>
-        <h1 class="p-name">Iris Embury</h1>
-        <p>person from Ottawa Canada doing stuff</p>
-        <div class="links-panel label-external">
-            <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a>
-            <a href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a>
-            <a href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a>
-            <a href="https://patreon.com/cw/irisembury/posts"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a>
-            <a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>
-            <a href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a>
-            <a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>
+<div>
+    <div class="profile-top">
+        <div class="profile-img"></div>
+        <div>
+            <h1 class="p-name">Iris Embury</h1>
+            <p>person from Ottawa Canada doing stuff</p>
         </div>
+    </div>
+    <div class="links-panel label-external">
+        <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a>
+        <a href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a>
+        <a href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a>
+        <a href="https://patreon.com/cw/irisembury/posts"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a>
+        <a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>
+        <a href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a>
+        <a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>
     </div>
 </div>
 <div class="tabs">

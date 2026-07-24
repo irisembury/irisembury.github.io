@@ -267,8 +267,7 @@ function linkReplace(chunk) {
             link_class.push("external-link");
             const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
             if (iconName) {
-                let spaceIndex = link_inner.lastIndexOf(" ") + 1;
-                link_inner = link_inner.substring(0, spaceIndex) + '<span class="nowrap">' + link_inner.substring(spaceIndex) + '<span class="' + iconName + ' inline-icon"></span>' + '</span>';
+                link_inner = link_inner.substring(0, link_inner.length - 1) + '<span class="nowrap">' + link_inner.substring(link_inner.length - 1) + '<span class="' + iconName + ' inline-icon"></span>' + '</span>';
             }
         }
         else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg")) {
@@ -305,8 +304,7 @@ function linkReplace(chunk) {
         let a_tag = '<a';
         if (iconName) {
             a_tag += ' class="has-icon"';
-            let spaceIndex = linkInner.lastIndexOf(" ") + 1;
-            linkInner = linkInner.substring(0, spaceIndex) + '<span class="nowrap">' + linkInner.substring(spaceIndex) + '<span class="' + iconName + ' inline-icon"></span>' + '</span>';
+            linkInner = linkInner.substring(0, linkInner.length - 1) + '<span class="nowrap">' + linkInner.substring(linkInner.length - 1) + '<span class="' + iconName + ' inline-icon"></span>' + '</span>';
         }
         return a_tag + ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
     });
@@ -603,31 +601,6 @@ function loadEntryMeta() {
         }
         document.querySelector(".article")?.insertAdjacentHTML('afterbegin', autoFormat('<div class="article-top">' + (page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-byline">${ page.date} </div>` :'' )));
         document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
-        <div class='footer-links-area'>
-            <div class="recent-pages">
-                <div>Pages recently added:</div>
-                <div>
-                    <ul class='label-external'>
-                        ${ pageList().slice(0, 4).map( entry => `<li><a href="/page/${ entry.url }">${ entry.title }</a></li>` ).join("") }
-                    </ul>
-                </div>
-            </div>
-            <div class="external-links">
-                <div>External links:</div>
-                <div class='flex label-external'>
-                    <ul>
-                        <li><a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span>YouTube channel</span></a></li>
-                        <li><a href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span>Twitter/X</span></a></li>
-                        <li><a href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span>Bluesky</span></a></li>
-                        <li><a href="https://irisembury.github.io/discord"><span class="discord-logo inline-icon"></span><span>Discord server</span></a></li>
-                    </ul>
-                    <ul>
-                        <li><a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span>Tumblr</span></a></li>
-                        <li><a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span>Substack</span></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
         <div>
             <p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
         </div>`);
