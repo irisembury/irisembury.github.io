@@ -505,7 +505,7 @@ function loadBody() {
                 </div>
             </div>
             <div class="screen"></div>
-            <div class="toc-toggle" onclick="tocToggle()" title="Table of Contents"></div>
+            <div class="toc-toggle-button" onclick="tocToggle()" title="Table of Contents"></div>
         </div>
         <div class="page-grid">
             <nav class="toc"></nav>
@@ -659,7 +659,7 @@ function rightMenuSetup() {
         }
     }
     const menuBtn = document.querySelector(".menu-button");
-    const tocToggleBtn = document.querySelector(".toc-toggle");
+    const tocToggleBtn = document.querySelector(".toc-toggle-button");
     if (menuBtn && tocToggleBtn) {
         menuBtn.addEventListener("click", rightMenuToggle);
         window.addEventListener("click", function(e) {
@@ -699,6 +699,7 @@ function tocSetup() {
     });
     if (pageHeadings.length < 2) {
         document.querySelector(".toc")?.remove();
+        document.querySelector(".toc-toggle-button")?.remove();
         document.querySelector(".right-spacer")?.remove();
     }
     else {
@@ -799,7 +800,7 @@ function init() {
             page => {
                 let title = `<a class="entry-title" title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a>`;
                 let date = `<span class="entry-date">${ page.date }</span>`;
-                let mirrors = page.mirrors ?`<span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(" ") }</span>` :'';
+                let mirrors = page.mirrors ?`<span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).sort().join(" ") }</span>` :'';
                 return `<div class="entry"><div>${ title }</div><div>${ date }${ mirrors }</div></div>`
             }
         ).join(''))
