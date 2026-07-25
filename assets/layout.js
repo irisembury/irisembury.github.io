@@ -484,10 +484,28 @@ function loadBody() {
     document.head.insertAdjacentHTML("beforeend",`<meta charset="utf-8"><link rel="stylesheet" href="${rootPath}assets/main.css"><link rel="icon" type="image/x-icon" href="${rootPath}favicon.ico"><link rel="stylesheet" href="${rootPath}assets/fonts.css"><meta name="viewport" content="width=device-width, initial-scale=1.0">`);
     document.body.innerHTML = `
         <nav class="navbar">
-            <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79    L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
-            <div><div class="page-name-segment"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div>
-            <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
+            <div class="nav-inner">
+                <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79    L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
+                <div><div class="page-name-segment"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div>
+                <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
+            </div>
         </nav>
+        <div class="panel-aligner">
+            <div class="right-panel">
+                <h3>Display:</h3>
+                <div class="switches-area">
+                    <label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch">
+                </div>
+                <hr>
+                <h3>Text formatting:</h3>
+                <div class="switches-area">
+                    <label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text">
+                    <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
+                    <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
+                </div>
+            </div>
+            <div class="screen"></div>
+        </div>
         <div class="page-grid">
             <nav class="toc"></nav>
             <div class="main-container">
@@ -495,19 +513,6 @@ function loadBody() {
                 <footer class="article-footer"></footer>
             </div>
             <div class="right-spacer"></div>
-        </div>
-        <div class="right-panel">
-            <h3>Display:</h3>
-            <div class="switches-area">
-                <label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch">
-            </div>
-            <hr>
-            <h3>Text formatting:</h3>
-            <div class="switches-area">
-                <label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text">
-                <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
-                <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
-            </div>
         </div>
         <div class="lightbox hidden">
             <div class="lb-top-left"><p></p></div>
@@ -594,7 +599,7 @@ function loadEntryMeta() {
             HTML.classList.add("wide");
         }
         if (page.mirrors) {
-            document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-10 label-external"><div>The text of this page was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.split(",").map(m => '<span class="bubble-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
+            document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-10 label-external"><div>This article was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.split(",").map(m => '<span class="rect-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
         }
         if (page.title) {
             document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', page.title);
@@ -602,7 +607,7 @@ function loadEntryMeta() {
         document.querySelector(".article")?.insertAdjacentHTML('afterbegin', autoFormat('<div class="article-top">' + (page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-byline">${ page.date} </div>` :'' )));
         document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
         <div>
-            <p>This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
+            <p class="italic times">This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
         </div>`);
     }
 }
