@@ -485,7 +485,7 @@ function loadBody() {
     document.body.innerHTML = `
         <nav class="navbar">
             <div class="nav-inner">
-                <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79    L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
+                <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79 L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
                 <div><div class="page-name-segment"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div>
                 <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
             </div>
@@ -505,6 +505,7 @@ function loadBody() {
                 </div>
             </div>
             <div class="screen"></div>
+            <div class="toc-toggle" onclick="tocToggle()" title="Table of Contents"></div>
         </div>
         <div class="page-grid">
             <nav class="toc"></nav>
@@ -519,8 +520,9 @@ function loadBody() {
             <div class="lb-img-wrapper" onclick="setlightbox('close')"><img></div>
             <div class="lb-caption-panel"><p></p></div>
         </div>`;
-    interpreter(document.querySelector(".article"));
     navbar = document.querySelector(".navbar");
+    toc = document.querySelector(".toc");
+    interpreter(document.querySelector(".article"));
     HTML.classList.add("js");
 }
 let canTocUpdate = true, tocLastHeading = 0, rowsInToc = [], pageHeadings = [];
@@ -657,11 +659,15 @@ function rightMenuSetup() {
         }
     }
     const menuBtn = document.querySelector(".menu-button");
-    if (menuBtn) {
+    const tocToggleBtn = document.querySelector(".toc-toggle");
+    if (menuBtn && tocToggleBtn) {
         menuBtn.addEventListener("click", rightMenuToggle);
         window.addEventListener("click", function(e) {
             if (!rightMenu.contains(e.target) && !menuBtn.contains(e.target)) {
                 rightMenuToggle("close");
+            }
+            if (!toc.contains(e.target) && !tocToggleBtn.contains(e.target)) {
+                tocHide();
             }
         })
     }
@@ -669,11 +675,19 @@ function rightMenuSetup() {
         if (e.key === "Escape") {
             rightMenuToggle("close");
             setlightbox("close");
+            tocHide();
         }
         else if (e.key === "Home") {
             scrollToTop();
         }
     })
+}
+let toc = null;
+function tocToggle() {
+    toc.classList.toggle("attach", !toc.classList.contains("attach"));
+}
+function tocHide() {
+    toc.classList.remove("attach");
 }
 function tocSetup() {
     pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
@@ -688,7 +702,6 @@ function tocSetup() {
         document.querySelector(".right-spacer")?.remove();
     }
     else {
-        const toc = document.querySelector(".toc");
         toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
         toc.scrollTo({ behavior: "instant", top: 0 })
         
@@ -784,10 +797,10 @@ function init() {
         }).join(''));
         document.querySelector(".text-index")?.insertAdjacentHTML("beforeend", pageList().map(
             page => {
-                let title = `<div><a class="entry-title" title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a></div>`;
-                let date = `<div><span class="entry-date">${ page.date }</span></div>`;
-                let mirrors = page.mirrors ?`<div><span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(" ") }</span></div>` :'';
-                return `<div class="entry">${ title }${ date }${ mirrors }</div>`
+                let title = `<a class="entry-title" title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a>`;
+                let date = `<span class="entry-date">${ page.date }</span>`;
+                let mirrors = page.mirrors ?`<span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(" ") }</span>` :'';
+                return `<div class="entry"><div>${ title }</div><div>${ date }${ mirrors }</div></div>`
             }
         ).join(''))
     }
