@@ -215,6 +215,7 @@
 
 @media (hover: none) and (pointer: coarse) { .article { max-width: unset; } .main-container { max-width: unset; } }
 @media (max-width: 1064px) { .toc { --toc-width: 180px; } :root{ --article-padding: 24px; } }
+@media (max-width: 600px) { .toc { --toc-width: 180px; } :root{ --article-padding: 8px; } }
 @media (max-width: 820px) {
     .toc { display: none; }
     .toc.attach { display: block; position: fixed; background-color: var(--page-bg); top: calc(57px + var(--nav-height)); left: 6px; border: 1px solid var(--grey-c); padding: 16px; }
