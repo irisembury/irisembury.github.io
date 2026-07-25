@@ -505,7 +505,9 @@ function loadBody() {
                 </div>
             </div>
             <div class="screen"></div>
-            <div class="toc-toggle-button" onclick="tocToggle()" title="Table of Contents"></div>
+            <div class="toc-toggle-button" onclick="tocToggle()" title="Table of Contents">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" width="20" height="20" viewBox="0 0 20 20"><path d="M3 16H1v-2h2zm16 0H5v-2h14zM3 11H1V9h2zm16 0H5V9h14zM3 6H1V4h2zm16 0H5V4h14z"/></svg>
+            </div>
         </div>
         <div class="page-grid">
             <nav class="toc"></nav>
