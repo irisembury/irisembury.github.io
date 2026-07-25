@@ -787,7 +787,7 @@ function init() {
                 let title = `<div><a class="entry-title" title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a></div>`;
                 let date = `<div><span class="entry-date">${ page.date }</span></div>`;
                 let mirrors = page.mirrors ?`<div><span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).join(" ") }</span></div>` :'';
-                return `<div class="entry">${ title }${ mirrors }${ date }</div>`
+                return `<div class="entry">${ title }${ date }${ mirrors }</div>`
             }
         ).join(''))
     }
