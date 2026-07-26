@@ -80,8 +80,10 @@ function imageGallery(chunk) {
     let meta = chunk.shift() + " ";
     meta = ("image-gallery " + meta.substring(meta.indexOf(" "))).trim();
     let galleryClass = "image-gallery";
-    ["float","oar","contain"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; } )
-    let maxHeight = meta.replace(/[^\d]/g, "") || meta.includes("float") ?200 :300;
+    ["float","oar","contain"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; })
+    console.log(meta)
+    let maxHeight = meta.replace(/[^\d]/g, "") || (meta.includes("float") ? 200 : 250);
+    console.log(maxHeight)
     chunk = `<div class="${ galleryClass }">${ chunk.map( row => {
         row = parseObj(row,"src","caption","alt","title");
         if (row.src == "") { return ""; }
@@ -145,6 +147,7 @@ function autoTable(chunk) {
                 return `<tr class="row row-${ (row_index + 1) + ' row-' + (row_index % 2 ?'even' :'odd') }">${
                     tableRow.replaceAll('\\|', '&verbar;').split('|').map(
                         (cell, cell_index) => {
+                            console.log(interpreter(cell))
                             return `<td class="cell col-${ cell_index + 1 } col-${ cell_index % 2 ?'even' :'odd' }">${
                                 interpreter(cell)
                             }</td>`
@@ -267,7 +270,7 @@ function linkReplace(chunk) {
             link_class.push("external-link");
             const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
             if (iconName) {
-                link_inner = link_inner.substring(0, link_inner.length - 1) + '<span class="nowrap">' + link_inner.substring(link_inner.length - 1) + '<span class="' + iconName + ' inline-icon"></span>' + '</span>';
+                link_inner += '<span class="' + iconName + ' inline-icon"></span>';
             }
         }
         else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg")) {
@@ -303,8 +306,7 @@ function linkReplace(chunk) {
         const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
         let a_tag = '<a';
         if (iconName) {
-            a_tag += ' class="has-icon"';
-            linkInner = linkInner.substring(0, linkInner.length - 1) + '<span class="nowrap">' + linkInner.substring(linkInner.length - 1) + '<span class="' + iconName + ' inline-icon"></span>' + '</span>';
+            linkInner += '<span class="' + iconName + ' inline-icon"></span>';
         }
         return a_tag + ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
     });
@@ -319,7 +321,6 @@ function interpreter(argValue) {
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
-        if (chunk.startsWith("<")) { return chunk; }
         if (chunk == "---") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         if (chunk.startsWith("!images")) { return imageGallery(chunk); }
@@ -342,6 +343,12 @@ function interpreter(argValue) {
     })
     return input.join('');
 }
+/*
+    3837
+    3837 % 60 = 57 seconds
+    if 3837 < 60, return (3837 % 60)
+    minutes = (3837 - 57) / 60
+*/
 function convertSeconds(secNum) {
     secNum = parseInt(secNum);
     if (!isNaN(secNum)) {
@@ -356,7 +363,7 @@ function convertSeconds(secNum) {
         if (secNum < 3600) {
             return minutes + ':' + seconds;
         }
-        let hours = (secNum - minutes - hours) / 3600;
+        let hours = (secNum - minutes - seconds) / 3600;
         if (minutes.length == 1) {
             minutes = '0' + minutes;
         }
@@ -399,7 +406,8 @@ function autoFormat(_string) {
     output = (output + afAux(_string))
         .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
         .replace(/\*(.+?)\*/g, '<i>$1</i>');
-    output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
+    output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>')
+        .replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
     return output;
 }
 function afAux(str_in) { //curly quotes, dashes
@@ -717,43 +725,43 @@ function tocSetup() {
 const HTML = document.documentElement;
 const rootPath = getRootPath();
 const index = (rootPath == "");
-const entries = `title:The Chilean coup |url:allende-and-pinochet |date:2026-07-02 |flags:hidden |type:page
-title:How bad is America? |url:how-bad-is-america |date:2026-07-01 |type:page
-title:What was the Freedom Convoy? |url:freedom-convoy |date:2026-06-15 |flags:wide |type:page
-title:Pierre Poilievre |url:pierre-poilievre |date: |flags:hidden |type:page
-title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01 |mirrors:substack:196152041,tumblr:815438258908643328,medium:e59c21f8095a |type:page
-title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29 |mirrors:substack:195885575,tumblr:815245873447649280 |type:page
-title:Floor crossings |url:floor-crossings |date:2026-04-17 |mirrors:substack:floor-crossings,medium:dfe93bb23bdd |type:page
-title:Rational ignorance |url:rational-ignorance |date:2026-04-09 |mirrors:substack:rational-ignorance,tumblr:813419185909727232,patreon:155199122 |type:page
-title:Liberal conservatism |subtitle:A philosophy of prudence and humility |url:liberal-conservatism |date:2026-03-24 |mirrors:substack:foundations-of-liberal-conservatism |flags:wide |type:page
-title:The case for abortion |url:abortion |date:2026-02-18 |mirrors:substack:the-case-for-abortion,tumblr:809547051047272448,patreon:155199340 |type:page
-title:A synopsis of American decline |url:a-synopsis-of-american-decline |date:2026-01-28 |mirrors:substack:186165875,patreon:155201485 |type:page
-title:Fetishism & politics |url:fetishism-politics |date:2024-11-14 |mirrors:tumblr:770364766791352320 |type:page
-title:Nick Shirley & the Somali day cares |url:somali-day-cares |date:2026-01-02 |mirrors:substack:183243480,patreon:155200604}, |type:page
-title:Why is Reddit so hated? |subtitle:On the website's history, what makes it unique, and the intense hatred many people seem to have for it |url:why-is-reddit-so-hated |date:2025-12-30 |mirrors:substack:why-is-reddit-so-hated |type:page
-title:Stay the trenches |url:stay-the-trenches |date:2025-12-17 |mirrors:substack:stay-the-trenches |type:page
-title:Immigration |url:immigration |date:2025-11-06 |mirrors:substack:183229652 |type:page
-title:Prejudice |url:what-is-prejudice |date:2025-10-30 |mirrors:substack:prejudice |type:page
-title:Notes on India |url:notes-on-india |date:2025-10-24 |mirrors:substack:india,tumblr:798351257128615936 |type:page
-title:Liberalism not leftism |url:liberalism-not-leftism |date:2025-09-19 |mirrors:substack:174062936,tumblr:795164683319574528,patreon:155199811 |type:page
-title:Normalization |url:normalization |date:2025-09-08 |mirrors:substack:normalization-and-status-quo-bias |type:page
-title:Lies about Ilhan Omar |url:lies-about-ilhan-omar |date:2025-08-25 |mirrors:substack:ilhan-omar,tumblr:794091916138594304,medium:46de1629e138 |type:page
-title:Israel & Palestine |url:israel-palestine |date:2025-07-27 |type:page
-title:Trump & Russia |url:trump-and-russia |date:2025-03-06 |mirrors:tumblr:777321996757450752,substack:trump-and-russia |type:page
-title:Why get bottom surgery? |url:why-get-bottom-surgery |date:2025-02-09 |mirrors:tumblr:775036555284856832 |type:page
-title:Elon Musk & the Nazi Salute |url:elon-musk-nazi-salute |date:2025-01-24 |mirrors:substack:the-nazi-salute,tumblr:773565389405847552 |type:page
-title:Lies about Elizabeth Warren & Hillary Clinton |url:lies-about-warren-clinton |date:2024-12-19 |mirrors:tumblr:770730090759946240,substack:153821886 |type:page
-title:Mark Robinson |url:mark-robinson |date:2024-12-15 |mirrors:tumblr:769962893917798400 |type:page
-title:The Trump appeal |url:the-trump-appeal |date:2024-12-03 |mirrors:tumblr:770270265635667968 |type:page
-title:The normal white man bias |url:the-normal-white-man-bias |date:2024-11-26 |mirrors:substack:153823028,tumblr:770305075441778688,medium:0c508d4c51b5 |type:page
-title:Sex, gender, & transsexuals |url:sex-gender-transsexuals |date:2024-11-19 |flags:wide |type:page
-title:Bernie Sanders & the military industrial complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16 |mirrors:tumblr:770070077409214464 |type:page
-title:Types of masculinity |url:types-of-masculinity |date:2024-11-08 |mirrors:tumblr:770310861444300800 |type:page
-title:Poor Things (2023 film) |url:poor-things |date:2024-10-31 |mirrors:tumblr:769969807464464384 |type:page
-title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19 |mirrors:substack:the-trans-prison-stats-argument,tumblr:771501478599868416 |type:page
-title:Public record |url:public-record |flags:hidden,wide |type:page
-title:Anime reviews |url:anime-reviews |date:2024-12-17 |type:page
-title:Data Structures & Algorithms |url:data-structures-algorithms |flags:hidden,wide |type:page
+const entries = `title:The Chilean coup |url:allende-and-pinochet |date:2026-07-02 |flags:hidden |type:article
+title:How bad is America? |url:how-bad-is-america |date:2026-07-01 |type:article
+title:What was the Freedom Convoy? |url:freedom-convoy |date:2026-06-15 |flags:wide |type:article
+title:Pierre Poilievre |url:pierre-poilievre |date: |flags:hidden |type:article
+title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01 |mirrors:substack:196152041,tumblr:815438258908643328,medium:e59c21f8095a |type:article
+title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29 |mirrors:substack:195885575,tumblr:815245873447649280 |type:article
+title:Floor crossings |url:floor-crossings |date:2026-04-17 |mirrors:substack:floor-crossings,medium:dfe93bb23bdd |type:article
+title:Rational ignorance |url:rational-ignorance |date:2026-04-09 |mirrors:substack:rational-ignorance,tumblr:813419185909727232,patreon:155199122 |type:article
+title:Liberal conservatism |subtitle:A philosophy of prudence and humility |url:liberal-conservatism |date:2026-03-24 |mirrors:substack:foundations-of-liberal-conservatism |flags:wide |type:article
+title:The case for abortion |url:abortion |date:2026-02-18 |mirrors:substack:the-case-for-abortion,tumblr:809547051047272448,patreon:155199340 |type:article
+title:A synopsis of American decline |url:a-synopsis-of-american-decline |date:2026-01-28 |mirrors:substack:186165875,patreon:155201485 |type:article
+title:Fetishism & politics |url:fetishism-politics |date:2024-11-14 |mirrors:tumblr:770364766791352320 |type:article
+title:Nick Shirley & the Somali day cares |url:somali-day-cares |date:2026-01-02 |mirrors:substack:183243480,patreon:155200604}, |type:article
+title:Why is Reddit so hated? |subtitle:On the website's history, what makes it unique, and the intense hatred many people seem to have for it |url:why-is-reddit-so-hated |date:2025-12-30 |mirrors:substack:why-is-reddit-so-hated |type:article
+title:Stay the trenches |url:stay-the-trenches |date:2025-12-17 |mirrors:substack:stay-the-trenches |type:article
+title:Immigration |url:immigration |date:2025-11-06 |mirrors:substack:183229652 |type:article
+title:Prejudice |url:what-is-prejudice |date:2025-10-30 |mirrors:substack:prejudice |type:article
+title:Notes on India |url:notes-on-india |date:2025-10-24 |mirrors:substack:india,tumblr:798351257128615936 |type:article
+title:Liberalism not leftism |url:liberalism-not-leftism |date:2025-09-19 |mirrors:substack:174062936,tumblr:795164683319574528,patreon:155199811 |type:article
+title:Normalization |url:normalization |date:2025-09-08 |mirrors:substack:normalization-and-status-quo-bias |type:article
+title:Lies about Ilhan Omar |url:lies-about-ilhan-omar |date:2025-08-25 |mirrors:substack:ilhan-omar,tumblr:794091916138594304,medium:46de1629e138 |type:article
+title:Israel & Palestine |url:israel-palestine |date:2025-07-27 |type:article
+title:Trump & Russia |url:trump-and-russia |date:2025-03-06 |mirrors:tumblr:777321996757450752,substack:trump-and-russia |type:article
+title:Why get bottom surgery? |url:why-get-bottom-surgery |date:2025-02-09 |mirrors:tumblr:775036555284856832 |type:article
+title:Elon Musk & the Nazi Salute |url:elon-musk-nazi-salute |date:2025-01-24 |mirrors:substack:the-nazi-salute,tumblr:773565389405847552 |type:article
+title:Lies about Elizabeth Warren & Hillary Clinton |url:lies-about-warren-clinton |date:2024-12-19 |mirrors:tumblr:770730090759946240,substack:153821886 |type:article
+title:Mark Robinson |url:mark-robinson |date:2024-12-15 |mirrors:tumblr:769962893917798400 |type:article
+title:The Trump appeal |url:the-trump-appeal |date:2024-12-03 |mirrors:tumblr:770270265635667968 |type:article
+title:The normal white man bias |url:the-normal-white-man-bias |date:2024-11-26 |mirrors:substack:153823028,tumblr:770305075441778688,medium:0c508d4c51b5 |type:article
+title:Sex, gender, & transsexuals |url:sex-gender-transsexuals |date:2024-11-19 |flags:wide |type:article
+title:Bernie Sanders & the military industrial complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16 |mirrors:tumblr:770070077409214464 |type:article
+title:Types of masculinity |url:types-of-masculinity |date:2024-11-08 |mirrors:tumblr:770310861444300800 |type:article
+title:Poor Things (2023 film) |url:poor-things |date:2024-10-31 |mirrors:tumblr:769969807464464384 |type:article
+title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19 |mirrors:substack:the-trans-prison-stats-argument,tumblr:771501478599868416 |type:article
+title:Public record |url:public-record |flags:hidden,wide |type:article
+title:Anime reviews |url:anime-reviews |date:2024-12-17 |type:article
+title:Data Structures & Algorithms |url:data-structures-algorithms |flags:hidden,wide |type:article
 title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18 |type:video
 title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34 |type:video
 title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15 |type:video
@@ -769,8 +777,8 @@ title:Why do people like Trump? |date:2025-09-13 |src:youtube:tcF0f-Dtgic |thumb
 title:Lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02 |type:video
 title:Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg |type:video
 title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14 |type:video`;
-function allEntries() { return entries.split("\n").map(e => parseObj(e,'title','date','thumb','length','src','type','url','flags')).filter(e=>e).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)); }
-function pageList() { return allEntries().filter(p => p.type=='page' && (!p.flags||!p.flags.includes('hidden'))) }
+function allEntries() { return entries.split("\n").map(e => parseObj(e,'title','date','thumb','length','src','mirrors','type','url','flags')).filter(e=>e).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)); }
+function pageList() { return allEntries().filter(p => p.type=='article' && (!p.flags||!p.flags.includes('hidden'))) }
 function videoList() { return allEntries().filter(e => e.type=='video') }
 
 const page_links = [];
@@ -799,12 +807,7 @@ function init() {
             </figure>`
         }).join(''));
         document.querySelector(".text-index")?.insertAdjacentHTML("beforeend", pageList().map(
-            page => {
-                let title = `<a class="entry-title" title="${ page.title }" href="page/${ page.url }">${ autoFormat(page.title) }</a>`;
-                let date = `<span class="entry-date">${ page.date }</span>`;
-                let mirrors = page.mirrors ?`<span class="entry-mirrors">${ page.mirrors.split(",").map(m => parseSource(m)).sort().join(" ") }</span>` :'';
-                return `<div class="entry"><div>${ title }</div><div>${ date }${ mirrors }</div></div>`
-            }
+            entry => `<div class="entry"><div class="cell a"><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div><div class="cell b">${ entry.date }</div><div class="cell c">${ entry.mirrors ?`<div class="entry-mirrors">${ entry.mirrors.split(",").map(m => parseSource(m)).sort().join(" ")}</div>` :'' }</div></div>`
         ).join(''))
     }
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);

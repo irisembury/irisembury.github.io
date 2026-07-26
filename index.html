@@ -2,10 +2,11 @@
 <html style="opacity:0">
 <head>
     <style>
-    .profile-top { line-height: 1.3; display: flex; justify-content: center; align-items: center; gap: 15px; }
-        .profile-img { background-image: url(assets/pfp.jpg); background-size: contain; max-width: 150px; max-height: 180px; width: 100%; height: 100%; background-repeat: no-repeat; aspect-ratio: 5 / 6; background-color: grey; border: 1px solid var(--grey-9); }
+    .profile-top { line-height: 1.3; display: flex; align-items: center; gap: 1em; }
+        .profile-img { background-image: url(assets/pfp.jpg); background-size: contain; max-width: 150px; max-height: 180px; width: 100%; height: 100%; background-repeat: no-repeat; aspect-ratio: 5 / 6; background-color: #0000; border: 1px solid var(--grey-9); }
         .profile-top h1 { font-style: italic; font-size: 34px; font-family: 'Lora','Georgia',sans-serif;  }
         .profile-top p { font: 15px/1.2 'Roboto','Arial',sans-serif; margin: 3px 10px; }
+        @media (max-width: 700px) { .profile-img { max-width: 25%; } }
     
     .container { margin-bottom: 20px; }
         .container .section { display: none; }
@@ -21,32 +22,26 @@
                     .links-panel .link-text { display: none; }
                     .links-panel .inline-icon { margin: 0 !important; width: 24px !important; height: 24px !important; }
         
-        .text-index { font: 17px/1.3 'Roboto','Arial',sans-serif; color: var(--grey-4); margin-inline: auto; }
-            .text-index .entry {  }
+        .text-index { display: table; font: 17px/1.4 'Roboto','Arial',sans-serif; color: var(--grey-4); margin-inline: auto; width: 100%; }
+            .entry { display: table-row; }
             .entry:nth-child(2n) { background-color: var(--grey-f); }
-                .text-index .entry-title { font: 18px 'Faculty Glyphic',sans-serif; }
-                .text-index .entry-date {  }
-                .text-index .entry-mirrors { display: inline-flex; gap: 3px; }
-                    .text-index .entry-mirrors a { padding: 2px 3px; }
-                        .text-index .entry-mirrors a .link-text { display: none; }
-                        .text-index .entry-mirrors a .inline-icon { margin-inline: 0; width: 18px; height: 18px; }
-       /* desktop */
-        @media (min-width: 700px) {
-            .text-index { display: table; width: 100%; }
-            .text-index .entry { display: table-row; }
-            .text-index .entry > div { display: table-cell; padding: 10px 11px 9px; }
-            .text-index .entry > div:nth-child(1) { width: 100%; }
-            .text-index .entry > div:nth-child(2) { white-space: nowrap; }
-            .text-index .entry .entry-mirrors { margin-left: 10px; }
-        }
-       /* mobile */
-        @media (max-width: 700px) {
-            .text-index { text-align: center; }
-            .entry { padding: 8px 12px; }
-            .entry > div:nth-child(2) { padding: 3px 0; }
-            .text-index .entry .entry-mirrors { margin-left: 5px; }
-        }
-        
+                .cell { display: table-cell; vertical-align: middle; padding-block: 10px 9px; }
+                    .cell.a { width: 100%; padding-left: 13px; }
+                        .cell.a a { font: 18px 'Faculty Glyphic'; }
+                    .cell.b { padding-inline: 11px; }
+                    .cell.c { padding-right: 13px; }
+                    .cell.c .entry-mirrors { display: inline-flex; gap: 2px; }
+                        .cell.c .entry-mirrors a { padding: 2px 3px; }
+                            .cell.c .entry-mirrors a .link-text { display: none; }
+                            .cell.c .entry-mirrors a .inline-icon { margin-inline: 0; width: 18px; height: 18px; }
+            @media (max-width: 690px) {
+                .entry { display: block; padding: 8px; text-align: center; }
+                .cell { display: block; padding: 0 !important; }
+                .cell.a { text-align: center; }
+                .cell.b, .cell.c { display: inline-block; }
+                .entry-mirrors { margin-left: 5px; }
+            }
+            
         .videos p { font: 15px/1.4 'Roboto','Arial',sans-serif; color: var(--grey-6); text-align: center; margin-block: 18px; }
         .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.24), 1fr)); }
             .video-index figure { margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
@@ -66,12 +61,13 @@
     <div class="profile-img"></div>
     <div>
         <h1 class="p-name">Iris Embury</h1>
-        <p>person from Ottawa Canada doing stuff</p>
+        <p>human from Ottawa Canada doing things</p>
     </div>
 </div>
 <div class="tabs">
-    <div class="no-select pseudo-link tab" onclick="tabSet(this)">Text</div>
-    <div class="no-select pseudo-link tab" onclick="tabSet(this)">Videos</div>
+    <div class="no-select pseudo-link tab" onclick="tabSet(this,'about')">About</div>
+    <div class="no-select pseudo-link tab" onclick="tabSet(this,'text')">Text</div>
+    <div class="no-select pseudo-link tab" onclick="tabSet(this,'videos')">Videos</div>
 </div>
 <div class="container" class="text">
     <div class="section text">
@@ -84,23 +80,27 @@
     </div>
     
     <div class="section about">
-    <div class="links-panel label-external">
-        <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a>
-        <a href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a>
-        <a href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a>
-        <a href="https://patreon.com/cw/irisembury/posts"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a>
-        <a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>
-        <a href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a>
-        <a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>
-    </div>
+        <p>I write stuff and make videos and post on various websites. I made this site so everything I do can be found in one place.</p>
+        <div class="links-panel label-external">
+            <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a>
+            <a href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a>
+            <a href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a>
+            <a href="https://patreon.com/cw/irisembury/posts"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a>
+            <a href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>
+            <a href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a>
+            <a href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>
+        </div>
+        <ul>
+            <li><a href="page/public-record">public record</a></li>
+        </ul>
     </div>
 </div>
 
 <script src="assets/layout.js"></script>
 <script>
-function tabSet(tab) {
+function tabSet(tab, sect) {
     Array.from(document.querySelectorAll('.tabs .tab')).forEach(t => t.classList.toggle('selected', t == tab));
-    Array.from(document.querySelectorAll('.container .section')).forEach(c => c.classList.toggle('selected', c == document.querySelector('.container .' + tab.innerText.toLowerCase())));
+    Array.from(document.querySelectorAll('.container .section')).forEach(c => c.classList.toggle('selected', c == document.querySelector('.container .' + sect)));
 }
 Array.from(document.querySelectorAll('.tab')).forEach(x => x.insertAdjacentHTML('beforeend',`<div class="dummy">${x.innerText}</div>`));
 document.querySelector('.tabs').firstElementChild.click();
