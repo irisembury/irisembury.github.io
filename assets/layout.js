@@ -489,14 +489,6 @@ function getRootPath() {
 }
 function loadBody() {
     HTML.lang = "en";
-    document.head.insertAdjacentHTML("beforeend",
-    `
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/assets/main.css">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    `
-    );
     document.body.innerHTML = `
         <nav class="navbar">
             <div class="nav-inner">

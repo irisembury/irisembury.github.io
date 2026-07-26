@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html style="opacity:0">
-<body>
+<!DOCTYPE html><html style="opacity:0"><head><meta charset="utf-8"><link rel="stylesheet" href="/assets/main.css"><link rel="icon" type="image/x-icon" href="/favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body>
+
 # Movies
 
 Here's a list of every movie I've ever seen.
@@ -285,7 +284,7 @@ Why haven't I seen a single movie released in 2020 or 2021? Just a coincidence? 
 
 Anyway.
 
-<script src="../../assets/layout.js"></script>
+<script src="/assets/layout.js"></script>
 <script>
 window.addEventListener("load", function() {
     let table = document.querySelector(".auto-table tbody");
@@ -294,6 +293,4 @@ window.addEventListener("load", function() {
     rows.sort((a, b) => parseInt(a.cells[1].textContent) - parseInt(b.cells[1].textContent));
     rows.forEach(row => table.appendChild(row));
 });
-</script>
-</body></html>
-
+</script></body></html>
