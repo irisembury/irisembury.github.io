@@ -81,9 +81,7 @@ function imageGallery(chunk) {
     meta = ("image-gallery " + meta.substring(meta.indexOf(" "))).trim();
     let galleryClass = "image-gallery";
     ["float","oar","contain"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; })
-    console.log(meta)
     let maxHeight = meta.replace(/[^\d]/g, "") || (meta.includes("float") ? 200 : 250);
-    console.log(maxHeight)
     chunk = `<div class="${ galleryClass }">${ chunk.map( row => {
         row = parseObj(row,"src","caption","alt","title");
         if (row.src == "") { return ""; }
@@ -488,11 +486,10 @@ function getRootPath() {
     return '../'.repeat(path.length);
 }
 function loadBody() {
-    HTML.lang = "en";
     document.body.innerHTML = `
         <nav class="navbar">
             <div class="nav-inner">
-                <div>${ index ?'' :'<a class="index-button no-select" href="/"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79 L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
+                <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79 L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
                 <div><div class="page-name-segment"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div>
                 <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
             </div>
