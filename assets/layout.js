@@ -177,7 +177,7 @@ function autoList(chunk) {
     const list = chunk.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
-            li = (li.substring(initpad));
+            li = autoFormat(li.substring(initpad));
             const indent = Math.floor(initpad * 0.25);
             const liType = /^[\*\-] /.test(li) ?"ul" :(/^\d+\. /.test(li) ? "ol" : "none");
             const listType = (liType =="ol") ?"ol" :"ul";
@@ -196,7 +196,7 @@ function autoList(chunk) {
                 li = closeTags.splice(-(prevIndent - indent)).reverse().join('') + li;
             }
             prevIndent = indent;
-            return autoFormat(li);
+            return li;
         }
     ).join("") + closeTags.join("");
     let output = list.substring(0, 3) + ' class="auto-list"' + list.substring(3);
