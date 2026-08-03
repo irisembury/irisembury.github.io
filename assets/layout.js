@@ -1,5 +1,6 @@
 "use strict"
 
+
 function scrollToTop() {
     window.scrollTo({ behavior: "smooth", top: 0 });
     history.replaceState(null, "", window.location.pathname);
@@ -154,7 +155,7 @@ function autoTable(chunk) {
                             }
                             tableCell[i] = autoFormat(tableCell[i]);
                         }
-                        return `<td class="cell coll-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</td>`;
+                        return `<td class="cell col-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</td>`;
                     }
                 )
                 return `<tr class="row row-${ rowIndex + 1 } row-${ rowIndex % 2 ? 'even' : 'odd' }">${ tableRow.join('') }</tr>`;
@@ -347,20 +348,6 @@ function interpreter(argValue) {
     return input.join('');
 }
 
-/*
-Norm Finkelstein: Is it antisemitism? I can't see that it is, because of the problem that every definition incorporates some notion that it's irrational. There's nothing irrational about that resentment. And that's, you say, it's hard to fight antisemitism? I think the problem is even bigger: the problem is, is it even antisemitism? When an ethnic group uses its financial and its political clout in order to further a Jewish supremacist agenda, is that antisemitism? I don't think it is.
-The problem is this. If there's a significant number of people carrying on in this way, is it really irrational? Is it really irrational? And as I said, part of a core, core definition of antisemitism, is it's supposed to be irrational. Is it really irrational if people reach, make a leap, and say the way Jews are carrying out is completely outrageous? Is it, does that really shock the conscience, when people reach that conclusion? Israel calls itself the state of the Jewish people. So is it so shocking if people conclude that when Israel carries on this way, it's acting
-Piker: And its defenders say that they're doing this at the behest of Judaism.
-Finkelstein: Right, at the behest of the Jewish people. Is that such a shocking conclusion? No, I don't think so. And I don't really, at some level, I don't really quarrel with people who reach the wrong conclusion. I'm going to say, okay. My parents passed through the Nazi holocaust. They lost, on both sides, my mother and father, lost every single member. To their dying day, they hated every German. Every German. Okay? Did I like that? Not really. Did I ever quarrel with them about it? Never. Did I ever argue with them about that? Never. I understood from their experience. I remember I once asked my mother the question. It's curious. I said, did you ever meet a German during the extermination who showed some sympathy? She thought very hard. She thought very hard. And then she said, 'I remember once a German soldier, he had a look on his face of feeling a little guilty.' She said, I remember one. So is it so shocking that she generalized from her experience and hated all Germans? I don't find that particularly shocking. And given what she endured, there was no way on God's earth that I would dare to quarrel with that experience. Did I think it was wrong? Yes. Do I have German friends? Yes. But will I argue? No. And in the same way, will I argue with a Palestinian or a Gazan who hates all Jews? Never. I would never argue with it. That's their experience. I will now not, which is totally out of character for me, I will not talk to an Israeli. You crossed the red line. You've gone too far. I've read too many human rights reports. You have targeted, targeted, you have targeted too many Gazan children. You have targeted too many in their head, you have targeted too many in their chest, you have targeted too many toddlers. Now you say, 'that's generalizing, that's not every Israeli.' Well, it's not really? Is it not?
-Finkelstein: I've read the polls. The polls show --- these polls are taken, like, every two weeks since the Gaza genocide. And you know what the polls showed?
-Piker: 80 percent support.
-Finkelstein: 5 percent of Israeli Jews thought Israel was using too much force. 95 percent said either sufficient force or not enough force. Of those 95 percent, 40 percent siad not enough force. I can go through many, many polls. Israel, to its, its, um, no, I wouldn't say honour, but it has a citizen army. I think a citizen army is a correct concept. Everybody should have to pay that ultimate price to defend their country. An army should not be composed of the poor or those who have no futures. So they say, you benefit from the independence of your country, everybody should have to serve to defend the country up to and including the ultimate sacrifice. Okay. But then there's a problem. You have a citizen army. You know what a citizen army means? It's representative of the population. Now if that citizen army is committing genocide, it's also representative of the population. It's not an unfair generalization to say this is a nation of child killers. To say this is a nation of child murderers. That's a fact. So then you say, well, but the number who actually target children, you know. Yes, it's horrible, yes it's terrible, you know the most recent ---
-Piker: No, it's the complicity.
-Finkelstein: The most recent UN Commission of Inquiry report on child assaults and children: they targeted an orphanage. But okay, you say that's still a handful. But here's a question. It was being reported already in mid-2024. It was already being reported: Israel is using starvation as a weapon of war in Gaza. Everybody agreed on that. The EU foreign policy chief, Guterres, everybody agreed. Israel's using starvation as a method of war. Okay? Now, it's not easy to use starvation as a weapon of war. You have to seal all the points of entry. You have to blow up food banks in Gaza in order to make that work. The whole Israeli army was implicated. And you know what? You know who you're trying to starve? 1.5, 1.1 of those 2.23 million Gazans are children. You are concretely implicated or, to use your word, complicitous in starving children. Okay, guys, you lost me. If I meet somebody in the street or at the beach, because I'm right near Coney Island beach, and the person says I'm from Israel, I walk away. I won't talk. You lost me. So to get back to your original question.
-Piker: I'm, again, I'm a little bit too woke for this, and only because I --- it's interesting, I had a very similar, well, not on this issue ---
-Finkelstein: I don't, I'm not proud, I'm not happy with what I'm saying. On the other hand, I think a line has been crossed.
-*/
-
 function unwrapSeconds(vSQuery) {
     vSQuery = parseInt(vSQuery);
     if (!isNaN(vSQuery)) {
@@ -533,7 +520,7 @@ function loadBody() {
             <nav class="toc"></nav>
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
-                <footer class="article-footer"></footer>
+                <footer class="article-footer"><div><p>This is a personal site. I have no association with any other person or organization. I have no formal background relevant to any topics discussed. This site is powered by <a href="https://github.com/irisembury">GitHub</a>. For inquiry contact irisembury@gmail.com</p></div></footer>
             </div>
             <div class="right-spacer"></div>
         </div>
@@ -581,6 +568,7 @@ function tocUpdate_() {
 }
 function setupLightswitch() {
     const lightswitch = document.getElementById("lightswitch");
+    if (!lightswitch) { console.error("couldn't find #lightswitch"); }
     if (lightswitch) {
         let scheme = (localStorage.getItem("css-color-scheme") == "dark" ?"dark" :"light");
         lightswitch.checked = (scheme == "dark");
@@ -646,8 +634,6 @@ function loadEntryMeta() {
             }
         }
     }
-}
-function loadCitelist() {
 }
 function rightMenuSetup() {
     Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
@@ -734,7 +720,7 @@ const index = (rootPath == "");
 const articlesData = `title:Allende and Pinochet |url:allende-and-pinochet |date:2026-07-26 |flags:hidden
 title:How bad is America? |url:how-bad-is-america |date:2026-07-01
 title:What was the Freedom Convoy? |url:freedom-convoy |date:2026-06-15 |flags:wide
-title:Pierre Poilievre |url:pierre-poilievre |date:2026-07-31 |flags:f
+title:The many problems with Pierre Poilievre |url:pierre-poilievre |date:2026-08-03
 title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01 |mirrors:substack:196152041,tumblr:815438258908643328,medium:e59c21f8095a
 title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29 |mirrors:substack:195885575,tumblr:815245873447649280
 title:Floor crossings |url:floor-crossings |date:2026-04-17 |mirrors:substack:floor-crossings,medium:dfe93bb23bdd
@@ -795,8 +781,7 @@ function init() {
     rightMenuSetup();
     tocSetup();
     let ext_links = page_links.filter(a => a.startsWith("http"));
-    if (ext_links.length > 0) { document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<div><div class="citelist-container"><div><span>Links on this page:</span></div><ol class="citelist">${ ext_links.map(x => `<li><a href="${ x }">${ x }</a></li>`).join("") }</ol></div></div>`); }
-    document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<div class="text-center"><span>This is a personal site. I have no association with any other person or organization. I have no formal background in any topics discussed. This site is powered by <a href="https://github.com/irisembury">GitHub</a>. For inquiry contact irisembury@gmail.com</span></div>`);
+    if (ext_links.length > 0) { document.querySelector('.article-footer')?.insertAdjacentHTML("afterbegin", `<div><div class="citelist-container"><div><span>Links on this page:</span></div><ol class="citelist">${ ext_links.map(x => `<li><a href="${ x }">${ x }</a></li>`).join("") }</ol></div></div>`); }
     window.addEventListener("scroll", navCheck); navCheck();
     Array.from(document.querySelectorAll(".auto-format")).forEach(a => { a.innerHTML = autoFormat(a.innerHTML); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
