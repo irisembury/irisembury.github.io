@@ -2,7 +2,7 @@
 
 function scrollToTop() {
     window.scrollTo({ behavior: "smooth", top: 0 });
-    history.replaceState(null, "", window.location.pathname + window.location.search);
+    history.replaceState(null, "", window.location.pathname);
     document.getElementById("toc")?.scrollTo({ behavior: "smooth", top: 0 })
 }
 function setlightbox(action) {
@@ -125,42 +125,47 @@ let table_number = 1;
 function autoTable(chunk) {
     let table = `<div class="table-wrapper"><table class="auto-table auto-table-${ table_number }"><tbody>${
         chunk.split(/\n(?! )/g).slice(1).map(
-            (tableRow, row_index) => {
-                tableRow = tableRow.split('\n').map(
-                    c => {
-                        c = c.trim();
-                        if (c.startsWith('!')) {
-                            c = '\n' + c;
+            (tableRow, rowIndex) => {
+                tableRow = tableRow.replaceAll('\\|','&verbar;').split('|');
+                tableRow = tableRow.map(
+                    (tableCell, cellIndex) => {
+                        tableCell = tableCell.split('\n');
+                        let i = 0, j;
+                        for (; i < tableCell.length; i += 1) {
+                            if (tableCell[i].search(/[^ ]/) >= 8) {
+                                j = i + 1;
+                                for (; j < tableCell.length; j += 1) {
+                                    if (tableCell[j].search(/[^ ]/) < 8) {
+                                        break;
+                                    }
+                                }
+                                tableCell[i] = autoIndent(tableCell.slice(i, j).join('\n'));
+                                for (let k = i + 1; k < j; k += 1) {
+                                    tableCell[k] = "";
+                                }
+                            }
+                            else {
+                                if (tableCell[i].trimStart().startsWith(".")) {
+                                    tableCell[i] = `<div class="fine"><p>${ tableCell[i].trim().substring(1) }</p></div>`;
+                                }
+                                else {
+                                    tableCell[i] = `<p>${ tableCell[i] }</p>`;
+                                }
+                            }
+                            tableCell[i] = autoFormat(tableCell[i]);
                         }
-                        return c;
+                        return `<td class="cell coll-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</td>`;
                     }
-                ).join('\n').split('\n\n').map(
-                    c => {
-                        if (!c.startsWith("!")) {
-                            c = c.replace(/\n/g, '\n\n')
-                        }
-                        return c;
-                    }
-                ).join('\n\n');
-                return `<tr class="row row-${ (row_index + 1) + ' row-' + (row_index % 2 ?'even' :'odd') }">${
-                    tableRow.replaceAll('\\|', '&verbar;').split('|').map(
-                        (cell, cell_index) => {
-                            console.log(interpreter(cell))
-                            return `<td class="cell col-${ cell_index + 1 } col-${ cell_index % 2 ?'even' :'odd' }">${
-                                interpreter(cell)
-                            }</td>`
-                        }
-                    ).join('')
-                }</tr>`
+                )
+                return `<tr class="row row-${ rowIndex + 1 } row-${ rowIndex % 2 ? 'even' : 'odd' }">${ tableRow.join('') }</tr>`;
         }).join('')
     }</tbody></table></div>`;
-    
     let first_row = chunk.substring(0, chunk.indexOf('\n'));
     if (first_row.indexOf(' ') != -1) {
         first_row = first_row.substring(first_row.indexOf(' ')).trim();
     }
     if (first_row.replace(/\s/g, '').length > 0) {
-        table += `<style>${ first_row.replace(/this/g, ".auto-table-" + table_number).replace(/;/g, "!important;") }</style>`
+        table += `<style>${ first_row.replace(/this/g, ".auto-table-" + table_number).replaceAll(";", "!important;") }</style>`
     }
     table_number += 1;
     return table;
@@ -319,6 +324,7 @@ function interpreter(argValue) {
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
+        if (chunk.startsWith("<") && !chunk.startsWith("<a")) { return chunk; }
         if (chunk == "---") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         if (chunk.startsWith("!images")) { return imageGallery(chunk); }
@@ -326,8 +332,7 @@ function interpreter(argValue) {
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-        if (chunk.startsWith("!info")) { return `<div class="info">${ autoFormat(chunk.substring(chunk.indexOf("\n"))) }</div>`; }
-        chunk = linkReplace(chunk);
+        //chunk = linkReplace(chunk);
         if (chunk.startsWith("!table")) { return autoTable(chunk); }
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
         let isFine = chunk.startsWith(".");
@@ -341,33 +346,45 @@ function interpreter(argValue) {
     })
     return input.join('');
 }
+
 /*
-    3837
-    3837 % 60 = 57 seconds
-    if 3837 < 60, return (3837 % 60)
-    minutes = (3837 - 57) / 60
+Norm Finkelstein: Is it antisemitism? I can't see that it is, because of the problem that every definition incorporates some notion that it's irrational. There's nothing irrational about that resentment. And that's, you say, it's hard to fight antisemitism? I think the problem is even bigger: the problem is, is it even antisemitism? When an ethnic group uses its financial and its political clout in order to further a Jewish supremacist agenda, is that antisemitism? I don't think it is.
+The problem is this. If there's a significant number of people carrying on in this way, is it really irrational? Is it really irrational? And as I said, part of a core, core definition of antisemitism, is it's supposed to be irrational. Is it really irrational if people reach, make a leap, and say the way Jews are carrying out is completely outrageous? Is it, does that really shock the conscience, when people reach that conclusion? Israel calls itself the state of the Jewish people. So is it so shocking if people conclude that when Israel carries on this way, it's acting
+Piker: And its defenders say that they're doing this at the behest of Judaism.
+Finkelstein: Right, at the behest of the Jewish people. Is that such a shocking conclusion? No, I don't think so. And I don't really, at some level, I don't really quarrel with people who reach the wrong conclusion. I'm going to say, okay. My parents passed through the Nazi holocaust. They lost, on both sides, my mother and father, lost every single member. To their dying day, they hated every German. Every German. Okay? Did I like that? Not really. Did I ever quarrel with them about it? Never. Did I ever argue with them about that? Never. I understood from their experience. I remember I once asked my mother the question. It's curious. I said, did you ever meet a German during the extermination who showed some sympathy? She thought very hard. She thought very hard. And then she said, 'I remember once a German soldier, he had a look on his face of feeling a little guilty.' She said, I remember one. So is it so shocking that she generalized from her experience and hated all Germans? I don't find that particularly shocking. And given what she endured, there was no way on God's earth that I would dare to quarrel with that experience. Did I think it was wrong? Yes. Do I have German friends? Yes. But will I argue? No. And in the same way, will I argue with a Palestinian or a Gazan who hates all Jews? Never. I would never argue with it. That's their experience. I will now not, which is totally out of character for me, I will not talk to an Israeli. You crossed the red line. You've gone too far. I've read too many human rights reports. You have targeted, targeted, you have targeted too many Gazan children. You have targeted too many in their head, you have targeted too many in their chest, you have targeted too many toddlers. Now you say, 'that's generalizing, that's not every Israeli.' Well, it's not really? Is it not?
+Finkelstein: I've read the polls. The polls show --- these polls are taken, like, every two weeks since the Gaza genocide. And you know what the polls showed?
+Piker: 80 percent support.
+Finkelstein: 5 percent of Israeli Jews thought Israel was using too much force. 95 percent said either sufficient force or not enough force. Of those 95 percent, 40 percent siad not enough force. I can go through many, many polls. Israel, to its, its, um, no, I wouldn't say honour, but it has a citizen army. I think a citizen army is a correct concept. Everybody should have to pay that ultimate price to defend their country. An army should not be composed of the poor or those who have no futures. So they say, you benefit from the independence of your country, everybody should have to serve to defend the country up to and including the ultimate sacrifice. Okay. But then there's a problem. You have a citizen army. You know what a citizen army means? It's representative of the population. Now if that citizen army is committing genocide, it's also representative of the population. It's not an unfair generalization to say this is a nation of child killers. To say this is a nation of child murderers. That's a fact. So then you say, well, but the number who actually target children, you know. Yes, it's horrible, yes it's terrible, you know the most recent ---
+Piker: No, it's the complicity.
+Finkelstein: The most recent UN Commission of Inquiry report on child assaults and children: they targeted an orphanage. But okay, you say that's still a handful. But here's a question. It was being reported already in mid-2024. It was already being reported: Israel is using starvation as a weapon of war in Gaza. Everybody agreed on that. The EU foreign policy chief, Guterres, everybody agreed. Israel's using starvation as a method of war. Okay? Now, it's not easy to use starvation as a weapon of war. You have to seal all the points of entry. You have to blow up food banks in Gaza in order to make that work. The whole Israeli army was implicated. And you know what? You know who you're trying to starve? 1.5, 1.1 of those 2.23 million Gazans are children. You are concretely implicated or, to use your word, complicitous in starving children. Okay, guys, you lost me. If I meet somebody in the street or at the beach, because I'm right near Coney Island beach, and the person says I'm from Israel, I walk away. I won't talk. You lost me. So to get back to your original question.
+Piker: I'm, again, I'm a little bit too woke for this, and only because I --- it's interesting, I had a very similar, well, not on this issue ---
+Finkelstein: I don't, I'm not proud, I'm not happy with what I'm saying. On the other hand, I think a line has been crossed.
 */
-function convertSeconds(secNum) {
-    secNum = parseInt(secNum);
-    if (!isNaN(secNum)) {
-        let seconds = secNum % 60;
-        if (secNum < 60) {
-            return seconds;
+
+function unwrapSeconds(vSQuery) {
+    vSQuery = parseInt(vSQuery);
+    if (!isNaN(vSQuery)) {
+        let seconds = vSQuery % 60;//remainder
+        if ((seconds + "").length == 1) {
+            seconds = '0' + seconds;//e.g. 8 -> 08
         }
-        if (seconds.length == 1) {
-            seconds = '0' + seconds;
+        if (vSQuery < 60) {//e.g. 08 -> 0:08, 40 -> 0:40
+            return '0:' + seconds;
         }
-        let minutes = ((secNum - seconds) % 3600) / 60;
-        if (secNum < 3600) {
+        vSQuery -= (vSQuery % 60);//remove remainder seconds
+        vSQuery /= 60;//convert from seconds to minutes
+        let minutes = vSQuery % 60;//remove minutes above 60
+        if (vSQuery < 60) {
             return minutes + ':' + seconds;
         }
-        let hours = (secNum - minutes - seconds) / 3600;
-        if (minutes.length == 1) {
+        if ((minutes + "").length == 1) {
             minutes = '0' + minutes;
         }
+        vSQuery -= (vSQuery % 60);//remove remainder minutes
+        let hours = vSQuery / 60;//convert from minutes to hours
         return hours + ':' + minutes + ':' + seconds;
     }
-    return secNum;
+    return vSQuery;
 }
 function ageFromISO(argDate) {
     argDate = argDate.replace(/\D/g, "");
@@ -401,11 +418,9 @@ function autoFormat(_string) {
         output += afAux(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
         _string = _string.substring(closeTag);
     }
-    output = (output + afAux(_string))
-        .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
-        .replace(/\*(.+?)\*/g, '<i>$1</i>');
-    output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>')
-        .replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
+    output = (output + afAux(_string)).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+    output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
+    output = linkReplace(output);
     return output;
 }
 function afAux(str_in) { //curly quotes, dashes
@@ -489,7 +504,7 @@ function loadBody() {
     document.body.innerHTML = `
         <nav class="navbar">
             <div class="nav-inner">
-                <div>${ index ?'' :'<a class="index-button no-select" href="'+rootPath+'"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79 L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
+                <div>${ index ?'' :'<a class="index-button no-select" href="../../"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79 L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
                 <div><div class="page-name-segment"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div>
                 <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
             </div>
@@ -507,13 +522,14 @@ function loadBody() {
                     <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
                     <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
                 </div>
+                <div style="text-align:right"><span class="grey-8 pseudo-link" onclick="localStorage.clear();this.parentNode.parentNode.classList.remove('open');document.querySelectorAll('.right-panel .switches-area input').forEach(x=>{if(x.checked)x.click()});">restore defaults</span></div>
             </div>
             <div class="screen"></div>
             <div class="toc-toggle-button" onclick="tocToggle()" title="Table of Contents">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" width="20" height="20" viewBox="0 0 20 20"><path d="M3 16H1v-2h2zm16 0H5v-2h14zM3 11H1V9h2zm16 0H5V9h14zM3 6H1V4h2zm16 0H5V4h14z"/></svg>
             </div>
         </div>
-        <div class="page-grid">
+        <div id="page">
             <nav class="toc"></nav>
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
@@ -601,42 +617,37 @@ function navCheck_() {
     }
 }
 function loadEntryMeta() {
-    const page = allEntries().find(e => e.url==getDirectory());
+    const page = allPages().find(e => e.url==getDirectory());
     if (!index && page) {
-        if (page.flags && page.flags.includes("wide")) {
-            HTML.classList.add("wide");
-        }
-        if (page.mirrors) {
-            document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<section class="mirror-container column gap-10 label-external"><div>This article was also posted in other places:</div><div class="align-center gap-5">${ page.mirrors.split(",").map(m => '<span class="rect-link">' + parseSource(m) + '</span>').join('') }</div></section>`);
-        }
+        document.querySelector(".article")?.insertAdjacentHTML("afterbegin", autoFormat(
+            `
+            ${ page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'' }
+            ${ page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'' }
+            <div class="article-byline">${ page.date}</div>${ page.mirrors ?`<div class="mirror-container label-external rect-link">This was also posted in other places: ${ page.mirrors.split(",").map(m => parseSource(m)).join('') }</div>` :'' }
+            `))
         if (page.title) {
-            document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', page.title);
+            document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', autoFormat(page.title));
         }
-        document.querySelector(".article")?.insertAdjacentHTML('afterbegin', autoFormat('<div class="article-top">' + (page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'') + (page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'') + (page.date ?`<div class="article-byline">${ page.date} </div>` :'' )));
-        document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
-        <div>
-            <p class="italic times">This is a personal site. I have no association with any other person or organization. I'm not an expert nor any sort of credentialed authority on any relevant topic.</p>
-        </div>`);
+        if (page.flags) {
+            if (page.flags.includes("wide")) {
+                HTML.classList.add("wide");
+            }
+            if (page.flags.includes("unset-width")) {
+                document.getElementById("lightswitch")?.parentNode.insertAdjacentHTML("beforeend", '<label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width">');
+                if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
+                    document.getElementById("unset-width").checked = true;
+                    HTML.classList.add("unset-width");
+                }
+                document.getElementById("unset-width")?.addEventListener("change", function() {
+                    HTML.classList.toggle(this.id, this.checked);
+                    localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
+                    tocUpdate();
+                });
+            }
+        }
     }
 }
 function loadCitelist() {
-    if (index) { return; }
-    let ext_links = page_links.filter(a => a.startsWith("http"));
-    if (ext_links.length > 0) {
-        document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `
-            <div style="padding-top: 10px; border-bottom: 1px solid var(--grey-c,silver);">
-                <div class="citelist-container">
-                    <div class="space-between"><span>External resources referenced:</span></div>
-                    <div class="citelist">
-                        ${ ext_links.map((x, n) => `<div class="no-select">${ n + 1 }.</div><div><a href="${ x }">${ x }</a></div>`).join("") }
-                    </div>
-                </div>
-            </div>`);
-        const citelist = document.querySelector(".citelist");
-        if (citelist.offsetHeight > parseInt(window.getComputedStyle(citelist).maxHeight)) {
-            citelist.previousElementSibling.insertAdjacentHTML('beforeend', `<span style="opacity:0.75; font-size:14px; cursor:pointer;" onclick="let citelist = document.querySelector('.citelist'); if (citelist) { let expanded = citelist.classList.contains('expanded'); this.innerHTML = expanded? 'expand':'collapse'; citelist.classList.toggle('expanded',!expanded); }">expand</span>`);
-        }
-    }
 }
 function rightMenuSetup() {
     Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
@@ -648,8 +659,8 @@ function rightMenuSetup() {
             c.addEventListener("change", function() {
                 localStorage.setItem(c.id, c.checked);
                 HTML.classList.toggle(c.id, c.checked);
+                tocUpdate();
             });
-            tocUpdate();
         }
     )
     const rightMenu = document.querySelector(".right-panel");
@@ -703,7 +714,7 @@ function tocSetup() {
             h.removeAttribute('class');
         }
     });
-    if (pageHeadings.length < 2) {
+    if (pageHeadings.length < 4) {
         document.querySelector(".toc")?.remove();
         document.querySelector(".toc-toggle-button")?.remove();
         document.querySelector(".right-spacer")?.remove();
@@ -711,71 +722,70 @@ function tocSetup() {
     else {
         toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
         toc.scrollTo({ behavior: "instant", top: 0 })
-        
         rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-        
         window.addEventListener("scroll", tocUpdate);
         tocUpdate();
     }
 }
+
 const HTML = document.documentElement;
 const rootPath = getRootPath();
 const index = (rootPath == "");
-const entries = `title:The Chilean coup |url:allende-and-pinochet |date:2026-07-02 |flags:hidden |type:article
-title:How bad is America? |url:how-bad-is-america |date:2026-07-01 |type:article
-title:What was the Freedom Convoy? |url:freedom-convoy |date:2026-06-15 |flags:wide |type:article
-title:Pierre Poilievre |url:pierre-poilievre |date: |flags:hidden |type:article
-title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01 |mirrors:substack:196152041,tumblr:815438258908643328,medium:e59c21f8095a |type:article
-title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29 |mirrors:substack:195885575,tumblr:815245873447649280 |type:article
-title:Floor crossings |url:floor-crossings |date:2026-04-17 |mirrors:substack:floor-crossings,medium:dfe93bb23bdd |type:article
-title:Rational ignorance |url:rational-ignorance |date:2026-04-09 |mirrors:substack:rational-ignorance,tumblr:813419185909727232,patreon:155199122 |type:article
-title:Liberal conservatism |subtitle:A philosophy of prudence and humility |url:liberal-conservatism |date:2026-03-24 |mirrors:substack:foundations-of-liberal-conservatism |flags:wide |type:article
-title:The case for abortion |url:abortion |date:2026-02-18 |mirrors:substack:the-case-for-abortion,tumblr:809547051047272448,patreon:155199340 |type:article
-title:A synopsis of American decline |url:a-synopsis-of-american-decline |date:2026-01-28 |mirrors:substack:186165875,patreon:155201485 |type:article
-title:Fetishism & politics |url:fetishism-politics |date:2024-11-14 |mirrors:tumblr:770364766791352320 |type:article
-title:Nick Shirley & the Somali day cares |url:somali-day-cares |date:2026-01-02 |mirrors:substack:183243480,patreon:155200604}, |type:article
-title:Why is Reddit so hated? |subtitle:On the website's history, what makes it unique, and the intense hatred many people seem to have for it |url:why-is-reddit-so-hated |date:2025-12-30 |mirrors:substack:why-is-reddit-so-hated |type:article
-title:Stay the trenches |url:stay-the-trenches |date:2025-12-17 |mirrors:substack:stay-the-trenches |type:article
-title:Immigration |url:immigration |date:2025-11-06 |mirrors:substack:183229652 |type:article
-title:Prejudice |url:what-is-prejudice |date:2025-10-30 |mirrors:substack:prejudice |type:article
-title:Notes on India |url:notes-on-india |date:2025-10-24 |mirrors:substack:india,tumblr:798351257128615936 |type:article
-title:Liberalism not leftism |url:liberalism-not-leftism |date:2025-09-19 |mirrors:substack:174062936,tumblr:795164683319574528,patreon:155199811 |type:article
-title:Normalization |url:normalization |date:2025-09-08 |mirrors:substack:normalization-and-status-quo-bias |type:article
-title:Lies about Ilhan Omar |url:lies-about-ilhan-omar |date:2025-08-25 |mirrors:substack:ilhan-omar,tumblr:794091916138594304,medium:46de1629e138 |type:article
-title:Israel & Palestine |url:israel-palestine |date:2025-07-27 |type:article
-title:Trump & Russia |url:trump-and-russia |date:2025-03-06 |mirrors:tumblr:777321996757450752,substack:trump-and-russia |type:article
-title:Why get bottom surgery? |url:why-get-bottom-surgery |date:2025-02-09 |mirrors:tumblr:775036555284856832 |type:article
-title:Elon Musk & the Nazi Salute |url:elon-musk-nazi-salute |date:2025-01-24 |mirrors:substack:the-nazi-salute,tumblr:773565389405847552 |type:article
-title:Lies about Elizabeth Warren & Hillary Clinton |url:lies-about-warren-clinton |date:2024-12-19 |mirrors:tumblr:770730090759946240,substack:153821886 |type:article
-title:Mark Robinson |url:mark-robinson |date:2024-12-15 |mirrors:tumblr:769962893917798400 |type:article
-title:The Trump appeal |url:the-trump-appeal |date:2024-12-03 |mirrors:tumblr:770270265635667968 |type:article
-title:The normal white man bias |url:the-normal-white-man-bias |date:2024-11-26 |mirrors:substack:153823028,tumblr:770305075441778688,medium:0c508d4c51b5 |type:article
-title:Sex, gender, & transsexuals |url:sex-gender-transsexuals |date:2024-11-19 |flags:wide |type:article
-title:Bernie Sanders & the military industrial complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16 |mirrors:tumblr:770070077409214464 |type:article
-title:Types of masculinity |url:types-of-masculinity |date:2024-11-08 |mirrors:tumblr:770310861444300800 |type:article
-title:Poor Things (2023 film) |url:poor-things |date:2024-10-31 |mirrors:tumblr:769969807464464384 |type:article
-title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19 |mirrors:substack:the-trans-prison-stats-argument,tumblr:771501478599868416 |type:article
-title:Public record |url:public-record |flags:hidden,wide |type:article
-title:Anime reviews |url:anime-reviews |date:2024-12-17 |type:article
-title:Data Structures & Algorithms |url:data-structures-algorithms |flags:hidden,wide |type:article
-title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18 |type:video
-title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34 |type:video
-title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15 |type:video
-title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13 |type:video
-title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04 |type:video
-title:How bad is America? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04 |type:video
-title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:oUOsAdnK2zs.jpg |length:39:47 |type:video
-title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:TYoe1jxBYPY.jpg |length:12:08 |type:video
-title:India |thumb:Pz0Oq1rb14E.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17 |type:video
-title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50 |type:video
-title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39 |type:video
-title:Why do people like Trump? |date:2025-09-13 |src:youtube:tcF0f-Dtgic |thumb:WhyTrump.jpg |length:11:33 |type:video
-title:Lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02 |type:video
-title:Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg |type:video
-title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14 |type:video`;
-function allEntries() { return entries.split("\n").map(e => parseObj(e,'title','date','thumb','length','src','mirrors','type','url','flags')).filter(e=>e).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)); }
-function pageList() { return allEntries().filter(p => p.type=='article' && (!p.flags||!p.flags.includes('hidden'))) }
-function videoList() { return allEntries().filter(e => e.type=='video') }
+const articlesData = `title:Allende and Pinochet |url:allende-and-pinochet |date:2026-07-26 |flags:hidden
+title:How bad is America? |url:how-bad-is-america |date:2026-07-01
+title:What was the Freedom Convoy? |url:freedom-convoy |date:2026-06-15 |flags:wide
+title:Pierre Poilievre |url:pierre-poilievre |date:2026-07-31 |flags:f
+title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01 |mirrors:substack:196152041,tumblr:815438258908643328,medium:e59c21f8095a
+title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29 |mirrors:substack:195885575,tumblr:815245873447649280
+title:Floor crossings |url:floor-crossings |date:2026-04-17 |mirrors:substack:floor-crossings,medium:dfe93bb23bdd
+title:Rational ignorance |url:rational-ignorance |date:2026-04-09 |mirrors:substack:rational-ignorance,tumblr:813419185909727232,patreon:155199122
+title:Liberal conservatism |subtitle:A philosophy of prudence and humility |url:liberal-conservatism |date:2026-03-24 |mirrors:substack:foundations-of-liberal-conservatism |flags:wide
+title:The case for abortion |url:abortion |date:2026-02-18 |mirrors:substack:the-case-for-abortion,tumblr:809547051047272448,patreon:155199340
+title:A synopsis of American decline |url:a-synopsis-of-american-decline |date:2026-01-28 |mirrors:substack:186165875,patreon:155201485
+title:Fetishism & politics |url:fetishism-politics |date:2024-11-14 |mirrors:tumblr:770364766791352320
+title:Nick Shirley & the Somali day cares |url:somali-day-cares |date:2026-01-02 |mirrors:substack:183243480,patreon:155200604},
+title:Why is Reddit so hated? |subtitle:On the website's history, what makes it unique, and the intense hatred many people seem to have for it |url:why-is-reddit-so-hated |date:2025-12-30 |mirrors:substack:why-is-reddit-so-hated
+title:Stay the trenches |url:stay-the-trenches |date:2025-12-17 |mirrors:substack:stay-the-trenches
+title:Immigration |url:immigration |date:2025-11-06 |mirrors:substack:183229652
+title:Prejudice |url:what-is-prejudice |date:2025-10-30 |mirrors:substack:prejudice
+title:Notes on India |url:notes-on-india |date:2025-10-24 |mirrors:substack:india,tumblr:798351257128615936
+title:Liberalism not leftism |url:liberalism-not-leftism |date:2025-09-19 |mirrors:substack:174062936,tumblr:795164683319574528,patreon:155199811
+title:Normalization |url:normalization |date:2025-09-08 |mirrors:substack:normalization-and-status-quo-bias
+title:Lies about Ilhan Omar |url:lies-about-ilhan-omar |date:2025-08-25 |mirrors:substack:ilhan-omar,tumblr:794091916138594304,medium:46de1629e138
+title:Israel & Palestine |url:israel-palestine |date:2025-07-27
+title:Trump & Russia |url:trump-and-russia |date:2025-03-06 |mirrors:tumblr:777321996757450752,substack:trump-and-russia
+title:Why get bottom surgery? |url:why-get-bottom-surgery |date:2025-02-09 |mirrors:tumblr:775036555284856832
+title:Elon Musk & the Nazi Salute |url:elon-musk-nazi-salute |date:2025-01-24 |mirrors:substack:the-nazi-salute,tumblr:773565389405847552
+title:Lies about Elizabeth Warren & Hillary Clinton |url:lies-about-warren-clinton |date:2024-12-19 |mirrors:tumblr:770730090759946240,substack:153821886
+title:Mark Robinson |url:mark-robinson |date:2024-12-15 |mirrors:tumblr:769962893917798400
+title:The Trump appeal |url:the-trump-appeal |date:2024-12-03 |mirrors:tumblr:770270265635667968
+title:The normal white man bias |url:the-normal-white-man-bias |date:2024-11-26 |mirrors:substack:153823028,tumblr:770305075441778688,medium:0c508d4c51b5
+title:Sex, gender, & transsexuals |url:sex-gender-transsexuals |date:2024-11-19 |flags:wide
+title:Bernie Sanders & the military industrial complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16 |mirrors:tumblr:770070077409214464
+title:Types of masculinity |url:types-of-masculinity |date:2024-11-08 |mirrors:tumblr:770310861444300800
+title:Poor Things (2023 film) |url:poor-things |date:2024-10-31 |mirrors:tumblr:769969807464464384
+title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19 |mirrors:substack:153916145,tumblr:771501478599868416
+title:Public record |url:public-record |flags:hidden,wide,sticky,unset-width
+title:Anime reviews |url:anime-reviews |date:2024-12-17
+title:Data Structures & Algorithms |url:data-structures-algorithms |flags:hidden,wide`
+const videosData = `title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18
+title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
+title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
+title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13
+title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04
+title:How bad is America? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04
+title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:oUOsAdnK2zs.jpg |length:39:47
+title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:TYoe1jxBYPY.jpg |length:12:08
+title:India |thumb:Pz0Oq1rb14E.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17
+title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50
+title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39
+title:Why do people like Trump? |date:2025-09-13 |src:youtube:tcF0f-Dtgic |thumb:WhyTrump.jpg |length:11:33
+title:Lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02
+title:Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
+title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14`;
+function videoList() { return videosData.split("\n").map(v => parseObj(v,"date")).filter(v => v).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)) }
+function allPages() { return articlesData.split("\n").map(p => parseObj(p,"date")).filter(p => p).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)) }
+function pageList() { return allPages().filter(p => (!p.flags || !p.flags.includes("hidden"))) }
 
 const page_links = [];
 function init() {
@@ -784,27 +794,37 @@ function init() {
     loadEntryMeta();
     rightMenuSetup();
     tocSetup();
+    let ext_links = page_links.filter(a => a.startsWith("http"));
+    if (ext_links.length > 0) { document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<div><div class="citelist-container"><div><span>Links on this page:</span></div><ol class="citelist">${ ext_links.map(x => `<li><a href="${ x }">${ x }</a></li>`).join("") }</ol></div></div>`); }
+    document.querySelector('.article-footer')?.insertAdjacentHTML("beforeend", `<div class="text-center"><span>This is a personal site. I have no association with any other person or organization. I have no formal background in any topics discussed. This site is powered by <a href="https://github.com/irisembury">GitHub</a>. For inquiry contact irisembury@gmail.com</span></div>`);
     window.addEventListener("scroll", navCheck); navCheck();
-    Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = convertSeconds(a.innerHTML));
+    Array.from(document.querySelectorAll(".auto-format")).forEach(a => { a.innerHTML = autoFormat(a.innerHTML); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
+    Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
     if (document.title == "") { document.title = "Iris Embury | GitHub"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
     if (index) {
-        document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", videoList().map( v => {
-            v.src = v.src.split(",").map(m => parseSource(m)).join(" | ");
-            return `<figure>
-                <div><img style="max-width:300px;max-height:200px;" loading="lazy" src="assets/video-thumbnails/${ v.thumb }"><div class="timecard no-select"><div>${ v.length }</div></div></div>
+        document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", videoList().map(
+            v => `<figure>
+                <div class="img" loading="lazy" style="background-image:url('assets/video-thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
                 <figcaption>
                     <div class="video-title">${ v.title }</div>
-                    <div>${ v.src }</div>
+                    <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
                     <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
                 </figcaption>
             </figure>`
-        }).join(''));
-        document.querySelector(".text-index")?.insertAdjacentHTML("beforeend", pageList().map(
-            entry => `<div class="entry"><div class="cell a"><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div><div class="cell b">${ entry.date }</div><div class="cell c">${ entry.mirrors ?`<div class="entry-mirrors">${ entry.mirrors.split(",").map(m => parseSource(m)).sort().join(" ")}</div>` :'' }</div></div>`
+        ).join(''));
+        
+        document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", pageList().map(
+            entry => `
+                <div class="article-entry">
+                    <div class="cell title"><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div>
+                    ${ entry.mirrors ?`<div class="cell mirror"><div class="mirrors">${ entry.mirrors.split(",").map(m => parseSource(m)).sort().join("") }</div></div>` :'' }
+                    <div class="cell date">${ entry.date ?`<span>${ entry.date }</span>` :'' }</div>
+                </div>`
         ).join(''))
+        
     }
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
 }
