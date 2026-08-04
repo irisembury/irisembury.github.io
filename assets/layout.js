@@ -509,6 +509,8 @@ function loadBody() {
                     <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
                     <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
                 </div>
+                <div>
+                </div>
                 <div style="text-align:right"><span class="grey-8 pseudo-link" onclick="localStorage.clear();this.parentNode.parentNode.classList.remove('open');document.querySelectorAll('.right-panel .switches-area input').forEach(x=>{if(x.checked)x.click()});">restore defaults</span></div>
             </div>
             <div class="screen"></div>

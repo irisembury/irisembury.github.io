@@ -7,10 +7,12 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
     html { scrollbar-gutter: stable; }
-    .profile { margin-top: -25px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
-        .profile .name { white-space: nowrap; margin-top: 0; font: 700 35px/1 Lora,Georgia,sans-serif; }
-        .profile .img { margin-left: -42px; border-radius: 8px; background-image: url(assets/pfp.jpg); width: 84px; aspect-ratio: 1; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#999, #333); filter: grayscale(0.3) brightness(1.15); }
-    .tabs { justify-content: center; padding: 0 1em; font: 16px/1 Roboto,sans-serif; display: flex; gap: 3px 16px; flex-wrap: wrap; margin-top: 24px; border-block: 1px solid var(--grey-c); color: var(--grey-6,dimgrey); }
+    .profile { padding-bottom: 24px; margin-top: -20px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center;
+    
+    }
+        .profile .name { white-space: nowrap; margin: 0; font: 650 italic 35px/1 Lora,Georgia,sans-serif; }
+        .profile .img { margin-left: -42px; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 84px; aspect-ratio: 1; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#c0c0c0, #1f1f20); filter: grayscale(0.3) brightness(1.15); }
+    .tabs { justify-content: center; padding: 0 1em; font: 16px/1 Roboto,sans-serif; display: flex; gap: 3px 16px; flex-wrap: wrap; border-block: 1px solid light-dark(#c0c0c0, #222324); color: var(--grey-6,dimgrey); }
         .tab { white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 15px 8px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
         .tab.selected { border-bottom-color: var(--grey-3); color: var(--grey-2); font-weight: 700; border-color: var(--grey-3); }
@@ -24,8 +26,8 @@
         
         .about-me.section {  }
             .about-me.section .text-panel { font: 18px/1.4 'Faculty Glyphic',sans-serif; text-align: justify; text-indent: 2em; }
-            .links-panel { justify-content: center; padding: 8px 0 0px; flex-wrap: wrap; list-style: none; display: flex; gap: 5px; font: 16px/1 Roboto,sans-serif; }
-                .links-panel li { aspect-ratio: 1; border: 1px solid var(--grey-c); border-radius: 5px; padding: 5px; }
+            .links-panel { justify-content: center; padding: 5px 0 0px; flex-wrap: wrap; list-style: none; display: flex; gap: 5px; font: 16px/1 Roboto,sans-serif; }
+                .links-panel li { aspect-ratio: 1; padding: 5px; }
                 .links-panel li:hover { border-color: var(--grey-9); }
                     .links-panel .link-text { display: none; }
                     .links-panel .inline-icon { margin: 0; width: 30px; height: unset; }
@@ -44,8 +46,8 @@
         .video-list.section { }
             .article .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.22), 1fr)); }
                 .article .video-index figure { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
-                    .article .video-index .img { border: 1px solid var(--grey-c); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
-                        .article .video-index .img .timecard { margin: 0 2px 2px 0; font: 14px/1.1 'Segoe UI',system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 0px 3px 1px; }
+                    .article .video-index .img { border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
+                        .article .video-index .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
                     .article .video-index figcaption { font: 17px/1.2 'Faculty Glyphic',sans-serif; display: grid; gap: 5px; font-size: 16px; line-height: 1.1; padding: 5px 8px; }
                         .article .video-index figcaption .video-title { font-size: 18px; color: var(--grey-2); }
                         .article .video-index figcaption .video-date { color: var(--grey-7,grey); }
