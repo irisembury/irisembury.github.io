@@ -33,7 +33,7 @@ function setlightbox(action) {
     }
 }
 function parseSource(string_in, separator = ":") {
-    let [site, id] = string_in.split(separator, 2);
+    let [site, id] = string_in.trim().split(separator, 2);
     switch (site) {
         case 'tumblr': return '<a class="external-link tumblr-link" href="https://irisembury.tumblr.com/post/' + id + '" title="https://irisembury.tumblr.com/post/' + id + '"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>';
         case 'youtube': return '<a class="external-link youtube-link" href="https://youtu.be/' + id + '" title="https://youtu.be/' + id + '"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a>';
@@ -54,7 +54,7 @@ function parseObj(entry, ...requiredFields) {
             const value = cell.substring(colon + 1);
             obj[key] = value;
         } else {
-            console.error(`parseObj: "${ cell }"`);
+            console.error(`parseObj: "${ entry }"`);
         }
     });
     requiredFields.forEach(r => { if (!Object.hasOwn(obj,r)) { obj[r] = ""; } });
@@ -177,12 +177,13 @@ function autoList(chunk) {
     const list = chunk.split("\n").map(
         li => {
             const initpad = li.match(/^ */)[0].length;
-            li = autoFormat(li.substring(initpad));
+            li = li.substring(initpad);
             const indent = Math.floor(initpad * 0.25);
             const liType = /^[\*\-] /.test(li) ?"ul" :(/^\d+\. /.test(li) ? "ol" : "none");
             const listType = (liType =="ol") ?"ol" :"ul";
             let startNum = (liType =="ol") ?li.substring(0, li.indexOf(".")) :1;
             li = (liType) == "none" ? li.trimStart() :li.substring(li.indexOf(" ")).trimStart();
+            li = autoFormat(li);
             if (liType =='none') {
                 if (li.startsWith("#")) { li = '<blockquote class="auto-indent"><div class="text-block">' + li.slice(1).trimStart() + '</div></blockquote>\n' }
                 if (li.startsWith(".")) { li = '<div class="fine">' + li.slice(1).trimStart() + '</div>\n' }
@@ -231,6 +232,44 @@ function dateFromISO(datestring) {
         datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ year + " " + month + " " + day +'</time>';
     }
     return datestring;
+}
+function meta(pageInfo) {
+    if (pageInfo.startsWith("---")) { pageInfo = pageInfo.substring(3); }
+    if (pageInfo.endsWith("---")) { pageInfo = pageInfo.slice(0,-3); }
+    pageInfo = parseObj(pageInfo.split("\n").map(n => n.trim()).filter(n => n.length > 3).join("|"));
+    const articleTop = [];
+    if (pageInfo.title) {
+        articleTop.push(`<h1 class="auto-heading for-toc">${ pageInfo.title }</h1>`);
+        document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', pageInfo.title);
+    }
+    if (pageInfo.subtitle) {
+        articleTop.push(`<h2 class="auto-heading">${ pageInfo.subtitle }</h2>`);
+    }
+    if (pageInfo.date) {
+        articleTop.push(`<div class="article-byline">${ pageInfo.date }</div>`);
+    }
+    if (pageInfo.mirrors) {
+        document.querySelector(".article-gutter")?.insertAdjacentHTML("beforeend",`<div class="mirror-container label-external">${ pageInfo.mirrors.split(",").map(m => parseSource(m)).join(" ") }</div>`);
+    }
+    if (pageInfo.flags) {
+        if (pageInfo.flags.includes("wide")) {
+            HTML.classList.add("wide")
+        }
+        if (pageInfo.flags.includes("unset-width")) {
+            document.getElementById("lightswitch")?.parentNode.insertAdjacentHTML("beforeend", '<label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width">');
+            if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
+                document.getElementById("unset-width").checked = true;
+                HTML.classList.add("unset-width");
+            }
+            document.getElementById("unset-width")?.addEventListener("change", function() {
+                HTML.classList.toggle(this.id, this.checked);
+                localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
+                tocUpdate();
+            });
+        }
+    }
+    if (articleTop.length == 0) { return ""; }
+    return '<div class="article-top">' + articleTop.map(x => autoFormat(x)).join("\n") + '</div>';
 }
 function autoHeading(chunk) {
     let number = chunk.indexOf(" ");
@@ -322,9 +361,11 @@ function interpreter(argValue) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
+    let firstP = true;
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
+        if (chunk.startsWith("---\n") && chunk.endsWith("\n---")) { return meta(chunk); }
         if (chunk.startsWith("<") && !chunk.startsWith("<a")) { return chunk; }
         if (chunk == "---") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
@@ -333,15 +374,23 @@ function interpreter(argValue) {
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-        //chunk = linkReplace(chunk);
         if (chunk.startsWith("!table")) { return autoTable(chunk); }
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
         let isFine = chunk.startsWith(".");
         if (isFine) { chunk = chunk.slice(1).trimStart(); }
-        if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + (l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
         if (chunk.startsWith("!list")) { chunk = autoList(chunk.substring(chunk.indexOf('\n') + 1)); }
-        else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) { chunk = autoList(chunk); }
-        else { chunk = '<p>' + autoFormat(chunk) + '</p>'; }
+        if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + (l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
+        else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
+            chunk = autoList(chunk);
+        } else {
+            if (firstP && !isFine) {
+                chunk = '<p class="first-paragraph">' + autoFormat(chunk) + '</p>';
+                firstP = false;
+            }
+            else {
+                chunk = '<p>' + autoFormat(chunk) + '</p>';
+            }
+        }
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
     })
@@ -396,7 +445,8 @@ function ageFromISO(argDate) {
     return age;
 }
 function autoFormat(_string) {
-    _string = _string.trim();
+    if (!_string) return _string;
+    _string = linkReplace(_string.trim());
     let output = "";
     while (true) {
         const openTag = _string.indexOf("<");
@@ -405,15 +455,12 @@ function autoFormat(_string) {
         output += afAux(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
         _string = _string.substring(closeTag);
     }
-    output = (output + afAux(_string)).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
-    output = output.replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
-    output = linkReplace(output);
+    output = output + afAux(_string)
+    output = output.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
     return output;
 }
 function afAux(str_in) { //curly quotes, dashes
-    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
-        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;")
-    }
+    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) { str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;") }
     return str_in.replaceAll("---", '&mdash;').replaceAll("--", "&ndash;");
 }
 function tokenizeByWordChar(stringData) {
@@ -522,7 +569,8 @@ function loadBody() {
             <nav class="toc"></nav>
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
-                <footer class="article-footer"><div><p>This is a personal site. I have no association with any other person or organization. I have no formal background relevant to any topics discussed. This site is powered by <a href="https://github.com/irisembury">GitHub</a>. For inquiry contact irisembury@gmail.com</p></div></footer>
+                <div class="article-gutter"></div>
+                <footer class="article-footer"><p class="text-indent">This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com</p></footer>
             </div>
             <div class="right-spacer"></div>
         </div>
@@ -604,37 +652,6 @@ function navCheck_() {
     else if (navSticky && pageYOffset < 2) {
         navbar.classList.remove("sticky-active");
         navSticky = false;
-    }
-}
-function loadEntryMeta() {
-    const page = allPages().find(e => e.url==getDirectory());
-    if (!index && page) {
-        document.querySelector(".article")?.insertAdjacentHTML("afterbegin", autoFormat(
-            `
-            ${ page.title ?`<h1 class="article-title auto-heading for-toc">${ page.title }</h1>` :'' }
-            ${ page.subtitle ?`<h2 class="article-subtitle">${ page.subtitle }</h2>` :'' }
-            <div class="article-byline">${ page.date}</div>${ page.mirrors ?`<div class="mirror-container label-external rect-link">This was also posted in other places: ${ page.mirrors.split(",").map(m => parseSource(m)).join('') }</div>` :'' }
-            `))
-        if (page.title) {
-            document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', autoFormat(page.title));
-        }
-        if (page.flags) {
-            if (page.flags.includes("wide")) {
-                HTML.classList.add("wide");
-            }
-            if (page.flags.includes("unset-width")) {
-                document.getElementById("lightswitch")?.parentNode.insertAdjacentHTML("beforeend", '<label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width">');
-                if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
-                    document.getElementById("unset-width").checked = true;
-                    HTML.classList.add("unset-width");
-                }
-                document.getElementById("unset-width")?.addEventListener("change", function() {
-                    HTML.classList.toggle(this.id, this.checked);
-                    localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
-                    tocUpdate();
-                });
-            }
-        }
     }
 }
 function rightMenuSetup() {
@@ -719,67 +736,10 @@ function tocSetup() {
 const HTML = document.documentElement;
 const rootPath = getRootPath();
 const index = (rootPath == "");
-const articlesData = `title:Allende and Pinochet |url:allende-and-pinochet |date:2026-07-26 |flags:hidden
-title:How bad is America? |url:how-bad-is-america |date:2026-07-01
-title:What was the Freedom Convoy? |url:freedom-convoy |date:2026-06-15 |flags:wide
-title:The many problems with Pierre Poilievre |url:pierre-poilievre |date:2026-08-03
-title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01 |mirrors:substack:196152041,tumblr:815438258908643328,medium:e59c21f8095a
-title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29 |mirrors:substack:195885575,tumblr:815245873447649280
-title:Floor crossings |url:floor-crossings |date:2026-04-17 |mirrors:substack:floor-crossings,medium:dfe93bb23bdd
-title:Rational ignorance |url:rational-ignorance |date:2026-04-09 |mirrors:substack:rational-ignorance,tumblr:813419185909727232,patreon:155199122
-title:Liberal conservatism |subtitle:A philosophy of prudence and humility |url:liberal-conservatism |date:2026-03-24 |mirrors:substack:foundations-of-liberal-conservatism |flags:wide
-title:The case for abortion |url:abortion |date:2026-02-18 |mirrors:substack:the-case-for-abortion,tumblr:809547051047272448,patreon:155199340
-title:A synopsis of American decline |url:a-synopsis-of-american-decline |date:2026-01-28 |mirrors:substack:186165875,patreon:155201485
-title:Fetishism & politics |url:fetishism-politics |date:2024-11-14 |mirrors:tumblr:770364766791352320
-title:Nick Shirley & the Somali day cares |url:somali-day-cares |date:2026-01-02 |mirrors:substack:183243480,patreon:155200604},
-title:Why is Reddit so hated? |subtitle:On the website's history, what makes it unique, and the intense hatred many people seem to have for it |url:why-is-reddit-so-hated |date:2025-12-30 |mirrors:substack:why-is-reddit-so-hated
-title:Stay the trenches |url:stay-the-trenches |date:2025-12-17 |mirrors:substack:stay-the-trenches
-title:Immigration |url:immigration |date:2025-11-06 |mirrors:substack:183229652
-title:Prejudice |url:what-is-prejudice |date:2025-10-30 |mirrors:substack:prejudice
-title:Notes on India |url:notes-on-india |date:2025-10-24 |mirrors:substack:india,tumblr:798351257128615936
-title:Liberalism not leftism |url:liberalism-not-leftism |date:2025-09-19 |mirrors:substack:174062936,tumblr:795164683319574528,patreon:155199811
-title:Normalization |url:normalization |date:2025-09-08 |mirrors:substack:normalization-and-status-quo-bias
-title:Lies about Ilhan Omar |url:lies-about-ilhan-omar |date:2025-08-25 |mirrors:substack:ilhan-omar,tumblr:794091916138594304,medium:46de1629e138
-title:Israel & Palestine |url:israel-palestine |date:2025-07-27
-title:Trump & Russia |url:trump-and-russia |date:2025-03-06 |mirrors:tumblr:777321996757450752,substack:trump-and-russia
-title:Why get bottom surgery? |url:why-get-bottom-surgery |date:2025-02-09 |mirrors:tumblr:775036555284856832
-title:Elon Musk & the Nazi Salute |url:elon-musk-nazi-salute |date:2025-01-24 |mirrors:substack:the-nazi-salute,tumblr:773565389405847552
-title:Lies about Elizabeth Warren & Hillary Clinton |url:lies-about-warren-clinton |date:2024-12-19 |mirrors:tumblr:770730090759946240,substack:153821886
-title:Mark Robinson |url:mark-robinson |date:2024-12-15 |mirrors:tumblr:769962893917798400
-title:The Trump appeal |url:the-trump-appeal |date:2024-12-03 |mirrors:tumblr:770270265635667968
-title:The normal white man bias |url:the-normal-white-man-bias |date:2024-11-26 |mirrors:substack:153823028,tumblr:770305075441778688,medium:0c508d4c51b5
-title:Sex, gender, & transsexuals |url:sex-gender-transsexuals |date:2024-11-19 |flags:wide
-title:Bernie Sanders & the military industrial complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16 |mirrors:tumblr:770070077409214464
-title:Types of masculinity |url:types-of-masculinity |date:2024-11-08 |mirrors:tumblr:770310861444300800
-title:Poor Things (2023 film) |url:poor-things |date:2024-10-31 |mirrors:tumblr:769969807464464384
-title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19 |mirrors:substack:153916145,tumblr:771501478599868416
-title:Public record |url:public-record |flags:hidden,wide,sticky,unset-width
-title:Anime reviews |url:anime-reviews |date:2024-12-17
-title:Data Structures & Algorithms |url:data-structures-algorithms |flags:hidden,wide`
-const videosData = `title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18
-title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
-title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
-title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13
-title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04
-title:How bad is America? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04
-title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:oUOsAdnK2zs.jpg |length:39:47
-title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:TYoe1jxBYPY.jpg |length:12:08
-title:India |thumb:Pz0Oq1rb14E.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17
-title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50
-title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39
-title:Why do people like Trump? |date:2025-09-13 |src:youtube:tcF0f-Dtgic |thumb:WhyTrump.jpg |length:11:33
-title:Lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02
-title:Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
-title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14`;
-function videoList() { return videosData.split("\n").map(v => parseObj(v,"date")).filter(v => v).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)) }
-function allPages() { return articlesData.split("\n").map(p => parseObj(p,"date")).filter(p => p).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)) }
-function pageList() { return allPages().filter(p => (!p.flags || !p.flags.includes("hidden"))) }
-
 const page_links = [];
 function init() {
     loadBody();
     setupLightswitch();
-    loadEntryMeta();
     rightMenuSetup();
     tocSetup();
     let ext_links = page_links.filter(a => a.startsWith("http"));
@@ -791,28 +751,6 @@ function init() {
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
     if (document.title == "") { document.title = "Iris Embury | GitHub"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
-    if (index) {
-        document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", videoList().map(
-            v => `<figure>
-                <div class="img" loading="lazy" style="background-image:url('assets/video-thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
-                <figcaption>
-                    <div class="video-title">${ v.title }</div>
-                    <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
-                    <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
-                </figcaption>
-            </figure>`
-        ).join(''));
-        
-        document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", pageList().map(
-            entry => `
-                <div class="article-entry">
-                    <div class="cell title"><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div>
-                    ${ entry.mirrors ?`<div class="cell mirror"><div class="mirrors">${ entry.mirrors.split(",").map(m => parseSource(m)).sort().join("") }</div></div>` :'' }
-                    <div class="cell date">${ entry.date ?`<span>${ entry.date }</span>` :'' }</div>
-                </div>`
-        ).join(''))
-        
-    }
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
 }
 window.addEventListener("load", init);

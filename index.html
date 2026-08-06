@@ -7,68 +7,66 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
     html { scrollbar-gutter: stable; }
-    .profile { padding-bottom: 24px; margin-top: -20px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center;
-    
-    }
-        .profile .name { white-space: nowrap; margin: 0; font: 650 italic 35px/1 Lora,Georgia,sans-serif; }
-        .profile .img { margin-left: -42px; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 84px; aspect-ratio: 1; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#c0c0c0, #1f1f20); filter: grayscale(0.3) brightness(1.15); }
-    .tabs { justify-content: center; padding: 0 1em; font: 16px/1 Roboto,sans-serif; display: flex; gap: 3px 16px; flex-wrap: wrap; border-block: 1px solid light-dark(#c0c0c0, #222324); color: var(--grey-6,dimgrey); }
-        .tab { white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 15px 8px; margin-bottom: -1px; }
+    .profile { margin-top: -20px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
+        .profile .name { white-space: nowrap; margin: 0; font: 600 36px/1 Lora,Georgia,sans-serif; }
+        .profile .img { margin-left: -42px; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 84px; aspect-ratio: 1; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: grayscale(0.3) brightness(1.15); }
+    .tabs { margin-block: 24px; padding: 0 1em; font: 16px/1 'DM Sans',sans-serif; display: flex; gap: 2px 1em; flex-wrap: wrap; border-block: 1px solid light-dark(#c0c0c0, #222324); color: var(--grey-6,dimgrey); }
+        .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 14px 8px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
         .tab.selected { border-bottom-color: var(--grey-3); color: var(--grey-2); font-weight: 700; border-color: var(--grey-3); }
             .dummy { width: 100%; font-weight: 700; visibility: hidden; height: 0; }
-    .container { color: var(--grey-2); font: 17px/1.5 Roboto,sans-serif; padding: 24px 26px; }
-        .container .section { display: none; }
-        .container .section.selected { display: grid; gap: 20px; }
+    
+    .container { font: 18px/1.4 'DM Sans',sans-serif }
+        .container .section { display: none; margin: 24px 26px; gap: 22px; }
+        .container .section.selected { display: grid; }
+            .note { color: var(--grey-5,dimgrey); font-size: 16px; line-height: 1.3; }
             .text-panel { margin-inline: auto; }
-            .text-panel :nth-child(n+2) { margin-top: 0.5em; }
-            .note { text-align: center; color: var(--grey-5,dimgrey); font: 16px/1.3 Rubik,sans-serif; }
+            .text-panel > p + p,
+            .text-panel > ul > li + li,
+            .text-panel > p + ul { margin-top: 10px; }
+            .text-panel > ul + p { margin-top: 20px; }
         
-        .about-me.section {  }
-            .about-me.section .text-panel { font: 18px/1.4 'Faculty Glyphic',sans-serif; text-align: justify; text-indent: 2em; }
+        .about.section {  }
+            .about.section .text-panel { text-indent: 2em; max-width: 1000px; }
             .links-panel { justify-content: center; padding: 5px 0 0px; flex-wrap: wrap; list-style: none; display: flex; gap: 5px; font: 16px/1 Roboto,sans-serif; }
-                .links-panel li { aspect-ratio: 1; padding: 5px; }
+                .links-panel li { aspect-ratio: 1; padding: 5px; margin: 0; }
                 .links-panel li:hover { border-color: var(--grey-9); }
                     .links-panel .link-text { display: none; }
-                    .links-panel .inline-icon { margin: 0; width: 30px; height: unset; }
+                    .links-panel .inline-icon { margin: 0; width: 34px; }
         
-        .article-list.section {  }
-            .article-index { line-height: 1; }
-                .article-entry { gap: 9px; padding: 11px 10px 10px; display: grid; grid-template-columns: auto min-content min-content; }
-                .article-entry + .article-entry { border-top: 1px dashed var(--grey-c); }
-                .article-entry:hover { background-color: var(--bg-light-blue); }
-                        .cell.title { }
-                        .mirrors { min-width: 72px; display: flex; gap: 6px; white-space: nowrap; }
-                            .mirrors a .link-text { display: none; }
-                            .mirrors a .inline-icon { margin-inline: 0; width: 18px; height: 18px; }
-                        .cell.date { grid-column: 3; color: var(--grey-6,dimgrey); white-space: nowrap; }
+        .articles.section {  }
+            .article-index { line-height: 1.2; margin-inline: auto; max-width: 590px; width: 100%; }
+                .article-index > div { display: flex; justify-content: space-between; gap: 5px; align-items: center; padding: 12px 9px 10px; border-bottom: 1px dashed var(--grey-c); }
+                .article-index > div:first-child { border-top: 1px dashed var(--grey-c); }
+                    .article-index .date { color: var(--grey-6,dimgrey); font: 17px/1 Roboto,sans-serif; }
         
-        .video-list.section { }
-            .article .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.22), 1fr)); }
-                .article .video-index figure { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
-                    .article .video-index .img { border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
-                        .article .video-index .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
-                    .article .video-index figcaption { font: 17px/1.2 'Faculty Glyphic',sans-serif; display: grid; gap: 5px; font-size: 16px; line-height: 1.1; padding: 5px 8px; }
-                        .article .video-index figcaption .video-title { font-size: 18px; color: var(--grey-2); }
-                        .article .video-index figcaption .video-date { color: var(--grey-7,grey); }
+        .pages.section {  }
         
-        @media (max-width: 650px) {
-            .article-entry { text-align: center; display: flex; flex-direction: column; }
-            .mirrors { min-width: unset; justify-content: center; }
-        }
+        .donate.section {  }
+            .donate.section p { font-size: 16px; }
+            .donate.section .links-panel { gap: 20px; }
+            .donate.section .links-panel a .inline-icon { display: block; margin-inline: auto; }
+            .donate.section .links-panel a .link-text { display: block; text-align: center; margin-top: 5px; }
+        
+        .videos.section { }
+            .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.22), 1fr)); }
+                .video-index figure { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
+                    .video-index .img { border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
+                        .video-index .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
+                    .video-index figcaption { font: 17px/1.1 'DM Sans',sans-serif; display: grid; gap: 5px; padding: 6px; }
+                        .video-index figcaption .video-title { font-size: calc(1em + 1px); }
+                        .video-index figcaption .video-date { font-size: calc(1em - 1px); color: var(--grey-7,grey); }
+        
         @media (max-width: 600px) {
             .profile { justify-content: center; }
             .profile .img { margin-left: 0; }
             .container { padding-inline: 0 !important; }
-        }
-        @media (max-width: 500px) {
             .profile { flex-direction: column; gap: 7px; }
             .profile .img { margin-bottom: 5px; }
             .profile .name { text-align: center; }
             .links-panel { padding: 8px 0 0; }
-        }
-        @media (max-width: 430px) {
-            .tab { padding: 9px 5px 7px; }
+            .tabs { padding: 0; gap: 2px 9px; }
+            .article-index > div { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -83,15 +81,16 @@
         </div>
     </div>
     <div class="tabs">
-        <div class="tab no-select about-me" onclick="fsetTab('about-me')">About</div>
-        <div class="tab no-select article-list" onclick="fsetTab('article-list')">Text</div>
-        <div class="tab no-select video-list" onclick="fsetTab('video-list')">Videos</div>
-        <div class="tab no-select extras-tab" onclick="fsetTab('extras-tab')">Extras</div>
+        <div class="tab no-select pages" onclick="fsetTab('pages')">Pages</div>
+        <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
+        <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
+        <div class="tab no-select donate" onclick="fsetTab('donate')">Donate</div>
     </div>
     <div class="container">
-        <div class="about-me section">
+        
+        <div class="pages section">
             <div>
-                <p class="note">Find me in other places:</p>
+                <p class="note text-center">Find me in other places</p>
                 <ul class="links-panel label-external">
                     <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
                     <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
@@ -103,50 +102,133 @@
                 </ul>
             </div>
             <div class="auto-format text-panel">
-                <p>I'm a small writer and YouTuber from Ontario, Canada. I set up this website to be a convergence point for everything I do, to host content in a way I have full control over, and for some unique pages that didn't fit well anywhere else.</p>
-                <p>I'm trying to help push back against an online ecosystem increasingly dominated by extremism, conspiracy theorism, racism, and misinformation. To that end, I oppose both right-populism (Trump, Farage, Orbán, etc.) and the far-left. I stand for liberal society (liberty, democracy, and rule of law), which totalitarian movements like Nazism and Communism both seek to subvert and destroy. I know my enemies.</p>
-                <p>I'm an Atlanticist and pro-NATO. I believe the Ukraine war is the most important thing happening in the world. In Canada, I favour raising military spending, expanding our oil and gas infrastructure, lowering immigration, and pushing for parliamentary and electoral reform. I feel optimistic about Canada's future.</p>
-                <p>I write about politics from a traditional liberal-conservative perspective. I like Christian democrats. I like strong centrists like Macron and Carney. I'm politically flexible as I believe character is often more important than policy. I could be called a moderate, a Red Tory, or social democrat depending on the circumstances.</p>
-                <p>To understand Western politics, I recommend reading about the ideas of Hobbes, Smith, Burke, and Rawls. I don't like Locke or Kant.</p>
-                <p class="grey-5">I'm a trans woman, so if you're writing about me in a formal context then you're supposed to use feminine pronouns, otherwise the intergalactic police will come to your house and cancel you (wee woo, wee woo).</p>
-            </div>
-        </div>
-        
-        <div class="extras-tab section">
-            <div class="auto-format text-panel label-external">
+                <p class="note">ongoing pages that I gradually add to:</p>
                 <ul>
                     <li>[Public record (collecting statements by public figures)](page/public-record)</li>
+                </ul>
+                <p class="note">pages that thoroughly explore one topic (not posted on other sites):</p>
+                <ul>
+                    <li>[What was the Freedom Convoy?](page/freedom-convoy)</li>
+                    <li>[Sex, Gender, & Transsexuals](page/sex-gender-transsexuals)</li>
+                    <li>[Israel & Palestine](page/israel-palestine)</li>
+                    <li>[Liberal Conservatism](page/liberal-conservatism)</li>
+                </ul>
+                <p class="note">other random things:</p>
+                <ul>
                     <li>[A list of every movie I've ever seen](page/movies)</li>
+                    <li>[Poor Things](page/poor-things)</li>
+                    <li>[Anime reviews](page/anime-reviews)</li>
                 </ul>
             </div>
         </div>
         
-        <div class="article-list section">
+        <div class="articles section">
             <div class="article-index label-external"></div>
         </div>
         
-        <div class="video-list section">
-            <div class="auto-format text-panel">
-                <p class="note">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
+        <div class="donate section">
+            <ul class="links-panel label-external">
+                <li><a target="_blank" href="https://paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span class="link-text">PayPal</span></a></li>
+                <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
+                <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
+                <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
+            </ul>
+            <div class="auto-format text-center">
+                <p>If you'd like to help contribute to what I do here.</p>
             </div>
+        </div>
+        
+        <div class="videos section">
+            <p class="note auto-format text-center">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
             <div class="video-index"></div>
         </div>
     </div>
 </div>
 <script src="assets/layout.js"></script>
 <script>
+    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", `
+        title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18
+        title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
+        title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
+        title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13
+        title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04
+        title:How bad is America? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04
+        title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:oUOsAdnK2zs.jpg |length:39:47
+        title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:TYoe1jxBYPY.jpg |length:12:08
+        title:India |thumb:Pz0Oq1rb14E.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17
+        title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50
+        title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39
+        title:Why do people like Trump? |date:2025-09-13 |src:youtube:tcF0f-Dtgic |thumb:WhyTrump.jpg |length:11:33
+        title:Exploring lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02
+        title:Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
+        title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14
+            `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
+            .map(v => parseObj(v,"date","src"))
+            .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
+            .map(v => {
+                return `<figure><div class="img" loading="lazy" style="background-image:url('assets/video-thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
+                <figcaption>
+                    <div class="video-title">${ v.title }</div>
+                    <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
+                    <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
+                </figcaption></figure>`}
+    ).join(''));
+    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", `
+        title:Allende and Pinochet |url:allende-and-pinochet |date:2026-07-26 |flags:hidden
+        title:How bad is America? |url:how-bad-is-america |date:2026-07-01
+        title:The many problems with Pierre Poilievre |url:pierre-poilievre |date:2026-08-03
+        title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01
+        title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29
+        title:Floor crossings |url:floor-crossings |date:2026-04-17
+        title:Rational ignorance |url:rational-ignorance |date:2026-04-09
+        title:The case for abortion |url:abortion |date:2026-02-18
+        title:A synopsis of American decline |url:a-synopsis-of-american-decline |date:2026-01-28
+        title:Fetishism and politics |url:fetishism-politics |date:2024-11-14
+        title:Nick Shirley and Somali day cares |url:somali-day-cares |date:2026-01-02
+        title:Thoughts on Reddit |url:reddit |date:2025-12-30
+        title:Stay the trenches |url:stay-the-trenches |date:2025-12-17
+        title:Immigration |url:immigration |date:2025-11-06
+        title:Thoughts on prejudice |url:prejudice |date:2025-10-30
+        title:India and Indians |url:india |date:2025-10-24
+        title:Liberalism not leftism |url:liberalism-not-leftism |date:2025-09-19
+        title:Bill Maher and Normalization |url:normalization |date:2025-09-08
+        title:Lies about Ilhan Omar |url:lies-about-ilhan-omar |date:2025-08-25
+        title:Trump and Russia |url:trump-and-russia |date:2025-03-06
+        title:Why get bottom surgery? |url:why-get-bottom-surgery |date:2025-02-09
+        title:Elon Musk and the Nazi Salute |url:elon-musk-nazi-salute |date:2025-01-24
+        title:Lies about Elizabeth Warren and Hillary Clinton |url:lies-about-warren-clinton |date:2024-12-19
+        title:Mark Robinson |url:mark-robinson |date:2024-12-15
+        title:Why do people like Trump? |url:the-trump-appeal |date:2024-12-03
+        title:On our bias for normal white men |url:bias-normal-white-men |date:2024-11-26
+        title:On types of masculinity |url:types-of-masculinity |date:2024-11-08
+        title:Bernie Sanders and the Military Industrial Complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16
+        title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19
+            `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
+            .map(p => parseObj(p,"date"))
+            .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
+            .filter(p => (!p.flags || !p.flags.includes("hidden")))
+            .map( entry => `<div><div class="cell title"><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div><div class="cell date">${ entry.date ?`<span>${ entry.date }</span>` :'' }</div></div>`
+    ).join(''));
+    
     function fsetTab(tabName) {
+        console.log('tabName: ' + tabName)
         document.querySelectorAll('.tabs .tab').forEach(t => t.classList.toggle('selected', t.classList.contains(tabName)));
         document.querySelectorAll('.container .section').forEach(c => c.classList.toggle('selected', c.classList.contains(tabName)));
         localStorage.setItem("ie-index-tab", tabName);
     }
+    
     const tabParam = new URLSearchParams(window.location.search).get("tab");
+    if (tabParam) {
+        history.replaceState(null, '', location.pathname);
+    }
     const tabInput = tabParam || localStorage.getItem("ie-index-tab");
     if (tabInput) {
         fsetTab(tabInput);
+    } else {
+        fsetTab(Array.from(document.querySelector('.tabs .tab').classList).find(c => !['tab','no-select','selected'].includes(c)))
     }
-    else {
-        document.querySelector('.tabs').firstElementChild.click();
-    }
-    document.querySelectorAll('.tabs .tab').forEach(t => t.innerHTML=`<div>${t.innerHTML}</div><div class="dummy">${t.innerHTML}</div>`);
+    document.querySelectorAll('.tabs .tab').forEach(t => {
+        t.innerHTML = `<div>${ t.innerHTML }</div><div class="dummy">${ t.innerHTML }</div>`;
+    })
+    
 </script></body></html>
