@@ -229,7 +229,7 @@
                     .image-gallery.float img { background-color: var(--page-bg); aspect-ratio: unset !important; padding: 4px; }
                 .image-gallery.oar img { aspect-ratio: unset !important; }
                 .image-gallery.contain img { object-fit: contain; }
-            .article-footer { font: 15px/1.4 'Open Sans',sans-serif; display: grid; gap: 2em; max-width: var(--main-width); grid-row: 2; grid-column: 1; color: var(--grey-5,dimgrey); margin-top: 2em; clear: both; }
+            .article-footer { font: 15px/1.4 'Open Sans',sans-serif; display: grid; gap: 2em; max-width: var(--main-width); grid-row: 2; grid-column: 1; color: var(--grey-6,dimgrey); margin-top: 2em; clear: both; }
                 .article-footer p a { text-decoration: underline var(--grey-8); }
                 .footer-links-area { display: flex; justify-content: space-evenly; padding-bottom: 0.5em; }
                     .footer-links-area a { color: var(--grey-6,dimgrey); }

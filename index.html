@@ -11,7 +11,7 @@
         .profile .name { white-space: nowrap; margin: 0; font: 600 36px/1 Lora,Georgia,sans-serif; }
         .profile .img { margin-left: -42px; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 84px; aspect-ratio: 1; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: grayscale(0.3) brightness(1.15); }
     .tabs { justify-content: center; margin-block: 20px; padding: 0 1em; font: 16px/1 'DM Sans',sans-serif; display: flex; gap: 2px 1em; flex-wrap: wrap; border-block: 1px solid light-dark(#c0c0c0, #222324); color: var(--grey-6,dimgrey); }
-        .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 14px 8px; margin-bottom: -1px; }
+        .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 11px 8px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
         .tab.selected { border-bottom-color: var(--grey-3); color: var(--grey-2); font-weight: 700; border-color: var(--grey-3); }
             .dummy { width: 100%; font-weight: 700; visibility: hidden; height: 0; }
@@ -65,7 +65,11 @@
             .profile .img { margin-bottom: 5px; }
             .profile .name { text-align: center; }
             .links-panel { padding: 8px 0 0; }
-            .tabs { padding: 0; gap: 2px 9px; }
+            .tabs { padding: 0; gap: 2px 8px; }
+        }
+        @media (max-width: 450px) {
+            .tabs { padding: 0; gap: 2px 5px; font-size: 15px; }
+            .tab { padding: 9px 4px 7px; }
         }
     </style>
 </head>
