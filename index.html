@@ -10,43 +10,39 @@
     .profile { margin-top: -20px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
         .profile .name { white-space: nowrap; margin: 0; font: 600 36px/1 Lora,Georgia,sans-serif; }
         .profile .img { margin-left: -42px; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 84px; aspect-ratio: 1; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: grayscale(0.3) brightness(1.15); }
-    .tabs { margin-block: 24px; padding: 0 1em; font: 16px/1 'DM Sans',sans-serif; display: flex; gap: 2px 1em; flex-wrap: wrap; border-block: 1px solid light-dark(#c0c0c0, #222324); color: var(--grey-6,dimgrey); }
+    .tabs { justify-content: center; margin-block: 20px; padding: 0 1em; font: 16px/1 'DM Sans',sans-serif; display: flex; gap: 2px 1em; flex-wrap: wrap; border-block: 1px solid light-dark(#c0c0c0, #222324); color: var(--grey-6,dimgrey); }
         .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 14px 8px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
         .tab.selected { border-bottom-color: var(--grey-3); color: var(--grey-2); font-weight: 700; border-color: var(--grey-3); }
             .dummy { width: 100%; font-weight: 700; visibility: hidden; height: 0; }
     
+    .links-panel { margin-block: 10px; flex-wrap: wrap; list-style: none; display: flex; gap: 10px; font: 16px/1 Roboto,sans-serif; justify-content: center; }
+        .links-panel li { aspect-ratio: 1; margin: 0; }
+        .links-panel li:hover { border-color: var(--grey-9); }
+            .links-panel li a { aspect-ratio: 1; display: block; }
+                .links-panel .link-text { display: none; }
+                .links-panel .inline-icon { margin: 0; width: 32px; }
+    
     .container { font: 18px/1.4 'DM Sans',sans-serif }
         .container .section { display: none; margin: 24px 26px; gap: 22px; }
         .container .section.selected { display: grid; }
             .note { color: var(--grey-5,dimgrey); font-size: 16px; line-height: 1.3; }
-            .text-panel { margin-inline: auto; }
+            .text-panel { margin-inline: auto; padding: 0 1em; }
             .text-panel > p + p,
             .text-panel > ul > li + li,
             .text-panel > p + ul { margin-top: 10px; }
             .text-panel > ul + p { margin-top: 20px; }
         
         .about.section {  }
-            .about.section .text-panel { text-indent: 2em; max-width: 1000px; }
-            .links-panel { justify-content: center; padding: 5px 0 0px; flex-wrap: wrap; list-style: none; display: flex; gap: 5px; font: 16px/1 Roboto,sans-serif; }
-                .links-panel li { aspect-ratio: 1; padding: 5px; margin: 0; }
-                .links-panel li:hover { border-color: var(--grey-9); }
-                    .links-panel .link-text { display: none; }
-                    .links-panel .inline-icon { margin: 0; width: 34px; }
-        
-        .articles.section {  }
-            .article-index { line-height: 1.2; margin-inline: auto; max-width: 590px; width: 100%; }
-                .article-index > div { display: flex; justify-content: space-between; gap: 5px; align-items: center; padding: 12px 9px 10px; border-bottom: 1px dashed var(--grey-c); }
-                .article-index > div:first-child { border-top: 1px dashed var(--grey-c); }
-                    .article-index .date { color: var(--grey-6,dimgrey); font: 17px/1 Roboto,sans-serif; }
         
         .pages.section {  }
         
-        .donate.section {  }
-            .donate.section p { font-size: 16px; }
-            .donate.section .links-panel { gap: 20px; }
-            .donate.section .links-panel a .inline-icon { display: block; margin-inline: auto; }
-            .donate.section .links-panel a .link-text { display: block; text-align: center; margin-top: 5px; }
+        .articles.section {  }
+            .article-index { max-width: 480px; margin-inline: auto; }
+                .article-index > div { padding: 8px; border-bottom: 1px dashed var(--grey-c); }
+                .article-index > div:first-child { border-top: 1px dashed var(--grey-c); }
+                .article-index ul { padding: 0 1em; }
+                .article-index .date { color: var(--grey-7,grey); }
         
         .videos.section { }
             .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.22), 1fr)); }
@@ -57,6 +53,12 @@
                         .video-index figcaption .video-title { font-size: calc(1em + 1px); }
                         .video-index figcaption .video-date { font-size: calc(1em - 1px); color: var(--grey-7,grey); }
         
+        .donate.section {  }
+            .donate.section p { font-size: 16px; }
+            .donate.section .links-panel { gap: 20px; }
+            .donate.section .links-panel a .inline-icon { display: block; margin-inline: auto; }
+            .donate.section .links-panel a .link-text { display: block; text-align: center; margin-top: 5px; }
+        
         @media (max-width: 600px) {
             .profile { justify-content: center; }
             .profile .img { margin-left: 0; }
@@ -66,7 +68,6 @@
             .profile .name { text-align: center; }
             .links-panel { padding: 8px 0 0; }
             .tabs { padding: 0; gap: 2px 9px; }
-            .article-index > div { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -81,6 +82,7 @@
         </div>
     </div>
     <div class="tabs">
+        <div class="tab no-select about" onclick="fsetTab('about')">About</div>
         <div class="tab no-select pages" onclick="fsetTab('pages')">Pages</div>
         <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
         <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
@@ -89,18 +91,6 @@
     <div class="container">
         
         <div class="pages section">
-            <div>
-                <p class="note text-center">Find me in other places</p>
-                <ul class="links-panel label-external">
-                    <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
-                    <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
-                    <li><a target="_blank" href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a></li>
-                    <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
-                    <li><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a></li>
-                    <li><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a></li>
-                    <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
-                </ul>
-            </div>
             <div class="auto-format text-panel">
                 <p class="note">ongoing pages that I gradually add to:</p>
                 <ul>
@@ -122,6 +112,28 @@
             </div>
         </div>
         
+        <div class="about section">
+            <div>
+                <p class="note text-center">Find me in other places</p>
+                <ul class="links-panel label-external">
+                    <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
+                    <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
+                    <li><a target="_blank" href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a></li>
+                    <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
+                    <li><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a></li>
+                    <li><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a></li>
+                    <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
+                </ul>
+            </div>
+            <div class="auto-paragraphs text-indent grid gap-10">
+            
+                I write and make videos, mostly about politics. I'm trying to push back against an online ecosystem dominated by disinformation and conspiracy theorism.
+                
+                I'm from Canada. I have a traditional liberal-conservative perspective. I like Christian democrats and strong centrists like Macron or Carney.
+                
+            </div>
+        </div>
+        
         <div class="articles section">
             <div class="article-index label-external"></div>
         </div>
@@ -133,13 +145,16 @@
                 <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
                 <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
             </ul>
-            <div class="auto-format text-center">
-                <p>If you'd like to help contribute to what I do here.</p>
+            <div class="auto-paragraphs text-center grid gap-5">
+                If you'd like to help contribute to what I do here, to invest in an online environment that's more like what I'm putting out.
+                (I'm currently trying to buy better production equipment.)
             </div>
         </div>
         
         <div class="videos section">
-            <p class="note auto-format text-center">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
+            <div class="text-panel auto-format text-center">
+                <p class="note">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
+            </div>
             <div class="video-index"></div>
         </div>
     </div>
@@ -204,14 +219,13 @@
         title:Bernie Sanders and the Military Industrial Complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16
         title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19
             `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
-            .map(p => parseObj(p,"date"))
+            .map(p => parseObj(p,"title","date"))
             .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
             .filter(p => (!p.flags || !p.flags.includes("hidden")))
-            .map( entry => `<div><div class="cell title"><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div><div class="cell date">${ entry.date ?`<span>${ entry.date }</span>` :'' }</div></div>`
+            .map( entry => `<div><ul><li><div class="cell title"><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div><div class="cell date">${ entry.date ?`<span>${ entry.date }</span>` :'' }</div></li></ul></div>`
     ).join(''));
     
     function fsetTab(tabName) {
-        console.log('tabName: ' + tabName)
         document.querySelectorAll('.tabs .tab').forEach(t => t.classList.toggle('selected', t.classList.contains(tabName)));
         document.querySelectorAll('.container .section').forEach(c => c.classList.toggle('selected', c.classList.contains(tabName)));
         localStorage.setItem("ie-index-tab", tabName);

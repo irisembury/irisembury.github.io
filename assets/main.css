@@ -151,7 +151,8 @@
                         .article-gutter .mirror-container a .inline-icon { width: 30px; margin: 0; display: block; }
                         .article-gutter .mirror-container a:hover .inline-icon { filter: brightness(1.15); }
             @media (max-width: 940px) { .article-gutter { display: none; } }
-            .article { font: var(--main-font); grid-row: 1; grid-column: 1; max-width: var(--main-width); }
+            .article { font: var(--main-font); }
+            .main-container > .article { grid-row: 1; grid-column: 1; max-width: var(--main-width); }
                 .article > :first-child { margin-top: 0 !important; }
                 .article > :nth-child(n+2) { margin-top: 12px; }
                 .article .first-paragraph { margin-top: 1em; }

@@ -746,6 +746,7 @@ function init() {
     if (ext_links.length > 0) { document.querySelector('.article-footer')?.insertAdjacentHTML("afterbegin", `<div><div class="citelist-container"><div><span>Links on this page:</span></div><ol class="citelist">${ ext_links.map(x => `<li><a href="${ x }">${ x }</a></li>`).join("") }</ol></div></div>`); }
     window.addEventListener("scroll", navCheck); navCheck();
     Array.from(document.querySelectorAll(".auto-format")).forEach(a => { a.innerHTML = autoFormat(a.innerHTML); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
+    Array.from(document.querySelectorAll(".auto-paragraphs")).forEach(a => { a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(l => `<p>${ autoFormat(l) }</p>`).join(""); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
