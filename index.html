@@ -39,10 +39,8 @@
         
         .articles.section {  }
             .article-index { max-width: 480px; margin-inline: auto; }
-                .article-index > div { padding: 8px; border-bottom: 1px dashed var(--grey-c); }
-                .article-index > div:first-child { border-top: 1px dashed var(--grey-c); }
-                .article-index ul { padding: 0 1em; }
-                .article-index .date { color: var(--grey-7,grey); }
+                .article-index li + li { margin-top: 8px; }
+                .article-index .date { display: block; color: var(--grey-7,grey); }
         
         .videos.section { }
             .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.22), 1fr)); }
@@ -135,7 +133,7 @@
         </div>
         
         <div class="articles section">
-            <div class="article-index label-external"></div>
+            <ul class="article-index label-external"></ul>
         </div>
         
         <div class="donate section">
@@ -222,7 +220,7 @@
             .map(p => parseObj(p,"title","date"))
             .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
             .filter(p => (!p.flags || !p.flags.includes("hidden")))
-            .map( entry => `<div><ul><li><div class="cell title"><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div><div class="cell date">${ entry.date ?`<span>${ entry.date }</span>` :'' }</div></li></ul></div>`
+            .map( entry => `<li><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a><span class="cell date">${ entry.date ?`<span>${ entry.date }</span>` :'' }</span></li>`
     ).join(''));
     
     function fsetTab(tabName) {
