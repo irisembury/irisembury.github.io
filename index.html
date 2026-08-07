@@ -35,11 +35,18 @@
         .about.section {  }
         
         .pages.section {  }
+            .pages.section .grid p { margin-inline: auto; max-width: 675px; }
         
         .articles.section {  }
-            .article-index { max-width: 480px; margin-inline: auto; }
-                .article-index li + li { margin-top: 8px; }
-                .article-index .date { font-size: calc(1em - 1px); font-family: 'Segoe UI',system-ui; display: block; color: var(--grey-7,grey); }
+            .article-index { margin-inline: auto; }
+                .article-index > div > div { padding: 8px; }
+                .article-index > div > div:nth-child(2) { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); }
+            
+            @media (min-width: 700px) {
+                .article-index { display: table; }
+                .article-index > div { display: table-row; }
+                .article-index > div > div { display: table-cell; }
+            }
         
         .videos.section { }
             .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.22), 1fr)); }
@@ -103,7 +110,6 @@
                     <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
                 </ul>
             </div>
-            <style>.auto-paragraphs.grid.gap-10 { margin-inline: auto; max-width: 650px; }</style>
             <div class="auto-paragraphs grid gap-10 text-indent">
                 I'm a writer and YouTuber from Canada trying to push back against an online ecosystem poisoned by disinformation and extremism.
             </div>
@@ -118,12 +124,6 @@
                     <li>[Sex, Gender, & Transsexuals](page/sex-gender-transsexuals)</li>
                     <li>[Israel & Palestine](page/israel-palestine)</li>
                     <li>[Liberal Conservatism](page/liberal-conservatism)</li>
-                </ul>
-                <p class="fine">other random things:</p>
-                <ul>
-                    <li>[list of every movie I've ever seen](page/movies)</li>
-                    <li>[Poor Things (2023 film)](page/poor-things)</li>
-                    <li>[anime reviews](page/anime-reviews)</li>
                 </ul>
             </div>
         </div>
@@ -216,7 +216,7 @@
             .map(p => parseObj(p,"title","date"))
             .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
             .filter(p => (!p.flags || !p.flags.includes("hidden")))
-            .map( entry => `<li><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a><span class="cell date">${ entry.date ?`<span>${ entry.date }</span>` :'' }</span></li>`
+            .map( entry => `<div><div><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div><div><span>${ entry.date ?`<span>${ entry.date }</span>` :'' }</span></div></div>`
     ).join(''));
     
     function fsetTab(tabName) {

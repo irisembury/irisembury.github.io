@@ -186,7 +186,7 @@
                 .article .fine, .article .fine *, .article .fine ::marker { color: var(--grey-5,dimgrey); font-size: 16px; line-height: 1.4; }
                     .article .fine + .fine { margin-top: 0; }
                         .article .fine a { text-decoration: 1px dotted underline var(--grey-9,silver); }
-                        .article .fine p, .article .fine li { margin-top: 4px; }
+                        .article .fine p, .article .fine li { margin-top: 5px; }
                 .rows .row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0px 2px; }
                 .article code { background-color: var(--grey-f,whitesmoke); vertical-align: baseline; font-size: 15px/1 'Consolas',monospace; padding-inline: 2px; letter-spacing: -0.3px; white-space: pre-wrap; }
                 .article code * { font-size: inherit !important; font-family: inherit !important; }
