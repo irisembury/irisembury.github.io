@@ -38,14 +38,14 @@
             .pages.section .grid p { margin-inline: auto; max-width: 675px; }
         
         .articles.section {  }
-            .article-index { margin-inline: auto; }
-                .article-index > div > div { padding: 8px; }
+            .article-index { margin-inline: auto; padding: 0; }
+                .article-index > div + div { margin-top: 8px; }
                 .article-index > div > div:nth-child(2) { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); }
             
-            @media (min-width: 700px) {
+            @media (min-width: 580px) {
                 .article-index { display: table; }
                 .article-index > div { display: table-row; }
-                .article-index > div > div { display: table-cell; }
+                .article-index > div > div { display: table-cell; padding: 8px; }
             }
         
         .videos.section { }
