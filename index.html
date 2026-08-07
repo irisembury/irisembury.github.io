@@ -16,7 +16,7 @@
         .tab.selected { border-bottom-color: var(--grey-3); color: var(--grey-2); font-weight: 700; border-color: var(--grey-3); }
             .dummy { width: 100%; font-weight: 700; visibility: hidden; height: 0; }
     
-    .links-panel { margin-block: 10px; flex-wrap: wrap; list-style: none; display: flex; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; }
+    .links-panel { margin-top: 10px; flex-wrap: wrap; list-style: none; display: flex; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; }
         .links-panel li { aspect-ratio: 1; margin: 0; }
         .links-panel li:hover { border-color: var(--grey-9); }
             .links-panel li a { aspect-ratio: 1; display: block; }
@@ -26,12 +26,11 @@
     .container { font: 18px/1.4 'DM Sans',sans-serif }
         .container .section { display: none; margin: 24px 26px; gap: 22px; }
         .container .section.selected { display: grid; }
-            .note { color: var(--grey-5,dimgrey); font-size: 16px; line-height: 1.3; }
             .text-panel { margin-inline: auto; padding: 0 1em; }
             .text-panel > ul > li + li { margin-top: 8px; }
             .text-panel > p + p,
-            .text-panel > p + ul { margin-top: 10px; }
-            .text-panel > ul + p { margin-top: 20px; }
+            .text-panel > p + ul { margin-top: 12px; }
+            .text-panel > ul + p { margin-top: 16px; }
         
         .about.section {  }
         
@@ -84,7 +83,6 @@
         </div>
     </div>
     <div class="tabs">
-        <div class="tab no-select about" onclick="fsetTab('about')">About</div>
         <div class="tab no-select pages" onclick="fsetTab('pages')">Pages</div>
         <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
         <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
@@ -93,30 +91,8 @@
     <div class="container">
         
         <div class="pages section">
-            <div class="auto-format text-panel">
-                <p class="note">ongoing pages that I gradually add to:</p>
-                <ul>
-                    <li>[Public record (collecting statements by public figures)](page/public-record)</li>
-                </ul>
-                <p class="note">pages that thoroughly explore one topic (not posted on other sites):</p>
-                <ul>
-                    <li>[What was the Freedom Convoy?](page/freedom-convoy)</li>
-                    <li>[Sex, Gender, & Transsexuals](page/sex-gender-transsexuals)</li>
-                    <li>[Israel & Palestine](page/israel-palestine)</li>
-                    <li>[Liberal Conservatism](page/liberal-conservatism)</li>
-                </ul>
-                <p class="note">other random things:</p>
-                <ul>
-                    <li>[list of every movie I've ever seen](page/movies)</li>
-                    <li>[Poor Things (2023 film)](page/poor-things)</li>
-                    <li>[anime reviews](page/anime-reviews)</li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="about section">
             <div>
-                <p class="note text-center">Find me in other places</p>
+                <p class="fine text-center">Find me in other places</p>
                 <ul class="links-panel label-external">
                     <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
                     <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
@@ -127,9 +103,28 @@
                     <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
                 </ul>
             </div>
-            <style>.auto-paragraphs.text-indent.grid.gap-10 { margin-inline: auto; max-width: 935px; }</style>
-            <div class="auto-paragraphs text-indent grid gap-10">
-                I'm a writer and YouTuber from Canada trying to push back against what I see as an online ecosystem that's been poisoned by disinformation and extremism.
+            <style>.auto-paragraphs.grid.gap-10 { margin-inline: auto; max-width: 650px; }</style>
+            <div class="auto-paragraphs grid gap-10 text-justify">
+                I'm a writer and YouTuber from Canada trying to push back against an online ecosystem poisoned by disinformation and extremism.
+            </div>
+            <div class="auto-format text-panel">
+                <p class="fine">ongoing pages that I gradually add to:</p>
+                <ul>
+                    <li>[Public record (collecting statements by public figures)](page/public-record)</li>
+                </ul>
+                <p class="fine">pages that thoroughly explore one topic (not posted on other sites):</p>
+                <ul>
+                    <li>[What was the Freedom Convoy?](page/freedom-convoy)</li>
+                    <li>[Sex, Gender, & Transsexuals](page/sex-gender-transsexuals)</li>
+                    <li>[Israel & Palestine](page/israel-palestine)</li>
+                    <li>[Liberal Conservatism](page/liberal-conservatism)</li>
+                </ul>
+                <p class="fine">other random things:</p>
+                <ul>
+                    <li>[list of every movie I've ever seen](page/movies)</li>
+                    <li>[Poor Things (2023 film)](page/poor-things)</li>
+                    <li>[anime reviews](page/anime-reviews)</li>
+                </ul>
             </div>
         </div>
         
@@ -152,7 +147,7 @@
         
         <div class="videos section">
             <div class="text-panel auto-format text-center">
-                <p class="note">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
+                <p class="fine">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
             </div>
             <div class="video-index"></div>
         </div>
