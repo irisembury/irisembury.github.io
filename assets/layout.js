@@ -47,11 +47,10 @@ function parseObj(entry, ...requiredFields) {
     entry = entry.trim().replaceAll('---','\u2014').replaceAll('--','\u2013').replaceAll("\"", "&quot;");
     const obj = { };
     entry.split("|").forEach(cell => {
-        cell = cell.trim();
         const colon = cell.indexOf(":");
         if (colon != -1) {
-            const key = cell.substring(0, colon);
-            const value = cell.substring(colon + 1);
+            const key = cell.substring(0, colon).trim();
+            const value = cell.substring(colon + 1).trim();
             obj[key] = value;
         } else {
             console.error(`parseObj: "${ entry }"`);
@@ -543,7 +542,7 @@ function loadBody() {
                 <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
             </div>
         </nav>
-        <div class="panel-aligner">
+        <div class="panel-space">
             <div class="right-panel">
                 <h3>Display:</h3>
                 <div class="switches-area">
@@ -570,7 +569,7 @@ function loadBody() {
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
                 <div class="article-gutter"></div>
-                <footer class="article-footer"><p class="text-indent">This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com</p></footer>
+                <footer class="article-footer"><p>This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com</p></footer>
             </div>
             <div class="right-spacer"></div>
         </div>
