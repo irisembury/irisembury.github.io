@@ -7,14 +7,16 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
     html { scrollbar-gutter: stable; }
+    
     .profile { margin-top: -20px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
-        .profile .name { white-space: nowrap; margin: 0; font: 600 36px/1 Lora,Georgia,sans-serif; }
-        .profile .img { margin-left: -42px; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 84px; aspect-ratio: 1; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: grayscale(0.3) brightness(1.15); }
-    .tabs { justify-content: center; margin-block: 20px; padding: 0 1em; font: 16px/1 'DM Sans',sans-serif; display: flex; gap: 2px 1em; flex-wrap: wrap; border-block: 1px solid light-dark(#c0c0c0, #222324); color: var(--grey-6,dimgrey); }
-        .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 11px 8px; margin-bottom: -1px; }
+        .profile .img { margin-left: 0; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 120px; aspect-ratio: 21/20; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: grayscale(0.5); }
+        .profile .name { font: 600 40px/1 Lora,'Georgia Pro',serif; white-space: nowrap; margin: 0; }
+    
+    .tabs { margin-block: 24px; justify-content: center; padding: 0 1em; font: 16px/1 'DM Sans',sans-serif; display: flex; gap: 2px 20px; flex-wrap: wrap; border-block: 1px solid light-dark(#c9c9c9, #222324); color: var(--grey-6,dimgrey); }
+        .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 9px 10px 7px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
-        .tab.selected { border-bottom-color: var(--grey-3); color: var(--grey-2); font-weight: 700; border-color: var(--grey-3); }
-            .dummy { width: 100%; font-weight: 700; visibility: hidden; height: 0; }
+        .tab.selected { border-bottom-color: var(--grey-4,dimgrey); color: var(--grey-3,black); font-weight: 700; }
+            .dummy { font-weight: 700; visibility: hidden; height: 0; }
     
     .links-panel { margin-top: 10px; flex-wrap: wrap; list-style: none; display: flex; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; }
         .links-panel li { aspect-ratio: 1; margin: 0; }
@@ -29,13 +31,28 @@
             .text-panel { margin-inline: auto; padding: 0 1em; }
             .text-panel > ul > li + li { margin-top: 8px; }
             .text-panel > p + p,
-            .text-panel > p + ul { margin-top: 12px; }
+            .text-panel > p + ul { margin-top: 10px; }
             .text-panel > ul + p { margin-top: 16px; }
         
         .about.section {  }
         
-        .pages.section {  }
-            .pages.section .grid p { margin-inline: auto; max-width: 675px; }
+        .landing.section {  }
+            .landing.section .text-panel { margin-inline: auto; text-indent: 2em; }
+            .recent-panels { padding: 10px; display: grid; grid-template-columns: auto auto; }
+            .recent-panels > div > div { padding: 8px 15px; }
+                .line-title { line-height: 1; display: flex; align-items: center; }
+                    .line-title b { font-size: 20px; margin-right: 0.5em; }
+                    .line-title a { font-size: 16px; color: var(--grey-6,dimgray); }
+                .recent-articles { max-width: 400px; margin-inline: auto; }
+                    .recent-articles > div + div { margin-top: 13px; }
+                    .recent-articles > div > div:nth-child(2) { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); margin-left: 5px; }
+                .recent-videos { }
+                    .recent-videos figure { margin-inline: auto; padding-block: 2px; max-width: 180px; display: flex; flex-direction: column; align-items: stretch; }
+                    .recent-videos figure .img { border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
+                    .recent-videos figure .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
+                    .recent-videos figure figcaption { text-align: left; font: 16px/1 'DM Sans',sans-serif; display: grid; gap: 5px; padding: 6px; }
+                    .recent-videos figure figcaption .video-title { font-size: 18px; }
+                    .recent-videos figure figcaption .video-date { font-family: Roboto,sans-serif; color: var(--grey-7,grey); }
         
         .articles.section {  }
             .article-index { margin-inline: auto; padding: 0; }
@@ -49,6 +66,7 @@
             }
         
         .videos.section { }
+            .videos.section p { font-size: 16px; }
             .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.22), 1fr)); }
                 .video-index figure { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
                     .video-index .img { border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
@@ -59,103 +77,121 @@
         
         .donate.section {  }
             .donate.section p { font-size: 16px; }
-            .donate.section .links-panel { gap: 20px; }
+            .donate.section .links-panel { gap: 24px; }
             .donate.section .links-panel a .inline-icon { display: block; margin-inline: auto; }
             .donate.section .links-panel a .link-text { display: block; text-align: center; margin-top: 5px; }
         
+        
+        @media (max-width: 700px) {
+            .recent-panels { gap: 14px; grid-template-columns: auto; }
+            .recent-articles { text-align: center; }
+            .line-title { justify-content: center; margin-left: -2em; }
+        }
         @media (max-width: 600px) {
             .profile { justify-content: center; }
             .profile .img { margin-left: 0; }
-            .container { padding-inline: 0 !important; }
             .profile { flex-direction: column; gap: 7px; }
             .profile .img { margin-bottom: 5px; }
             .profile .name { text-align: center; }
+            .container { padding-inline: 0 !important; }
             .links-panel { padding: 8px 0 0; }
             .tabs { padding: 0; gap: 2px 8px; }
+            .landing.section .text-panel { text-indent: 0; }
         }
         @media (max-width: 480px) {
-            .tabs { justify-content: space-between; padding: 0; gap: 2px 5px; font-size: 15px; }
+            .tabs { padding: 0; gap: 2px 5px; font-size: 15px; }
             .tab { padding: 8px 8px 6px; }
         }
     </style>
 </head>
 <body>
-<div>
-    <div class="profile">
-        <div>
+    <div>
+        <div class="profile">
             <div class="img"></div>
+            <div class="name">Iris Embury</div>
         </div>
-        <div>
-            <h1 class="name">Iris Embury</h1>
+        <div class="tabs">
+            <div class="tab no-select landing" onclick="fsetTab('landing')">Recent</div>
+            <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
+            <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
+            <div class="tab no-select other" onclick="fsetTab('other')">Other</div>
+            <div class="tab no-select donate" onclick="fsetTab('donate')">Donate</div>
         </div>
-    </div>
-    <div class="tabs">
-        <div class="tab no-select pages" onclick="fsetTab('pages')">Pages</div>
-        <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
-        <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
-        <div class="tab no-select donate" onclick="fsetTab('donate')">Donate</div>
-    </div>
-    <div class="container">
-        
-        <div class="pages section">
-            <div>
-                <p class="fine text-center">Find me in other places</p>
+        <div class="container">
+            <div class="landing section">
+                <div>
+                    <p class="fine text-center">Find me in other places</p>
+                    <ul class="links-panel label-external">
+                        <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
+                        <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
+                        <li><a target="_blank" href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a></li>
+                        <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
+                        <li><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a></li>
+                        <li><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a></li>
+                        <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
+                    </ul>
+                </div>
+                <div class="auto-paragraphs text-panel">
+                    I'm a writer and YouTuber from Canada trying to push back against an online ecosystem poisoned by disinformation and extremism.
+                </div>
+                <div class="recent-panels">
+                    <div>
+                        <div class="line-title"><b>Recent text</b> <a class="pseudo-link" onclick="fsetTab('articles')">see all</a></div>
+                        <div class="recent-articles"></div>
+                    </div>
+                    <div>
+                        <div class="line-title"><b>Recent videos</b> <a class="pseudo-link" onclick="fsetTab('videos')">see all</a></div>
+                        <div class="recent-videos"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="articles section">
+                <ul class="article-index label-external"></ul>
+            </div>
+            
+            <div class="other section">
+                <div class="auto-format text-panel">
+                    <p class="fine">ongoing pages that I gradually add to:</p>
+                    <ul>
+                        <li>[Public record (collecting statements by public figures)](page/public-record)</li>
+                    </ul>
+                    <p class="fine">pages that thoroughly explore one topic (not posted on other sites):</p>
+                    <ul>
+                        <li>[What was the Freedom Convoy?](page/freedom-convoy)</li>
+                        <li>[Sex, Gender, & Transsexuals](page/sex-gender-transsexuals)</li>
+                        <li>[Israel & Palestine](page/israel-palestine)</li>
+                        <li>[Liberal Conservatism](page/liberal-conservatism)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="donate section">
                 <ul class="links-panel label-external">
-                    <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
-                    <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
-                    <li><a target="_blank" href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a></li>
+                    <li><a target="_blank" href="https://paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span class="link-text">PayPal</span></a></li>
                     <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
-                    <li><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a></li>
-                    <li><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a></li>
-                    <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
+                    <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
+                    <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
                 </ul>
+                <div class="auto-paragraphs text-center grid gap-5">
+                    If you'd like to help contribute to what I do here, to invest in an online environment that's more like what I'm putting out.
+                    (I'm currently trying to afford better production equipment.)
+                </div>
             </div>
-            <div class="auto-paragraphs grid gap-10 text-indent">
-                I'm a writer and YouTuber from Canada trying to push back against an online ecosystem poisoned by disinformation and extremism.
+            
+            <div class="videos section">
+                <div class="text-panel auto-format text-center">
+                    <p>This is a select library, not every video. Presented reverse-chronologically. For a fuller list, see my accounts on [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos) or [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=video).</p>
+                    <p class="fine">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
+                </div>
+                <div class="video-index"></div>
             </div>
-            <div class="auto-format text-panel">
-                <p class="fine">ongoing pages that I gradually add to:</p>
-                <ul>
-                    <li>[Public record (collecting statements by public figures)](page/public-record)</li>
-                </ul>
-                <p class="fine">pages that thoroughly explore one topic (not posted on other sites):</p>
-                <ul>
-                    <li>[What was the Freedom Convoy?](page/freedom-convoy)</li>
-                    <li>[Sex, Gender, & Transsexuals](page/sex-gender-transsexuals)</li>
-                    <li>[Israel & Palestine](page/israel-palestine)</li>
-                    <li>[Liberal Conservatism](page/liberal-conservatism)</li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="articles section">
-            <ul class="article-index label-external"></ul>
-        </div>
-        
-        <div class="donate section">
-            <ul class="links-panel label-external">
-                <li><a target="_blank" href="https://paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span class="link-text">PayPal</span></a></li>
-                <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
-                <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
-                <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
-            </ul>
-            <div class="auto-paragraphs text-center grid gap-5">
-                If you'd like to help contribute to what I do here, to invest in an online environment that's more like what I'm putting out.
-                (I'm currently trying to afford better production equipment.)
-            </div>
-        </div>
-        
-        <div class="videos section">
-            <div class="text-panel auto-format text-center">
-                <p class="fine">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
-            </div>
-            <div class="video-index"></div>
         </div>
     </div>
-</div>
 <script src="assets/layout.js"></script>
 <script>
-    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", `
+    
+    const VIDEOS = `
         title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18
         title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
         title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
@@ -171,19 +207,11 @@
         title:Exploring lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02
         title:Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
         title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14
-            `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
-            .map(v => parseObj(v,"date","src"))
-            .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
-            .map(v => {
-                return `<figure><div class="img" loading="lazy" style="background-image:url('assets/video-thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
-                <figcaption>
-                    <div class="video-title">${ v.title }</div>
-                    <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
-                    <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
-                </figcaption></figure>`}
-    ).join(''));
-    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", `
-        title:Allende and Pinochet |url:allende-and-pinochet |date:2026-07-26 |flags:hidden
+        `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
+        .map(v => parseObj(v,"date","src"))
+        .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0));
+    
+    const ARTICLES = `
         title:How bad is America? |url:how-bad-is-america |date:2026-07-01
         title:The many problems with Pierre Poilievre |url:pierre-poilievre |date:2026-08-03
         title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01
@@ -212,24 +240,45 @@
         title:On types of masculinity |url:types-of-masculinity |date:2024-11-08
         title:Bernie Sanders and the Military Industrial Complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16
         title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19
-            `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
-            .map(p => parseObj(p,"title","date"))
-            .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0))
-            .filter(p => (!p.flags || !p.flags.includes("hidden")))
-            .map( entry => `<div><div><a title="${ entry.title }" href="page/${ entry.url }">${ autoFormat(entry.title) }</a></div><div><span>${ entry.date ?`<span>${ entry.date }</span>` :'' }</span></div></div>`
+        `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
+        .map(p => parseObj(p,"title","date"))
+        .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0));
+    
+    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", VIDEOS.map(
+        v => `<figure><div class="img" loading="lazy" style="background-image:url('assets/video-thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
+        <figcaption>
+            <div class="video-title">${ v.title }</div>
+            <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
+            <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
+        </figcaption></figure>`).join(''));
+    
+    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", ARTICLES.map(
+        p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div>${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
     ).join(''));
+    
+    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", ARTICLES.slice(0, 6).map(
+        p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div>${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
+    ).join(''));
+    
+    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", VIDEOS.slice(0, 2).map(
+        v => `<figure><div class="img" loading="lazy" style="background-image:url('assets/video-thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
+        <figcaption>
+            <div class="video-title">${ v.title }</div>
+            <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
+            <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
+        </figcaption></figure>`).join(''));
     
     function fsetTab(tabName) {
         document.querySelectorAll('.tabs .tab').forEach(t => t.classList.toggle('selected', t.classList.contains(tabName)));
         document.querySelectorAll('.container .section').forEach(c => c.classList.toggle('selected', c.classList.contains(tabName)));
-        localStorage.setItem("ie-index-tab", tabName);
+        localStorage.setItem("index-tab", tabName);
     }
     
     const tabParam = new URLSearchParams(window.location.search).get("tab");
     if (tabParam) {
         history.replaceState(null, '', location.pathname);
     }
-    const tabInput = tabParam || localStorage.getItem("ie-index-tab");
+    const tabInput = tabParam || localStorage.getItem("index-tab");
     if (tabInput) {
         fsetTab(tabInput);
     } else {
