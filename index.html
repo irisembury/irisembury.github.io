@@ -12,7 +12,7 @@
         .profile .img { margin-left: 0; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 108px; aspect-ratio: 22/20; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: brightness(1.1) contrast(1.1) grayscale(0.4); }
         .profile .name { font: 600 40px/1 Lora,'Georgia Pro',serif; white-space: nowrap; margin: 0; }
     
-    .tabs { margin-block: 24px; justify-content: center; padding: 0 1em; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 20px; flex-wrap: wrap; border-block: 1px solid light-dark(#c9c9c9, #222324); color: var(--grey-6,dimgrey); }
+    .tabs { margin-block: 24px; justify-content: center; padding: 0 1em; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 15px; flex-wrap: wrap; border-block: 1px solid light-dark(#c9c9c9, #222324); color: var(--grey-6,dimgrey); }
         .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 9px 10px 7px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
         .tab.selected { border-bottom-color: var(--grey-4,dimgrey); color: var(--grey-3,black); font-weight: 700; }
@@ -56,6 +56,7 @@
         
         .articles.section {  }
             .article-index { margin-inline: auto; padding: 0; }
+                .article-index .pin-icon { opacity: 0.75; }
                 .article-index > div:hover { background-color: var(--grey-f,whitesmoke); }
                 .article-index > div + div { margin-top: 8px; }
                 .article-index > div > div.date { color: var(--grey-6,dimgrey); font: 400 16px/1 Roboto,sans-serif; letter-spacing: 0.5px; }
@@ -70,7 +71,7 @@
         
         .videos.section { }
             .videos.section p { font-size: 16px; }
-            .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.22), 1fr)); }
+            .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.19), 1fr)); }
                 .video-index figure { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
                     .video-index .img { border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
                         .video-index .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
@@ -152,7 +153,7 @@
             
             <div class="articles section">
                 <ul class="article-index label-external">
-                    <div><div class="title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="inline-icon pin"></span></a></div><div class="date"></div></div>
+                    <div><div class="title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="inline-icon pin-icon"></span></a></div><div class="date"></div></div>
                 </ul>
             </div>
             
@@ -187,7 +188,7 @@
         title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
         title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13
         title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04
-        title:How bad is America? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04
+        title:How bad is America, really? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04
         title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:oUOsAdnK2zs.jpg |length:39:47
         title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:TYoe1jxBYPY.jpg |length:12:08
         title:India |thumb:Pz0Oq1rb14E.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17
