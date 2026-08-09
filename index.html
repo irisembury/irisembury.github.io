@@ -45,7 +45,7 @@
                     .line-title a { font-size: 16px; color: var(--grey-6,dimgray); }
                 .recent-articles { max-width: 400px; margin-inline: auto; line-height: 1.5; }
                     .recent-articles > div + div { margin-top: 10px; }
-                    .recent-articles > div > div.date { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); margin-left: 3px; }
+                    .recent-articles > div > div.date { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); margin-left: 1em; }
                 .recent-videos { }
                     .recent-videos figure { margin-inline: auto; padding-block: 2px; max-width: 180px; display: flex; flex-direction: column; align-items: stretch; }
                     .recent-videos figure .img { border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
@@ -152,7 +152,7 @@
             
             <div class="articles section">
                 <ul class="article-index label-external">
-                    <div><div class="title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)</a></div><div class="date"></div></div>
+                    <div><div class="title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="inline-icon pin"></span></a></div><div class="date"></div></div>
                 </ul>
             </div>
             
@@ -202,6 +202,7 @@
         .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0));
     
     const TEXTPAGES = `
+        The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
         The many problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
         How bad is America? | how-bad-is-america | 2026-07-01
         What was the Freedom Convoy? | freedom-convoy | 2026-06-15

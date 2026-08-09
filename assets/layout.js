@@ -248,7 +248,7 @@ function meta(pageInfo) {
         articleTop.push(`<div class="article-byline">${ pageInfo.date }</div>`);
     }
     if (pageInfo.mirrors) {
-        document.querySelector(".article-gutter")?.insertAdjacentHTML("beforeend",`<div class="mirror-container label-external">${ pageInfo.mirrors.split(",").map(m => parseSource(m)).join(" ") }</div>`);
+        articleTop.push(`<div class="mirror-container label-external">This was posted in other places: <div>${ pageInfo.mirrors.split(",").map(m => parseSource(m)).join(" ") }</div></div>`);
     }
     if (pageInfo.flags) {
         if (pageInfo.flags.includes("wide")) {
@@ -568,7 +568,6 @@ function loadBody() {
             <nav class="toc"></nav>
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
-                <div class="article-gutter"></div>
                 <footer class="article-footer"><p>This is a simple personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com</p></footer>
             </div>
             <div class="right-spacer"></div>
