@@ -569,7 +569,7 @@ function loadBody() {
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
                 <div class="article-gutter"></div>
-                <footer class="article-footer"><p>This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com</p></footer>
+                <footer class="article-footer"><p>This is a simple personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com</p></footer>
             </div>
             <div class="right-spacer"></div>
         </div>
