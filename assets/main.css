@@ -21,7 +21,7 @@
     --grey-b: light-dark(#b0b0b0, hsl(230, 4%, 33%));
     --grey-c: light-dark(#c0c0c0, hsl(230, 4%, 27%));
     --grey-d: light-dark(#d1d1d1, hsl(230, 4%, 21%));
-    --grey-e: light-dark(#e0e0e0, hsl(230, 4%, 15%));
+    --grey-e: light-dark(#e1e1e1, hsl(230, 4%, 15%));
     --grey-f: light-dark(#f2f2f2, hsl(230, 4%, 10%));
     --page-bg: light-dark(#fafafa, hsl(230, 5%, 8%));
     --white: light-dark(hsl(0, 0%, 100%), hsl(230, 7%, 7%));

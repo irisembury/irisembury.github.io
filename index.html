@@ -56,13 +56,15 @@
         
         .articles.section {  }
             .article-index { margin-inline: auto; padding: 0; }
+                .article-index > div:hover { background-color: var(--grey-f,whitesmoke); }
                 .article-index > div + div { margin-top: 8px; }
-                .article-index > div > div.date { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); }
+                .article-index > div > div.date { color: var(--grey-6,dimgrey); font: 400 16px/1 Roboto,sans-serif; letter-spacing: 0.5px; }
             
             /* page width is > 600px */
             @media (min-width: 600px) {
                 .article-index { display: table; }
                 .article-index > div { display: table-row; }
+                .article-index > div > div.title { width: 100%; }
                 .article-index > div > div { display: table-cell; padding: 8px 10px; }
             }
         
