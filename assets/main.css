@@ -1,48 +1,9 @@
 
-@font-face{font-family:"DM Sans";src:url(fonts/dm-sans-regular.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;}
-@font-face{font-family:"DM Sans";src:url(fonts/dm-sans-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;}
-@font-face{font-family:"Faculty Glyphic";src:url(fonts/faculty-glyphic.woff2) format("woff2");font-style:normal;font-weight:400 600 700;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}
-@font-face{font-family:"Faculty Glyphic";src:url(fonts/faculty-glyphic-ext.woff2) format("woff2");font-style:normal;font-weight:400 600 700;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}
-@font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-regular.ttf) format("truetype");font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-italic.ttf) format("truetype");font-weight:400;font-style:italic;font-display:swap;}
-@font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-bold.ttf) format("truetype");font-weight:700;font-style:normal;font-display:swap;}
-@font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-bold-italic.ttf) format("truetype");font-weight:700;font-style:italic;font-display:swap;}
-@font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-semibold.ttf) format("truetype");font-weight:600;font-style:normal;font-display:swap;}
-@font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-semibold-italic.ttf) format("truetype");font-weight:600;font-style:italic;font-display:swap;}
-@font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-black.ttf) format("truetype");font-weight:900;font-style:normal;font-display:swap;}
-@font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-black-italic.ttf) format("truetype");font-weight:900;font-style:italic;font-display:swap;}
-@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-regular.ttf) format("truetype");font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-italic.ttf) format("truetype");font-weight:400;font-style:italic;font-display:swap;}
-@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-bold.ttf) format("truetype");font-weight:700;font-style:normal;font-display:swap;}
-@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-bold-italic.ttf) format("truetype");font-weight:700;font-style:italic;font-display:swap;}
-@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-semibold.ttf) format("truetype");font-weight:600;font-style:normal;font-display:swap;}
-@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-semibold-italic.ttf) format("truetype");font-weight:600;font-style:italic;font-display:swap;}
-@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-black.ttf) format("truetype");font-weight:900;font-style:normal;font-display:swap;}
-@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-black-italic.ttf) format("truetype");font-weight:900;font-style:italic;font-display:swap;}
-@font-face{font-family:"Inter";src:url(fonts/inter-regular.woff2) format("woff2");font-weight:400 600 700;font-style:normal;font-display:swap;}
-@font-face{font-family:"Inter";src:url(fonts/inter-italic.woff2) format("woff2");font-weight:400 600 700;font-style:italic;font-display:swap;}
-@font-face{font-family:"Lato";src:url(fonts/lato-regular.woff2) format("woff2");font-weight:400;font-style:regular;font-display:swap;}
-@font-face{font-family:"Lato";src:url(fonts/lato-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap;}
-@font-face{font-family:"Lato";src:url(fonts/lato-bold.woff2) format("woff2");font-weight:700;font-style:regular;font-display:swap;}
-@font-face{font-family:"Lato";src:url(fonts/lato-bold-italic.woff2) format("woff2");font-weight:700;font-style:italic;font-display:swap;}
-@font-face{font-family:"Lora";src:url(fonts/lora-regular.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;}
-@font-face{font-family:"Lora";src:url(fonts/lora-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;}
-@font-face{font-family:"Raleway";src:url("fonts/raleway-regular.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
-@font-face{font-family:"Raleway";src:url("fonts/raleway-regular-ext.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
-@font-face{font-family:"Raleway";src:url("fonts/raleway-italic.woff2") format("woff2");font-style:italic;font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
-@font-face{font-family:"Raleway";src:url("fonts/raleway-italic-ext.woff2") format("woff2");font-style:italic;font-weight:100 900;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
-@font-face{font-family:"Roboto";src:url(fonts/roboto-regular.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;}
-@font-face{font-family:"Roboto";src:url(fonts/roboto-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;}
-@font-face{font-family:"Rubik";src:url(fonts/rubik-regular.woff2) format("woff2");font-weight:400;font-style:regular;font-display:swap;}
-@font-face{font-family:"Rubik";src:url(fonts/rubik-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap;}
-@font-face{font-family:"Rubik";src:url(fonts/rubik-semibold.woff2) format("woff2");font-weight:600 700;font-style:regular;font-display:swap;}
-@font-face{font-family:"Rubik";src:url(fonts/rubik-semibold-italic.woff2) format("woff2");font-weight:600 700;font-style:italic;font-display:swap;}
-@font-face{font-family:"Open Sans";src:url(fonts/open-sans-regular.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;}
-@font-face{font-family:"Open Sans";src:url(fonts/open-sans-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;}
+@font-face{font-family:"DM Sans";src:url(fonts/dm-sans-regular.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;} @font-face{font-family:"DM Sans";src:url(fonts/dm-sans-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;} @font-face{font-family:"Roboto";src:url(fonts/roboto-regular.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;} @font-face{font-family:"Roboto";src:url(fonts/roboto-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;} @font-face{font-family:"Rubik";src:url(fonts/rubik-regular.woff2) format("woff2");font-weight:400;font-style:regular;font-display:swap;} @font-face{font-family:"Rubik";src:url(fonts/rubik-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap;} @font-face{font-family:"Rubik";src:url(fonts/rubik-semibold.woff2) format("woff2");font-weight:600 700;font-style:regular;font-display:swap;} @font-face{font-family:"Rubik";src:url(fonts/rubik-semibold-italic.woff2) format("woff2");font-weight:600 700;font-style:italic;font-display:swap;} @font-face{font-family:"Open Sans";src:url(fonts/open-sans-regular.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;} @font-face{font-family:"Open Sans";src:url(fonts/open-sans-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;} @font-face{font-family:"Lora";src:url(fonts/lora-regular.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap;} @font-face{font-family:"Lora";src:url(fonts/lora-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap;}
 
 :root {
     color-scheme: light dark;
-    --main-width: 799px;
+    --main-width: 780px;
     --main-font: 400 18px/1.5 'DM Sans',Arial,sans-serif;
     --header-height: 84px;
     --nav-height: 47px;
@@ -92,7 +53,7 @@
     
     html.justify-text .article { text-align: justify; }
     html.indent-text .article > p { text-indent: 2em; }
-    html.wide { --main-width: 1000px; }
+    html.wide { --main-width: 920px; }
     html.unset-width .article, html.unset-width .article-footer { max-width: unset; } html.unset-width .right-spacer { display: none; }
     html.reduce-margins .article > p + p, html.reduce-margins .article > .image-gallery.float + p { margin-top: 0; } html.reduce-margins .article .auto-list li.text-block { margin-top: 0.2353em; } html.reduce-margins .article .auto-list div.text-block { margin-top: 0; }
 
@@ -142,7 +103,7 @@
                 .toc-row.active-heading a { color: light-dark(#333, #939393); font-weight: 600; }
                     .toc-row a { color: inherit; }
                     .toc-row a:hover { color: light-dark(#666, #999); color: var(--grey-3,black); }
-        .main-container { flex: 1 1 auto; display: grid; grid-template-columns: auto auto; background-color: var(--page-bg); padding: 60px 50px 60px; justify-content: center; }
+        .main-container { display: grid; grid-template-columns: auto auto; background-color: var(--page-bg); padding: 60px 50px 60px; justify-content: center; }
             .article-gutter { grid-row: 1; grid-column: 2; }
                 .article-gutter .mirror-container { margin-left: 18px; display: flex; flex-direction: column; gap: 10px; padding: 8px; background-color: var(--grey-f); padding-bottom: 50px; }
                     .article-gutter .mirror-container a { aspect-ratio: 1; padding: 3px; background-color: var(--page-bg); border-radius: 5px; border: 1px solid transparent; }
@@ -154,16 +115,18 @@
             .article { font: var(--main-font); }
             .main-container > .article { grid-row: 1; grid-column: 1; max-width: var(--main-width); }
                 .article > :first-child { margin-top: 0 !important; }
-                .article > :nth-child(n+2) { margin-top: 12px; }
-                .article .first-paragraph { margin-top: 1em; }
-                    .article .article-top h1.auto-heading { margin: 0; font: 700 40px/1.15 Lora,'Georgia Pro',sans-serif; }
-                    .article .article-top h2.auto-heading { margin: 10px 0 14px; font: 400 23px/1.3 Lora,'Georgia Pro',sans-serif; color: var(--grey-6,dimgrey); }
-                    .article .article-top .article-byline { margin: 10px 1px; font: 16px/1.5 'Segoe UI',sans-serif; color: var(--grey-7,grey); }
+                .article > * + * { margin-top: 12px; }
+                .article .first-paragraph { margin-top: 1em;  }
+                .article .article-top { display: grid; gap: 10px; }
+                .article .article-top > * { margin: 0; }
+                    .article .article-top h1 { font: 700 48px/1.1 'DM Sans',Roboto,sans-serif; }
+                    .article .article-top h2 { font: 400 28px/1.3 'Georgia Pro',Roboto,sans-serif; color: var(--grey-5,dimgrey); }
+                    .article .article-top .article-byline { font: 17px/1.3 Roboto,system-ui; color: var(--grey-7,grey); }
                 .article-top + .image-gallery.float { margin-top: 0; }
-                .article h1,.article h2,.article h3,.article h4 { clear: both; text-align: left; font-weight: 700; color: var(--grey-2,black); }
-                .article h1.auto-heading { color: var(--grey-1); font-size: calc(1em + 12px); margin-top: 1em; }
-                .article h2.auto-heading { color: var(--grey-1); font-size: calc(1em + 6px); margin-top: 1em; }
-                .article h3.auto-heading { color: var(--grey-1); font-size: calc(1em + 2px); margin-top: 1em; }
+                .article h1, .article h2, .article h3, .article h4 { clear: both; text-align: left; font-weight: 700; color: var(--grey-2,black); }
+                .article h1 { color: var(--grey-1); font-size: calc(1em + 12px); margin-top: 1em; }
+                .article h2 { color: var(--grey-1); font-size: calc(1em + 6px); margin-top: 1em; }
+                .article h3 { color: var(--grey-1); font-size: calc(1em + 2px); margin-top: 1em; }
                 .article h4 { font-size: 1em; }
                 .article .auto-heading + .autoheading { margin-top: 0.5em; }
                 .article h4 + p { margin-top: 0.5em; }
@@ -245,7 +208,7 @@
         .right-spacer { flex: 1 1 auto;
             max-width: clamp(
                 0px,
-                calc(0.334 * (100vw - 100px - var(--main-width) - var(--toc-width))),
+                calc(0.3 * (100vw - 100px - var(--main-width) - var(--toc-width))),
                 var(--toc-width)
             );
         }
@@ -280,11 +243,11 @@
 }
 @media (max-width: 700px) {
     .article-footer p { text-indent: 0; }
-    .index-button { width: 64px; min-width: unset; max-width: 64px; }
-    .index-button span { display: none; }
 }
 @media (max-width: 650px) {
     .toc.attach { font-size: 18px; }
+    .index-button span { display: none; }
+    .index-button { width: 35%; min-width: 42px; max-width: unset; }
 }
 @media (max-width: 625px) {
     .image-gallery { grid-template-columns: auto auto; }
@@ -296,4 +259,36 @@
 @media (max-width: 500px) {
     .image-gallery { grid-template-columns: auto; gap: 12px; }
 }
+
+
+
+/* @font-face{font-family:"Faculty Glyphic";src:url(fonts/faculty-glyphic.woff2) format("woff2");font-style:normal;font-weight:400 600 700;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;} */
+/* @font-face{font-family:"Faculty Glyphic";src:url(fonts/faculty-glyphic-ext.woff2) format("woff2");font-style:normal;font-weight:400 600 700;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;} */
+/* @font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-regular.ttf) format("truetype");font-weight:400;font-style:normal;font-display:swap;} */
+/* @font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-italic.ttf) format("truetype");font-weight:400;font-style:italic;font-display:swap;} */
+/* @font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-bold.ttf) format("truetype");font-weight:700;font-style:normal;font-display:swap;} */
+/* @font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-bold-italic.ttf) format("truetype");font-weight:700;font-style:italic;font-display:swap;} */
+/* @font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-semibold.ttf) format("truetype");font-weight:600;font-style:normal;font-display:swap;} */
+/* @font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-semibold-italic.ttf) format("truetype");font-weight:600;font-style:italic;font-display:swap;} */
+/* @font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-black.ttf) format("truetype");font-weight:900;font-style:normal;font-display:swap;} */
+/* @font-face{font-family:"Georgia Pro Digits";unicode-range:U+0030-0039;font-display:swap;src:url(fonts/georgia-pro-black-italic.ttf) format("truetype");font-weight:900;font-style:italic;font-display:swap;} */
+@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-regular.ttf) format("truetype");font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-italic.ttf) format("truetype");font-weight:400;font-style:italic;font-display:swap;}
+@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-bold.ttf) format("truetype");font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-bold-italic.ttf) format("truetype");font-weight:700;font-style:italic;font-display:swap;}
+@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-semibold.ttf) format("truetype");font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-semibold-italic.ttf) format("truetype");font-weight:600;font-style:italic;font-display:swap;}
+@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-black.ttf) format("truetype");font-weight:900;font-style:normal;font-display:swap;}
+@font-face{font-family:"Georgia Pro";src:url(fonts/georgia-pro-black-italic.ttf) format("truetype");font-weight:900;font-style:italic;font-display:swap;}
+/* @font-face{font-family:"Inter";src:url(fonts/inter-regular.woff2) format("woff2");font-weight:400 600 700;font-style:normal;font-display:swap;} */
+/* @font-face{font-family:"Inter";src:url(fonts/inter-italic.woff2) format("woff2");font-weight:400 600 700;font-style:italic;font-display:swap;} */
+/* @font-face{font-family:"Lato";src:url(fonts/lato-regular.woff2) format("woff2");font-weight:400;font-style:regular;font-display:swap;} */
+/* @font-face{font-family:"Lato";src:url(fonts/lato-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap;} */
+/* @font-face{font-family:"Lato";src:url(fonts/lato-bold.woff2) format("woff2");font-weight:700;font-style:regular;font-display:swap;} */
+/* @font-face{font-family:"Lato";src:url(fonts/lato-bold-italic.woff2) format("woff2");font-weight:700;font-style:italic;font-display:swap;} */
+/* @font-face{font-family:"Raleway";src:url("fonts/raleway-regular.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;} */
+/* @font-face{font-family:"Raleway";src:url("fonts/raleway-regular-ext.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;} */
+/* @font-face{font-family:"Raleway";src:url("fonts/raleway-italic.woff2") format("woff2");font-style:italic;font-weight:100 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;} */
+/* @font-face{font-family:"Raleway";src:url("fonts/raleway-italic-ext.woff2") format("woff2");font-style:italic;font-weight:100 900;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;} */
+
 

@@ -9,7 +9,7 @@
     html { scrollbar-gutter: stable; }
     
     .profile { margin-top: -20px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
-        .profile .img { margin-left: 0; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 108px; aspect-ratio: 22/20; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: grayscale(0.5); }
+        .profile .img { margin-left: 0; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 108px; aspect-ratio: 22/20; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: grayscale(0.33); }
         .profile .name { font: 600 40px/1 Lora,'Georgia Pro',serif; white-space: nowrap; margin: 0; }
     
     .tabs { margin-block: 24px; justify-content: center; padding: 0 1em; font: 16px/1 'DM Sans',sans-serif; display: flex; gap: 2px 20px; flex-wrap: wrap; border-block: 1px solid light-dark(#c9c9c9, #222324); color: var(--grey-6,dimgrey); }
@@ -43,9 +43,9 @@
                 .line-title { line-height: 1; display: flex; align-items: center; }
                     .line-title b { font-size: 20px; margin-right: 0.5em; }
                     .line-title a { font-size: 16px; color: var(--grey-6,dimgray); }
-                .recent-articles { max-width: 400px; margin-inline: auto; }
-                    .recent-articles > div + div { margin-top: 13px; }
-                    .recent-articles > div > div:nth-child(2) { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); margin-left: 5px; }
+                .recent-articles { max-width: 400px; margin-inline: auto; line-height: 1.5; }
+                    .recent-articles > div + div { margin-top: 10px; }
+                    .recent-articles > div > div.date { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); margin-left: 1px; }
                 .recent-videos { }
                     .recent-videos figure { margin-inline: auto; padding-block: 2px; max-width: 180px; display: flex; flex-direction: column; align-items: stretch; }
                     .recent-videos figure .img { border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
@@ -57,12 +57,13 @@
         .articles.section {  }
             .article-index { margin-inline: auto; padding: 0; }
                 .article-index > div + div { margin-top: 8px; }
-                .article-index > div > div:nth-child(2) { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); }
+                .article-index > div > div.date { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); }
             
-            @media (min-width: 580px) {
+            /* page width is > 600px */
+            @media (min-width: 600px) {
                 .article-index { display: table; }
                 .article-index > div { display: table-row; }
-                .article-index > div > div { display: table-cell; padding: 8px; }
+                .article-index > div > div { display: table-cell; padding: 8px 10px; }
             }
         
         .videos.section { }
@@ -81,13 +82,14 @@
             .donate.section .links-panel a .inline-icon { display: block; margin-inline: auto; }
             .donate.section .links-panel a .link-text { display: block; text-align: center; margin-top: 5px; }
         
-        
+        /* page width is < 700px */
         @media (max-width: 700px) {
             .recent-panels { gap: 14px; grid-template-columns: auto; }
             .recent-articles { text-align: center; }
             .line-title { justify-content: center; margin-left: -2em; }
             .recent-videos figure figcaption { text-align: center; }
         }
+        /* page width is < 600px */
         @media (max-width: 600px) {
             .profile { justify-content: center; }
             .profile .img { margin-left: 0; }
@@ -98,12 +100,15 @@
             .links-panel { padding: 8px 0 0; }
             .tabs { padding: 0; gap: 2px 8px; }
             .landing.section .text-panel { text-indent: 0; }
+            .article-index { text-align: center; }
         }
+        /* page width is < 480px */
         @media (max-width: 480px) {
             .container .section { margin: 24px 6px; }
             .tabs { padding: 0; gap: 2px 5px; font-size: 15px; }
             .tab { padding: 8px 8px 6px; }
         }
+        /* page width is < 400px */
         @media (max-width: 400px) {
             .links-panel .inline-icon { width: 28px; }
         }
@@ -119,7 +124,6 @@
             <div class="tab no-select landing" onclick="fsetTab('landing')">Recent</div>
             <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
             <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
-            <div class="tab no-select other" onclick="fsetTab('other')">Other</div>
             <div class="tab no-select donate" onclick="fsetTab('donate')">Donate</div>
         </div>
         <div class="container">
@@ -152,23 +156,9 @@
             </div>
             
             <div class="articles section">
-                <ul class="article-index label-external"></ul>
-            </div>
-            
-            <div class="other section">
-                <div class="auto-format text-panel">
-                    <p class="fine">ongoing pages that I gradually add to:</p>
-                    <ul>
-                        <li>[Public record (collecting statements by public figures)](page/public-record)</li>
-                    </ul>
-                    <p class="fine">pages that thoroughly explore one topic (not posted on other sites):</p>
-                    <ul>
-                        <li>[What was the Freedom Convoy?](page/freedom-convoy)</li>
-                        <li>[Sex, Gender, & Transsexuals](page/sex-gender-transsexuals)</li>
-                        <li>[Israel & Palestine](page/israel-palestine)</li>
-                        <li>[Liberal Conservatism](page/liberal-conservatism)</li>
-                    </ul>
-                </div>
+                <ul class="article-index label-external">
+                    <div><div class="title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)</a></div><div class="date"></div></div>
+                </ul>
             </div>
             
             <div class="donate section">
@@ -216,37 +206,42 @@
         .map(v => parseObj(v,"date","src"))
         .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0));
     
-    const ARTICLES = `
-        title:How bad is America? |url:how-bad-is-america |date:2026-07-01
-        title:The many problems with Pierre Poilievre |url:pierre-poilievre |date:2026-08-03
-        title:The Conservative Party's hard problem |url:conservative-party-hard-problem |date:2026-05-01
-        title:Canada's plan for a sovereign wealth fund |url:canada-sovereign-wealth-fund |date:2026-04-29
-        title:Floor crossings |url:floor-crossings |date:2026-04-17
-        title:Rational ignorance |url:rational-ignorance |date:2026-04-09
-        title:The case for abortion |url:abortion |date:2026-02-18
-        title:A synopsis of American decline |url:a-synopsis-of-american-decline |date:2026-01-28
-        title:Fetishism and politics |url:fetishism-politics |date:2024-11-14
-        title:Nick Shirley and Somali day cares |url:somali-day-cares |date:2026-01-02
-        title:Thoughts on Reddit |url:reddit |date:2025-12-30
-        title:Stay the trenches |url:stay-the-trenches |date:2025-12-17
-        title:Immigration |url:immigration |date:2025-11-06
-        title:Thoughts on prejudice |url:prejudice |date:2025-10-30
-        title:India and Indians |url:india |date:2025-10-24
-        title:Liberalism not leftism |url:liberalism-not-leftism |date:2025-09-19
-        title:Bill Maher and Normalization |url:normalization |date:2025-09-08
-        title:Lies about Ilhan Omar |url:lies-about-ilhan-omar |date:2025-08-25
-        title:Trump and Russia |url:trump-and-russia |date:2025-03-06
-        title:Why get bottom surgery? |url:why-get-bottom-surgery |date:2025-02-09
-        title:Elon Musk and the Nazi Salute |url:elon-musk-nazi-salute |date:2025-01-24
-        title:Lies about Elizabeth Warren and Hillary Clinton |url:lies-about-warren-clinton |date:2024-12-19
-        title:Mark Robinson |url:mark-robinson |date:2024-12-15
-        title:Why do people like Trump? |url:the-trump-appeal |date:2024-12-03
-        title:On our bias for normal white men |url:bias-normal-white-men |date:2024-11-26
-        title:On types of masculinity |url:types-of-masculinity |date:2024-11-08
-        title:Bernie Sanders and the Military Industrial Complex |url:bernie-sanders-and-the-military-industrial-complex |date:2024-12-16
-        title:The trans prison stats argument |url:the-trans-prison-stats-argument |date:2024-10-19
-        `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
-        .map(p => parseObj(p,"title","date"))
+    const TEXTPAGES = `
+        The many problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
+        How bad is America? | how-bad-is-america | 2026-07-01
+        What was the Freedom Convoy? | freedom-convoy | 2026-06-15
+        The Conservative Party's hard problem | conservative-party-hard-problem | 2026-05-01
+        Canada's plan for a sovereign wealth fund | canada-sovereign-wealth-fund | 2026-04-29
+        Floor crossings | floor-crossings | 2026-04-17
+        Rational ignorance | rational-ignorance | 2026-04-09
+        The case for abortion | abortion | 2026-02-18
+        A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28
+        Fetishism and politics | fetishism-politics | 2024-11-14
+        Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
+        Thoughts on Reddit | reddit | 2025-12-30
+        Stay the trenches | stay-the-trenches | 2025-12-17
+        Immigration | immigration | 2025-11-06
+        Thoughts on prejudice | prejudice | 2025-10-30
+        India and Indians | india | 2025-10-24
+        Liberalism not leftism | liberalism-not-leftism | 2025-09-19
+        Bill Maher and Normalization | normalization | 2025-09-08
+        Israel & Palestine | israel-palestine | 2025-07-27
+        Lies about Ilhan Omar | lies-about-ilhan-omar | 2025-08-25
+        Trump and Russia | trump-and-russia | 2025-03-06
+        Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
+        Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
+        Lies about Elizabeth Warren and Hillary Clinton | lies-about-warren-clinton | 2024-12-19
+        Mark Robinson | mark-robinson | 2024-12-15
+        Liberal Conservatism | liberal-conservatism | 2026-03-24
+        Why do people like Trump? | the-trump-appeal | 2024-12-03
+        On our bias for normal white men | bias-normal-white-men | 2024-11-26
+        On types of masculinity | types-of-masculinity | 2024-11-08
+        Bernie Sanders and the Military Industrial Complex | bernie-sanders-and-the-military-industrial-complex | 2024-12-16
+        The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
+        Poor Things | poor-things | 2024-10-31
+        Sex, Gender, & Transsexuals | sex-gender-transsexuals | 2024-11-19
+        `.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3)
+        .map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}})
         .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0));
     
     document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", VIDEOS.map(
@@ -257,12 +252,12 @@
             <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
         </figcaption></figure>`).join(''));
     
-    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", ARTICLES.map(
-        p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div>${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
+    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", TEXTPAGES.map(
+        p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
     ).join(''));
     
-    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", ARTICLES.slice(0, 6).map(
-        p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div>${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
+    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", TEXTPAGES.slice(0, 6).map(
+        p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
     ).join(''));
     
     document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", VIDEOS.slice(0, 2).map(
