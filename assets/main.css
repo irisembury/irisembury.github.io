@@ -115,7 +115,7 @@
                     .article .article-top h2 { font: 400 28px/1.3 'Georgia Pro',Roboto,sans-serif; color: var(--grey-5,dimgrey); }
                     .article .article-top .article-byline { font-size: 17px; color: var(--grey-7,grey); }
                     .article .article-top .mirror-container { margin-block: 5px; font-size: 16px; padding: 11px 11px 10px; background-color: var(--grey-f,whitesmoke); line-height: 1; display: flex; align-items: center; }
-                    .article .article-top .mirror-container div { display: flex; align-items: center; gap: 5px; margin-inline: 5px; }
+                    .article .article-top .mirror-container div { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-inline: 5px; }
                     .article .article-top .mirror-container div a { color: var(--grey-4,dimgrey); }
                 .article-top + .image-gallery.float { margin-top: 0; }
                 .article h1, .article h2, .article h3, .article h4 { clear: both; text-align: left; font-weight: 700; color: var(--grey-2,black); }
