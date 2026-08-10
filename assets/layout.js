@@ -250,6 +250,7 @@ function meta(pageInfo) {
     if (pageInfo.mirrors) {
         articleTop.push(`<div class="mirror-container label-external">This was posted in other places: <div>${ pageInfo.mirrors.split(",").map(m => parseSource(m)).join(" ") }</div></div>`);
     }
+    console.log(pageInfo.flags)
     if (pageInfo.flags) {
         if (pageInfo.flags.includes("wide")) {
             HTML.classList.add("wide")

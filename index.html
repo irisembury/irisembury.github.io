@@ -25,7 +25,7 @@
                 .links-panel .link-text { display: none; }
                 .links-panel .inline-icon { margin: 0; width: 32px; }
     
-    .container { font: 18px/1.3 'DM Sans',Roboto,Arial,sans-serif }
+    .container { font: 18px/1.4 'DM Sans',Roboto,Arial,sans-serif }
         .container .section { display: none; margin: 28px 26px; gap: 22px; }
         .container .section.selected { display: grid; }
             .text-panel { margin-inline: auto; padding: 0 1em; }
@@ -37,7 +37,7 @@
         .about.section {  }
         
         .landing.section {  }
-            .landing.section .text-panel { text-align: center; }
+            .landing.section .text-panel {  }
             .recent-panels { padding: 10px; display: grid; grid-template-columns: auto auto; }
             .recent-panels > div > div { padding: 8px 15px; }
                 .line-title { line-height: 1; display: flex; align-items: center; }
@@ -149,6 +149,14 @@
                         <div class="recent-videos"></div>
                     </div>
                 </div>
+                <div>
+                    <div class="auto-paragraphs text-panel text-indent">
+                        **About me**: I'm a writer and YouTuber from Canada. Join me as I try to push back against an online ecosystem of misinformation and extremism.
+                        I talk about politics from a liberal-conservative perspective (for Americans, you might understand me as a moderate Democrat). I like strong centrists like Macron or Carney. I stand for liberty, democracy, and rule of law, against totalitarian groups like Nazis and Communists who want to destroy such things. I recommend you read about the ideas of Hobbes, Smith, Burke, and Rawls.
+                        I'm an Atlanticist and pro-NATO. I believe the Ukraine war is the most important thing happening in the world. In Canada, I support increased military spending, reducing immigration, and expanding our oil and gas infrastructure. I'm optimistic about Canada's future.
+                        To clarify, since I don't talk about it much, I'm a trans woman. If you write about me in a formal context, you have to use feminine pronouns, otherwise you are in violation of intergalactic law and liable of being cancelled by the CPUOS.
+                    </div>
+                </div>
             </div>
             
             <div class="articles section">
@@ -183,6 +191,7 @@
 <script>
     
     const VIDEOS = `
+        title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:cDJ3lQH7m0Y.jpg
         title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18
         title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
         title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
@@ -200,7 +209,13 @@
         title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14
         `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
         .map(v => parseObj(v,"date","src"))
-        .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0));
+        .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
+            v => `<figure><div class="img" loading="lazy" style="background-image:url('assets/thumbnail/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
+            <figcaption>
+                <div class="video-title">${ v.title }</div>
+                <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
+                <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
+            </figcaption></figure>`)
     
     const TEXTPAGES = `
         The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
@@ -239,31 +254,14 @@
         Sex, Gender, & Transsexuals | sex-gender-transsexuals | 2024-11-19
         `.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3)
         .map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}})
-        .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0));
+        .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
+            p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
+        )
     
-    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", VIDEOS.map(
-        v => `<figure><div class="img" loading="lazy" style="background-image:url('assets/video-thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
-        <figcaption>
-            <div class="video-title">${ v.title }</div>
-            <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
-            <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
-        </figcaption></figure>`).join(''));
-    
-    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", TEXTPAGES.map(
-        p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
-    ).join(''));
-    
-    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", TEXTPAGES.slice(0, 6).map(
-        p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
-    ).join(''));
-    
-    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", VIDEOS.slice(0, 2).map(
-        v => `<figure><div class="img" loading="lazy" style="background-image:url('assets/video-thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
-        <figcaption>
-            <div class="video-title">${ v.title }</div>
-            <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
-            <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
-        </figcaption></figure>`).join(''));
+    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", TEXTPAGES.join(''));
+    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", TEXTPAGES.slice(0, 6).join(''));
+    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", VIDEOS.join(''));
+    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", VIDEOS.slice(0, 2).join(''));
     
     function fsetTab(tabName) {
         document.querySelectorAll('.tabs .tab').forEach(t => t.classList.toggle('selected', t.classList.contains(tabName)));
