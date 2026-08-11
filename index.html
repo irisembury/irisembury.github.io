@@ -190,6 +190,7 @@
 <script>
     
     const VIDEOS = `
+        title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:166429634.jpg
         title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:cDJ3lQH7m0Y.jpg
         title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18
         title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
@@ -209,7 +210,7 @@
         `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
         .map(v => parseObj(v,"date","src"))
         .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
-            v => `<figure><div class="img" loading="lazy" style="background-image:url('assets/thumbnail/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
+            v => `<figure><div class="img" loading="lazy" style="background-image:url('assets/th/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
             <figcaption>
                 <div class="video-title">${ v.title }</div>
                 <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
