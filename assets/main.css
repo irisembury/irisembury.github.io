@@ -170,7 +170,7 @@
                         .auto-table .fine { margin: 0.5em 0 0.5em; }
                         .auto-table td > * + * { margin-top: 0.35em; }
                         .auto-table th,
-                        .auto-table td { padding: 0.355em 0.53em; vertical-align: top; }
+                        .auto-table td { padding: 0.3em 0.5em 0.4em; vertical-align: top; }
                         .auto-table .auto-indent { margin-left: 5px; padding: 4px 10px 5px; font-size: calc(1em - 1px); }
                 .file-box { background-color: light-dark(#fff0, #242424); border: 1px dashed grey; display: flex; gap: 3px; font-size: 14px; margin: 15px 0 15px 20px; line-height: 1.15; width: min-content; padding: 8px 6px 2px; float: right; }
                     .file-box figure { gap: 1px; width: 102px; display: flex; flex-direction: column; align-items: center; }

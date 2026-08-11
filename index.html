@@ -10,7 +10,7 @@
     
     .profile { margin-top: -20px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
         .profile .img { margin-left: 0; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 108px; aspect-ratio: 22/20; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: brightness(1.1) contrast(1.1) grayscale(0.4); }
-        .profile .name { font: 600 34px/1 Lora,'Georgia Pro',serif; white-space: nowrap; margin: 0; }
+        .profile .name { font: 600 40px/1 Lora,'Georgia Pro',serif; white-space: nowrap; margin: 0; }
     
     .tabs { margin-block: 24px; justify-content: center; padding: 0 1em; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 15px; flex-wrap: wrap; border-block: 1px solid light-dark(#c9c9c9, #222324); color: var(--grey-6,dimgrey); }
         .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 9px 10px 7px; margin-bottom: -1px; }
@@ -43,7 +43,7 @@
                 .line-title { line-height: 1; display: flex; align-items: center; }
                     .line-title b { font-size: 20px; margin-right: 0.5em; }
                     .line-title a { font-size: 16px; color: var(--grey-6,dimgray); }
-                .recent-articles { max-width: 400px; margin-inline: auto; line-height: 1.5; }
+                .recent-articles { max-width: 400px; margin-inline: auto; line-height: 1.45; }
                     .recent-articles > div + div { margin-top: 10px; }
                     .recent-articles > div > div.date { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); margin-left: 1em; }
                 .recent-videos { }
@@ -55,10 +55,11 @@
                     .recent-videos figure figcaption .video-date { font-family: Roboto,sans-serif; color: var(--grey-7,grey); }
         
         .articles.section {  }
-            .article-index { margin-inline: auto; padding: 0; }
+            .article-index { margin-inline: auto; padding: 0; font-size: 17px; }
                 .article-index > div:hover { background-color: var(--grey-f,whitesmoke); }
                 .article-index > div + div { margin-top: 8px; }
-                .article-index > div > div.date { color: var(--grey-6,dimgrey); font: 400 16px/1 Roboto,sans-serif; letter-spacing: 0.5px; }
+                .article-index > div > div.title {  }
+                .article-index > div > div.date { color: var(--grey-6,dimgrey); font-family: Roboto,sans-serif; }
             
             /* page width is > 600px */
             @media (min-width: 600px) {
@@ -149,11 +150,10 @@
                     </div>
                 </div>
                 <div>
-                    <div class="auto-paragraphs text-panel text-indent">
+                    <div class="auto-paragraphs text-panel text-indent hidden">
                         **About me**: I'm a writer and YouTuber from Canada. Join me as I try to push back against an online ecosystem of misinformation and extremism.
                         I talk about politics from a liberal-conservative perspective (for Americans, you might understand me as a moderate Democrat). I like strong centrists like Macron or Carney. I stand for liberty, democracy, and rule of law, against totalitarian groups like Nazis and Communists who want to destroy such things. I recommend you read about the ideas of Hobbes, Smith, Burke, and Rawls.
                         I'm an Atlanticist and pro-NATO. I believe the Ukraine war is the most important thing happening in the world. In Canada, I support increased military spending, reducing immigration, and expanding our oil and gas infrastructure. I'm optimistic about Canada's future.
-                        To clarify, since I don't talk about it much, I'm a trans woman. If you write about me in a formal context, you have to use feminine pronouns, otherwise you are in violation of intergalactic law and liable of being cancelled by the CPUOS.
                     </div>
                 </div>
             </div>
@@ -254,7 +254,7 @@
         `.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3)
         .map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}})
         .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
-            p => `<div><div><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
+            p => `<div><div class="title"><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
         )
     
     document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", TEXTPAGES.join(''));
