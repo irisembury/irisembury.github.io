@@ -104,7 +104,7 @@
                 .toc-row.active-heading a { color: light-dark(#333, #939393); font-weight: 600; }
                     .toc-row a { color: inherit; }
                     .toc-row a:hover { color: light-dark(#666, #999); color: var(--grey-3,black); }
-        .main-container { background-color: var(--content-bg); padding: 60px 50px 60px; }
+        .main-container { background-color: var(--content-bg); padding: 55px 50px 60px; }
             .article { font: var(--main-font); }
             .main-container > .article { max-width: var(--main-width); }
                 .article > :first-child { margin-top: 0 !important; }

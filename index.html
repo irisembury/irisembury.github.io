@@ -27,19 +27,19 @@
         --grey-f: hsl(240, 4%, 10%);
     }
     html { scrollbar-gutter: stable; }
-    body { background-image: radial-gradient(#161f35, #1d1d1d); background-attachment: fixed; }
+    body { background-image: radial-gradient(#1c243e, #202020); background-attachment: fixed; }
     #page { min-height: 100vh; }
     .main-container { display: flex; flex-direction: column; }
     .article { flex-grow: 1; }
     .navbar { display: none; }
     .article-footer { opacity: 0.7; text-align: center; }
-    .article a:hover { color: #daa56d; }
+    .article a:hover { color: #e99945; }
     
     .profile { line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
         .profile .img { margin-left: 0; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 108px; aspect-ratio: 22/20; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: brightness(1.1) contrast(1.1) grayscale(0.4); }
         .profile .name { font: 600 40px/1 Lora,'Georgia Pro',serif; white-space: nowrap; margin: 0; }
     
-    .tabs { justify-content: center; margin-block: 24px; padding: 0 1em; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 15px; flex-wrap: wrap; border-block: 1px solid #ffffff1a; color: var(--grey-6,dimgrey); }
+    .tabs { justify-content: center; margin-block: 22px 24px; border-bottom: 1px solid #ffffff1a; padding: 0 1em; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 15px; flex-wrap: wrap; color: var(--grey-6,dimgrey); }
         .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 9px 10px 7px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
         .tab.selected { border-bottom-color: var(--grey-4,dimgrey); color: var(--grey-3,black); font-weight: 700; }
@@ -77,13 +77,14 @@
         
         .videos.section { }
             .videos.section p { font-size: 16px; }
-            .video-index { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.185), 1fr)); }
-                .video-entry { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; padding: 6px; box-sizing: border-box; border-radius: 5px; }
-                .video-index .video-entry { background-color: #ffffff0c; }
+            .video-index { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.185), 1fr)); background-color: #ffffff0a; padding: 12px; border-radius: 5px; }
+                .video-entry { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; box-sizing: border-box; }
+                /* .video-index .video-entry { background-color: #ffffff0f; padding: 10px; border-radius: 5px; } */
                     .video-entry .img { border-radius: 5px; box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
                         .video-entry .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
                     .video-entry-caption { font: 17px/1.1 'DM Sans',Roboto,Arial,sans-serif !important; display: grid; gap: 5px; padding: 6px 6px 3px; }
                         .video-entry-caption .video-title { font-size: 18px; color: var(--grey-3); }
+                        .video-entry-caption .video-sources { white-space: nowrap; }
                         .video-entry-caption .video-date { font-size: 16px; color: var(--grey-8,grey); }
         
         .donate.section {  }
@@ -225,7 +226,7 @@
             v => `<figure class="video-entry"><div class="img" loading="lazy" style="background-image:url('assets/th/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
             <figcaption class="video-entry-caption">
                 <div class="video-title">${ v.title }</div>
-                <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
+                <div class="video-sources">${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
                 <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
             </figcaption></figure>`)
     const TEXTPAGES = `
