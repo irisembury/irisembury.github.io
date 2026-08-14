@@ -543,7 +543,7 @@ function loadBody() {
                 <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
             </div>
         </nav>
-        <div class="panel-space">
+        <div class="--page-aligner">
             <div class="right-panel">
                 <h3>Display:</h3>
                 <div class="switches-area">
@@ -731,14 +731,13 @@ function tocSetup() {
         tocUpdate();
     }
 }
-
 const HTML = document.documentElement;
 const rootPath = getRootPath();
 const index = (rootPath == "");
 const page_links = [];
 function init() {
     loadBody();
-    setupLightswitch();
+    if (!index) setupLightswitch(); else { HTML.classList.add("dark"); }
     rightMenuSetup();
     tocSetup();
     let ext_links = page_links.filter(a => a.startsWith("http"));
@@ -754,4 +753,3 @@ function init() {
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
 }
 window.addEventListener("load", init);
-

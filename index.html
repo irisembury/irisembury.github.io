@@ -6,13 +6,40 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
+    :root {
+        --content-bg: #0000 !important;
+        --page-bg: #000 !important;
+        --link-color: #94b1d1;
+        --grey-1: hsl(240, 4%, 88%);
+        --grey-2: hsl(240, 4%, 82%);
+        --grey-3: hsl(240, 4%, 75%);
+        --grey-4: hsl(240, 4%, 68%);
+        --grey-5: hsl(240, 4%, 60%);
+        --grey-6: hsl(240, 4%, 52%);
+        --grey-7: hsl(240, 4%, 54%);
+        --grey-8: hsl(240, 4%, 50%);
+        --grey-9: hsl(240, 4%, 44%);
+        --grey-a: hsl(240, 4%, 38%);
+        --grey-b: hsl(240, 4%, 33%);
+        --grey-c: hsl(240, 4%, 27%);
+        --grey-d: hsl(240, 4%, 21%);
+        --grey-e: hsl(240, 4%, 15%);
+        --grey-f: hsl(240, 4%, 10%);
+    }
     html { scrollbar-gutter: stable; }
+    body { background-image: radial-gradient(#161f35, #1d1d1d); background-attachment: fixed; }
+    #page { min-height: 100vh; }
+    .main-container { display: flex; flex-direction: column; }
+    .article { flex-grow: 1; }
+    .navbar { display: none; }
+    .article-footer { opacity: 0.7; text-align: center; }
+    .article a:hover { color: #daa56d; }
     
-    .profile { margin-top: -20px; line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
+    .profile { line-height: 1.3; display: flex; gap: 12px; align-items: center; justify-content: center; }
         .profile .img { margin-left: 0; border-radius: 5px; background-image: url(assets/pfp.jpg); width: 108px; aspect-ratio: 22/20; background-size: cover; background-repeat: no-repeat; background-position: center; border: 1px solid light-dark(#9a9a9a, #1f1f20); filter: brightness(1.1) contrast(1.1) grayscale(0.4); }
         .profile .name { font: 600 40px/1 Lora,'Georgia Pro',serif; white-space: nowrap; margin: 0; }
     
-    .tabs { margin-block: 24px; justify-content: center; padding: 0 1em; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 15px; flex-wrap: wrap; border-block: 1px solid light-dark(#c9c9c9, #222324); color: var(--grey-6,dimgrey); }
+    .tabs { justify-content: center; margin-block: 24px; padding: 0 1em; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 15px; flex-wrap: wrap; border-block: 1px solid #ffffff1a; color: var(--grey-6,dimgrey); }
         .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 9px 10px 7px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
         .tab.selected { border-bottom-color: var(--grey-4,dimgrey); color: var(--grey-3,black); font-weight: 700; }
@@ -35,28 +62,29 @@
             .text-panel > ul + p { margin-top: 16px; }
         
         .articles.section {  }
-            .article-index { margin-inline: auto; padding: 0; font-size: 17px; }
-                .article-index > div:hover { background-color: var(--grey-f,whitesmoke); }
-                .article-index > div + div { margin-top: 8px; }
-                .article-index > div > div.title {  }
-                .article-index > div > div.date { color: var(--grey-6,dimgrey); font-family: Roboto,sans-serif; }
-            /* page width is > 600px */
+            .article-index { margin-inline: auto; border-radius: 5px; padding: 8px; background-color: #ffffff04; font-size: 17px; }
+                .article-index .article-entry:hover { background-color: #aaa1; }
+                .article-entry + .article-entry { margin-top: 8px; }
+                .article-entry .article-title {  }
+                .article-entry .article-date { color: var(--grey-6,dimgrey); font-family: Roboto,Arial,sans-serif; }
+            
             @media (min-width: 600px) {
-                .article-index { display: table; }
-                .article-index > div { display: table-row; }
-                .article-index > div > div.title { width: 100%; }
-                .article-index > div > div { display: table-cell; padding: 8px 10px; }
+                .article-index .article-index { display: table; }
+                .article-index .article-entry { display: table-row; }
+                .article-index .article-entry > div { display: table-cell; padding: 8px 10px; }
+                .article-index .article-entry .article-title { width: 100%; }
             }
         
         .videos.section { }
             .videos.section p { font-size: 16px; }
-            .video-index { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.19), 1fr)); }
-                .video-entry { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; }
-                    .video-entry .img { border-radius: 3px; border: 1px solid light-dark(#c0c0c0, #242425); box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
+            .video-index { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.185), 1fr)); }
+                .video-entry { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; padding: 6px; box-sizing: border-box; border-radius: 5px; }
+                .video-index .video-entry { background-color: #ffffff0c; }
+                    .video-entry .img { border-radius: 5px; box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
                         .video-entry .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
-                    .video-entry-caption { font: 17px/1.1 'DM Sans',Roboto,Arial,sans-serif !important; display: grid; gap: 5px; padding: 6px; }
-                        .video-entry-caption .video-title { font-size: calc(1em + 1px); }
-                        .video-entry-caption .video-date { font-size: calc(1em - 1px); color: var(--grey-7,grey); }
+                    .video-entry-caption { font: 17px/1.1 'DM Sans',Roboto,Arial,sans-serif !important; display: grid; gap: 5px; padding: 6px 6px 3px; }
+                        .video-entry-caption .video-title { font-size: 18px; color: var(--grey-3); }
+                        .video-entry-caption .video-date { font-size: 16px; color: var(--grey-8,grey); }
         
         .donate.section {  }
             .donate.section p { font-size: 16px; }
@@ -70,12 +98,13 @@
             .recent-panels > div > div { padding: 8px 15px; }
                 .line-title { line-height: 1; display: flex; align-items: center; }
                     .line-title b { font-size: 20px; margin-right: 0.5em; }
-                    .line-title a { font-size: 16px; color: var(--grey-6,dimgray); }
+                    .line-title a { font-size: 16px; color: var(--grey-7,grey); }
                 .recent-articles { max-width: 400px; margin-inline: auto; line-height: 1.45; }
-                    .recent-articles > div + div { margin-top: 10px; }
-                    .recent-articles > div > div.date { font-family: Roboto,sans-serif; color: var(--grey-6,dimgrey); margin-left: 1em; }
+                    .article-entry .article-date { margin-left: 1em; }
+                
                 .recent-videos { }
-                    .recent-videos .video-entry { margin-inline: unset; padding-block: 2px; max-width: 180px; display: flex; flex-direction: column; }
+                    .recent-videos .video-entry { margin-inline: auto; padding-block: 2px; max-width: 180px; display: flex; flex-direction: column; }
+                    .recent-videos .video-entry + .video-entry { margin-top: 8px; }
         
         /* page width is < 700px */
         @media (max-width: 700px) {
@@ -141,18 +170,14 @@
                         <div class="recent-videos"></div>
                     </div>
                 </div>
-                <div>
-                    <div class="auto-paragraphs text-panel text-indent hidden">
-                        **About me**: I'm a writer and YouTuber from Canada. Join me as I try to push back against an online ecosystem of misinformation and extremism.
-                        I talk about politics from a liberal-conservative perspective (for Americans, you might understand me as a moderate Democrat). I like strong centrists like Macron or Carney. I stand for liberty, democracy, and rule of law, against totalitarian groups like Nazis and Communists who want to destroy such things. I recommend you read about the ideas of Hobbes, Smith, Burke, and Rawls.
-                        I'm an Atlanticist and pro-NATO. I believe the Ukraine war is the most important thing happening in the world. In Canada, I support increased military spending, reducing immigration, and expanding our oil and gas infrastructure. I'm optimistic about Canada's future.
-                    </div>
-                </div>
             </div>
             
             <div class="articles section">
+                <div class="text-panel text-center auto-paragraphs">
+                    These are mirrors of things I posted to Substack, Medium, and other sites.
+                </div>
                 <ul class="article-index label-external">
-                    <div><div class="title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="inline-icon pin-icon"></span></a></div><div class="date"></div></div>
+                    <div class="article-entry"><div class="article-title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="inline-icon pin-icon"></span></a></div><div class="article-date"></div></div>
                 </ul>
             </div>
             
@@ -163,10 +188,6 @@
                     <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
                     <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
                 </ul>
-                <div class="auto-paragraphs text-center grid gap-5">
-                    If you'd like to help contribute to what I do here, to invest in an online environment that's more like what I'm putting out.
-                    (I'm currently trying to afford better production equipment.)
-                </div>
             </div>
             
             <div class="videos section">
@@ -180,7 +201,6 @@
     </div>
 <script src="assets/layout.js"></script>
 <script>
-    
     const VIDEOS = `
         title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:QPNCs5A3iYo.jpg
         title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:cDJ3lQH7m0Y.jpg
@@ -208,7 +228,6 @@
                 <div>${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
                 <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
             </figcaption></figure>`)
-    
     const TEXTPAGES = `
         The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
         The many problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
@@ -247,20 +266,20 @@
         `.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3)
         .map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}})
         .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
-            p => `<div><div class="title"><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`
+            p => `<div class="article-entry">
+                <div class="article-title"><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div>
+                <div class="article-date">${ p.date ?`<span>${ p.date }</span>` :'' }</div>
+            </div>`
         )
-    
     document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", TEXTPAGES.join(''));
-    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", TEXTPAGES.slice(0, 6).join(''));
     document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", VIDEOS.join(''));
+    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", TEXTPAGES.slice(0, 6).join(''));
     document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", VIDEOS.slice(0, 2).join(''));
-    
     function fsetTab(tabName) {
         document.querySelectorAll('.tabs .tab').forEach(t => t.classList.toggle('selected', t.classList.contains(tabName)));
         document.querySelectorAll('.container .section').forEach(c => c.classList.toggle('selected', c.classList.contains(tabName)));
         localStorage.setItem("index-tab", tabName);
     }
-    
     const tabParam = new URLSearchParams(window.location.search).get("tab");
     if (tabParam) {
         history.replaceState(null, '', location.pathname);
