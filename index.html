@@ -25,10 +25,10 @@
         --grey-e: hsl(240, 4%, 15%);
         --grey-f: hsl(240, 4%, 10%);
         --link-color: #8fb3db;
-        --link-hover: #d2a053;
+        --link-hover: #d58938;
     }
     .navbar { display: none; }
-    body { background-image: radial-gradient(#131e38, #131313); background-attachment: fixed; }
+    body { background: fixed radial-gradient(#131e38, #131313); }
     
     html { scrollbar-gutter: stable; }
     #page { min-height: 100vh; }
@@ -47,7 +47,8 @@
         .tab.selected { border-bottom-color: var(--grey-4,dimgrey); color: var(--grey-2,black); font-weight: 700; }
             .dummy { font-weight: 700; visibility: hidden; height: 0; }
             
-    .links-panel { margin-top: 10px; flex-wrap: wrap; list-style: none; display: flex; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; }
+    .links-panel-box { display: grid; gap: 6px; justify-content: center; }
+    .links-panel { flex-wrap: wrap; list-style: none; display: inline-flex; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; padding: 8px 13px 9px; background-color: #d3e0ff0a; border-radius: 10px; }
         .links-panel li { aspect-ratio: 1; margin: 0; }
         .links-panel li:hover { border-color: var(--grey-9); }
             .links-panel li a { aspect-ratio: 1; display: block; }
@@ -147,7 +148,7 @@
         </div>
         <div class="container">
             <div class="landing section">
-                <div>
+                <div class="links-panel-box">
                     <p class="fine text-center">Find me in other places</p>
                     <ul class="links-panel label-external">
                         <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
