@@ -513,15 +513,6 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     output = output.replace(/(\/\/.*)/, "<span class=\"code-comment\">$1</span>").replace(/(#.*)/, "<span class=\"code-macro\">$1</span>")
     return output;
 }
-/* irisembury.github.io/page/RETURN_VALUE/index.html */
-function getDirectory() {
-    let path = window.location.pathname.replace(/index\.html$/, "");
-    if (path.endsWith("/")) {
-        path = path.slice(0, -1);
-    }
-    path = path.substring(path.lastIndexOf('/') + 1);
-    return path;
-}
 function getRootPath() {
     let path = window.location.pathname;
     if (path.endsWith("index.html")) {
@@ -530,7 +521,7 @@ function getRootPath() {
     if (path.endsWith("/")) {
         path = path.slice(0, -1);
     }
-    path = path.substring(path.indexOf("irisembury.github.io"));
+    path = path.substring(path.indexOf("irisembury"));
     path = path.replace(/[^/]/g,'');
     return '../'.repeat(path.length);
 }
