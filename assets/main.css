@@ -61,11 +61,11 @@
 
     ::selection { background-color: light-dark(#fff49f, #343942); color: light-dark(#262626, #e1e1e1); }
     
-    .navbar { position: sticky; top: 0; min-height: var(--nav-height); font: 15px/1 Roboto,system-ui; background-color: light-dark(#2a2a2a, #151515); color: light-dark(#7e7e7e, #6e6e6e); transition: box-shadow 0.5s; padding: 1px 15px 0; z-index: 4; }
+    .navbar { position: sticky; top: 0; min-height: var(--nav-height); font: 15px/1 Roboto,system-ui; background-color: light-dark(#222, #151515); color: light-dark(#7e7e7e, #6e6e6e); transition: box-shadow 0.5s; padding: 1px 15px 0; z-index: 4; }
     .navbar.sticky-active { box-shadow: 0 1px 8px light-dark(#0005, #0000); }
         .nav-inner { min-height: var(--nav-height); width: inherit; display: grid; grid-template-columns: 1fr auto 1fr; gap: 1em; margin-inline: auto; }
             .nav-inner > div { display: flex; align-items: center; }
-                .index-button { height: 32px; min-width: 114px; max-width: 142px; width: 25%; display: flex; justify-content: center; align-items: center; font: 14px/1 'Segoe UI',system-ui; border-radius: 5px; color: light-dark(#e5e8ec, #c6cacf); background-color: light-dark(#4c5461, #3b4659); }
+                .index-button { height: 32px; min-width: 114px; max-width: 142px; width: 25%; display: flex; justify-content: center; align-items: center; font: 14px/1 'Segoe UI',system-ui; border-radius: 5px; color: light-dark(#c7cace, #c6cacf); background-color: light-dark(#4c5461, #3b4659); }
                 .index-button:hover { text-decoration: none; filter: brightness(1.1); }
                     .index-button div { white-space: nowrap; }
                         .index-button svg { transform: translateY(1px); }
