@@ -1,60 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" style="opacity:0" class="dark">
+<html lang="en" dir="ltr" style="opacity:0">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    :root {
-        --content-bg: #0000 !important;
-        --page-bg: #000 !important;
-        --grey-1: hsl(240, 4%, 92%);
-        --grey-2: hsl(240, 4%, 86%);
-        --grey-3: hsl(240, 4%, 79%);
-        --grey-4: hsl(240, 4%, 72%);
-        --grey-5: hsl(240, 4%, 64%);
-        --grey-6: hsl(240, 4%, 59%);
-        --grey-7: hsl(240, 4%, 54%);
-        --grey-8: hsl(240, 4%, 50%);
-        --grey-9: hsl(240, 4%, 44%);
-        --grey-a: hsl(240, 4%, 38%);
-        --grey-b: hsl(240, 4%, 33%);
-        --grey-c: hsl(240, 4%, 27%);
-        --grey-d: hsl(240, 4%, 21%);
-        --grey-e: hsl(240, 4%, 15%);
-        --grey-f: hsl(240, 4%, 10%);
-        --link-color: #8fb3db;
-        --link-hover: #d58938;
-    }
-    .navbar { display: none; }
     
-    html { scrollbar-gutter: stable; }
-    #page { min-height: 100vh; background: fixed radial-gradient(#1a2931, #192031, #0d1019); }
-    .main-container { display: flex; flex-direction: column; }
-    .article { flex-grow: 1; }
-    .article-footer { opacity: 0.7; text-align: center; }
-    
-    .profile { line-height: 1.3; display: grid; gap: 1em; }
+    .profile { line-height: 1.3; display: grid; gap: 14px; }
     .profile > * { margin-inline: auto; text-align: center; }
         .profile .img { border-radius: 5px; background-image: url(assets/003.jpg); width: 108px; aspect-ratio: 1; background-size: cover; background-repeat: no-repeat; background-position: center; }
         .profile .name { font: 600 40px/1 Lora,'Georgia Pro',serif; white-space: nowrap; margin: 0; }
-    
-    .tabs { justify-content: center; margin: 22px 1em; border-bottom: 1px solid #ffffff1a; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 15px; flex-wrap: wrap; color: var(--grey-6,dimgrey); }
-        .tab { text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 9px 10px 7px; margin-bottom: -1px; }
+    .tabs { margin-block: 24px; justify-content: center; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; gap: 2px 15px; flex-wrap: wrap; border-block: 1px solid var(--grey-d,silver); }
+        .tab { color: var(--grey-6,dimgrey); text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; padding: 9px 10px 7px; margin-bottom: -1px; }
         .tab:hover { text-decoration: underline; }
-        .tab.selected { border-bottom-color: var(--grey-4,dimgrey); color: var(--grey-2,black); font-weight: 700; }
+        .tab.selected { color: var(--grey-3,black); border-bottom-color: var(--grey-4,dimgrey); font-weight: 700; }
             .dummy { font-weight: 700; visibility: hidden; height: 0; }
-            
+        
     .links-panel-box { display: grid; gap: 6px; justify-content: center; }
-    .links-panel { flex-wrap: wrap; list-style: none; display: inline-flex; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; padding: 8px 13px 9px; background-color: #d3e0ff0a; border-radius: 10px; }
+    .links-panel { flex-wrap: wrap; list-style: none; display: inline-flex; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; padding: 8px 13px 9px; border-radius: 10px; }
         .links-panel li { aspect-ratio: 1; margin: 0; }
         .links-panel li:hover { border-color: var(--grey-9); }
             .links-panel li a { aspect-ratio: 1; display: block; }
                 .links-panel .link-text { display: none; }
                 .links-panel .inline-icon { margin: 0; width: 32px; }
     
-    .container { font: 18px/1.4 'DM Sans',Roboto,Arial,sans-serif }
+    .container { font: 18px/1.4 'DM Sans',Roboto,Arial,sans-serif; max-width: var(--main-width); margin: 1em auto; }
         .container .section { display: none; margin: 28px 26px 0; gap: 22px; }
         .container .section.selected { display: grid; }
             .text-panel { margin-inline: auto; padding: 0 1em; font-size: 16px; }
@@ -64,7 +35,7 @@
             .text-panel > ul + p { margin-top: 16px; }
             
         .articles.section {  }
-            .article-index { width: 100%; margin-inline: auto; border-radius: 5px; padding: 8px; background-color: #ffffff0c; font-size: 17px; }
+            .article-index { width: 100%; margin-inline: auto; border-radius: 5px; padding: 8px; background-color: #ffffff08; font-size: 17px; }
                 .article-index .article-entry:hover { background-color: #aaa1; }
                 .article-entry + .article-entry { margin-top: 8px; }
                 .article-entry .article-title {  }
@@ -80,7 +51,7 @@
         .videos.section { }
             .video-index { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.185), 1fr)); background-color: #ffffff0a; padding: 12px; border-radius: 5px; }
                 .video-entry { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; box-sizing: border-box; }
-                    .video-entry .img { border-radius: 5px; box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
+                    .video-entry .img { border-radius: 8px; box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
                         .video-entry .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
                     .video-entry-caption { font: 17px/1.1 'DM Sans',Roboto,Arial,sans-serif !important; display: grid; gap: 5px; padding: 6px 6px 3px; }
                         .video-entry-caption .video-title { font-size: 18px; color: var(--grey-3); }
@@ -136,68 +107,67 @@
     </style>
 </head>
 <body>
-    <div class="front-card">
-        <div class="profile">
-            <div class="name">Iris Embury</div>
+<div class="profile">
+    <div class="name">Iris Embury</div>
+</div>
+<div class="tabs">
+    <div class="tab no-select landing" onclick="fsetTab('landing')">About</div>
+    <div class="tab no-select articles" onclick="fsetTab('articles')">Text docs</div>
+    <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
+</div>
+<div class="article container">
+    <div class="landing section">
+        <div class="links-panel-box">
+            <p class="fine text-center">Find me in other places</p>
+            <ul class="links-panel label-external">
+                <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
+                <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
+                <li><a target="_blank" href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a></li>
+                <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
+                <li><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a></li>
+                <li><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a></li>
+                <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
+            </ul>
         </div>
-        <div class="tabs">
-            <div class="tab no-select landing" onclick="fsetTab('landing')">About</div>
-            <div class="tab no-select articles" onclick="fsetTab('articles')">Text docs</div>
-            <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
-        </div>
-        <div class="container">
-            <div class="landing section">
-                <div class="links-panel-box">
-                    <p class="fine text-center">Find me in other places</p>
-                    <ul class="links-panel label-external">
-                        <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
-                        <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
-                        <li><a target="_blank" href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a></li>
-                        <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
-                        <li><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a></li>
-                        <li><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a></li>
-                        <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
-                    </ul>
-                </div>
-                <div class="recent-panels">
-                    <div>
-                        <div class="line-title"><b>Recent text</b> <a class="pseudo-link" onclick="fsetTab('articles')">see all</a></div>
-                        <div class="recent-articles"></div>
-                    </div>
-                    <div>
-                        <div class="line-title"><b>Recent videos</b> <a class="pseudo-link" onclick="fsetTab('videos')">see all</a></div>
-                        <div class="recent-videos"></div>
-                    </div>
-                </div>
+        <div class="recent-panels">
+            <div>
+                <div class="line-title"><b>Recent text</b> <a class="pseudo-link" onclick="fsetTab('articles')">see all</a></div>
+                <div class="recent-articles"></div>
             </div>
-            
-            <div class="articles section">
-                <div class="text-panel text-center auto-paragraphs">
-                    This is mostly mirrors of things I posted to Substack, Medium, &c.
-                </div>
-                <ul class="article-index label-external">
-                    <div class="article-entry"><div class="article-title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="inline-icon pin-icon"></span></a></div><div class="article-date"></div></div>
-                </ul>
-            </div>
-            
-            <div class="donate section">
-                <ul class="links-panel label-external">
-                    <li><a target="_blank" href="https://paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span class="link-text">PayPal</span></a></li>
-                    <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
-                    <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
-                    <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
-                </ul>
-            </div>
-            
-            <div class="videos section">
-                <div class="text-panel auto-format text-center">
-                    <p>Presented reverse-chronologically. This isn't every single video. For a fuller list, see my accounts on [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos) or [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=video).</p>
-                    <p class="fine">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
-                </div>
-                <div class="video-index"></div>
+            <div>
+                <div class="line-title"><b>Recent videos</b> <a class="pseudo-link" onclick="fsetTab('videos')">see all</a></div>
+                <div class="recent-videos"></div>
             </div>
         </div>
     </div>
+    
+    <div class="articles section">
+        <div class="text-panel text-center auto-paragraphs">
+            This is mostly mirrors of things I posted to Substack, Medium, &c.
+        </div>
+        <ul class="article-index label-external">
+            <div class="article-entry"><div class="article-title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="inline-icon pin-icon"></span></a></div><div class="article-date"></div></div>
+        </ul>
+    </div>
+    
+    <div class="donate section">
+        <ul class="links-panel label-external">
+            <li><a target="_blank" href="https://paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span class="link-text">PayPal</span></a></li>
+            <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
+            <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
+            <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
+        </ul>
+    </div>
+    
+    <div class="videos section">
+        <div class="text-panel auto-format text-center">
+            <p>Presented reverse-chronologically. This isn't every single video. For a fuller list, see my accounts on [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos) or [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=video).</p>
+            <p class="fine">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
+        </div>
+        <div class="video-index"></div>
+    </div>
+</div>
+
 <script src="assets/layout.js"></script>
 <script>
     const VIDEOS = `
@@ -219,14 +189,14 @@
         title:Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
         title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14
         `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
-        .map(v => parseObj(v,"date","src"))
-        .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
-            v => `<figure class="video-entry"><div class="img" loading="lazy" style="background-image:url('assets/th/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
+            .map(v => parseObj(v,"date","src"))
+            .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
+                v => `<figure class="video-entry"><div class="img" loading="lazy" style="background-image:url('assets/th/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
             <figcaption class="video-entry-caption">
                 <div class="video-title">${ v.title }</div>
                 <div class="video-sources">${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
                 <div><span class="video-date">${ dateFromISO(v.date) }</span></div>
-            </figcaption></figure>`)
+            </figcaption></figure>`);
     const TEXTPAGES = `
         The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
         The many problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
@@ -268,8 +238,7 @@
             p => `<div class="article-entry">
                 <div class="article-title"><a title="${ p.title }" href="page/${ p.url }">${ autoFormat(p.title) }</a></div>
                 <div class="article-date">${ p.date ?`<span>${ p.date }</span>` :'' }</div>
-            </div>`
-        )
+            </div>`);
     document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", TEXTPAGES.join(''));
     document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", VIDEOS.join(''));
     document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", TEXTPAGES.slice(0, 6).join(''));
