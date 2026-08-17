@@ -2,7 +2,7 @@
 
 
 function scrollToTop() {
-    window.scrollTo({ behavior: "smooth", top: 0 });
+    window.scrollTo({ top: 0 });
     history.replaceState(null, "", window.location.pathname);
     document.getElementById("toc")?.scrollTo({ behavior: "smooth", top: 0 })
 }
@@ -240,6 +240,7 @@ function meta(pageInfo) {
     if (pageInfo.title) {
         articleTop.push(`<h1 class="auto-heading for-toc">${ pageInfo.title }</h1>`);
         document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', pageInfo.title);
+        document.title = pageInfo.title;
     }
     if (pageInfo.subtitle) {
         articleTop.push(`<h2 class="auto-heading">${ pageInfo.subtitle }</h2>`);
@@ -250,12 +251,12 @@ function meta(pageInfo) {
     if (pageInfo.mirrors) {
         articleTop.push(`<div class="mirror-container label-external">This was posted in other places: <div>${ pageInfo.mirrors.split(",").map(m => parseSource(m)).join(" ") }</div></div>`);
     }
-    console.log(pageInfo.flags)
     if (pageInfo.flags) {
-        if (pageInfo.flags.includes("wide")) {
+        Array.from(pageInfo.flags.split(" ")).forEach(f => page_flags.push(f));
+        if (page_flags.includes("wide")) {
             HTML.classList.add("wide")
         }
-        if (pageInfo.flags.includes("unset-width")) {
+        if (page_flags.includes("unset-width")) {
             document.getElementById("lightswitch")?.parentNode.insertAdjacentHTML("beforeend", '<label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width">');
             if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
                 document.getElementById("unset-width").checked = true;
@@ -361,7 +362,7 @@ function interpreter(argValue) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
-    let firstP = true;
+    let p_num = 1;
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
@@ -382,14 +383,9 @@ function interpreter(argValue) {
         if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + (l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
         else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
             chunk = autoList(chunk);
-        } else {
-            if (firstP && !isFine) {
-                chunk = '<p class="first-paragraph">' + autoFormat(chunk) + '</p>';
-                firstP = false;
-            }
-            else {
-                chunk = '<p>' + autoFormat(chunk) + '</p>';
-            }
+        }
+        else {
+            chunk = `<p id="p-${ p_num++ }">${ autoFormat(chunk) }</p>`;
         }
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
@@ -607,6 +603,9 @@ function tocUpdate_() {
     tocLastHeading = currentHeading;
 }
 function setupLightswitch() {
+    if (index) {
+        return;
+    }
     const lightswitch = document.getElementById("lightswitch");
     if (!lightswitch) { console.error("couldn't find #lightswitch"); }
     if (lightswitch) {
@@ -702,34 +701,37 @@ function tocHide() {
     toc.classList.remove("attach");
 }
 function tocSetup() {
-    pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
-    pageHeadings.forEach(h => {
-        h.classList.remove("for-toc");
-        if (h.classList.length == 0) {
-            h.removeAttribute('class');
+    if (!page_flags.includes("no-toc")) {
+        pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
+        pageHeadings.forEach(h => {
+            h.classList.remove("for-toc");
+            if (h.classList.length == 0) {
+                h.removeAttribute('class');
+            }
+        });
+        if (pageHeadings.length > 3) {
+            toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
+            toc.scrollTo({ behavior: "instant", top: 0 })
+            rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+            window.addEventListener("scroll", tocUpdate);
+            tocUpdate();
+            return;
         }
-    });
-    if (pageHeadings.length < 4) {
-        document.querySelector(".toc")?.remove();
-        document.querySelector(".toc-toggle-button")?.remove();
-        document.querySelector(".right-spacer")?.remove();
     }
-    else {
-        toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
-        toc.scrollTo({ behavior: "instant", top: 0 })
-        rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-        window.addEventListener("scroll", tocUpdate);
-        tocUpdate();
-    }
+    /* if page_flags includes 'no-toc', or if toc is not created by above, remove those elements: */
+    document.querySelector(".toc")?.remove();
+    document.querySelector(".toc-toggle-button")?.remove();
+    document.querySelector(".right-spacer")?.remove();
 }
 const HTML = document.documentElement;
 const rootPath = getRootPath();
 const index = (rootPath == "");
 const page_links = [];
+const page_flags = [];
 function init() {
     loadBody();
-    if (!index) setupLightswitch(); else { HTML.classList.add("dark"); }
     rightMenuSetup();
+    setupLightswitch();
     tocSetup();
     let ext_links = page_links.filter(a => a.startsWith("http"));
     if (ext_links.length > 0) { document.querySelector('.article-footer')?.insertAdjacentHTML("afterbegin", `<div><div class="citelist-container"><div><span>Links on this page:</span></div><ol class="citelist">${ ext_links.map(x => `<li><a href="${ x }">${ x }</a></li>`).join("") }</ol></div></div>`); }
@@ -739,7 +741,7 @@ function init() {
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
-    if (document.title == "") { document.title = "Iris Embury | GitHub"; }
+    if (document.title == "") { document.title = "Iris Embury"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
 }
