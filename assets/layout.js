@@ -1,12 +1,26 @@
 "use strict"
 
+const HTML = document.documentElement;
+let page_links = [];
+let toc = null;
+let canTocUpdate = true;
+let tocLastHeading = 0;
+let rowsInToc = [];
+let pageHeadings = [];
+let navbar = null;
+let canNavCheck = true;
+let navSticky = false;
+let loadToc = false;
+let loadCitelist = false;
+const siteIcons = { 'youtube.com': 'youtube-logo', 'youtu.be': 'youtube-logo', 'twitch.tv': 'twitch-logo', 'bsky.app': 'bluesky-logo', 'x.com': 'twitter-logo', 'twitter.com': 'twitter-logo', 'facebook.com': 'facebook-logo', 'substack.com': 'substack-logo', 'instagram.com': 'instagram-logo', 'reddit.com': 'reddit-logo', 'medium.com': 'medium-logo', 'wikipedia.org': 'wikipedia-logo' };
+const KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
 
 function scrollToTop() {
     window.scrollTo({ top: 0 });
     history.replaceState(null, "", window.location.pathname);
     document.getElementById("toc")?.scrollTo({ behavior: "smooth", top: 0 })
 }
-function setlightbox(action) {
+function setLightbox(action) {
     if (action instanceof HTMLElement) {
         document.querySelector(".lightbox").classList.remove("hidden");
         let img = document.querySelector(".lightbox .lb-img-wrapper img")
@@ -89,7 +103,7 @@ function imageGallery(chunk) {
         row.alt = row.alt || row.caption;
         if (row.caption) { row.caption = '<figcaption>' + row.caption + '</figcaption>'; }
         return `<figure>
-            <div><img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setlightbox(this)">
+            <div><img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setLightbox(this)">
             ${ row.caption }
         </figure>`;
     }).join("")}</div>`;
@@ -121,8 +135,7 @@ function codeblock(chunk) {
 function codeReplace(match, captured) {
     return `<code>${ captured.replaceAll("\"", "&quot;").replaceAll("'", "&apos;").replaceAll("-", "&hyphen;").replaceAll("(", "&lpar;").replaceAll(")", "&rpar;").replaceAll("[", "&lbrack;").replaceAll("]", "&rbrack;").replaceAll("*", "&ast;").replaceAll("\n", "<br>") }</code>`;
 }
-let table_number = 1;
-function autoTable(chunk) {
+function autoTable(chunk, table_number) {
     let table = `<div class="table-wrapper"><table class="auto-table auto-table-${ table_number }"><tbody>${
         chunk.split(/\n(?! )/g).slice(1).map(
             (tableRow, rowIndex) => {
@@ -167,7 +180,6 @@ function autoTable(chunk) {
     if (first_row.replace(/\s/g, '').length > 0) {
         table += `<style>${ first_row.replace(/this/g, ".auto-table-" + table_number).replaceAll(";", "!important;") }</style>`
     }
-    table_number += 1;
     return table;
 }
 function autoList(chunk) {
@@ -219,8 +231,8 @@ function autoIndent(chunk) {
     }).join('');
     return `<blockquote class="auto-indent">${ chunk }</blockquote>`
 }
-/* converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
 function dateFromISO(datestring) {
+    /* this converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
     let input = datestring.replace(/\D/g, "")
     if (input.length == 8) {
         const iso = input.substring(0,4) + "-" + input.substring(4,6) + "-" + input.substring(6,8);
@@ -232,11 +244,32 @@ function dateFromISO(datestring) {
     }
     return datestring;
 }
-function meta(pageInfo) {
+function frontmatter(pageInfo) {
+    /* "frontmatter" is just a standard name I didn't come up with it */
     if (pageInfo.startsWith("---")) { pageInfo = pageInfo.substring(3); }
     if (pageInfo.endsWith("---")) { pageInfo = pageInfo.slice(0,-3); }
     pageInfo = parseObj(pageInfo.split("\n").map(n => n.trim()).filter(n => n.length > 3).join("|"));
     const articleTop = [];
+    if (pageInfo.flags) {
+        if (pageInfo.flags.includes("toc")) {
+            loadToc = true;
+        }
+        if (pageInfo.flags.includes("wide")) {
+            HTML.classList.add("wide");
+        }
+        if (pageInfo.flags.includes("unset-width")) {
+            document.getElementById("lightswitch")?.parentNode.insertAdjacentHTML("beforeend", '<label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width">');
+            if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
+                document.getElementById("unset-width").checked = true;
+                HTML.classList.add("unset-width");
+            }
+            document.getElementById("unset-width")?.addEventListener("change", function() {
+                HTML.classList.toggle(this.id, this.checked);
+                localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
+                tocUpdate();
+            });
+        }
+    }
     if (pageInfo.title) {
         articleTop.push(`<h1 class="auto-heading for-toc">${ pageInfo.title }</h1>`);
         document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', pageInfo.title);
@@ -250,24 +283,6 @@ function meta(pageInfo) {
     }
     if (pageInfo.mirrors) {
         articleTop.push(`<div class="mirror-container label-external">This was posted in other places: <div>${ pageInfo.mirrors.split(",").map(m => parseSource(m)).join(" ") }</div></div>`);
-    }
-    if (pageInfo.flags) {
-        Array.from(pageInfo.flags.split(" ")).forEach(f => page_flags.push(f));
-        if (page_flags.includes("wide")) {
-            HTML.classList.add("wide")
-        }
-        if (page_flags.includes("unset-width")) {
-            document.getElementById("lightswitch")?.parentNode.insertAdjacentHTML("beforeend", '<label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width">');
-            if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
-                document.getElementById("unset-width").checked = true;
-                HTML.classList.add("unset-width");
-            }
-            document.getElementById("unset-width")?.addEventListener("change", function() {
-                HTML.classList.toggle(this.id, this.checked);
-                localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
-                tocUpdate();
-            });
-        }
     }
     if (articleTop.length == 0) { return ""; }
     return '<div class="article-top">' + articleTop.map(x => autoFormat(x)).join("\n") + '</div>';
@@ -284,7 +299,6 @@ function autoHeading(chunk) {
     heading = autoFormat(heading);
     return `<${ tag } class="auto-heading${ number == 4 ? '' : ' for-toc' }" id="${ id }">${ heading }</${ tag }>`;
 }
-const siteIcons = { 'youtube.com': 'youtube-logo', 'youtu.be': 'youtube-logo', 'twitch.tv': 'twitch-logo', 'bsky.app': 'bluesky-logo', 'x.com': 'twitter-logo', 'twitter.com': 'twitter-logo', 'facebook.com': 'facebook-logo', 'substack.com': 'substack-logo', 'instagram.com': 'instagram-logo', 'reddit.com': 'reddit-logo', 'medium.com': 'medium-logo', 'wikipedia.org': 'wikipedia-logo' };
 function linkReplace(chunk) {
     chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
         linkUrl = linkUrl.replaceAll('&#41;', ')');
@@ -292,7 +306,7 @@ function linkReplace(chunk) {
         const external = linkUrl.startsWith("http");
         const blankDisplay = displayText == "";
         
-        let linkIndex = '[res]';
+        let linkIndex = '[link]';
         if (linkUrl.startsWith("http")) {
             let _linkUrl = linkUrl;
             if (_linkUrl.indexOf("#") != -1) {
@@ -318,7 +332,7 @@ function linkReplace(chunk) {
             }
         }
         else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg")) {
-            a_tag = `<a onclick="setlightbox('${ linkUrl }')"`;
+            a_tag = `<a onclick="setLightbox('${ linkUrl }')"`;
             link_class.push("pseudo-link");
             link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
             let s_ = link_inner.lastIndexOf(" ") + 1;
@@ -356,17 +370,17 @@ function linkReplace(chunk) {
     });
     return chunk;
 }
-/* ------------------------------- main interpreter for #article content ------------------------------- */
 function interpreter(argValue) {
     if (argValue instanceof Node) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
     let p_num = 1;
+    let table_number = 1;
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
-        if (chunk.startsWith("---\n") && chunk.endsWith("\n---")) { return meta(chunk); }
+        if (chunk.startsWith("---\n") && chunk.endsWith("\n---")) { return frontmatter(chunk); }
         if (chunk.startsWith("<") && !chunk.startsWith("<a")) { return chunk; }
         if (chunk == "---") { return "<hr>"; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
@@ -375,12 +389,12 @@ function interpreter(argValue) {
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-        if (chunk.startsWith("!table")) { return autoTable(chunk); }
+        if (chunk.startsWith("!table")) { return autoTable(chunk, table_number); }
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
         let isFine = chunk.startsWith(".");
         if (isFine) { chunk = chunk.slice(1).trimStart(); }
         if (chunk.startsWith("!list")) { chunk = autoList(chunk.substring(chunk.indexOf('\n') + 1)); }
-        if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + (l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
+        if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + autoFormat(l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
         else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
             chunk = autoList(chunk);
         }
@@ -392,7 +406,6 @@ function interpreter(argValue) {
     })
     return input.join('');
 }
-
 function unwrapSeconds(vSQuery) {
     vSQuery = parseInt(vSQuery);
     if (!isNaN(vSQuery)) {
@@ -472,7 +485,6 @@ function tokenizeByWordChar(stringData) {
     }
     return result;
 }
-const KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
 function colorizeKeywords(stringInput, syntaxClass, customKeywords) {
     return tokenizeByWordChar(stringInput).map(word => {
         if (KEYWORDS[syntaxClass] && KEYWORDS[syntaxClass].split(" ").includes(word)) {
@@ -525,7 +537,7 @@ function loadBody() {
     document.body.innerHTML = `
         <nav class="navbar">
             <div class="nav-inner">
-                <div>${ index ?'' :'<a class="index-button no-select" href="../../"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79 L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a>' }</div>
+                <div><a class="index-button no-select" href="../../"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79 L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a></div>
                 <div><div class="page-name-segment"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div>
                 <div><div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div></div>
             </div>
@@ -548,28 +560,22 @@ function loadBody() {
                 <div style="text-align:right"><span class="grey-8 pseudo-link" onclick="localStorage.clear();this.parentNode.parentNode.classList.remove('open');document.querySelectorAll('.right-panel .switches-area input').forEach(x=>{if(x.checked)x.click()});">restore defaults</span></div>
             </div>
             <div class="screen"></div>
-            <div class="toc-toggle-button" onclick="tocToggle()" title="Table of Contents">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" width="20" height="20" viewBox="0 0 20 20"><path d="M3 16H1v-2h2zm16 0H5v-2h14zM3 11H1V9h2zm16 0H5V9h14zM3 6H1V4h2zm16 0H5V4h14z"/></svg>
-            </div>
         </div>
         <div id="page">
-            <nav class="toc"></nav>
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
-                <footer class="article-footer"><p>This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com</p></footer>
+                <footer class="article-footer"><p>This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com.</p></footer>
             </div>
-            <div class="right-spacer"></div>
         </div>
         <div class="lightbox hidden">
             <div class="lb-top-left"><p></p></div>
-            <div class="lb-img-wrapper" onclick="setlightbox('close')"><img></div>
+            <div class="lb-img-wrapper" onclick="setLightbox('close')"><img></div>
             <div class="lb-caption-panel"><p></p></div>
         </div>`;
     navbar = document.querySelector(".navbar");
-    toc = document.querySelector(".toc");
     interpreter(document.querySelector(".article"));
+    window.addEventListener("scroll", navCheck); navCheck();
 }
-let canTocUpdate = true, tocLastHeading = 0, rowsInToc = [], pageHeadings = [];
 function tocUpdate() {
     if (!canTocUpdate) { return; }
     if (HTML.classList.contains("hide-toc")) { return; }
@@ -617,7 +623,6 @@ function setupLightswitch() {
         })
     }
 }
-let navbar = null, canNavCheck = true, navSticky = false;
 function navCheck() {
     if (!canNavCheck) {
         return;
@@ -653,35 +658,45 @@ function rightMenuSetup() {
             });
         }
     )
-    const rightMenu = document.querySelector(".right-panel");
+    const right_menu_panel = document.querySelector(".right-panel");
     function rightMenuToggle(option) {
         if (option == "open") {
-            rightMenu.classList.add("open");
+            right_menu_panel.classList.add("open");
         }
         else if (option == "close") {
-            rightMenu.classList.remove("open");
+            right_menu_panel.classList.remove("open");
         }
         else {
-            rightMenuToggle(!rightMenu.classList.contains("open") ? "open" : "close");
+            rightMenuToggle(!right_menu_panel.classList.contains("open") ? "open" : "close");
         }
     }
-    const menuBtn = document.querySelector(".menu-button");
-    const tocToggleBtn = document.querySelector(".toc-toggle-button");
-    if (menuBtn && tocToggleBtn) {
-        menuBtn.addEventListener("click", rightMenuToggle);
+    const right_menu_hamburger_button = document.querySelector(".menu-button");
+    const toc_toggle_button = document.querySelector(".toc-toggle-button");
+    
+    right_menu_hamburger_button?.addEventListener("click", rightMenuToggle);
+    
+    if (right_menu_hamburger_button && toc_toggle_button) {
         window.addEventListener("click", function(e) {
-            if (!rightMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+            if (!right_menu_panel.contains(e.target) && !right_menu_hamburger_button.contains(e.target)) {
                 rightMenuToggle("close");
             }
-            if (!toc.contains(e.target) && !tocToggleBtn.contains(e.target)) {
+            if (!toc.contains(e.target) && !toc_toggle_button.contains(e.target)) {
                 tocHide();
             }
         })
     }
+    else if (right_menu_hamburger_button) {
+        window.addEventListener("click", function(e) {
+            if (!right_menu_panel.contains(e.target) && !right_menu_hamburger_button.contains(e.target)) {
+                rightMenuToggle("close");
+            }
+        })
+    }
+    
     window.addEventListener("keydown", function(e) {
         if (e.key === "Escape") {
             rightMenuToggle("close");
-            setlightbox("close");
+            setLightbox("close");
             tocHide();
         }
         else if (e.key === "Home") {
@@ -689,7 +704,6 @@ function rightMenuSetup() {
         }
     })
 }
-let toc = null;
 function tocToggle() {
     toc.classList.toggle("attach", !toc.classList.contains("attach"));
 }
@@ -697,41 +711,27 @@ function tocHide() {
     toc.classList.remove("attach");
 }
 function tocSetup() {
-    if (!page_flags.includes("no-toc")) {
-        pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
-        pageHeadings.forEach(h => {
-            h.classList.remove("for-toc");
-            if (h.classList.length == 0) {
-                h.removeAttribute('class');
-            }
-        });
-        if (pageHeadings.length > 3) {
-            toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
-            toc.scrollTo({ behavior: "instant", top: 0 })
-            rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-            window.addEventListener("scroll", tocUpdate);
-            tocUpdate();
-            return;
-        }
-    }
-    /* if page_flags includes 'no-toc', or if toc is not created by above, remove those elements: */
-    document.querySelector(".toc")?.remove();
-    document.querySelector(".toc-toggle-button")?.remove();
-    document.querySelector(".right-spacer")?.remove();
+    pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
+    pageHeadings.forEach(h => { h.classList.remove("for-toc"); if (h.classList.length == 0) { h.removeAttribute('class'); } });
+    if (pageHeadings.length < 3) { return; }
+    const aligner_ = document.getElementById("aligner");
+    const page_ = document.getElementById("page");
+    if (page_ == null || aligner_ == null) return;
+    aligner_.insertAdjacentHTML("beforeend",`<div class="toc-toggle-button" onclick="tocToggle()" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" width="20" height="20" viewBox="0 0 20 20"><path d="M3 16H1v-2h2zm16 0H5v-2h14zM3 11H1V9h2zm16 0H5V9h14zM3 6H1V4h2zm16 0H5V4h14z"/></svg></div>`);
+    page_.insertAdjacentHTML("afterbegin",`<nav class="toc"></nav>`);
+    page_.insertAdjacentHTML("beforeend",`<div class="right-spacer"></div>`);
+    toc = document.querySelector(".toc");
+    toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
+    toc.scrollTo({ behavior: "instant", top: 0 })
+    rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
+    window.addEventListener("scroll", tocUpdate);
+    tocUpdate();
 }
-const HTML = document.documentElement;
-const rootPath = getRootPath();
-const index = (rootPath == "");
-const page_links = [];
-const page_flags = [];
 function init() {
     loadBody();
     rightMenuSetup();
     setupLightswitch();
-    tocSetup();
-    let ext_links = page_links.filter(a => a.startsWith("http"));
-    if (ext_links.length > 0) { document.querySelector('.article-footer')?.insertAdjacentHTML("afterbegin", `<div><div class="citelist-container"><div><span>Links on this page:</span></div><ol class="citelist">${ ext_links.map(x => `<li><a href="${ x }">${ x }</a></li>`).join("") }</ol></div></div>`); }
-    window.addEventListener("scroll", navCheck); navCheck();
+    if (loadToc) tocSetup();
     Array.from(document.querySelectorAll(".auto-format")).forEach(a => { a.innerHTML = autoFormat(a.innerHTML); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
     Array.from(document.querySelectorAll(".auto-paragraphs")).forEach(a => { a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(l => `<p>${ autoFormat(l) }</p>`).join(""); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
@@ -742,3 +742,4 @@ function init() {
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
 }
 window.addEventListener("load", init);
+

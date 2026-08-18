@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
+    .index-button { display: none !important; }
     
     .profile { line-height: 1.3; display: grid; gap: 14px; }
     .profile > * { margin-inline: auto; text-align: center; }
@@ -25,8 +26,8 @@
                 .links-panel .link-text { display: none; }
                 .links-panel .inline-icon { margin: 0; width: 32px; }
     
-    .container { font: 18px/1.4 'DM Sans',Roboto,Arial,sans-serif; max-width: var(--main-width); margin: 1em auto; }
-        .container .section { display: none; margin: 28px 26px 0; gap: 22px; }
+    .container { font: 18px/1.4 'DM Sans',Roboto,Arial,sans-serif; max-width: var(--main-width); margin: 0 auto; }
+        .container .section { display: none; padding: 0px 26px; gap: 16px; }
         .container .section.selected { display: grid; }
             .text-panel { margin-inline: auto; padding: 0 1em; font-size: 16px; }
             .text-panel > ul > li + li { margin-top: 8px; }
@@ -35,23 +36,18 @@
             .text-panel > ul + p { margin-top: 16px; }
             
         .articles.section {  }
-            .article-index { width: 100%; margin-inline: auto; border-radius: 5px; padding: 8px; background-color: #ffffff08; font-size: 17px; }
-                .article-index .article-entry:hover { background-color: #aaa1; }
-                .article-entry + .article-entry { margin-top: 8px; }
+            .article-index { border-radius: 5px; padding: 8px; font-size: 17px; }
+                .article-entry { padding: 7px 9px; }
+                .article-entry:hover { background-color: var(--grey-f); }
                 .article-entry .article-title {  }
                 .article-entry .article-date { color: var(--grey-6,dimgrey); font-family: Roboto,Arial,sans-serif; }
             
-            @media (min-width: 600px) {
-                .article-index .article-index { display: table; }
-                .article-index .article-entry { display: table-row; }
-                .article-index .article-entry > div { display: table-cell; padding: 7px 9px; }
-                .article-index .article-entry .article-title { width: 100%; }
-            }
-        
+            .article-index { display: flex; flex-direction: column; min-height: 0; flex: 1 }
+            
         .videos.section { }
             .video-index { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(calc(var(--main-width) * 0.185), 1fr)); background-color: #ffffff0a; padding: 12px; border-radius: 5px; }
                 .video-entry { width: 100%; margin-inline: auto; max-width: 300px; display: flex; flex-direction: column; align-items: stretch; box-sizing: border-box; }
-                    .video-entry .img { border-radius: 7px; box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
+                    .video-entry .img { border-radius: 5px; box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
                         .video-entry .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
                     .video-entry-caption { font: 17px/1.1 'DM Sans',Roboto,Arial,sans-serif !important; display: grid; gap: 5px; padding: 6px 6px 3px; }
                         .video-entry-caption .video-title { font-size: 18px; color: var(--grey-3); }
@@ -85,8 +81,12 @@
             .line-title { justify-content: center; margin-left: -2em; }
             .recent-videos figure figcaption { text-align: center; }
         }
-        /* page width is < 600px */
-        @media (max-width: 600px) {
+        /* page width is > 580px */
+        @media (min-width: 580px) {
+            .article-index .article-entry { display: flex; justify-content: space-between; }
+        }
+        /* page width is < 580px */
+        @media (max-width: 580px) {
             .profile { flex-direction: column; gap: 7px; }
             .profile .name { text-align: center; }
             .container { padding-inline: 0 !important; }
@@ -115,7 +115,7 @@
     <div class="tab no-select articles" onclick="fsetTab('articles')">Text docs</div>
     <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
 </div>
-<div class="article container">
+<div class="container">
     <div class="landing section">
         <div class="links-panel-box">
             <p class="fine text-center">Find me in other places</p>
@@ -191,7 +191,7 @@
         `.split("\n").map(v => v.trim()).filter(v => v.length > 3)
             .map(v => parseObj(v,"date","src"))
             .sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
-                v => `<figure class="video-entry"><div class="img" loading="lazy" style="background-image:url('assets/th/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
+                v => `<figure class="video-entry"><div class="img" loading="lazy" style="background-image:url('assets/thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div>
             <figcaption class="video-entry-caption">
                 <div class="video-title">${ v.title }</div>
                 <div class="video-sources">${ v.src.split(",").map(m => parseSource(m)).join(" | ") }</div>
