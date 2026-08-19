@@ -37,8 +37,9 @@
             
         .articles.section {  }
             .article-index { border-radius: 5px; padding: 8px; font-size: 17px; }
-                .article-entry { padding: 7px 9px; }
-                .article-entry:hover { background-color: var(--grey-f); }
+                .article-entry { padding: 5px 1px; }
+            .article-index .article-entry { padding: 7px 8px; }
+                .article-index .article-entry:hover { background-color: var(--grey-f); }
                 .article-entry .article-title {  }
                 .article-entry .article-date { color: var(--grey-6,dimgrey); font-family: Roboto,Arial,sans-serif; }
             
@@ -63,15 +64,14 @@
         .landing.section {  }
             .landing.section .text-panel {  }
             .recent-panels { padding: 10px; display: grid; grid-template-columns: auto auto; }
-            .recent-panels > div > div { padding: 8px 15px; }
+            .recent-panels > div > div { padding: 5px 15px; }
                 .line-title { line-height: 1; display: flex; align-items: center; }
                     .line-title b { font-size: 20px; margin-right: 0.5em; }
                     .line-title a { font-size: 16px; color: var(--grey-7,grey); }
-                .recent-articles { max-width: 400px; margin-inline: auto; line-height: 1.45; }
-                    .article-entry .article-date { margin-left: 1em; }
+                .recent-articles { max-width: 400px; margin-inline: auto; line-height: 1.4; }
                 
                 .recent-videos { }
-                    .recent-videos .video-entry { margin-inline: auto; padding-block: 2px; max-width: 180px; display: flex; flex-direction: column; }
+                    .recent-videos .video-entry { margin-inline: auto; padding-block: 3px; max-width: 180px; display: flex; flex-direction: column; }
                     .recent-videos .video-entry + .video-entry { margin-top: 8px; }
         
         /* page width is < 700px */
@@ -112,7 +112,7 @@
 </div>
 <div class="tabs">
     <div class="tab no-select landing" onclick="fsetTab('landing')">About</div>
-    <div class="tab no-select articles" onclick="fsetTab('articles')">Text docs</div>
+    <div class="tab no-select articles" onclick="fsetTab('articles')">Text</div>
     <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
 </div>
 <div class="container">
@@ -146,7 +146,7 @@
             This is mostly mirrors of things I posted to Substack, Medium, &c.
         </div>
         <ul class="article-index label-external">
-            <div class="article-entry"><div class="article-title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="inline-icon pin-icon"></span></a></div><div class="article-date"></div></div>
+            <div class="article-entry"><div class="article-title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div><div class="article-date"></div></div>
         </ul>
     </div>
     
@@ -171,6 +171,7 @@
 <script src="assets/layout.js"></script>
 <script>
     const VIDEOS = `
+        title:Mark Carney |date:2026-08-18 |src:youtube:5fsJUueUvpw.jpg,patreon:167033503 |thumb:5fsJUueUvpw.jpg |length:13:54
         title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:QPNCs5A3iYo.jpg
         title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:cDJ3lQH7m0Y.jpg
         title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18

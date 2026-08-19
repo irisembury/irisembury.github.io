@@ -61,7 +61,7 @@
 
     ::selection { background-color: light-dark(#fff49f, #343942); color: light-dark(#262626, #e1e1e1); }
     
-    .navbar { position: sticky; top: 0; min-height: var(--nav-height); font: 15px/1 Roboto,system-ui; background-color: light-dark(#222, #0d0d0d); color: light-dark(#7e7e7e, #6e6e6e); transition: box-shadow 0.5s; padding: 0px 15px 0px; z-index: 4; }
+    .navbar { position: sticky; top: 0; min-height: var(--nav-height); font: 15px/1 Roboto,system-ui; background-color: light-dark(#181818, #0d0d0d); color: light-dark(#7e7e7e, #6e6e6e); transition: box-shadow 0.5s; padding: 0px 15px 0px; z-index: 4; }
     .navbar.sticky-active { box-shadow: 0 1px 8px light-dark(#0005, #0006); }
         .nav-inner { min-height: var(--nav-height); width: inherit; display: grid; grid-template-columns: 1fr auto 1fr; gap: 1em; margin-inline: auto; }
             .nav-inner > div { display: flex; align-items: center; }
@@ -161,7 +161,7 @@
                     .codeblock .code-macro { color: var(--code-grey); }
                         .codeblock .code-comment * { color: inherit !important; }
                         .codeblock .code-macro * { color: inherit !important; }
-                .auto-indent { font-size: 17px; padding: 12px 20px; margin-left: 6px; background-color: light-dark(#f2f5fa, #5599ff08); border-left: 2px solid light-dark(#7286a6, #354a6c); border-radius: 2px 0 2px 4px; border-bottom: 1px solid light-dark(#0001, #0000); }
+                .auto-indent { font-size: 17px; padding: 12px 20px; margin-left: 6px; background-color: light-dark(#f2f5f9, #5599ff08); border-left: 2px solid light-dark(#7286a6, #354a6c); border-radius: 2px 0 2px 4px; border-bottom: 1px solid light-dark(#0001, #0000); }
                     .auto-indent > :nth-child(n+2) { margin-top: 0.24em; }
                     .auto-indent .attribution { margin-left: 2em; }
                     .auto-indent .attribution, .auto-indent .attribution { color: var(--grey-5,dimgrey); }
