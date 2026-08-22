@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
     .index-button { display: none !important; }
+    .article-footer { text-align: center; }
     
     .profile { line-height: 1.3; display: grid; gap: 14px; }
     .profile > * { margin-inline: auto; text-align: center; }
@@ -18,17 +19,16 @@
         .tab.selected { color: var(--grey-3,black); border-bottom-color: var(--grey-4,dimgrey); font-weight: 700; }
             .dummy { font-weight: 700; visibility: hidden; height: 0; }
         
-    .links-panel-box { display: grid; gap: 6px; justify-content: center; }
-    .links-panel { flex-wrap: wrap; list-style: none; display: inline-flex; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; padding: 8px 13px 9px; border-radius: 10px; }
+    .links-panel { margin-block: 12px; list-style: none; display: flex; flex-wrap: wrap; gap: 13px; font: 16px/1 Roboto,sans-serif; justify-content: center; border-radius: 10px; }
         .links-panel li { aspect-ratio: 1; margin: 0; }
         .links-panel li:hover { border-color: var(--grey-9); }
             .links-panel li a { aspect-ratio: 1; display: block; }
                 .links-panel .link-text { display: none; }
-                .links-panel .inline-icon { margin: 0; width: 32px; }
+                .links-panel .inline-icon { margin: 0; width: 30px; }
     
-    .container { font: 18px/1.4 'DM Sans',Roboto,Arial,sans-serif; max-width: var(--main-width); margin: 0 auto; }
-        .container .section { display: none; padding: 0px 26px; gap: 16px; }
-        .container .section.selected { display: grid; }
+    .container { font: 18px/1.4 'DM Sans',Roboto,Arial,sans-serif; max-width: var(--main-width); margin: 10px auto; }
+        .container .section { display: none; padding: 0px 18px; }
+        .container .section.selected { display: grid; gap: 16px; }
             .text-panel { margin-inline: auto; padding: 0 1em; font-size: 16px; }
             .text-panel > ul > li + li { margin-top: 8px; }
             .text-panel > p + p,
@@ -36,7 +36,7 @@
             .text-panel > ul + p { margin-top: 16px; }
             
         .articles.section {  }
-            .article-index { border-radius: 5px; padding: 8px; font-size: 17px; }
+            .article-index { border-radius: 5px; padding: 8px; font-size: 18px; }
                 .article-entry { padding: 5px 1px; }
             .article-index .article-entry { padding: 7px 8px; }
                 .article-index .article-entry:hover { background-color: var(--grey-f); }
@@ -51,9 +51,9 @@
                     .video-entry .img { border-radius: 5px; box-sizing: border-box; background-size: cover; display: flex; align-items: flex-end; justify-content: flex-end; background-position: center; aspect-ratio: 16 / 9; background-repeat: no-repeat; }
                         .video-entry .img .timecard { margin: 0 2px 2px 0; font: 13px/1 Rubik,system-ui; border-radius: 3px; color: #ccc; background-color: #0009; padding: 2px 3px; }
                     .video-entry-caption { font: 17px/1.1 'DM Sans',Roboto,Arial,sans-serif !important; display: grid; gap: 5px; padding: 6px 6px 3px; }
-                        .video-entry-caption .video-title { font-size: 18px; color: var(--grey-3); }
+                        .video-entry-caption .video-title { font-size: 18px; color: var(--grey-3); font-family: Inter,'DM Sans',Roboto,sans-serif; }
                         .video-entry-caption .video-sources { white-space: nowrap; }
-                        .video-entry-caption .video-date { font-size: 16px; color: var(--grey-8,grey); }
+                        .video-entry-caption .video-date { color: var(--grey-8,grey); }
         
         .donate.section {  }
             .donate.section p { font-size: 16px; }
@@ -63,21 +63,22 @@
         
         .landing.section {  }
             .landing.section .text-panel {  }
-            .recent-panels { padding: 10px; display: grid; grid-template-columns: auto auto; }
-            .recent-panels > div > div { padding: 5px 15px; }
+            .recent-panels { display: grid; gap: 20px; grid-template-columns: auto auto; margin-inline: auto; }
+            .recent-panels > div > div + div { margin-top: 10px; }
                 .line-title { line-height: 1; display: flex; align-items: center; }
                     .line-title b { font-size: 20px; margin-right: 0.5em; }
                     .line-title a { font-size: 16px; color: var(--grey-7,grey); }
-                .recent-articles { max-width: 400px; margin-inline: auto; line-height: 1.4; }
+                .recent-articles {  }
                 
                 .recent-videos { }
-                    .recent-videos .video-entry { margin-inline: auto; padding-block: 3px; max-width: 180px; display: flex; flex-direction: column; }
+                    .recent-videos .video-entry { margin-inline: auto 0; padding-block: 3px; max-width: 180px; display: flex; flex-direction: column; }
                     .recent-videos .video-entry + .video-entry { margin-top: 8px; }
         
         /* page width is < 700px */
         @media (max-width: 700px) {
             .recent-panels { gap: 14px; grid-template-columns: auto; }
             .recent-articles { text-align: center; }
+            .recent-videos .video-entry { margin-inline: auto; }
             .line-title { justify-content: center; margin-left: -2em; }
             .recent-videos figure figcaption { text-align: center; }
         }
@@ -90,7 +91,6 @@
             .profile { flex-direction: column; gap: 7px; }
             .profile .name { text-align: center; }
             .container { padding-inline: 0 !important; }
-            .links-panel { padding: 8px 0 0; }
             .tabs { padding: 0; gap: 2px 8px; }
             .article-index { text-align: center; }
         }
@@ -107,64 +107,62 @@
     </style>
 </head>
 <body>
-<div class="profile">
-    <div class="name">Iris Embury</div>
-</div>
-<div class="tabs">
-    <div class="tab no-select landing" onclick="fsetTab('landing')">About</div>
-    <div class="tab no-select articles" onclick="fsetTab('articles')">Text</div>
-    <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
-</div>
-<div class="container">
-    <div class="landing section">
-        <div class="links-panel-box">
-            <p class="fine text-center">Find me in other places</p>
-            <ul class="links-panel label-external">
-                <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
-                <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
-                <li><a target="_blank" href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a></li>
-                <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
-                <li><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a></li>
-                <li><a target="_blank" href="https://irisembury.tumblr.com/"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a></li>
-                <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
+<div>
+    <div class="profile">
+        <div class="name">Iris Embury</div>
+    </div>
+    <ul class="links-panel label-external">
+        <li><a target="_blank" href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a></li>
+        <li><a target="_blank" href="https://twitter.com/irisembury"><span class="twitter-logo inline-icon"></span><span class="link-text">Twitter/X</span></a></li>
+        <li><a target="_blank" href="https://discord.gg/aK83BPKQ5G"><span class="discord-logo inline-icon"></span><span class="link-text">Discord server</span></a></li>
+        <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
+        <li><a target="_blank" href="https://irisembury.substack.com/archive"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a></li>
+        <li><a target="_blank" href="https://bsky.app/profile/irisembury.bsky.social"><span class="bluesky-logo inline-icon"></span><span class="link-text">Bluesky</span></a></li>
+    </ul>
+    <div class="tabs">
+        <div class="tab no-select recent" onclick="fsetTab('recent')">Recent</div>
+        <div class="tab no-select articles" onclick="fsetTab('articles')">Text</div>
+        <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
+    </div>
+    <div class="container">
+        <div class="recent section">
+            <div class="recent-panels">
+                <div>
+                    <div class="line-title"><b>Recent text</b> <a class="pseudo-link" onclick="fsetTab('articles')">see all</a></div>
+                    <div class="recent-articles"></div>
+                </div>
+                <div>
+                    <div class="line-title flex-end"><b>Recent videos</b> <a class="pseudo-link" onclick="fsetTab('videos')">see all</a></div>
+                    <div class="recent-videos"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="articles section">
+            <div class="text-panel text-center auto-paragraphs">
+                This is mostly mirrors of things I posted to Substack, Medium, &c.
+            </div>
+            <ul class="article-index label-external">
+                <div class="article-entry"><div class="article-title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div><div class="article-date"></div></div>
             </ul>
         </div>
-        <div class="recent-panels">
-            <div>
-                <div class="line-title"><b>Recent text</b> <a class="pseudo-link" onclick="fsetTab('articles')">see all</a></div>
-                <div class="recent-articles"></div>
+        
+        <div class="donate section">
+            <ul class="links-panel label-external">
+                <li><a target="_blank" href="https://paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span class="link-text">PayPal</span></a></li>
+                <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
+                <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
+                <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
+            </ul>
+        </div>
+        
+        <div class="videos section">
+            <div class="text-panel auto-format text-center">
+                <p>This isn't every single video. For a fuller list, see my accounts on [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos) or [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=video).</p>
+                <p class="fine">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
             </div>
-            <div>
-                <div class="line-title"><b>Recent videos</b> <a class="pseudo-link" onclick="fsetTab('videos')">see all</a></div>
-                <div class="recent-videos"></div>
-            </div>
+            <div class="video-index"></div>
         </div>
-    </div>
-    
-    <div class="articles section">
-        <div class="text-panel text-center auto-paragraphs">
-            This is mostly mirrors of things I posted to Substack, Medium, &c.
-        </div>
-        <ul class="article-index label-external">
-            <div class="article-entry"><div class="article-title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public record (collecting statements by public figures)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div><div class="article-date"></div></div>
-        </ul>
-    </div>
-    
-    <div class="donate section">
-        <ul class="links-panel label-external">
-            <li><a target="_blank" href="https://paypal.me/irisembury"><span class="paypal-logo inline-icon"></span><span class="link-text">PayPal</span></a></li>
-            <li><a target="_blank" href="https://patreon.com/cw/irisembury"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a></li>
-            <li><a target="_blank" href="https://ko-fi.com/irisembury"><span class="kofi-logo inline-icon"></span><span class="link-text">Ko-fi</span></a></li>
-            <li><a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><span class="stripe-logo inline-icon"></span><span class="link-text">Stripe</span></a></li>
-        </ul>
-    </div>
-    
-    <div class="videos section">
-        <div class="text-panel auto-format text-center">
-            <p>Presented reverse-chronologically. This isn't every single video. For a fuller list, see my accounts on [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos) or [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=video).</p>
-            <p class="fine">Patreon videos aren't paywalled; it's just an alternate video host in case anything ever goes wrong with YouTube.</p>
-        </div>
-        <div class="video-index"></div>
     </div>
 </div>
 
@@ -201,14 +199,14 @@
     const TEXTPAGES = `
         The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
         The many problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
-        How bad is America? | how-bad-is-america | 2026-07-01
+        How bad is America, really? | how-bad-is-america-really | 2026-07-01
         What was the Freedom Convoy? | freedom-convoy | 2026-06-15
         The Conservative Party's hard problem | conservative-party-hard-problem | 2026-05-01
         Canada's plan for a sovereign wealth fund | canada-sovereign-wealth-fund | 2026-04-29
         Floor crossings | floor-crossings | 2026-04-17
         Rational ignorance | rational-ignorance | 2026-04-09
         The case for abortion | abortion | 2026-02-18
-        A synopsis of American decline | a-synopsis-of-american-decline | 2026-01-28
+        A synopsis of American decline | american-decline | 2026-01-28
         Fetishism and politics | fetishism-politics | 2024-11-14
         Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
         Thoughts on Reddit | reddit | 2025-12-30

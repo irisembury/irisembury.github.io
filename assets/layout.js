@@ -49,11 +49,11 @@ function setLightbox(action) {
 function parseSource(string_in, separator = ":") {
     let [site, id] = string_in.trim().split(separator, 2);
     switch (site) {
-        case 'tumblr': return '<a class="external-link tumblr-link" href="https://irisembury.tumblr.com/post/' + id + '" title="https://irisembury.tumblr.com/post/' + id + '"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></a>';
-        case 'youtube': return '<a class="external-link youtube-link" href="https://youtu.be/' + id + '" title="https://youtu.be/' + id + '"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></a>';
-        case 'substack': return '<a class="external-link substack-link" href="https://irisembury.substack.com/p/' + id + '" title="https://irisembury.substack.com/p/' + id + '"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></a>';
-        case 'patreon': return '<a class="external-link patreon-link" href="https://www.patreon.com/posts/' + id + '" title="https://www.patreon.com/posts/' + id + '"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></a>';
-        case 'medium': return '<a class="external-link medium-link" href="https://medium.com/@irisembury/' + id + '" title="https://medium.com/@irisembury/' + id + '"><span class="medium-logo inline-icon"></span><span class="link-text">Medium</span></a>';
+        case 'tumblr': return '<a class="external-link tumblr-link" href="https://irisembury.tumblr.com/post/' + id + '" title="https://irisembury.tumblr.com/post/' + id + '"><span class="nowrap"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></span></a>';
+        case 'youtube': return '<a class="external-link youtube-link" href="https://youtu.be/' + id + '" title="https://youtu.be/' + id + '"><span class="nowrap"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></span></a>';
+        case 'substack': return '<a class="external-link substack-link" href="https://irisembury.substack.com/p/' + id + '" title="https://irisembury.substack.com/p/' + id + '"><span class="nowrap"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></span></a>';
+        case 'patreon': return '<a class="external-link patreon-link" href="https://www.patreon.com/posts/' + id + '" title="https://www.patreon.com/posts/' + id + '"><span class="nowrap"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></span></a>';
+        case 'medium': return '<a class="external-link medium-link" href="https://medium.com/@irisembury/' + id + '" title="https://medium.com/@irisembury/' + id + '"><span class="nowrap"><span class="medium-logo inline-icon"></span><span class="link-text">Medium</span></span></a>';
     }
     return "";
 }
@@ -158,13 +158,21 @@ function autoTable(chunk, table_number) {
                                 }
                             }
                             else {
-                                if (tableCell[i].trimStart().startsWith(".")) {
-                                    tableCell[i] = `<div class="fine"><p>${ tableCell[i].trim().substring(1) }</p></div>`;
-                                }
-                                else {
-                                    tableCell[i] = `<p>${ tableCell[i] }</p>`;
+                                tableCell[i] = tableCell[i].trim();
+                                if (tableCell[i]) {
+                                    if (tableCell[i].startsWith(".")) {
+                                        tableCell[i] = `<div class="fine"><p>${ tableCell[i].substring(1).trimStart() }</p></div>`;
+                                    }
+                                    /* if it starts with a non-link < tag, don't paragraph it: */
+                                    else if (tableCell[i].startsWith("<") && !tableCell[i].startsWith("<a")) {
+                                        tableCell[i] = tableCell[i];
+                                    }
+                                    else {
+                                        tableCell[i]= `<p>${ tableCell[i] }</p>`;
+                                    }
                                 }
                             }
+                            console.log(tableCell[i])
                             tableCell[i] = autoFormat(tableCell[i]);
                         }
                         return `<td class="cell col-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</td>`;
@@ -364,7 +372,7 @@ function linkReplace(chunk) {
         const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
         let a_tag = '<a';
         if (iconName) {
-            linkInner += '<span class="' + iconName + ' inline-icon"></span>';
+            linkInner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
         }
         return a_tag + ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
     });
