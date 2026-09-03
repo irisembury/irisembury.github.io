@@ -343,7 +343,7 @@ function linkReplace(chunk) {
             link_class.push("pseudo-link");
             link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
             let s_ = link_inner.lastIndexOf(" ") + 1;
-            link_inner = link_inner.substring(0, s_) + '<span class="nowrap">' + link_inner.substring(s_) + '<span class="inline-icon lightbox-link"></span></span>';
+            link_inner = link_inner.substring(0, s_) + link_inner.substring(s_) + '<span class="nowrap"><span class="inline-icon lightbox-link"></span></span>';
         }
         if (blankDisplay) {
             link_class.push('super');
