@@ -172,7 +172,6 @@ function autoTable(chunk, table_number) {
                                     }
                                 }
                             }
-                            console.log(tableCell[i])
                             tableCell[i] = autoFormat(tableCell[i]);
                         }
                         return `<td class="cell col-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</td>`;
@@ -354,8 +353,8 @@ function linkReplace(chunk) {
             a_tag = '<sup>' + a_tag + '</sup>';
         }
         return a_tag;
-    })
-    chunk = chunk.replace(/(?<=^|\s)(https?:\/\/\S+)(?=\s|$)/g, (match, linkUrl) => {
+    });
+    chunk = chunk.replace(/(?<=^|\s)(https?:\/\/[^\s<$]+)/g, (match, linkUrl) => {
         let linkAfter = "";
         if (/[.,?!;]$/.test(linkUrl)) {
             linkAfter = linkUrl.at(-1);
@@ -374,7 +373,9 @@ function linkReplace(chunk) {
         if (iconName) {
             linkInner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
         }
-        return a_tag + ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
+        a_tag += ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
+        console.log(a_tag)
+        return a_tag;
     });
     return chunk;
 }
@@ -383,7 +384,7 @@ function interpreter(argValue) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
-    let p_num = 1;
+    let paragraph_num = 1;
     let table_number = 1;
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
@@ -407,7 +408,12 @@ function interpreter(argValue) {
             chunk = autoList(chunk);
         }
         else {
-            chunk = `<p id="p-${ p_num++ }">${ autoFormat(chunk) }</p>`;
+            if (paragraph_num++ == 1) {
+                chunk = `<p class="first-p">${ autoFormat(chunk) }</p>`;
+            }
+            else {
+                chunk = `<p>${ autoFormat(chunk) }</p>`;
+            }
         }
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
@@ -572,7 +578,7 @@ function loadBody() {
         <div id="page">
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
-                <footer class="article-footer"><p>This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact irisembury@gmail.com.</p></footer>
+                <footer class="article-footer"><p>This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact contact@irisembury.com which directs to my personal inbox.</p></footer>
             </div>
         </div>
         <div class="lightbox hidden">
