@@ -335,7 +335,7 @@ function linkReplace(chunk) {
             link_class.push("external-link");
             const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
             if (iconName) {
-                link_inner += '<span class="' + iconName + ' inline-icon"></span>';
+                link_inner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
             }
         }
         else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg")) {
