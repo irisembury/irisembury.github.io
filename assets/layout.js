@@ -578,7 +578,7 @@ function loadBody() {
         <div id="page">
             <div class="main-container">
                 <article class="article">${ document.body.innerHTML }</article>
-                <footer class="article-footer"><p>This is a personal site powered by <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry, contact contact@irisembury.com which directs to my personal inbox.</p></footer>
+                <footer class="article-footer"><p>This is a personal site that I made and host via <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry you can contact contact@irisembury.com which directs to my personal inbox.</p></footer>
             </div>
         </div>
         <div class="lightbox hidden">
