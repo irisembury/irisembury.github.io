@@ -143,6 +143,10 @@
                     .auto-list ul + .text-block { margin-top: 0.65em; }
                 .article a { color: var(--link-color); }
                 .article a:hover { color: var(--link-hover); text-decoration: underline; }
+                .article a[href^="#"] {
+                    color: var(--grey-4,dimgrey);
+                    text-decoration: dotted underline var(--grey-7,grey);
+                }
                 .article sup { vertical-align: text-top; line-height: 1; }
                 .article sup a { text-decoration: none; margin-left: 1px; }
                 .article sub { vertical-align: sub; line-height: 1; }
@@ -176,7 +180,7 @@
                         .auto-table th,
                         .auto-table td { padding: 0.3em 0.5em 0.4em; vertical-align: top; }
                         .auto-table td > * + *:not(br) { margin-top: 5px; }
-                        .auto-table .auto-indent { margin-left: 5px; padding: 4px 10px 5px; font-size: calc(1em - 1px); }
+                        .auto-table .auto-indent { margin-left: 5px; padding: 5px 9px 5px; font-size: calc(1em - 1px); }
                 .file-box { background-color: light-dark(#fff0, #242424); border: 1px dashed grey; display: flex; gap: 3px; font-size: 14px; margin: 15px 0 15px 20px; line-height: 1.15; width: min-content; padding: 8px 6px 2px; float: right; }
                     .file-box figure { gap: 1px; width: 102px; display: flex; flex-direction: column; align-items: center; }
                         .file-box .pdf { width: 35px; aspect-ratio: 1; background: url(pdf-icon.png); background-size: contain; }
