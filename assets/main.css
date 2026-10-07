@@ -227,7 +227,7 @@
                 .recent-articles .listing-date { display: none; }
 
                     /* index section elements */
-                    .article-index { display: grid; padding: 0; margin-inline: auto; }
+                    .article-index { margin-inline: auto; max-width: 582px; width: 100%; }
                         .article-index .page-listing { padding: 8px 9px 7px; gap: 20px; }
                         .article-index .page-listing + .page-listing { border-top: 1px dotted var(--grey-c,silver); }
                         .article-index .page-listing:hover { background-color: var(--grey-f,whitesmoke); }
