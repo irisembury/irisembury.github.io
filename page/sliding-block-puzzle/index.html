@@ -51,29 +51,29 @@
         font-weight: 700;
         max-width: 50%;
     }
-	
-	</style></head><body>
-<main>
-    <div class="topInstructions">Goal: Put all tiles in order (1, 2, 3, 4, 5...)</div>
-    <br>
-    <section>
-        <table id="gameBoard"></table>
-        
-        <div style="font-family:Roboto,sans-serif; text-align:left; padding:5px; margin-top:16px;">
-            <label>Last move: </label><span id="lastMove"></span>
-            <span style="float: right"><label>Moves: </label><span id="moveCount">0</span></span>
-            <div style="text-align:center;">Time: <span id="timeDisplay">0</span></div>
-            <div style="text-align:right; margin-top:1em">
-                <select id="board-select" style="font-family:system-ui; padding:0.25rem;">
-                    <option value="1">board 1</option>
-                    <option value="2">board 2</option>
-                    <option value="3">board 3</option>
-                    <option value="4">board 4</option>
-                    <option value="5">random (not guaranteed to be possible)</option>
-                </select>
+	</style></head><body><main id="page">
+    <div>
+        <div class="topInstructions">Goal: Put all tiles in order (1, 2, 3, 4, 5...)</div>
+        <br>
+        <section>
+            <table id="gameBoard"></table>
+            
+            <div style="font-family:Roboto,sans-serif; text-align:left; padding:5px; margin-top:16px;">
+                <label>Last move: </label><span id="lastMove"></span>
+                <span style="float: right"><label>Moves: </label><span id="moveCount">0</span></span>
+                <div style="text-align:center;">Time: <span id="timeDisplay">0</span></div>
+                <div style="text-align:right; margin-top:1em">
+                    <select id="board-select" style="font-family:system-ui; padding:0.25rem;">
+                        <option value="1">board 1</option>
+                        <option value="2">board 2</option>
+                        <option value="3">board 3</option>
+                        <option value="4">board 4</option>
+                        <option value="5">random (not guaranteed to be possible)</option>
+                    </select>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </main>
 <script>
 	function rand(min, max) { return Math.floor(Math.random() * (max - min + 1) ) + min; }
@@ -300,6 +300,4 @@
             init(this.value)
         })
     })
-	</script>
-</body>
-</html>
+</script></body></html>

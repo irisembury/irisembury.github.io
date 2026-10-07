@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" dir="ltr" style="opacity:0"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/main.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body>
+<!DOCTYPE html><html lang="en" dir="ltr" style="opacity:0"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/main.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><main id="page">
 
 # Movies
 
@@ -288,13 +288,4 @@ Why haven't I seen a single movie released in 2020 or 2021? Just a coincidence? 
 
 Anyway.
 
-<script src="../../assets/layout.js"></script>
-<script>
-window.addEventListener("load", function() {
-    let table = document.querySelector(".auto-table tbody");
-    let rows = Array.from(table.rows);
-    document.querySelector(".movie-count").innerHTML = rows.length;
-    rows.sort((a, b) => parseInt(a.cells[1].textContent) - parseInt(b.cells[1].textContent));
-    rows.forEach(row => table.appendChild(row));
-});
-</script></body></html>
+</main><script src="../../assets/layout.js"></script><script>window.addEventListener("load", function() { let table = document.querySelector(".auto-table tbody"); let rows = Array.from(table.rows); document.querySelector(".movie-count").innerHTML = rows.length; rows.sort((a, b) => parseInt(a.cells[1].textContent) - parseInt(b.cells[1].textContent)); rows.forEach(row => table.appendChild(row)); });</script></body></html>

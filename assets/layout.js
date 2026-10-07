@@ -1,19 +1,5 @@
 "use strict"
-
-const HTML = document.documentElement;
-let page_links = [];
-let toc = null;
-let canTocUpdate = true;
-let tocLastHeading = 0;
-let rowsInToc = [];
-let pageHeadings = [];
-let navbar = null;
-let canNavCheck = true;
-let navSticky = false;
-let loadToc = false;
-let loadCitelist = false;
-const siteIcons = { 'youtube.com': 'youtube-logo', 'youtu.be': 'youtube-logo', 'twitch.tv': 'twitch-logo', 'bsky.app': 'bluesky-logo', 'x.com': 'twitter-logo', 'twitter.com': 'twitter-logo', 'facebook.com': 'facebook-logo', 'substack.com': 'substack-logo', 'instagram.com': 'instagram-logo', 'reddit.com': 'reddit-logo', 'medium.com': 'medium-logo', 'wikipedia.org': 'wikipedia-logo' };
-const KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
+const HTML = document.documentElement; let pageLinks = []; let _toc_ = null; let canTocUpdate = true; let tocLastHeading = 0; let rowsInToc = []; let pageHeadings = []; let loadToc = false; const siteIcons = { 'youtube.com': 'youtube-logo', 'youtu.be': 'youtube-logo', 'twitch.tv': 'twitch-logo', 'bsky.app': 'bluesky-logo', 'x.com': 'twitter-logo', 'twitter.com': 'twitter-logo', 'facebook.com': 'facebook-logo', 'substack.com': 'substack-logo', 'instagram.com': 'instagram-logo', 'reddit.com': 'reddit-logo', 'medium.com': 'medium-logo', 'wikipedia.org': 'wikipedia-logo', 'patreon.com': 'patreon-logo', 'tumblr.com': 'tumblr-logo', 'discord.gg': 'discord-logo', 'discord.com': 'discord-logo' }; const KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
 
 function scrollToTop() {
     window.scrollTo({ top: 0 });
@@ -26,7 +12,7 @@ function setLightbox(action) {
         let img = document.querySelector(".lightbox .lb-img-wrapper img")
         img.src = action.src;
         img.alt = action.alt;
-        img.title = action.title;
+        if (action.title != "Click to expand") img.title = action.title;
         document.querySelector(".lightbox .lb-top-left p").innerHTML = `This image: <a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
         document.querySelector(".lightbox .lb-caption-panel p").innerHTML = action.alt;
     }
@@ -46,16 +32,37 @@ function setLightbox(action) {
         }
     }
 }
-function parseSource(string_in, separator = ":") {
-    let [site, id] = string_in.trim().split(separator, 2);
-    switch (site) {
-        case 'tumblr': return '<a class="external-link tumblr-link" href="https://irisembury.tumblr.com/post/' + id + '" title="https://irisembury.tumblr.com/post/' + id + '"><span class="nowrap"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></span></a>';
-        case 'youtube': return '<a class="external-link youtube-link" href="https://youtu.be/' + id + '" title="https://youtu.be/' + id + '"><span class="nowrap"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></span></a>';
-        case 'substack': return '<a class="external-link substack-link" href="https://irisembury.substack.com/p/' + id + '" title="https://irisembury.substack.com/p/' + id + '"><span class="nowrap"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></span></a>';
-        case 'patreon': return '<a class="external-link patreon-link" href="https://www.patreon.com/posts/' + id + '" title="https://www.patreon.com/posts/' + id + '"><span class="nowrap"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></span></a>';
-        case 'medium': return '<a class="external-link medium-link" href="https://medium.com/@irisembury/' + id + '" title="https://medium.com/@irisembury/' + id + '"><span class="nowrap"><span class="medium-logo inline-icon"></span><span class="link-text">Medium</span></span></a>';
+function linkParse(string_in, mode = 0, separator = ":") {
+    /* 0 = link, 1 = tag, 3 = tag with icon */
+    let [sitename, id] = string_in.trim().split(separator, 2);
+    let ans = {
+        'youtube': [
+            `https://youtu.be/${id}`,
+            `<a class="external-link youtube-link" href="https://youtu.be/${id}" title="https://youtu.be/${id}">YouTube</a>`,
+            `<a class="external-link youtube-link" href="https://youtu.be/${id}" title="https://youtu.be/${id}"><span class="nowrap"><span class="youtube-logo inline-icon"></span><span class="link-text">YouTube</span></span></a>`
+        ],
+        'tumblr': [
+            `https://irisembury.tumblr.com/post/${id}`,
+            `<a class="external-link tumblr-link" href="https://irisembury.tumblr.com/post/${id}" title="https://irisembury.tumblr.com/post/${id}">Tumblr</a>`,
+            `<a class="external-link tumblr-link" href="https://irisembury.tumblr.com/post/${id}" title="https://irisembury.tumblr.com/post/${id}"><span class="nowrap"><span class="tumblr-logo inline-icon"></span><span class="link-text">Tumblr</span></span></a>`
+        ],
+        'substack': [
+            `https://irisembury.substack.com/p/${id}`,
+            `<a class="external-link substack-link" href="https://irisembury.substack.com/p/${id}" title="https://irisembury.substack.com/p/${id}">Substack</a>`,
+            `<a class="external-link substack-link" href="https://irisembury.substack.com/p/${id}" title="https://irisembury.substack.com/p/${id}"><span class="nowrap"><span class="substack-logo inline-icon"></span><span class="link-text">Substack</span></span></a>`
+        ],
+        'patreon': [
+            `https://www.patreon.com/posts/${id}`,
+            `<a class="external-link patreon-link" href="https://www.patreon.com/posts/${id}" title="https://www.patreon.com/posts/${id}">Patreon</a>`,
+            `<a class="external-link patreon-link" href="https://www.patreon.com/posts/${id}" title="https://www.patreon.com/posts/${id}"><span class="nowrap"><span class="patreon-logo inline-icon"></span><span class="link-text">Patreon</span></span></a>`
+        ],
+        'medium': [
+            `https://medium.com/@irisembury/${id}`,
+            `<a class="external-link medium-link" href="https://medium.com/@irisembury/${id}" title="https://medium.com/@irisembury/${id}">Medium</a>`,
+            `<a class="external-link medium-link" href="https://medium.com/@irisembury/${id}" title="https://medium.com/@irisembury/${id}"><span class="nowrap"><span class="medium-logo inline-icon"></span><span class="link-text">Medium</span></span></a>`
+        ]
     }
-    return "";
+    return ans[sitename][mode] ?? "";
 }
 function parseObj(entry, ...requiredFields) {
     entry = entry.trim().replaceAll('---','\u2014').replaceAll('--','\u2013').replaceAll("\"", "&quot;");
@@ -103,7 +110,7 @@ function imageGallery(chunk) {
         row.alt = row.alt || row.caption;
         if (row.caption) { row.caption = '<figcaption>' + row.caption + '</figcaption>'; }
         return `<figure>
-            <div><img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setLightbox(this)">
+            <img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setLightbox(this)">
             ${ row.caption }
         </figure>`;
     }).join("")}</div>`;
@@ -252,7 +259,6 @@ function dateFromISO(datestring) {
     return datestring;
 }
 function frontmatter(pageInfo) {
-    /* "frontmatter" is just a standard name I didn't come up with it */
     if (pageInfo.startsWith("---")) { pageInfo = pageInfo.substring(3); }
     if (pageInfo.endsWith("---")) { pageInfo = pageInfo.slice(0,-3); }
     pageInfo = parseObj(pageInfo.split("\n").map(n => n.trim()).filter(n => n.length > 3).join("|"));
@@ -265,7 +271,7 @@ function frontmatter(pageInfo) {
             HTML.classList.add("wide");
         }
         if (pageInfo.flags.includes("unset-width")) {
-            document.getElementById("lightswitch")?.parentNode.insertAdjacentHTML("beforeend", '<label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width">');
+            document.getElementById("lightswitch")?.parentNode.parentNode.insertAdjacentHTML("beforeend", '<div><label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width"></div>');
             if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
                 document.getElementById("unset-width").checked = true;
                 HTML.classList.add("unset-width");
@@ -278,21 +284,34 @@ function frontmatter(pageInfo) {
         }
     }
     if (pageInfo.title) {
-        articleTop.push(`<h1 class="auto-heading for-toc">${ pageInfo.title }</h1>`);
-        document.querySelector('.page-name')?.insertAdjacentHTML('beforeend', pageInfo.title);
+        articleTop.push(`<h1 class="for-toc">${ pageInfo.title }</h1>`);
         document.title = pageInfo.title;
     }
     if (pageInfo.subtitle) {
-        articleTop.push(`<h2 class="auto-heading">${ pageInfo.subtitle }</h2>`);
+        articleTop.push(`<h2>${ pageInfo.subtitle }</h2>`);
     }
-    if (pageInfo.date) {
-        articleTop.push(`<div class="article-byline">${ pageInfo.date }</div>`);
+    if (pageInfo.date || pageInfo.mirrors) {
+        let by = '<div class="article-byline label-external">';
+        if (pageInfo.date) {
+            let d1 = new Date(pageInfo.date);
+            let d2 = new Date();
+            d2.setFullYear(d2.getFullYear() - 2);
+            if (d1 < d2) {
+                pageInfo.date = '<span class="date-ago">' + pageInfo.date + '</span> (' + (new Date().getFullYear() - d1.getFullYear()) + '+ years ago)';
+            } else {
+                pageInfo.date = '<span>' + pageInfo.date + '</span>';
+            }
+            by += pageInfo.date;
+        }
+        if (pageInfo.mirrors) {
+            by += pageInfo.mirrors.split(",").map(m => linkParse(m,2)).join(" ");
+        }
+        articleTop.push(by + '</div>');
     }
-    if (pageInfo.mirrors) {
-        articleTop.push(`<div class="mirror-container label-external">This was posted in other places: <div>${ pageInfo.mirrors.split(",").map(m => parseSource(m)).join(" ") }</div></div>`);
+    if (articleTop.length != 0) {
+        document.querySelector(".article__body")?.insertAdjacentHTML("beforebegin", '<div class="article__top">' + articleTop.map(i => autoFormat(i)).join("\n") + '</div>')
     }
-    if (articleTop.length == 0) { return ""; }
-    return '<div class="article-top">' + articleTop.map(x => autoFormat(x)).join("\n") + '</div>';
+    return '';
 }
 function autoHeading(chunk) {
     let number = chunk.indexOf(" ");
@@ -304,7 +323,7 @@ function autoHeading(chunk) {
     const id = heading.replaceAll(" ", "_").replaceAll("---", '\u2014').replaceAll("--", "\u2013").replace(/[\*<>]/g, "");
     
     heading = autoFormat(heading);
-    return `<${ tag } class="auto-heading${ number == 4 ? '' : ' for-toc' }" id="${ id }">${ heading }</${ tag }>`;
+    return `<${ tag } id="${ id }"${ number == 4 ? '' : ' class="for-toc"'}>${ heading }</${ tag }>`;
 }
 function linkReplace(chunk) {
     chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
@@ -315,13 +334,13 @@ function linkReplace(chunk) {
         
         let linkIndex = '[link]';
         if (linkUrl.startsWith("http")) {
-            let _linkUrl = linkUrl;
-            if (_linkUrl.indexOf("#") != -1) {
-                _linkUrl = _linkUrl.substring(0, _linkUrl.indexOf("#"))
+            let _link_url = linkUrl;
+            if (_link_url.indexOf("#") != -1) {
+                _link_url = _link_url.substring(0, _link_url.indexOf("#"))
             }
-            linkIndex = page_links.indexOf(_linkUrl);
+            linkIndex = pageLinks.indexOf(_link_url);
             if (linkIndex == -1) {
-                linkIndex = page_links.push(_linkUrl); }
+                linkIndex = pageLinks.push(_link_url); }
         }
         if (linkUrl.startsWith('#')) {
             linkUrl = linkUrl.replaceAll(' ', '_');
@@ -360,12 +379,12 @@ function linkReplace(chunk) {
             linkAfter = linkUrl.at(-1);
             linkUrl = linkUrl.slice(0, -1);
         }
-        let _linkUrl = linkUrl;
-        if (_linkUrl.indexOf("#") != -1) {
-            _linkUrl = _linkUrl.substring(0, _linkUrl.indexOf("#"))
+        let _link_url = linkUrl;
+        if (_link_url.indexOf("#") != -1) {
+            _link_url = _link_url.substring(0, _link_url.indexOf("#"))
         }
-        if (page_links.indexOf(_linkUrl) == -1) {
-            page_links.push(_linkUrl);
+        if (pageLinks.indexOf(_link_url) == -1) {
+            pageLinks.push(_link_url);
         }
         let linkInner = linkUrl;
         const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
@@ -374,7 +393,6 @@ function linkReplace(chunk) {
             linkInner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
         }
         a_tag += ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
-        console.log(a_tag)
         return a_tag;
     });
     return chunk;
@@ -384,6 +402,7 @@ function interpreter(argValue) {
         argValue.innerHTML = interpreter(argValue.innerHTML);
         return;
     }
+    if (!argValue) return;
     let paragraph_num = 1;
     let table_number = 1;
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
@@ -392,28 +411,26 @@ function interpreter(argValue) {
         if (chunk.startsWith("---\n") && chunk.endsWith("\n---")) { return frontmatter(chunk); }
         if (chunk.startsWith("<") && !chunk.startsWith("<a")) { return chunk; }
         if (chunk == "---") { return "<hr>"; }
+        if (chunk == "***") { return '<div class="dinkus no-select">***</div>'; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         if (chunk.startsWith("!images")) { return imageGallery(chunk); }
         if (chunk.startsWith("!files")) { return fileBox(chunk); }
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         chunk = chunk.replace(/`(.+?)`/g, codeReplace);
-        if (chunk.startsWith("!table")) { return autoTable(chunk, table_number); }
+        if (chunk.startsWith("!table")) { return autoTable(chunk, table_number++); }
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
         let isFine = chunk.startsWith(".");
         if (isFine) { chunk = chunk.slice(1).trimStart(); }
         if (chunk.startsWith("!list")) { chunk = autoList(chunk.substring(chunk.indexOf('\n') + 1)); }
-        if (chunk.startsWith("-- ")) { return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + autoFormat(l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>' }
+        if (chunk.startsWith("-- ")) {
+            return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + autoFormat(l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>'
+        }
         else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
             chunk = autoList(chunk);
         }
         else {
-            if (paragraph_num++ == 1) {
-                chunk = `<p class="first-paragraph">${ autoFormat(chunk) }</p>`;
-            }
-            else {
-                chunk = `<p>${ autoFormat(chunk) }</p>`;
-            }
+            chunk = `<p>${ autoFormat(chunk) }</p>`;
         }
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
@@ -548,49 +565,82 @@ function getRootPath() {
     return '../'.repeat(path.length);
 }
 function loadBody() {
-    document.body.innerHTML = `
-        <nav class="navbar">
-            <div class="nav-inner">
-                <div><a class="index-button no-select" href="../../"><div><svg height="11" width="11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"><path fill="currentColor" d="M24.57,34.075c-0.505,0-1.011-0.191-1.396-0.577L8.11,18.432c-0.771-0.771-0.771-2.019,0-2.79 L23.174,0.578c0.771-0.771,2.02-0.771,2.791,0s0.771,2.02,0,2.79l-13.67,13.669l13.67,13.669c0.771,0.771,0.771,2.021,0,2.792 C25.58,33.883,25.075,34.075,24.57,34.075z"/></svg><span>Index</span></div></a></div>
-                <div><div class="page-name-segment"><span class="page-name pseudo-link" onclick="scrollToTop()"></span></div></div>
-                <div>
-                    <div class="menu-button"><svg viewBox="0 0 24 24" width="28" height="24"><path fill="currentcolor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></div>
+    const page = document.getElementById("page");
+    if (page) {
+        page.innerHTML = `
+            <article class="article">
+                <div class="article__body">
+                    ${ page.innerHTML }
                 </div>
-            </div>
-        </nav>
-        <div id="aligner">
-            <div class="right-panel">
+                ${ getRootPath()?`
+                    <footer class="article__footer">
+                        <div class="panel-switcher--580">
+                            <div>
+                                <div class="line-title"><span>Recently added</span><a href="../../#page_list">see all</a></div>
+                                <div class="recent-articles">${ pagesData.text.slice(0, 5).join('') }</div>
+                            </div>
+                            <div>
+                                <div class="line-title"><span>Recent videos</span><a href="../../?tab=videos">see all</a></div>
+                                <div class="recent-videos">${ pagesData.videos.slice(0, 2).join('') }</div>
+                            </div>
+                        </div>
+                    </footer>`:'' }
+            </article>`;
+        interpreter(page.querySelector('.article__body'));
+        page.insertAdjacentHTML("afterend",`
+            <footer class="page-footer__main">
+                <div class="page-footer__links">
+                    <p>Find, join, and follow me in other places</p>
+                    <div class="icons label-external">
+                        <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="inline-icon youtube-logo-bw"></span></a>
+                        <a href="https://x.com/irisembury"><span class="inline-icon twitter-logo-bw"></span></a>
+                        <a href="https://irisembury.substack.com"><span class="inline-icon substack-logo-bw"></span></a>
+                        <a href="https://discord.com/invite/aK83BPKQ5G"><span class="inline-icon discord-logo-bw"></span></a>
+                        <a href="https://bsky.app/profile/irisembury.bsky.social"><span class="inline-icon bluesky-logo-bw"></span></a>
+                        <a href="https://irisembury.tumblr.com/"><span class="inline-icon tumblr-logo-bw"></span></a>
+                        <a href="https://medium.com/u/32081f2a377f"><span class="inline-icon medium-logo-bw"></span></a>
+                        <a href="https://www.patreon.com/cw/irisembury"><span class="inline-icon patreon-logo-bw"></span></a>
+                    </div>
+                </div>
+                <div class="page-footer__about">
+                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. | Aspects of this site might not load ideally if you're on mobile. If you're a mobile user, I hate you. The small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. | For general inquiry: contact@irisembury.com</p>
+                </div>
+            </footer>`);
+    }
+    document.body.insertAdjacentHTML("afterbegin", `
+        <header class="page-header">
+            <a class="header__name" href="${getRootPath()}">Iris Embury</a>
+            <div class="gear"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
+        </header>
+        <div class="menu">
+            <div class="gc t s">
                 <h3>Display:</h3>
-                <div class="switches-area">
-                    <label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch">
+                <div class="gr vs">
+                    <div><label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch"></div>
                 </div>
-                <hr>
+            </div>
+            <div class="gc t s">
                 <h3>Text formatting:</h3>
-                <div class="switches-area">
-                    <label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text">
-                    <label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text">
-                    <label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins">
+                <div class="gr vs">
+                    <div><label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
+                    <div><label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
+                    <div><label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins"></div>
                 </div>
-                <div>
-                </div>
-                <div style="text-align:right"><span class="grey-8 pseudo-link" onclick="localStorage.clear();this.parentNode.parentNode.classList.remove('open');document.querySelectorAll('.right-panel .switches-area input').forEach(x=>{if(x.checked)x.click()});">restore defaults</span></div>
             </div>
-            <div class="screen"></div>
-        </div>
-        <div id="page">
-            <div class="main-container">
-                <article class="article">${ document.body.innerHTML }</article>
-                <footer class="article-footer"><p>This is a personal site that I made and host via <a href="https://github.com/irisembury">GitHub</a>. I have no association with any other person or organization. For general inquiry you can contact contact@irisembury.com which directs to my personal inbox.</p></footer>
+            <div>
+                <div class="text-right grey-8"><span class="pseudo-link" onclick="localStorage.clear(); document.querySelector('.menu')?.classList.remove('open'); document.querySelectorAll('.menu input').forEach(x => { if (x.checked) x.click() });">restore defaults</span></div>
             </div>
         </div>
-        <div class="lightbox hidden">
+        <div class="toc-btn" onclick="tocToggle()" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" width="20" height="20" viewBox="0 0 20 20"><path d="M3 16H1v-2h2zm16 0H5v-2h14zM3 11H1V9h2zm16 0H5V9h14zM3 6H1V4h2zm16 0H5V4h14z"/></svg></div>
+        `
+    );
+    document.body.insertAdjacentHTML("beforeend", `<div class="lightbox hidden">
             <div class="lb-top-left"><p></p></div>
             <div class="lb-img-wrapper" onclick="setLightbox('close')"><img></div>
             <div class="lb-caption-panel"><p></p></div>
-        </div>`;
-    navbar = document.querySelector(".navbar");
-    interpreter(document.querySelector(".article"));
-    window.addEventListener("scroll", navCheck); navCheck();
+        </div>`
+    );
+    //interpreter(document.querySelector(".article"));
 }
 function tocUpdate() {
     if (!canTocUpdate) { return; }
@@ -639,27 +689,6 @@ function setupLightswitch() {
         })
     }
 }
-function navCheck() {
-    if (!canNavCheck) {
-        return;
-    }
-    canNavCheck = false;
-    navCheck_();
-    setTimeout(() => {
-        canNavCheck = true;
-        navCheck_();
-    }, 250);
-}
-function navCheck_() {
-    if (!navSticky && pageYOffset > 1) {
-        navbar.classList.add("sticky-active");
-        navSticky = true;
-    }
-    else if (navSticky && pageYOffset < 2) {
-        navbar.classList.remove("sticky-active");
-        navSticky = false;
-    }
-}
 function rightMenuSetup() {
     Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
         c => {
@@ -674,41 +703,40 @@ function rightMenuSetup() {
             });
         }
     )
-    const right_menu_panel = document.querySelector(".right-panel");
+    const _menu_ = document.querySelector(".menu");
     function rightMenuToggle(option) {
         if (option == "open") {
-            right_menu_panel.classList.add("open");
+            _menu_.classList.add("open");
         }
         else if (option == "close") {
-            right_menu_panel.classList.remove("open");
+            _menu_.classList.remove("open");
         }
         else {
-            rightMenuToggle(!right_menu_panel.classList.contains("open") ? "open" : "close");
+            rightMenuToggle(!_menu_.classList.contains("open") ? "open" : "close");
         }
     }
-    const right_menu_hamburger_button = document.querySelector(".menu-button");
-    const toc_toggle_button = document.querySelector(".toc-toggle-button");
+    const _gear_ = document.querySelector(".gear");
+    const _toc_btn_ = document.querySelector(".toc-btn");
     
-    right_menu_hamburger_button?.addEventListener("click", rightMenuToggle);
+    _gear_?.addEventListener("click", rightMenuToggle);
     
-    if (right_menu_hamburger_button && toc_toggle_button) {
+    if (_gear_ && _toc_btn_) {
         window.addEventListener("click", function(e) {
-            if (!right_menu_panel.contains(e.target) && !right_menu_hamburger_button.contains(e.target)) {
+            if (!_menu_.contains(e.target) && !_gear_.contains(e.target)) {
                 rightMenuToggle("close");
             }
-            if (!toc.contains(e.target) && !toc_toggle_button.contains(e.target)) {
+            if (!_toc_?.contains(e.target) && !_toc_btn_.contains(e.target)) {
                 tocHide();
             }
         })
     }
-    else if (right_menu_hamburger_button) {
+    else if (_gear_) {
         window.addEventListener("click", function(e) {
-            if (!right_menu_panel.contains(e.target) && !right_menu_hamburger_button.contains(e.target)) {
+            if (!_menu_.contains(e.target) && !_gear_.contains(e.target)) {
                 rightMenuToggle("close");
             }
         })
     }
-    
     window.addEventListener("keydown", function(e) {
         if (e.key === "Escape") {
             rightMenuToggle("close");
@@ -721,41 +749,118 @@ function rightMenuSetup() {
     })
 }
 function tocToggle() {
-    toc.classList.toggle("attach", !toc.classList.contains("attach"));
+    _toc_?.classList.toggle("attach", !_toc_.classList.contains("attach"));
 }
 function tocHide() {
-    toc.classList.remove("attach");
+    _toc_?.classList.remove("attach");
 }
 function tocSetup() {
-    pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
-    pageHeadings.forEach(h => { h.classList.remove("for-toc"); if (h.classList.length == 0) { h.removeAttribute('class'); } });
-    if (pageHeadings.length < 3) { return; }
-    const aligner_ = document.getElementById("aligner");
     const page_ = document.getElementById("page");
-    if (page_ == null || aligner_ == null) return;
-    aligner_.insertAdjacentHTML("beforeend",`<div class="toc-toggle-button" onclick="tocToggle()" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" width="20" height="20" viewBox="0 0 20 20"><path d="M3 16H1v-2h2zm16 0H5v-2h14zM3 11H1V9h2zm16 0H5V9h14zM3 6H1V4h2zm16 0H5V4h14z"/></svg></div>`);
-    page_.insertAdjacentHTML("afterbegin",`<nav class="toc"></nav>`);
-    page_.insertAdjacentHTML("beforeend",`<div class="right-spacer"></div>`);
-    toc = document.querySelector(".toc");
-    toc.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
-    toc.scrollTo({ behavior: "instant", top: 0 })
-    rowsInToc = Array.from(toc.getElementsByClassName("toc-row"));
-    window.addEventListener("scroll", tocUpdate);
-    tocUpdate();
+    if (page_ && loadToc) {
+        pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
+        pageHeadings.forEach(h => { h.classList.remove("for-toc"); if (h.classList.length == 0) { h.removeAttribute('class'); } });
+        if (pageHeadings.length < 3) { return; }
+        page_.insertAdjacentHTML("afterbegin",`<nav class="toc"></nav>`);
+        page_.insertAdjacentHTML("beforeend",`<div class="page-spacer"></div>`);
+        _toc_ = document.querySelector(".toc");
+        _toc_.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
+        _toc_.scrollTo({ behavior: "instant", top: 0 })
+        rowsInToc = Array.from(_toc_.getElementsByClassName("toc-row"));
+        window.addEventListener("scroll", tocUpdate);
+        tocUpdate();
+    }
 }
+
+const pagesData = {
+    videos: `
+    title:Getting to know leftist YouTubers |date:2026-09-25 |src:youtube:gWHImeICuYw |length:1:17:57 |thumb:leftyt.jpg
+    title:Medical Assistance in Dying (MAiD) |date:2026-09-16 |src:patreon:169696851,youtube:0n0edHbri5k |length:13:32 |thumb:maid2.jpg
+    title:Mark Carney |date:2026-08-18 |src:youtube:5fsJUueUvpw.jpg,patreon:167033503 |thumb:5fsJUueUvpw.jpg |length:13:54
+    title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:QPNCs5A3iYo.jpg
+    title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:cDJ3lQH7m0Y.jpg
+    title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18
+    title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
+    title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
+    title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13
+    title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04
+    title:How bad is America, really? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04
+    title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:oUOsAdnK2zs.jpg |length:39:47
+    title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:TYoe1jxBYPY.jpg |length:12:08
+    title:India |thumb:Pz0Oq1rb14E.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17
+    title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50
+    title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39
+    title:Why do people like Trump? |date:2025-09-13 |src:youtube:tcF0f-Dtgic |thumb:WhyTrump.jpg |length:11:33
+    title:Exploring lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02
+    title:Bernie Sanders & the Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
+    title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14`.split("\n").map(v => v.trim()).filter(v => v.length > 3).map(v => parseObj(v,'date','src')).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(v => `<figure class="video-figure"><div class="img-box"><a href="${ linkParse(v.src.split(",").sort().reverse().at(0)) }"><div class="img" loading="lazy" style="background-image:url('${getRootPath()}assets/thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div></a></div><figcaption><div class="video-title">${ v.title }</div><div class="video-sources">${ v.src.split(",").sort().reverse().map(m => linkParse(m,1)).join(" | ") }</div><div class="video-date"><span>${ dateFromISO(v.date) }</span></div></figcaption></figure>`),
+    text:`
+    Leftist YouTube | leftist-youtube | 2026-10-07
+    On airport privatization | airport-privatization | 2026-09-20
+    Medical Assistance in Dying | maid | 2026-09-14
+    On the AfD victory in Saxony-Anhalt | afd-victory-2026 | 2026-09-08
+    The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
+    The problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
+    How bad is America, really? | how-bad-is-america-really | 2026-07-01
+    What was the Freedom Convoy? | freedom-convoy | 2026-06-15
+    The Conservative Party's hard problem | conservative-party-hard-problem | 2026-05-01
+    Canada's plan for a sovereign wealth fund | canada-sovereign-wealth-fund | 2026-04-29
+    Floor crossings | floor-crossings | 2026-04-17
+    Rational ignorance | rational-ignorance | 2026-04-09
+    The case for abortion | abortion | 2026-02-18
+    A synopsis of American decline | american-decline | 2026-01-28
+    Fetishism and politics | fetishism-politics | 2024-11-14
+    Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
+    Thoughts on Reddit | reddit | 2025-12-30
+    Stay the trenches | stay-the-trenches | 2025-12-17
+    Immigration | immigration | 2025-11-06
+    Thoughts on prejudice | prejudice | 2025-10-30
+    India | india | 2025-10-24
+    Liberalism not leftism | liberalism-not-leftism | 2025-09-19
+    Bill Maher and Normalization | normalization | 2025-09-08
+    Israel & Palestine | israel-palestine | 2025-07-27
+    Lies about Ilhan Omar | lies-about-ilhan-omar | 2025-08-25
+    Trump and Russia | trump-and-russia | 2025-03-06
+    Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
+    On types of masculinity | types-of-masculinity | 2024-11-08
+    Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
+    Lies about Elizabeth Warren and Hillary Clinton | lies-about-warren-clinton | 2024-12-19
+    Mark Robinson | mark-robinson | 2024-12-15
+    Liberal Conservatism | liberal-conservatism | 2026-03-24
+    Why do people like Trump? | the-trump-appeal | 2024-12-03
+    On our bias for normal white men | bias-normal-white-men | 2024-11-26
+    Bernie Sanders and the Military Industrial Complex | bernie-sanders-and-the-military-industrial-complex | 2024-12-16
+    Sex, Gender, & Transsexuals | sex-gender-transsexuals | 2024-11-19
+    Poor Things | poor-things | 2024-10-31
+    The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3).map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}}).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(p => `<div class="page-listing"><div class="page-listing-title"><a title="${ p.title }" href="${ getRootPath() }page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="listing-date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`)
+}
+
 function init() {
     loadBody();
     rightMenuSetup();
     setupLightswitch();
-    if (loadToc) tocSetup();
+    tocSetup();
     Array.from(document.querySelectorAll(".auto-format")).forEach(a => { a.innerHTML = autoFormat(a.innerHTML); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
-    Array.from(document.querySelectorAll(".auto-paragraphs")).forEach(a => { a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(l => `<p>${ autoFormat(l) }</p>`).join(""); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
+    Array.from(document.querySelectorAll(".auto-paragraphs")).forEach(a => {
+        a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(
+            line => {
+                if (line.startsWith('.')) { return `<div class='fine'><p>${ autoFormat(line.substring(1).trimStart()) }</p></div>`; }
+                if (line.startsWith('#')) { return `<h4>${ autoFormat(line.substring(1).trimStart()) }</h4>`; }
+                return `<p>${ autoFormat(line) }</p>`
+            }
+        ).join('');
+        a.classList.remove("auto-paragraphs");
+        if (a.classList.length == 0) {
+            a.removeAttribute("class");
+        }
+    });
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
+    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", pagesData.text.join(''));
+    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", pagesData.videos.join(''));
+    document.querySelector(".latest-videos-front")?.insertAdjacentHTML("beforeend", pagesData.videos.slice(0, 4).join(''));
     if (document.title == "") { document.title = "Iris Embury"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
 }
 window.addEventListener("load", init);
-
