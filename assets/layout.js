@@ -603,7 +603,7 @@ function loadBody() {
                     </div>
                 </div>
                 <div class="page-footer__about">
-                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. | Aspects of this site might not load ideally if you're on mobile. If you're a mobile user, I hate you. The small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. | For general inquiry: contact@irisembury.com</p>
+                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. • Aspects of this site might not load ideally if you're on mobile. If you're a mobile user, I hate you. The small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. • For general inquiry: contact@irisembury.com</p>
                 </div>
             </footer>`);
     }
@@ -773,7 +773,7 @@ function tocSetup() {
 
 const pagesData = {
     videos: `
-    title:Getting to know leftist YouTubers |date:2026-09-25 |src:youtube:gWHImeICuYw |length:1:17:57 |thumb:leftyt.jpg
+    title:Thoughts on Leftist YouTube |date:2026-09-25 |src:youtube:R_xfJqp3M4g |length:1:17:57 |thumb:R_xfJqp3M4g.jpg
     title:Medical Assistance in Dying (MAiD) |date:2026-09-16 |src:patreon:169696851,youtube:0n0edHbri5k |length:13:32 |thumb:maid2.jpg
     title:Mark Carney |date:2026-08-18 |src:youtube:5fsJUueUvpw.jpg,patreon:167033503 |thumb:5fsJUueUvpw.jpg |length:13:54
     title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:QPNCs5A3iYo.jpg
@@ -794,7 +794,7 @@ const pagesData = {
     title:Bernie Sanders & the Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
     title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14`.split("\n").map(v => v.trim()).filter(v => v.length > 3).map(v => parseObj(v,'date','src')).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(v => `<figure class="video-figure"><div class="img-box"><a href="${ linkParse(v.src.split(",").sort().reverse().at(0)) }"><div class="img" loading="lazy" style="background-image:url('${getRootPath()}assets/thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div></a></div><figcaption><div class="video-title">${ v.title }</div><div class="video-sources">${ v.src.split(",").sort().reverse().map(m => linkParse(m,1)).join(" | ") }</div><div class="video-date"><span>${ dateFromISO(v.date) }</span></div></figcaption></figure>`),
     text:`
-    Leftist YouTube | leftist-youtube | 2026-10-07
+    Thoughts on Leftist YouTube | leftist-youtube | 2026-10-07
     On airport privatization | airport-privatization | 2026-09-20
     Medical Assistance in Dying | maid | 2026-09-14
     On the AfD victory in Saxony-Anhalt | afd-victory-2026 | 2026-09-08

@@ -45,7 +45,7 @@
             .landing__about { margin-inline: auto; display: grid; grid-template-columns: auto auto; gap: 20px; justify-items: center; }
             @media (max-width: 430px) { .landing__about { grid-template-columns: auto; } }
             .landing__about p { max-width: 374px; }
-                .profile-img { width: 128px; aspect-ratio: 1; filter: grayscale(0.1); float: left; background-position: center; background-image: url(assets/pf.jpg); background-size: cover; background-repeat: no-repeat; border-radius: 50%; }
+                .profile-img { width: 170px; aspect-ratio: 1; border-radius: 5px; float: left; background-position: center; background-image: url(assets/pf.jpg); background-size: cover; background-repeat: no-repeat; border: 1px solid var(--grey-9,grey); }
                 .dark .profile-img { filter: contrast(0.9); }
             .latest-videos-front { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
             .latest-videos-front .video-date { display: none; }
@@ -62,7 +62,7 @@
 <div id="page">
 <div>
     <div class="tabs">
-        <div class="tab no-select landing" onclick="fsetTab('landing')">Main</div>
+        <div class="tab no-select landing" onclick="fsetTab('landing')">Home</div>
         <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
         <div class="tab no-select donate" onclick="fsetTab('donate')">Donate</div>
     </div>
