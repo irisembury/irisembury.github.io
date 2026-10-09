@@ -42,10 +42,10 @@
         .tab-panel p + p { margin-top: 8px; }
         
         .landing.tab-panel { gap: 38px; }
-            .landing__about { margin-inline: auto; display: grid; grid-template-columns: auto auto; gap: 20px; justify-items: center; }
+            .landing__about { margin-inline: auto; }
             @media (max-width: 430px) { .landing__about { grid-template-columns: auto; } }
-            .landing__about p { max-width: 374px; }
-                .profile-img { width: 170px; aspect-ratio: 1; border-radius: 5px; float: left; background-position: center; background-image: url(assets/pf.jpg); background-size: cover; background-repeat: no-repeat; border: 1px solid var(--grey-9,grey); }
+            .landing__about p { max-width: 650px; }
+                .profile-img { width: 140px; aspect-ratio: 0.8; border-radius: 5px; float: left; background-position: center; background-image: url(assets/pf.jpg); background-size: cover; background-repeat: no-repeat; border: 1px solid var(--grey-9,grey); }
                 .dark .profile-img { filter: contrast(0.9); }
             .latest-videos-front { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
             .latest-videos-front .video-date { display: none; }
@@ -69,7 +69,6 @@
     <div class="tab-panels__main">
         <div class="landing tab-panel">
             <div class="landing__about">
-                <div><div class="profile-img"></div></div>
                 <div class="auto-paragraphs links-inherit">
                     I'm **Iris Catherine Embury** (b. 1994). I'm an English Canadian living in Ottawa.
                     This is a personal site where you can copies of the stuff I do, and links to stuff I put on other websites.
