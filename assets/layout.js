@@ -62,7 +62,11 @@ function linkParse(string_in, mode = 0, separator = ":") {
             `<a class="external-link medium-link" href="https://medium.com/@irisembury/${id}" title="https://medium.com/@irisembury/${id}"><span class="nowrap"><span class="medium-logo inline-icon"></span><span class="link-text">Medium</span></span></a>`
         ]
     }
-    return ans[sitename][mode] ?? "";
+    if (ans[sitename] && ans[sitename][mode]) {
+        return ans[sitename][mode];
+    }
+    console.error('linkParse: ' + sitename + ', ' + mode + ' (' + string_in + ')')
+    return '';
 }
 function parseObj(entry, ...requiredFields) {
     entry = entry.trim().replaceAll('---','\u2014').replaceAll('--','\u2013').replaceAll("\"", "&quot;");
@@ -430,7 +434,7 @@ function interpreter(argValue) {
             chunk = autoList(chunk);
         }
         else {
-            chunk = `<p>${ autoFormat(chunk) }</p>`;
+            chunk = `<p id="p-${ paragraph_num++ }">${ autoFormat(chunk) }</p>`;
         }
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
@@ -773,64 +777,82 @@ function tocSetup() {
 
 const pagesData = {
     videos: `
-    title:Thoughts on Leftist YouTube |date:2026-09-25 |src:youtube:R_xfJqp3M4g |length:1:17:57 |thumb:R_xfJqp3M4g.jpg
-    title:Medical Assistance in Dying (MAiD) |date:2026-09-16 |src:patreon:169696851,youtube:0n0edHbri5k |length:13:32 |thumb:maid2.jpg
-    title:Mark Carney |date:2026-08-18 |src:youtube:5fsJUueUvpw.jpg,patreon:167033503 |thumb:5fsJUueUvpw.jpg |length:13:54
-    title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:QPNCs5A3iYo.jpg
-    title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:cDJ3lQH7m0Y.jpg
-    title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:207IiRGFowE.jpg |length:2:41:18
-    title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
-    title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
-    title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:Sy33HSFsuu8.jpg |length:2:03:13
-    title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:CpjJ8TgOxJY.jpg |length:43:04
-    title:How bad is America, really? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:W0Dmtyyc7FU.jpg |length:27:04
-    title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:oUOsAdnK2zs.jpg |length:39:47
-    title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:TYoe1jxBYPY.jpg |length:12:08
-    title:India |thumb:Pz0Oq1rb14E.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17
-    title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50
-    title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39
-    title:Exploring lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:LPQD6sxlWOs.jpg |length:34:02
-    title:Bernie Sanders & the Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
-    title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:Hgh3r7gJoWU.jpg |length:1:26:14`.split("\n").map(v => v.trim()).filter(v => v.length > 3).map(v => parseObj(v,'date','src')).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(v => `<figure class="video-figure"><div class="img-box"><a href="${ linkParse(v.src.split(",").sort().reverse().at(0)) }"><div class="img" loading="lazy" style="background-image:url('${getRootPath()}assets/thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div></a></div><figcaption><div class="video-title">${ v.title }</div><div class="video-sources">${ v.src.split(",").sort().reverse().map(m => linkParse(m,1)).join(" | ") }</div><div class="video-date"><span>${ dateFromISO(v.date) }</span></div></figcaption></figure>`),
+        title:Canadian separatism |date:2026-10-12 |src:patreon:172199226,youtube:Q_ltXhrXb6s |thumb:172199226.jpg |length:10:13
+        title:Macklemore, Ed Sheeran |date:2026-10-10 |src:youtube:_lfRiHlNFbc,patreon:172218877 |thumb:172218877.jpg |length:41:18
+        title:Thoughts on Leftist YouTube |date:2026-09-25 |src:youtube:R_xfJqp3M4g,patreon:171931256 |length:1:17:57 |thumb:171931256.jpg
+        title:Medical Assistance in Dying (MAiD) |date:2026-09-16 |src:patreon:169696851,youtube:0n0edHbri5k |length:13:32 |thumb:maid-2.jpg
+        title:Mark Carney |date:2026-08-18 |src:youtube:5fsJUueUvpw,patreon:167033503 |thumb:167033503.jpg |length:13:54
+        title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:166429634.jpg
+        title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:166242253.jpg
+        title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:164228303.jpg |length:2:41:18
+        title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
+        title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
+        title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:154996870.jpg |length:2:03:13
+        title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:151884875.jpg |length:43:04
+        title:How bad is America, really? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:152288758.jpg |length:27:04
+        title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:150555019.jpg |length:39:47
+        title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:148679519.jpg |length:12:08
+        title:India |thumb:148682097.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17
+        title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50
+        title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39
+        title:Exploring lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:148676394.jpg |length:34:02
+        title:Bernie Sanders & the Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
+        title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:148676474.jpg |length:1:26:14
+    `.split("\n").map(v => v.trim()).filter(v => v.length > 3).map(v => {
+        let k = parseObj(v,'date','src');
+        k.src = k.src.split(',').sort().reverse().filter(n => linkParse(n,1));
+        console.log(k.src)
+        return k;
+    }).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
+        v => `<figure class="video-figure">
+            <div class="img-box"><a href="${ linkParse(v.src[0],0) }"><div class="img" loading="lazy" style="background-image:url('${ getRootPath() }assets/thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div></a></div>
+            <figcaption class="label-external">
+                <div class="video-title">${ v.title }</div>
+                <div class="video-sources">${ v.src.map(n => linkParse(n,1)).join(" | ") }</div>
+                <div class="video-date"><span>${ dateFromISO(v.date) }</span></div>
+            </figcaption><style>.video-figure .video-sources .link-text { display: none; }</style>
+        </figure>`
+    ),
     text:`
-    Thoughts on Leftist YouTube | leftist-youtube | 2026-10-07
-    On airport privatization | airport-privatization | 2026-09-20
-    Medical Assistance in Dying | maid | 2026-09-14
-    On the AfD victory in Saxony-Anhalt | afd-victory-2026 | 2026-09-08
-    The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
-    The problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
-    How bad is America, really? | how-bad-is-america-really | 2026-07-01
-    What was the Freedom Convoy? | freedom-convoy | 2026-06-15
-    The Conservative Party's hard problem | conservative-party-hard-problem | 2026-05-01
-    Canada's plan for a sovereign wealth fund | canada-sovereign-wealth-fund | 2026-04-29
-    Floor crossings | floor-crossings | 2026-04-17
-    Rational ignorance | rational-ignorance | 2026-04-09
-    The case for abortion | abortion | 2026-02-18
-    A synopsis of American decline | american-decline | 2026-01-28
-    Fetishism and politics | fetishism-politics | 2024-11-14
-    Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
-    Thoughts on Reddit | reddit | 2025-12-30
-    Stay the trenches | stay-the-trenches | 2025-12-17
-    Immigration | immigration | 2025-11-06
-    Thoughts on prejudice | prejudice | 2025-10-30
-    India | india | 2025-10-24
-    Liberalism not leftism | liberalism-not-leftism | 2025-09-19
-    Bill Maher and Normalization | normalization | 2025-09-08
-    Israel & Palestine | israel-palestine | 2025-07-27
-    Lies about Ilhan Omar | lies-about-ilhan-omar | 2025-08-25
-    Trump and Russia | trump-and-russia | 2025-03-06
-    Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
-    On types of masculinity | types-of-masculinity | 2024-11-08
-    Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
-    Lies about Elizabeth Warren and Hillary Clinton | lies-about-warren-clinton | 2024-12-19
-    Mark Robinson | mark-robinson | 2024-12-15
-    Liberal Conservatism | liberal-conservatism | 2026-03-24
-    Why do people like Trump? | the-trump-appeal | 2024-12-03
-    On our bias for normal white men | bias-normal-white-men | 2024-11-26
-    Bernie Sanders and the Military Industrial Complex | bernie-sanders-and-the-military-industrial-complex | 2024-12-16
-    Sex, Gender, & Transsexuals | sex-gender-transsexuals | 2024-11-19
-    Poor Things | poor-things | 2024-10-31
-    The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19`.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3).map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}}).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(p => `<div class="page-listing"><div class="page-listing-title"><a title="${ p.title }" href="${ getRootPath() }page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="listing-date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`)
+        Thoughts on Leftist YouTube | leftist-youtube | 2026-10-07
+        On airport privatization | airport-privatization | 2026-09-20
+        Medical Assistance in Dying | maid | 2026-09-14
+        On the AfD victory in Saxony-Anhalt | afd-victory-2026 | 2026-09-08
+        The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
+        The problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
+        How bad is America, really? | how-bad-is-america-really | 2026-07-01
+        What was the Freedom Convoy? | freedom-convoy | 2026-06-15
+        The Conservative Party's hard problem | conservative-party-hard-problem | 2026-05-01
+        Canada's plan for a sovereign wealth fund | canada-sovereign-wealth-fund | 2026-04-29
+        Floor crossings | floor-crossings | 2026-04-17
+        Rational ignorance | rational-ignorance | 2026-04-09
+        The case for abortion | abortion | 2026-02-18
+        A synopsis of American decline | american-decline | 2026-01-28
+        Fetishism and politics | fetishism-politics | 2024-11-14
+        Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
+        Thoughts on Reddit | reddit | 2025-12-30
+        Stay the trenches | stay-the-trenches | 2025-12-17
+        Immigration | immigration | 2025-11-06
+        Thoughts on prejudice | prejudice | 2025-10-30
+        Notes on India | india | 2025-10-24
+        Liberalism not leftism | liberalism-not-leftism | 2025-09-19
+        Bill Maher and Normalization | normalization | 2025-09-08
+        Israel & Palestine | israel-palestine | 2025-07-27
+        Lies about Ilhan Omar | lies-about-ilhan-omar | 2025-08-25
+        Trump and Russia | trump-and-russia | 2025-03-06
+        Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
+        On types of masculinity | types-of-masculinity | 2024-11-08
+        Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
+        Lies about Elizabeth Warren and Hillary Clinton | lies-about-warren-clinton | 2024-12-19
+        Mark Robinson | mark-robinson | 2024-12-15
+        Liberal Conservatism | liberal-conservatism | 2026-03-24
+        Why do people like Trump? | the-trump-appeal | 2024-12-03
+        On our bias for normal white men | bias-normal-white-men | 2024-11-26
+        Bernie Sanders and the Military Industrial Complex | bernie-sanders-and-the-military-industrial-complex | 2024-12-16
+        Sex, Gender, & Transsexuals | sex-gender-transsexuals | 2024-11-19
+        Poor Things | poor-things | 2024-10-31
+        The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
+    `.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3).map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}}).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(p => `<div class="page-listing"><div class="page-listing-title"><a title="${ p.title }" href="${ getRootPath() }page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="listing-date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`)
 }
 
 function init() {
