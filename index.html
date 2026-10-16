@@ -24,15 +24,13 @@
     .tabs { gap: 2px 8px; margin-block: 0px 24px; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; flex-wrap: wrap; padding: 0 1rem; border-bottom: 1px solid var(--grey-d,lightgrey); }
         .tab { padding: 10px 14px 9px; color: var(--grey-6,dimgrey); text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; }
         .tab:hover { background-color: var(--grey-e,gainsboro); }
-        .tab.selected { color: var(--grey-2,black); border-bottom-color: var(--grey-3,black); font-weight: 700; }
+        .tab.selected { color: var(--grey-2,black); border-bottom-color: var(--grey-3,black); font-weight: 600; }
             .dummy { font-weight: 700; visibility: hidden; height: 0; }
         
     @media (max-width: 480px) {
         .tabs { padding: 0; gap: 1px 4px; font-size: 15px; }
         .tab { padding: 8px 8px 6px; }
     }
-    
-    .fine, .fine * { color: var(--grey-6,grey) !important; line-height: 1.3 !important; }
     
     .tab-panels__main { font: 17px/1.4 Roboto,Arial,sans-serif; max-width: var(--main-width); }
         .tab-panel { display: none; padding: 0px 17px; gap: 20px; }
@@ -53,8 +51,6 @@
             @media (max-width: 540px) { .latest-videos-front { grid-template-columns: 1fr 1fr; } .latest-videos-front > :nth-child(n+3) { display: none; } }
             @media (max-width: 380px) { .latest-videos-front { grid-template-columns: 1fr; justify-items: center; } }
             
-            #page_list { justify-content: center; }
-        
     </style>
 </head>
 <body>
@@ -64,25 +60,32 @@
     <div class="tabs">
         <div class="tab no-select landing" onclick="fsetTab('landing')">Home</div>
         <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
+        <div class="tab no-select articles" onclick="fsetTab('articles')">Text pages</div>
     </div>
     <div class="tab-panels__main">
         <div class="landing tab-panel">
             <div class="landing__about">
                 <div class="auto-paragraphs links-inherit">
-                    I'm **Iris Catherine Embury** (b. 1994). I'm an English Canadian living in Ottawa.
+                    I'm **Iris Catherine Embury**. I'm an English Canadian living in Ottawa.
                     This is a personal site where you can copies of the stuff I do, and links to stuff I put on other websites.
                 </div>
             </div>
-            <div>
+            <div class="panel-switcher--580">
                 <div>
-                    <div class="line-title"><span>Recent videos</span><a class="pseudo-link" onclick="fsetTab('videos')">see all</a></div>
-                    <div class="latest-videos-front"></div>
+                    <div class="line-title"><span>Recently added</span><a onclick="fsetTab('articles')">see all</a></div>
+                    <div class="recent-articles"></div>
+                </div>
+                <div>
+                    <div class="line-title"><span>Recent videos</span><a onclick="fsetTab('videos')">see all</a></div>
+                    <div class="recent-videos"></div>
                 </div>
             </div>
+        </div>
+        
+        <div class="articles tab-panel">
             <div class="article-index label-external">
-                <div class="line-title" id="page_list"><span>Pages hosted</span></div>
-                <div class="page-listing">
-                    <div class="page-listing-title"><a title="Public record (collecting statements by public figures)" href="page/public-record">Public statements (index)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div><div class="listing-date"></div>
+                <div>
+                    <div><a title="Public record (collecting statements by public figures)" href="page/public-record">Public statements (index)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div>
                 </div>
             </div>
         </div>

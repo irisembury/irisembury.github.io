@@ -434,7 +434,7 @@ function interpreter(argValue) {
             chunk = autoList(chunk);
         }
         else {
-            chunk = `<p id="p-${ paragraph_num++ }">${ autoFormat(chunk) }</p>`;
+            chunk = `<p id="p-${ paragraph_num++ }">${ autoFormat(chunk).replaceAll('  ','<br>') }</p>`;
         }
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
@@ -580,12 +580,12 @@ function loadBody() {
                     <footer class="article__footer">
                         <div class="panel-switcher--580">
                             <div>
-                                <div class="line-title"><span>Recently added</span><a href="../../#page_list">see all</a></div>
-                                <div class="recent-articles">${ pagesData.text.slice(0, 5).join('') }</div>
+                                <div class="line-title"><span>Recently added</span><a href="../../?tab=articles">see all</a></div>
+                                <div class="recent-articles"></div>
                             </div>
                             <div>
                                 <div class="line-title"><span>Recent videos</span><a href="../../?tab=videos">see all</a></div>
-                                <div class="recent-videos">${ pagesData.videos.slice(0, 2).join('') }</div>
+                                <div class="recent-videos"></div>
                             </div>
                         </div>
                     </footer>`:'' }
@@ -607,13 +607,13 @@ function loadBody() {
                     </div>
                 </div>
                 <div class="page-footer__about">
-                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. • Aspects of this site might not load ideally if you're on mobile. If you're a mobile user, I hate you. The small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. • For general inquiry: contact@irisembury.com</p>
+                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. • Aspects of this site might not load ideally if you're on mobile. If you're a mobile user, I hate you, the small amount of effort I put into making it so things don't break completely is more than you deserve, get off your bed and use a normal computer. • For general inquiry: contact@irisembury.com</p>
                 </div>
             </footer>`);
     }
     document.body.insertAdjacentHTML("afterbegin", `
         <header class="page-header">
-            <a class="header__name" href="${getRootPath()}">Iris Embury</a>
+            <a class="header__name" href="${getRootPath()}index.html">Iris Embury</a>
             <div class="gear"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
         </header>
         <div class="menu">
@@ -779,8 +779,8 @@ const pagesData = {
     videos: `
         title:Canadian separatism |date:2026-10-12 |src:patreon:172199226,youtube:Q_ltXhrXb6s |thumb:172199226.jpg |length:10:13
         title:Macklemore, Ed Sheeran |date:2026-10-10 |src:youtube:_lfRiHlNFbc,patreon:172218877 |thumb:172218877.jpg |length:41:18
-        title:Thoughts on Leftist YouTube |date:2026-09-25 |src:youtube:R_xfJqp3M4g,patreon:171931256 |length:1:17:57 |thumb:171931256.jpg
-        title:Medical Assistance in Dying (MAiD) |date:2026-09-16 |src:patreon:169696851,youtube:0n0edHbri5k |length:13:32 |thumb:maid-2.jpg
+        title:Thoughts on Leftist YouTube |date:2026-09-25 |src:youtube:R_xfJqp3M4g,patreon:171931256 |length:1:17:57 |thumb:1719312562.jpg
+        title:Medical Assistance in Dying (MAiD) |date:2026-09-16 |src:patreon:169696851,youtube:0n0edHbri5k |length:13:32 |thumb:1696968512.jpg
         title:Mark Carney |date:2026-08-18 |src:youtube:5fsJUueUvpw,patreon:167033503 |thumb:167033503.jpg |length:13:54
         title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:166429634.jpg
         title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:166242253.jpg
@@ -801,7 +801,6 @@ const pagesData = {
     `.split("\n").map(v => v.trim()).filter(v => v.length > 3).map(v => {
         let k = parseObj(v,'date','src');
         k.src = k.src.split(',').sort().reverse().filter(n => linkParse(n,1));
-        console.log(k.src)
         return k;
     }).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
         v => `<figure class="video-figure">
@@ -814,6 +813,7 @@ const pagesData = {
         </figure>`
     ),
     text:`
+        Destiny--Finkelstein Debate: Retrospective | destiny-finkelstein-debate | 2026-10-14
         Thoughts on Leftist YouTube | leftist-youtube | 2026-10-07
         On airport privatization | airport-privatization | 2026-09-20
         Medical Assistance in Dying | maid | 2026-09-14
@@ -852,7 +852,11 @@ const pagesData = {
         Sex, Gender, & Transsexuals | sex-gender-transsexuals | 2024-11-19
         Poor Things | poor-things | 2024-10-31
         The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
-    `.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3).map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}}).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(p => `<div class="page-listing"><div class="page-listing-title"><a title="${ p.title }" href="${ getRootPath() }page/${ p.url }">${ autoFormat(p.title) }</a></div><div class="listing-date">${ p.date ?`<span>${ p.date }</span>` :'' }</div></div>`)
+    `.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3).map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}}).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(p => `
+        <div>
+            <div>${ p.date ?`<span class='date'>${ p.date }</span>` :'' }</div>
+            <div><a title="${ p.title }" href="${ getRootPath() }page/${ p.url }/index.html">${ autoFormat(p.title) }</a></div>
+        </div>`)
 }
 
 function init() {
@@ -879,7 +883,8 @@ function init() {
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
     document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", pagesData.text.join(''));
     document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", pagesData.videos.join(''));
-    document.querySelector(".latest-videos-front")?.insertAdjacentHTML("beforeend", pagesData.videos.slice(0, 4).join(''));
+    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", pagesData.text.slice(0, 5).join(''));
+    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", pagesData.videos.slice(0, 2).join(''));
     if (document.title == "") { document.title = "Iris Embury"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
