@@ -1,9 +1,11 @@
 <!DOCTYPE html><html lang="en" dir="ltr" style="opacity:0"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/main.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
-	    
     * { margin: 0; padding: 0; }
     html, body { height: 100%; }
     
+    body {
+        background-color: #a2a6a9;
+    }
     header {
         width: 100%;
         background-color: #111111;
@@ -12,7 +14,6 @@
     }
     main {
         text-align: center;
-        padding: 12px;
     }
     main > section {
         background-color: #FFFFFF;
@@ -57,7 +58,6 @@
         <br>
         <section>
             <table id="gameBoard"></table>
-            
             <div style="font-family:Roboto,sans-serif; text-align:left; padding:5px; margin-top:16px;">
                 <label>Last move: </label><span id="lastMove"></span>
                 <span style="float: right"><label>Moves: </label><span id="moveCount">0</span></span>
@@ -300,4 +300,5 @@
             init(this.value)
         })
     })
+    setTimeout(() => { document.documentElement.style.removeProperty("opacity"); document.documentElement.classList.add("animate"); }, 250);
 </script></body></html>

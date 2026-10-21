@@ -1,5 +1,14 @@
 "use strict"
-const HTML = document.documentElement; let pageLinks = []; let _toc_ = null; let canTocUpdate = true; let tocLastHeading = 0; let rowsInToc = []; let pageHeadings = []; let loadToc = false; const siteIcons = { 'youtube.com': 'youtube-logo', 'youtu.be': 'youtube-logo', 'twitch.tv': 'twitch-logo', 'bsky.app': 'bluesky-logo', 'x.com': 'twitter-logo', 'twitter.com': 'twitter-logo', 'facebook.com': 'facebook-logo', 'substack.com': 'substack-logo', 'instagram.com': 'instagram-logo', 'reddit.com': 'reddit-logo', 'medium.com': 'medium-logo', 'wikipedia.org': 'wikipedia-logo', 'patreon.com': 'patreon-logo', 'tumblr.com': 'tumblr-logo', 'discord.gg': 'discord-logo', 'discord.com': 'discord-logo' }; const KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
+const HTML = document.documentElement;
+let pageLinks = [];
+let _toc_ = null;
+let canTocUpdate = true;
+let tocLastHeading = 0;
+let rowsInToc = [];
+let pageHeadings = [];
+let loadToc = false;
+const siteIcons = { 'youtube.com':'youtube-logo', 'youtu.be':'youtube-logo', 'twitch.tv':'twitch-logo', 'bsky.app':'bluesky-logo', 'x.com':'twitter-logo', 'twitter.com':'twitter-logo', 'facebook.com':'facebook-logo', 'substack.com':'substack-logo', 'instagram.com':'instagram-logo', 'reddit.com':'reddit-logo', 'medium.com':'medium-logo', 'wikipedia.org':'wikipedia-logo', 'patreon.com':'patreon-logo', 'tumblr.com':'tumblr-logo', 'discord.gg':'discord-logo', 'discord.com':'discord-logo' };
+const KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
 
 function scrollToTop() {
     window.scrollTo({ top: 0 });
@@ -262,37 +271,36 @@ function dateFromISO(datestring) {
     }
     return datestring;
 }
-function frontmatter(pageInfo) {
-    if (pageInfo.startsWith("---")) { pageInfo = pageInfo.substring(3); }
-    if (pageInfo.endsWith("---")) { pageInfo = pageInfo.slice(0,-3); }
-    pageInfo = parseObj(pageInfo.split("\n").map(n => n.trim()).filter(n => n.length > 3).join("|"));
-    const articleTop = [];
-    if (pageInfo.flags) {
-        if (pageInfo.flags.includes("toc")) {
-            loadToc = true;
+function articleTop() {
+    let pageInfo = pagesMeta.find(p => p.url == getDomain());
+    if (!pageInfo) {
+        return '';
+    }
+    const articleTopContents = [];
+    if (pageInfo.toc) {
+        loadToc = true;
+    }
+    if (pageInfo.wide) {
+        HTML.classList.add("wide");
+    }
+    if (pageInfo.unsetWidth) {
+        document.querySelector('.menu .grid .grid').insertAdjacentHTML("beforeend", '<div><label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width"></div>');
+        if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
+            document.getElementById("unset-width").checked = true;
+            HTML.classList.add("unset-width");
         }
-        if (pageInfo.flags.includes("wide")) {
-            HTML.classList.add("wide");
-        }
-        if (pageInfo.flags.includes("unset-width")) {
-            document.getElementById("lightswitch")?.parentNode.parentNode.insertAdjacentHTML("beforeend", '<div><label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width"></div>');
-            if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
-                document.getElementById("unset-width").checked = true;
-                HTML.classList.add("unset-width");
-            }
-            document.getElementById("unset-width")?.addEventListener("change", function() {
-                HTML.classList.toggle(this.id, this.checked);
-                localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
-                tocUpdate();
-            });
-        }
+        document.getElementById("unset-width")?.addEventListener("change", function() {
+            HTML.classList.toggle(this.id, this.checked);
+            localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
+            tocUpdate();
+        });
     }
     if (pageInfo.title) {
-        articleTop.push(`<h1 class="for-toc">${ pageInfo.title }</h1>`);
-        document.title = pageInfo.title;
+        articleTopContents.push(`<h1 class="for-toc">${ pageInfo.title }</h1>`);
+        document.title = pageInfo.title.replaceAll('---','\u2014').replaceAll('--','\u2013');
     }
     if (pageInfo.subtitle) {
-        articleTop.push(`<h2>${ pageInfo.subtitle }</h2>`);
+        articleTopContents.push(`<h2>${ pageInfo.subtitle }</h2>`);
     }
     if (pageInfo.date || pageInfo.mirrors) {
         let by = '<div class="article-byline label-external">';
@@ -310,10 +318,10 @@ function frontmatter(pageInfo) {
         if (pageInfo.mirrors) {
             by += pageInfo.mirrors.split(",").map(m => linkParse(m,2)).join(" ");
         }
-        articleTop.push(by + '</div>');
+        articleTopContents.push(by + '</div>');
     }
-    if (articleTop.length != 0) {
-        document.querySelector(".article__body")?.insertAdjacentHTML("beforebegin", '<div class="article__top">' + articleTop.map(i => autoFormat(i)).join("\n") + '</div>')
+    if (articleTopContents.length != 0) {
+        return '<div class="article__top">' + articleTopContents.map(i => autoFormat(i)).join("\n") + '</div>';
     }
     return '';
 }
@@ -412,7 +420,6 @@ function interpreter(argValue) {
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
-        if (chunk.startsWith("---\n") && chunk.endsWith("\n---")) { return frontmatter(chunk); }
         if (chunk.startsWith("<") && !chunk.startsWith("<a")) { return chunk; }
         if (chunk == "---") { return "<hr>"; }
         if (chunk == "***") { return '<div class="dinkus no-select">***</div>'; }
@@ -434,7 +441,7 @@ function interpreter(argValue) {
             chunk = autoList(chunk);
         }
         else {
-            chunk = `<p id="p-${ paragraph_num++ }">${ autoFormat(chunk).replaceAll('  ','<br>') }</p>`;
+            chunk = `<p id="p-${ paragraph_num++ }">${ autoFormat(chunk).replaceAll('  \n','<br>') }</p>`;
         }
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
@@ -561,18 +568,60 @@ function getRootPath() {
     if (path.endsWith("index.html")) {
         path = path.slice(0, -10);
     }
-    if (path.endsWith("/")) {
+    while (path.endsWith("/")) {
         path = path.slice(0, -1);
     }
     path = path.substring(path.indexOf("irisembury"));
     path = path.replace(/[^/]/g,'');
     return '../'.repeat(path.length);
 }
+function getDomain() {
+    let path = window.location.pathname;
+    if (path.endsWith("index.html")) {
+        path = path.slice(0, -10);
+    }
+    while (path.endsWith("/")) {
+        path = path.slice(0, -1);
+    }
+    let lastSlash = path.lastIndexOf("/");
+    if (lastSlash == -1) {
+        console.error("Wait no this should be impossible")
+        return "";
+    }
+    return path.substring(lastSlash + 1);
+}
 function loadBody() {
+    document.body.insertAdjacentHTML("afterbegin", `
+        <header class="page-header">
+            <a class="header__name" href="${getRootPath()}index.html">Iris Embury</a>
+            <div class="gear"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
+        </header>
+        <div class="menu">
+            <div class="grid">
+                <h3>Display:</h3>
+                <div class="grid">
+                    <div><label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch"></div>
+                </div>
+            </div>
+            <div class="grid">
+                <h3>Text formatting:</h3>
+                <div class="grid">
+                    <div><label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
+                    <div><label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
+                    <div><label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins"></div>
+                </div>
+            </div>
+            <div>
+                <div class="text-right grey-8"><span class="pseudo-link" onclick="localStorage.clear(); document.querySelector('.menu')?.classList.remove('open'); document.querySelectorAll('.menu input').forEach(x => { if (x.checked) x.click() });">restore defaults</span></div>
+            </div>
+        </div>
+        <div class="toc-btn" onclick="tocToggle()" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" width="20" height="20" viewBox="0 0 20 20"><path d="M3 16H1v-2h2zm16 0H5v-2h14zM3 11H1V9h2zm16 0H5V9h14zM3 6H1V4h2zm16 0H5V4h14z"/></svg></div>
+        `);
     const page = document.getElementById("page");
     if (page) {
         page.innerHTML = `
             <article class="article">
+                ${ articleTop() }
                 <div class="article__body">
                     ${ page.innerHTML }
                 </div>
@@ -600,9 +649,7 @@ function loadBody() {
                         <a href="https://x.com/irisembury"><span class="inline-icon twitter-logo-bw"></span></a>
                         <a href="https://irisembury.substack.com"><span class="inline-icon substack-logo-bw"></span></a>
                         <a href="https://discord.com/invite/aK83BPKQ5G"><span class="inline-icon discord-logo-bw"></span></a>
-                        <a href="https://bsky.app/profile/irisembury.bsky.social"><span class="inline-icon bluesky-logo-bw"></span></a>
                         <a href="https://irisembury.tumblr.com/"><span class="inline-icon tumblr-logo-bw"></span></a>
-                        <a href="https://medium.com/u/32081f2a377f"><span class="inline-icon medium-logo-bw"></span></a>
                         <a href="https://www.patreon.com/cw/irisembury"><span class="inline-icon patreon-logo-bw"></span></a>
                     </div>
                 </div>
@@ -611,33 +658,6 @@ function loadBody() {
                 </div>
             </footer>`);
     }
-    document.body.insertAdjacentHTML("afterbegin", `
-        <header class="page-header">
-            <a class="header__name" href="${getRootPath()}index.html">Iris Embury</a>
-            <div class="gear"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
-        </header>
-        <div class="menu">
-            <div class="gc t s">
-                <h3>Display:</h3>
-                <div class="gr vs">
-                    <div><label for="lightswitch">Dark mode:</label><input type="checkbox" class="slide-checkbox" id="lightswitch"></div>
-                </div>
-            </div>
-            <div class="gc t s">
-                <h3>Text formatting:</h3>
-                <div class="gr vs">
-                    <div><label for="indent-text">Indent paragraphs:</label><input type="checkbox" class="slide-checkbox formatting auto" id="indent-text"></div>
-                    <div><label for="justify-text">Justify text:</label><input type="checkbox" class="slide-checkbox formatting auto" id="justify-text"></div>
-                    <div><label for="reduce-margins">Reduce vertical margins:</label><input type="checkbox" class="slide-checkbox auto" id="reduce-margins"></div>
-                </div>
-            </div>
-            <div>
-                <div class="text-right grey-8"><span class="pseudo-link" onclick="localStorage.clear(); document.querySelector('.menu')?.classList.remove('open'); document.querySelectorAll('.menu input').forEach(x => { if (x.checked) x.click() });">restore defaults</span></div>
-            </div>
-        </div>
-        <div class="toc-btn" onclick="tocToggle()" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" width="20" height="20" viewBox="0 0 20 20"><path d="M3 16H1v-2h2zm16 0H5v-2h14zM3 11H1V9h2zm16 0H5V9h14zM3 6H1V4h2zm16 0H5V4h14z"/></svg></div>
-        `
-    );
     document.body.insertAdjacentHTML("beforeend", `<div class="lightbox hidden">
             <div class="lb-top-left"><p></p></div>
             <div class="lb-img-wrapper" onclick="setLightbox('close')"><img></div>
@@ -774,90 +794,89 @@ function tocSetup() {
         tocUpdate();
     }
 }
-
-const pagesData = {
-    videos: `
-        title:Canadian separatism |date:2026-10-12 |src:patreon:172199226,youtube:Q_ltXhrXb6s |thumb:172199226.jpg |length:10:13
-        title:Macklemore, Ed Sheeran |date:2026-10-10 |src:youtube:_lfRiHlNFbc,patreon:172218877 |thumb:172218877.jpg |length:41:18
-        title:Thoughts on Leftist YouTube |date:2026-09-25 |src:youtube:R_xfJqp3M4g,patreon:171931256 |length:1:17:57 |thumb:1719312562.jpg
-        title:Medical Assistance in Dying (MAiD) |date:2026-09-16 |src:patreon:169696851,youtube:0n0edHbri5k |length:13:32 |thumb:1696968512.jpg
-        title:Mark Carney |date:2026-08-18 |src:youtube:5fsJUueUvpw,patreon:167033503 |thumb:167033503.jpg |length:13:54
-        title:Am I a liberal? |date:2026-08-11 |src:youtube:QPNCs5A3iYo,patreon:166429634 |length:16:26 |thumb:166429634.jpg
-        title:Canada is under attack |date:2026-08-09 |src:youtube:cDJ3lQH7m0Y,patreon:166242253 |length:16:21 |thumb:166242253.jpg
-        title:The Freedom Convoy |date:2026-07-19 |src:youtube:207IiRGFowE,patreon:164228303 |thumb:164228303.jpg |length:2:41:18
-        title:Floor crossers |date:2026-05-17 |src:youtube:N3csai2IFDU,patreon:158476239 |thumb:158476239.jpg |length:56:34
-        title:Liberalism not Leftism |date:2026-05-06 |src:youtube:DgGf_g4aGYA,patreon:157517952 |thumb:157517952.jpg |length:41:15
-        title:Liberal Conservatism |date:2026-04-07 |src:youtube:Sy33HSFsuu8,patreon:154996870 |thumb:154996870.jpg |length:2:03:13
-        title:Abortion |date:2026-02-24 |src:youtube:CpjJ8TgOxJY,patreon:151884875 |thumb:151884875.jpg |length:43:04
-        title:How bad is America, really? |date:2026-03-04 |src:youtube:W0Dmtyyc7FU,patreon:152288758 |thumb:152288758.jpg |length:27:04
-        title:American decline |date:2026-02-11 |src:youtube:oUOsAdnK2zs,patreon:150555019 |thumb:150555019.jpg |length:39:47
-        title:Normalization |src:youtube:TYoe1jxBYPY,patreon:148679519 |date:2025-09-19 |thumb:148679519.jpg |length:12:08
-        title:India |thumb:148682097.jpg |src:youtube:Pz0Oq1rb14E,patreon:148682097 |date:2025-10-23 |length:41:17
-        title:Lies about Ilhan Omar |date:2025-09-03 |src:youtube:zgE4L-e9yg0,patreon:148679387 |thumb:148679387.jpg |length:44:50
-        title:Trans fetishism |date:2025-04-02 |src:youtube:vk57rvM1zWo |thumb:vk57rvM1zWo.jpg |length:22:39
-        title:Exploring lies about Warren and Clinton |date:2025-04-09 |src:youtube:LPQD6sxlWOs,patreon:148676394 |thumb:148676394.jpg |length:34:02
-        title:Bernie Sanders & the Military Industrial Complex |date:2025-03-22 |length:12:44 |src:youtube:yt6O0OMdIT0 |thumb:yt6O0OMdIT0.jpg
-        title:Sex, gender, & transsexuals |date:2025-10-17 |src:youtube:Hgh3r7gJoWU,patreon:148676474 |thumb:148676474.jpg |length:1:26:14
-    `.split("\n").map(v => v.trim()).filter(v => v.length > 3).map(v => {
-        let k = parseObj(v,'date','src');
-        k.src = k.src.split(',').sort().reverse().filter(n => linkParse(n,1));
-        return k;
-    }).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(
-        v => `<figure class="video-figure">
-            <div class="img-box"><a href="${ linkParse(v.src[0],0) }"><div class="img" loading="lazy" style="background-image:url('${ getRootPath() }assets/thumbnails/${ v.thumb }')">${ v.length ?`<span class="timecard no-select">${ v.length }</span>` :"" }</div></a></div>
-            <figcaption class="label-external">
-                <div class="video-title">${ v.title }</div>
-                <div class="video-sources">${ v.src.map(n => linkParse(n,1)).join(" | ") }</div>
-                <div class="video-date"><span>${ dateFromISO(v.date) }</span></div>
-            </figcaption><style>.video-figure .video-sources .link-text { display: none; }</style>
+const toc = 1, wide = 1, unlisted = 1, unsetWidth = 1;
+const pagesMeta = [
+    { url:"destiny-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
+    { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:88392592,tumblr:809547051047272448,patreon:55199340",toc },
+    { url:"afd-victory-2026",title:"On the AfD victory in Saxony-Anhalt",date:"2026-09-08",mirrors:"substack:214741964,tumblr:827199160807817216" },
+    { url:"airport-privatization",title:"Thoughts on airport privatization",date:"2026-09-20",mirrors:"substack:216649667" },
+    { url:"allende-and-pinochet",title:"Allende and Pinochet",date:"2026-08-09",mirrors:"substack:210515116,mediumb:55782f90e9" },
+    { url:"leftist-youtube",title:"Thoughts on Leftist YouTube",date:"2026-10-07",mirrors:"substack:219340446",toc },
+    { url:"public-record",title:"Public record",wide,toc,unlisted,unsetWidth },
+    { url:"stay-the-trenches",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
+    { url:"floor-crossings",title:"Floor crossings",date:"2026-04-17",mirrors:"substack:94479253,medium:dfe93bb23bdd" },
+    { url:"india",title:"India",date:"2025-10-24",mirrors:"substack:77071182,tumblr:798351257128615936" },
+    { url:"liberal-conservatism",title:"Liberal conservatism",subtitle:"A philosophy of prudence and humility",date:"2026-03-24",toc },
+    { url:"american-decline",title:"A synopsis of American decline",date:"2026-01-28",mirrors:"substack:86165875,patreon:55201485",toc },
+    { url:"anime-reviews",title:"Anime reviews",date:"2024-12-17",mirrors:"tumblr:770134591113658368",unlisted },
+    { url:"bernie-military-industrial-complex",title:"Bernie Sanders and the Military Industrial Complex",date:"2024-12-16",mirrors:"tumblr:770070077409214464" },
+    { url:"bias-normal-white-men",title:"On our bias for normal white men",date:"2024-11-26",mirrors:"substack:53823028,tumblr:770305075441778688,medium:0c508d4c51b5" },
+    { url:"canada-sovereign-wealth-fund",title:"Canada's plan for a sovereign wealth fund",date:"2026-04-29",mirrors:"substack:95885575,tumblr:815245873447649280" },
+    { url:"data-structures-algorithms",title:"Data structures & algorithms",date:"2021-04-31",wide,toc,unlisted },
+    { url:"elon-musk-nazi-salute",title:"Elon Musk and the Nazi Salute",date:"2025-01-24",mirrors:"substack:55604956,tumblr:773565389405847552" },
+    { url:"fetishism-politics",title:"Fetishism and politics",date:"2024-11-14",mirrors:"tumblr:770364766791352320" },
+    { url:"freedom-convoy",title:"What was the Freedom Convoy?",date:"2026-06-15",wide,toc },
+    { url:"how-bad-is-america-really",title:"How bad is America, really?",date:"2026-07-01" },
+    { url:"immigration",title:"Immigration",date:"2025-11-06",mirrors:"substack:83229652" },
+    { url:"israel-palestine",title:"Israel and Palestine",date:"2025-07-27",toc,wide },
+    { url:"liberalism-not-leftism",title:"Liberalism not leftism",date:"2025-09-19",mirrors:"substack:74062936,tumblr:795164683319574528,patreon:55199811" },
+    { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:73066010,tumblr:794091916138594304,medium:46de1629e138" },
+    { url:"lies-about-warren-clinton",title:"Lies about Elizabeth Warren and Hillary Clinton",date:"2024-12-19",mirrors:"tumblr:770730090759946240,substack:53821886" },
+    { url:"maid",title:"Medical Assistance in Dying",date:"2026-09-14",mirrors:"substack:215626100,medium:378a520d05e0,tumblr:828961026747809793" },
+    { url:"mark-robinson",title:"Mark Robinson",date:"2024-12-15",mirrors:"tumblr:769962893917798400" },
+    { url:"normalization",title:"Normalization",date:"2025-09-08",mirrors:"substack:61739183" },
+    { url:"pierre-poilievre",title:"The many problems with Pierre Poilievre",date:"2026-08-03",mirrors:"substack:216081530",toc },
+    { url:"prejudice",title:"Notes on prejudice",date:"2025-10-30",mirrors:"substack:77556410" },
+    { url:"rational-ignorance",title:"Rational ignorance",date:"2026-04-09",mirrors:"substack:193680023,tumblr:813419185909727232,patreon55199122,medium:7d332cf2dfb5" },
+    { url:"reddit",title:"Notes on Reddit",subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it",date:"2025-12-30",mirrors:"substack:83230909" },
+    { url:"relationships",title:"The standard relationship model",date:"2025-11-19" },
+    { url:"sex-gender-transsexuals",title:"Sex, Gender, & Transsexuals",date:"2024-11-19",wide,toc },
+    { url:"somali-day-cares",title:"Nick Shirley and Somali day cares",date:"2026-01-02",mirrors:"substack:83243480,patreon:55200604" },
+    { url:"trans-prison-stats-argument",title:"The trans prison stats argument",date:"2024-09-15",mirrors:"substack:153916145,tumblr:771501478599868416" },
+    { url:"trump-and-russia",title:"Trump and Russia",date:"2025-03-06",mirrors:"tumblr:777321996757450752,substack:58560801" },
+    { url:"trump-appeal",title:"The Trump appeal",subtitle:"How and why does anyone actually like him?",date:"2024-12-03",mirrors:"tumblr:770270265635667968,medium:5c6806252b43" },
+    { url:"types-of-masculinity",title:"On types of masculinity",date:"2024-11-08",mirrors:"tumblr:770310861444300800" },
+    { url:"why-bottom-surgery",title:"Why get bottom surgery?",date:"2025-02-09",mirrors:"tumblr:775036555284856832" }
+];
+const textElements = pagesMeta.filter(x => !x.unlisted).sort(
+    (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
+).map(
+    tobj => `<div><div>${ tobj.date ?`<span class='date'>${ tobj.date }</span>` :'' }</div><div><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) }</a></div></div>`
+);
+// { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:207IiRGFowE,patreon:164228303",thumb:"164228303.jpg",length:"2:41:18" },
+const videoElements = [
+    { title:"Destiny versus Finkelstein",date:"2026-10-20",src:"youtube:2jY-wfdKkyw,patreon:172891823",thumb:"172891823.jpg",length:"44:24" },
+    { title:"Canadian separatism",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
+    { title:"Macklemore, Ed Sheeran",date:"2026-10-10",src:"youtube:_lfRiHlNFbc,patreon:172218877",thumb:"172218877.jpg",length:"41:18" },
+    { title:"Thoughts on Leftist YouTube",date:"2026-09-25",src:"youtube:R_xfJqp3M4g,patreon:171931256",length:"1:17:57",thumb:"1719312562.jpg" },
+    { title:"Medical Assistance in Dying (MAiD)",date:"2026-09-16",src:"patreon:169696851,youtube:0n0edHbri5k",length:"13:32",thumb:"1696968512.jpg" },
+    { title:"Mark Carney",date:"2026-08-18",src:"youtube:5fsJUueUvpw,patreon:167033503",thumb:"167033503.jpg",length:"13:54" },
+    { title:"Am I a liberal?",date:"2026-08-11",src:"youtube:QPNCs5A3iYo,patreon:166429634",length:"16:26",thumb:"166429634.jpg" },
+    { title:"Canada is under attack",date:"2026-08-09",src:"youtube:cDJ3lQH7m0Y,patreon:166242253",length:"16:21",thumb:"166242253.jpg" },
+    { title:"Floor crossers",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
+    { title:"Liberalism not Leftism",date:"2026-05-06",src:"youtube:DgGf_g4aGYA,patreon:157517952",thumb:"157517952.jpg",length:"41:15" },
+    { title:"Liberal Conservatism",date:"2026-04-07",src:"youtube:Sy33HSFsuu8,patreon:154996870",thumb:"154996870.jpg",length:"2:03:13" },
+    { title:"Abortion",date:"2026-02-24",src:"youtube:CpjJ8TgOxJY,patreon:151884875",thumb:"151884875.jpg",length:"43:04" },
+    { title:"How bad is America, really?",date:"2026-03-04",src:"youtube:W0Dmtyyc7FU,patreon:152288758",thumb:"152288758.jpg",length:"27:04" },
+    { title:"American decline",date:"2026-02-11",src:"youtube:oUOsAdnK2zs,patreon:150555019",thumb:"150555019.jpg",length:"39:47" },
+    { title:"Normalization",src:"youtube:TYoe1jxBYPY,patreon:148679519",date:"2025-09-19",thumb:"148679519.jpg",length:"12:08" },
+    { title:"India",thumb:"148682097.jpg",src:"youtube:Pz0Oq1rb14E,patreon:148682097",date:"2025-10-23",length:"41:17" },
+    { title:"Lies about Ilhan Omar",date:"2025-09-03",src:"youtube:zgE4L-e9yg0,patreon:148679387",thumb:"148679387.jpg",length:"44:50" },
+    { title:"Trans fetishism",date:"2025-04-02",src:"youtube:vk57rvM1zWo",thumb:"vk57rvM1zWo.jpg",length:"22:39" },
+    { title:"Exploring lies about Warren and Clinton",date:"2025-04-09",src:"youtube:LPQD6sxlWOs,patreon:148676394",thumb:"148676394.jpg",length:"34:02" },
+    { title:"Bernie Sanders & the Military Industrial Complex",date:"2025-03-22",length:"12:44",src:"youtube:yt6O0OMdIT0",thumb:"yt6O0OMdIT0.jpg" },
+    { title:"Sex, gender, & transsexuals",date:"2025-10-17",src:"youtube:Hgh3r7gJoWU,patreon:148676474",thumb:"148676474.jpg",length:"1:26:14" }
+].sort((a,b)=>(parseInt(b.date?.replace(/\D/g,''))||0)-(parseInt(a.date?.replace(/\D/g,''))||0)).map(
+    vobj => `
+        <figure class="video-figure">
+            <div class="img-box"><a href="${ linkParse(vobj.src.split(",")[0],0) }"><div class="img" loading="lazy" style="background-image:url('${ getRootPath() }assets/thumbnails/${ vobj.thumb }')">${ vobj.length ?`<span class="timecard no-select">${ vobj.length }</span>` :"" }</div></a></div>
+            <figcaption>
+                <div class="video-title">${ vobj.title }</div>
+                <div class="video-sources">${ vobj.src.split(",").map(n => linkParse(n,1)).join(" | ") }</div>
+                <div class="video-date"><span>${ dateFromISO(vobj.date) }</span></div>
+            </figcaption>
         </figure>`
-    ),
-    text:`
-        Destiny--Finkelstein Debate: Retrospective | destiny-finkelstein-debate | 2026-10-14
-        Thoughts on Leftist YouTube | leftist-youtube | 2026-10-07
-        On airport privatization | airport-privatization | 2026-09-20
-        Medical Assistance in Dying | maid | 2026-09-14
-        On the AfD victory in Saxony-Anhalt | afd-victory-2026 | 2026-09-08
-        The Chilean Coup: Allende and Pinochet | allende-and-pinochet | 2026-08-09
-        The problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
-        How bad is America, really? | how-bad-is-america-really | 2026-07-01
-        What was the Freedom Convoy? | freedom-convoy | 2026-06-15
-        The Conservative Party's hard problem | conservative-party-hard-problem | 2026-05-01
-        Canada's plan for a sovereign wealth fund | canada-sovereign-wealth-fund | 2026-04-29
-        Floor crossings | floor-crossings | 2026-04-17
-        Rational ignorance | rational-ignorance | 2026-04-09
-        The case for abortion | abortion | 2026-02-18
-        A synopsis of American decline | american-decline | 2026-01-28
-        Fetishism and politics | fetishism-politics | 2024-11-14
-        Nick Shirley and Somali day cares | somali-day-cares | 2026-01-02
-        Thoughts on Reddit | reddit | 2025-12-30
-        Stay the trenches | stay-the-trenches | 2025-12-17
-        Immigration | immigration | 2025-11-06
-        Thoughts on prejudice | prejudice | 2025-10-30
-        Notes on India | india | 2025-10-24
-        Liberalism not leftism | liberalism-not-leftism | 2025-09-19
-        Bill Maher and Normalization | normalization | 2025-09-08
-        Israel & Palestine | israel-palestine | 2025-07-27
-        Lies about Ilhan Omar | lies-about-ilhan-omar | 2025-08-25
-        Trump and Russia | trump-and-russia | 2025-03-06
-        Why get bottom surgery? | why-get-bottom-surgery | 2025-02-09
-        On types of masculinity | types-of-masculinity | 2024-11-08
-        Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
-        Lies about Elizabeth Warren and Hillary Clinton | lies-about-warren-clinton | 2024-12-19
-        Mark Robinson | mark-robinson | 2024-12-15
-        Liberal Conservatism | liberal-conservatism | 2026-03-24
-        Why do people like Trump? | the-trump-appeal | 2024-12-03
-        On our bias for normal white men | bias-normal-white-men | 2024-11-26
-        Bernie Sanders and the Military Industrial Complex | bernie-sanders-and-the-military-industrial-complex | 2024-12-16
-        Sex, Gender, & Transsexuals | sex-gender-transsexuals | 2024-11-19
-        Poor Things | poor-things | 2024-10-31
-        The trans prison stats argument | the-trans-prison-stats-argument | 2024-10-19
-    `.split("\n").map(v => v.trim()).filter(v => v.length > 3 && v.split("|").length == 3).map(n => n.split("|")).map(p => {return {title:p[0].trim(),url:p[1].trim(),date:p[2].trim()}}).sort((a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,""))||0)).map(p => `
-        <div>
-            <div>${ p.date ?`<span class='date'>${ p.date }</span>` :'' }</div>
-            <div><a title="${ p.title }" href="${ getRootPath() }page/${ p.url }/index.html">${ autoFormat(p.title) }</a></div>
-        </div>`)
-}
+);
 
 function init() {
     loadBody();
@@ -881,10 +900,10 @@ function init() {
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
-    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", pagesData.text.join(''));
-    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", pagesData.videos.join(''));
-    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", pagesData.text.slice(0, 5).join(''));
-    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", pagesData.videos.slice(0, 2).join(''));
+    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", textElements.join(''));
+    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", videoElements.join(''));
+    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", textElements.slice(0, 5).join(''));
+    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", videoElements.slice(0, 3).join(''));
     if (document.title == "") { document.title = "Iris Embury"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);

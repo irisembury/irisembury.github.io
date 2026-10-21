@@ -1,4 +1,5 @@
 <!DOCTYPE html><html lang="en" dir="ltr" style="opacity:0"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/main.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
     * {
         margin: 0;
         padding: 0;
@@ -25,7 +26,7 @@
         position: inherit;
         border-radius: 50%;
     }
-	</style></head><body><main id="page"></main>
+	</style></head><body>
     <script>
     function rand(min, max) {
         return Math.floor(Math.random() * (max - min + 1) ) + min;
@@ -79,6 +80,7 @@
             moveClouds, 1000 / 50
         )
     })
+    setTimeout(() => { document.documentElement.style.removeProperty("opacity"); document.documentElement.classList.add("animate"); }, 250);
 	</script></body>
 </html>
 
