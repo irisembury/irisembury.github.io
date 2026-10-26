@@ -299,7 +299,7 @@ function articleTop() {
     }
     if (pageInfo.unsetWidth) {
         document.querySelector('.menu .grid .grid').insertAdjacentHTML("beforeend", '<div><label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width"></div>');
-        if (localStorage.getItem("unset-width-" + window.location.pathname) == 'true') {
+        if (localStorage.getItem("unset-width-" + window.location.pathname) != 'false') {
             document.getElementById("unset-width").checked = true;
             HTML.classList.add("unset-width");
         }
