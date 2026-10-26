@@ -465,24 +465,24 @@ function interpreter(argValue) {
 function unwrapSeconds(vSQuery) {
     vSQuery = parseInt(vSQuery);
     if (!isNaN(vSQuery)) {
-        let seconds = vSQuery % 60;//remainder
+        let seconds = vSQuery % 60; // remainder
         if ((seconds + "").length == 1) {
-            seconds = '0' + seconds;//e.g. 8 -> 08
+            seconds = '0' + seconds; // e.g. 8 -> 08
         }
-        if (vSQuery < 60) {//e.g. 08 -> 0:08, 40 -> 0:40
+        if (vSQuery < 60) { // e.g. 08 -> 0:08, 40 -> 0:40
             return '0:' + seconds;
         }
-        vSQuery -= (vSQuery % 60);//remove remainder seconds
-        vSQuery /= 60;//convert from seconds to minutes
-        let minutes = vSQuery % 60;//remove minutes above 60
+        vSQuery -= (vSQuery % 60); // remove remainder seconds
+        vSQuery /= 60; // convert from seconds to minutes
+        let minutes = vSQuery % 60; // remove minutes above 60
         if (vSQuery < 60) {
             return minutes + ':' + seconds;
         }
         if ((minutes + "").length == 1) {
             minutes = '0' + minutes;
         }
-        vSQuery -= (vSQuery % 60);//remove remainder minutes
-        let hours = vSQuery / 60;//convert from minutes to hours
+        vSQuery -= (vSQuery % 60); // remove remainder minutes
+        let hours = vSQuery / 60; // convert from minutes to hours
         return hours + ':' + minutes + ':' + seconds;
     }
     return vSQuery;
@@ -856,8 +856,10 @@ const textElements = pagesMeta.filter(x => !x.unlisted).sort(
     (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
 ).map(
     tobj => `
-        <div class="page-date">${ tobj.date ?`<span title="${ dateFromISO(tobj.date) }">${ tobj.date }</span>` :'' }</div>
-        <div class="page-link"><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></div>
+    <div>
+        <div>${ tobj.date ?`<span title="${ dateFromISO(tobj.date) }" class="page-date">${ tobj.date }</span>` :'' }</div>
+        <div><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></div>
+    </div>
     `
 );
 const videoElements = [
