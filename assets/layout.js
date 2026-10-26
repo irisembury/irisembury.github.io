@@ -121,13 +121,13 @@ function imageGallery(chunk) {
         if (row.src == "") { return ""; }
         row.title = row.title || row.alt || "Click to expand";
         row.alt = row.alt || row.caption;
-        if (row.caption) { row.caption = '<figcaption>' + row.caption + '</figcaption>'; }
+        if (row.caption) { row.caption = '<figcaption>' + autoFormat(row.caption.replaceAll('&quot;','"')) + '</figcaption>'; }
         return `<figure>
             <img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setLightbox(this)">
             ${ row.caption }
         </figure>`;
     }).join("")}</div>`;
-    return autoFormat(chunk);
+    return chunk;
 }
 function autoVideo(chunk) {
     let data = chunk.split("\n").slice(1)[0].split("|").map(c => c.trim());
@@ -258,17 +258,31 @@ function autoIndent(chunk) {
     }).join('');
     return `<blockquote class="auto-indent">${ chunk }</blockquote>`
 }
-function dateFromISO(datestring) {
+function dateFromISO(datestring, tag = 0, datelength = 0) {
     /* this converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
+    /* mode 0 = raw datestring return, mode 1 = time element */
     let input = datestring.replace(/\D/g, "")
     if (input.length == 8) {
         const iso = input.substring(0,4) + "-" + input.substring(4,6) + "-" + input.substring(6,8);
         let [year,month,day] = iso.split("-").map(Number);
         if (month >= 1 && month <= 12) {
-            month = {1:"Jan",2:"Feb",3:"Mar",4:"Apr",5:"May",6:"June",7:"July",8:"Aug",9:"Sept",10:"Oct",11:"Nov",12:"Dec",}[month]
+            
+            if (datelength == 0) {
+                month = { 1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June", 7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec" }[month]
+            }
+            else {
+                month = { 1: "January", 2: "February", 3: "March", 4: "Aprril", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December" }[month]
+            }
+            
+            if (tag == 0) {
+                datestring = year + " " + month + " " + day;
+            }
+            else {
+                datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ year + " " + month + " " + day +'</time>';
+            }
         }
-        datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ year + " " + month + " " + day +'</time>';
     }
+    /* if anything fails, just return the value that was passed unaltered */
     return datestring;
 }
 function articleTop() {
@@ -309,13 +323,14 @@ function articleTop() {
             let d2 = new Date();
             d2.setFullYear(d2.getFullYear() - 2);
             if (d1 < d2) {
-                pageInfo.date = '<span class="date-ago">' + pageInfo.date + '</span> (' + (new Date().getFullYear() - d1.getFullYear()) + '+ years ago)';
+                pageInfo.date = '<span class="date-ago">' + pageInfo.date + ' (' + (new Date().getFullYear() - d1.getFullYear()) + '+ years ago)</span>';
             } else {
-                pageInfo.date = '<span>' + pageInfo.date + '</span>';
+                pageInfo.date = '<span>' + dateFromISO(pageInfo.date) + '</span>';
             }
             by += pageInfo.date;
         }
         if (pageInfo.mirrors) {
+            by += ' \u00b7 ';
             by += pageInfo.mirrors.split(",").map(m => linkParse(m,2)).join(" ");
         }
         articleTopContents.push(by + '</div>');
@@ -415,7 +430,6 @@ function interpreter(argValue) {
         return;
     }
     if (!argValue) return;
-    let paragraph_num = 1;
     let table_number = 1;
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
@@ -441,7 +455,7 @@ function interpreter(argValue) {
             chunk = autoList(chunk);
         }
         else {
-            chunk = `<p id="p-${ paragraph_num++ }">${ autoFormat(chunk).replaceAll('  \n','<br>') }</p>`;
+            chunk = `<p>${ autoFormat(chunk).replaceAll('  \n','<br>') }</p>`;
         }
         if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
@@ -510,7 +524,8 @@ function autoFormat(_string) {
     output = output.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
     return output;
 }
-function afAux(str_in) { //curly quotes, dashes
+function afAux(str_in) {
+    //curly quotes, dashes
     if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) { str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;") }
     return str_in.replaceAll("---", '&mdash;').replaceAll("--", "&ndash;");
 }
@@ -804,7 +819,7 @@ const pagesMeta = [
     { url:"leftist-youtube",title:"Thoughts on Leftist YouTube",date:"2026-10-07",mirrors:"substack:219340446",toc },
     { url:"public-record",title:"Public record",wide,toc,unlisted,unsetWidth },
     { url:"stay-the-trenches",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
-    { url:"floor-crossings",title:"Floor crossings",date:"2026-04-17",mirrors:"substack:94479253,medium:dfe93bb23bdd" },
+    { url:"floor-crossings",title:"Floor crossing (Canadian politics)",date:"2026-04-17",mirrors:"substack:94479253,medium:dfe93bb23bdd" },
     { url:"india",title:"India",date:"2025-10-24",mirrors:"substack:77071182,tumblr:798351257128615936" },
     { url:"liberal-conservatism",title:"Liberal conservatism",subtitle:"A philosophy of prudence and humility",date:"2026-03-24",toc },
     { url:"american-decline",title:"A synopsis of American decline",date:"2026-01-28",mirrors:"substack:86165875,patreon:55201485",toc },
@@ -823,12 +838,11 @@ const pagesMeta = [
     { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:73066010,tumblr:794091916138594304,medium:46de1629e138" },
     { url:"lies-about-warren-clinton",title:"Lies about Elizabeth Warren and Hillary Clinton",date:"2024-12-19",mirrors:"tumblr:770730090759946240,substack:53821886" },
     { url:"maid",title:"Medical Assistance in Dying",date:"2026-09-14",mirrors:"substack:215626100,medium:378a520d05e0,tumblr:828961026747809793" },
-    { url:"mark-robinson",title:"Mark Robinson",date:"2024-12-15",mirrors:"tumblr:769962893917798400" },
-    { url:"normalization",title:"Normalization",date:"2025-09-08",mirrors:"substack:61739183" },
+    { url:"mark-robinson",title:"Mark Robinson",subtitle:"A chronicling of a person too ridiculous to forget",date:"2024-12-15",mirrors:"tumblr:769962893917798400" },
     { url:"pierre-poilievre",title:"The many problems with Pierre Poilievre",date:"2026-08-03",mirrors:"substack:216081530",toc },
     { url:"prejudice",title:"Notes on prejudice",date:"2025-10-30",mirrors:"substack:77556410" },
-    { url:"rational-ignorance",title:"Rational ignorance",date:"2026-04-09",mirrors:"substack:193680023,tumblr:813419185909727232,patreon55199122,medium:7d332cf2dfb5" },
-    { url:"reddit",title:"Notes on Reddit",subtitle:"On the website's history, what makes it unique, and the intense hatred many people seem to have for it",date:"2025-12-30",mirrors:"substack:83230909" },
+    { url:"rational-ignorance",title:"Rational ignorance",date:"2026-04-09",mirrors:"substack:193680023,tumblr:813419185909727232,patreon:55199122,medium:7d332cf2dfb5" },
+    { url:"reddit",title:"Reddit",subtitle:"The website's history, what makes it unique, and the intense hatred many people seem to have for it",date:"2025-12-30",mirrors:"substack:83230909" },
     { url:"relationships",title:"The standard relationship model",date:"2025-11-19" },
     { url:"sex-gender-transsexuals",title:"Sex, Gender, & Transsexuals",date:"2024-11-19",wide,toc },
     { url:"somali-day-cares",title:"Nick Shirley and Somali day cares",date:"2026-01-02",mirrors:"substack:83243480,patreon:55200604" },
@@ -841,9 +855,11 @@ const pagesMeta = [
 const textElements = pagesMeta.filter(x => !x.unlisted).sort(
     (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
 ).map(
-    tobj => `<div><div>${ tobj.date ?`<span class='date'>${ tobj.date }</span>` :'' }</div><div><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) }</a></div></div>`
+    tobj => `
+        <div class="page-date">${ tobj.date ?`<span title="${ dateFromISO(tobj.date) }">${ tobj.date }</span>` :'' }</div>
+        <div class="page-link"><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></div>
+    `
 );
-// { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:207IiRGFowE,patreon:164228303",thumb:"164228303.jpg",length:"2:41:18" },
 const videoElements = [
     { title:"Destiny versus Finkelstein",date:"2026-10-20",src:"youtube:2jY-wfdKkyw,patreon:172891823",thumb:"172891823.jpg",length:"44:24" },
     { title:"Canadian separatism",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
@@ -852,6 +868,7 @@ const videoElements = [
     { title:"Medical Assistance in Dying (MAiD)",date:"2026-09-16",src:"patreon:169696851,youtube:0n0edHbri5k",length:"13:32",thumb:"1696968512.jpg" },
     { title:"Mark Carney",date:"2026-08-18",src:"youtube:5fsJUueUvpw,patreon:167033503",thumb:"167033503.jpg",length:"13:54" },
     { title:"Am I a liberal?",date:"2026-08-11",src:"youtube:QPNCs5A3iYo,patreon:166429634",length:"16:26",thumb:"166429634.jpg" },
+    { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:ilB3j3BTCTI,patreon:164228303",thumb:"164228303.jpg",length:"2:41:06" },
     { title:"Canada is under attack",date:"2026-08-09",src:"youtube:cDJ3lQH7m0Y,patreon:166242253",length:"16:21",thumb:"166242253.jpg" },
     { title:"Floor crossers",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
     { title:"Liberalism not Leftism",date:"2026-05-06",src:"youtube:DgGf_g4aGYA,patreon:157517952",thumb:"157517952.jpg",length:"41:15" },
