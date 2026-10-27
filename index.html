@@ -42,7 +42,7 @@
         .landing.tab-panel { gap: 38px; }
             .landing__about { margin-inline: auto; }
             @media (max-width: 430px) { .landing__about { grid-template-columns: auto; } }
-            .landing__about p { max-width: 469px; }
+            .landing__about p { max-width: 528px; }
             .landing__about p {
                 font: 17px/1.4 Constantia,Georgia,Times;
             }
@@ -54,7 +54,6 @@
             @media (max-width: 540px) { .latest-videos-front { grid-template-columns: 1fr 1fr; } .latest-videos-front > :nth-child(n+3) { display: none; } }
             @media (max-width: 430px) { .tab-panel { padding: 0; } }
             @media (max-width: 380px) { .latest-videos-front { grid-template-columns: 1fr; justify-items: center; } }
-            
     </style>
 </head>
 <body>
@@ -64,7 +63,7 @@
     <div class="tabs">
         <div class="tab no-select landing" onclick="fsetTab('landing')">Home</div>
         <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
-        <div class="tab no-select articles" onclick="fsetTab('articles')">Text pages</div>
+        <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
     </div>
     <div class="tab-panels__main">
         <div class="landing tab-panel">
@@ -90,7 +89,7 @@
         
         <div class="articles tab-panel">
             <div class="article-index label-external">
-                <div><div></div><div><a href="page/public-record">Public record (public figure statements)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div></div>
+                <div><div><a href="page/public-record">Public record (public figure statements)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div></div>
             </div>
         </div>
         
@@ -137,4 +136,5 @@
     })
     history.replaceState(null, '', window.location.pathname);
 </script></div></body></html>
+
 

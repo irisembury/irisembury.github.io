@@ -1,45 +1,155 @@
 "use strict"
-const HTML = document.documentElement;
-let pageLinks = [];
-let _toc_ = null;
-let canTocUpdate = true;
-let tocLastHeading = 0;
-let rowsInToc = [];
-let pageHeadings = [];
-let loadToc = false;
-const siteIcons = { 'youtube.com':'youtube-logo', 'youtu.be':'youtube-logo', 'twitch.tv':'twitch-logo', 'bsky.app':'bluesky-logo', 'x.com':'twitter-logo', 'twitter.com':'twitter-logo', 'facebook.com':'facebook-logo', 'substack.com':'substack-logo', 'instagram.com':'instagram-logo', 'reddit.com':'reddit-logo', 'medium.com':'medium-logo', 'wikipedia.org':'wikipedia-logo', 'patreon.com':'patreon-logo', 'tumblr.com':'tumblr-logo', 'discord.gg':'discord-logo', 'discord.com':'discord-logo' };
-const KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
+let tocElement = null,canTocUpdate = true, tocLastHeading = 0,rowsInToc = [],pageHeadings = [],loadToc = false,pageLinks = [];
+const HTML = document.documentElement, toc = 1, wide = 1, unlisted = 1, unsetWidth = 1, siteIcons = { 'youtube.com':'youtube-logo', 'youtu.be':'youtube-logo', 'twitch.tv':'twitch-logo', 'bsky.app':'bluesky-logo', 'x.com':'twitter-logo', 'twitter.com':'twitter-logo', 'facebook.com':'facebook-logo', 'substack.com':'substack-logo', 'instagram.com':'instagram-logo', 'reddit.com':'reddit-logo', 'medium.com':'medium-logo', 'wikipedia.org':'wikipedia-logo', 'patreon.com':'patreon-logo', 'tumblr.com':'tumblr-logo', 'discord.gg':'discord-logo', 'discord.com':'discord-logo' }, KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
 
+const pagesMeta = [
+    { url:"destiny-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
+    { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:88392592,tumblr:809547051047272448,patreon:55199340",toc },
+    { url:"afd-victory-2026",title:"On the AfD victory in Saxony-Anhalt",date:"2026-09-08",mirrors:"substack:214741964,tumblr:827199160807817216" },
+    { url:"airport-privatization",title:"Thoughts on airport privatization",date:"2026-09-20",mirrors:"substack:216649667" },
+    { url:"allende-and-pinochet",title:"Allende and Pinochet",date:"2026-08-09",mirrors:"substack:210515116,medium:55782f90e9" },
+    { url:"leftist-youtube",title:"Thoughts on Leftist YouTube",date:"2026-10-07",mirrors:"substack:219340446",toc },
+    { url:"public-record",title:"Public record",wide,toc,unlisted,unsetWidth },
+    { url:"stay-the-trenches",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
+    { url:"floor-crossings",title:"Floor crossing (Canadian politics)",date:"2026-04-17",mirrors:"substack:94479253,medium:dfe93bb23bdd" },
+    { url:"india",title:"India",date:"2025-10-24",mirrors:"substack:77071182,tumblr:798351257128615936" },
+    { url:"liberal-conservatism",title:"Liberal conservatism",subtitle:"A philosophy of prudence and humility",date:"2026-03-24",toc },
+    { url:"american-decline",title:"A synopsis of American decline",date:"2026-01-28",mirrors:"substack:86165875,patreon:55201485",toc },
+    { url:"anime-reviews",title:"Anime reviews",date:"2024-12-17",mirrors:"tumblr:770134591113658368",unlisted },
+    { url:"bernie-military-industrial-complex",title:"Bernie Sanders and the Military Industrial Complex",date:"2024-12-16",mirrors:"tumblr:770070077409214464" },
+    { url:"bias-normal-white-men",title:"On our bias for normal white men",date:"2024-11-26",mirrors:"substack:53823028,tumblr:770305075441778688,medium:0c508d4c51b5" },
+    { url:"canada-sovereign-wealth-fund",title:"Canada's plan for a sovereign wealth fund",date:"2026-04-29",mirrors:"substack:95885575,tumblr:815245873447649280" },
+    { url:"data-structures-algorithms",title:"Data structures & algorithms",date:"2021-04-31",wide,toc,unlisted },
+    { url:"elon-musk-nazi-salute",title:"Elon Musk and the Nazi Salute",date:"2025-01-24",mirrors:"substack:55604956,tumblr:773565389405847552" },
+    { url:"fetishism-politics",title:"Fetishism and politics",date:"2024-11-14",mirrors:"tumblr:770364766791352320" },
+    { url:"freedom-convoy",title:"What was the Freedom Convoy?",date:"2026-06-15",wide,toc },
+    { url:"how-bad-is-america-really",title:"How bad is America, really?",date:"2026-07-01" },
+    { url:"immigration",title:"Immigration",date:"2025-11-06",mirrors:"substack:83229652" },
+    { url:"israel-palestine",title:"Israel and Palestine",date:"2025-07-27",toc,wide },
+    { url:"liberalism-not-leftism",title:"Liberalism not leftism",date:"2025-09-19",mirrors:"substack:74062936,tumblr:795164683319574528,patreon:55199811" },
+    { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:73066010,tumblr:794091916138594304,medium:46de1629e138" },
+    { url:"lies-about-warren-clinton",title:"Lies about Elizabeth Warren and Hillary Clinton",date:"2024-12-19",mirrors:"tumblr:770730090759946240,substack:53821886" },
+    { url:"maid",title:"Medical Assistance in Dying",date:"2026-09-14",mirrors:"substack:215626100,medium:378a520d05e0,tumblr:828961026747809793" },
+    { url:"mark-robinson",title:"Mark Robinson",subtitle:"A chronicling of a person too ridiculous to forget",date:"2024-12-15",mirrors:"tumblr:769962893917798400" },
+    { url:"pierre-poilievre",title:"The many problems with Pierre Poilievre",date:"2026-08-03",mirrors:"substack:216081530",toc },
+    { url:"prejudice",title:"Notes on prejudice",date:"2025-10-30",mirrors:"substack:77556410" },
+    { url:"rational-ignorance",title:"Rational ignorance",date:"2026-04-09",mirrors:"substack:193680023,tumblr:813419185909727232,patreon:55199122,medium:7d332cf2dfb5" },
+    { url:"reddit",title:"Reddit",subtitle:"The website's history, what makes it unique, and the intense hatred many people seem to have for it",date:"2025-12-30",mirrors:"substack:83230909" },
+    { url:"relationships",title:"The standard relationship model",date:"2025-11-19" },
+    { url:"sex-gender-transsexuals",title:"Sex, Gender, & Transsexuals",date:"2024-11-19",wide,toc },
+    { url:"somali-day-cares",title:"Nick Shirley and Somali day cares",date:"2026-01-02",mirrors:"substack:83243480,patreon:55200604" },
+    { url:"trans-prison-stats-argument",title:"The trans prison stats argument",date:"2024-09-15",mirrors:"substack:153916145,tumblr:771501478599868416" },
+    { url:"trump-and-russia",title:"Trump and Russia",date:"2025-03-06",mirrors:"tumblr:777321996757450752,substack:58560801" },
+    { url:"trump-appeal",title:"The Trump appeal",subtitle:"How and why does anyone actually like him?",date:"2024-12-03",mirrors:"tumblr:770270265635667968,medium:5c6806252b43" },
+    { url:"types-of-masculinity",title:"On types of masculinity",date:"2024-11-08",mirrors:"tumblr:770310861444300800" },
+    { url:"why-bottom-surgery",title:"Why get bottom surgery?",date:"2025-02-09",mirrors:"tumblr:775036555284856832" }
+];
+const videoElements = [
+    { title:"Destiny versus Finkelstein",date:"2026-10-20",src:"youtube:2jY-wfdKkyw,patreon:172891823",thumb:"172891823.jpg",length:"44:24" },
+    { title:"Canadian separatism",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
+    { title:"Macklemore, Ed Sheeran",date:"2026-10-10",src:"youtube:_lfRiHlNFbc,patreon:172218877",thumb:"172218877.jpg",length:"41:18" },
+    { title:"Thoughts on Leftist YouTube",date:"2026-09-25",src:"youtube:R_xfJqp3M4g,patreon:171931256",length:"1:17:57",thumb:"1719312562.jpg" },
+    { title:"Medical Assistance in Dying (MAiD)",date:"2026-09-16",src:"patreon:169696851,youtube:0n0edHbri5k",length:"13:32",thumb:"1696968512.jpg" },
+    { title:"Mark Carney",date:"2026-08-18",src:"youtube:5fsJUueUvpw,patreon:167033503",thumb:"167033503.jpg",length:"13:54" },
+    { title:"Am I a liberal?",date:"2026-08-11",src:"youtube:QPNCs5A3iYo,patreon:166429634",length:"16:26",thumb:"166429634.jpg" },
+    { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:ilB3j3BTCTI,patreon:164228303",thumb:"164228303.jpg",length:"2:41:06" },
+    { title:"Canada is under attack",date:"2026-08-09",src:"youtube:cDJ3lQH7m0Y,patreon:166242253",length:"16:21",thumb:"166242253.jpg" },
+    { title:"Floor crossers",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
+    { title:"Liberalism not Leftism",date:"2026-05-06",src:"youtube:DgGf_g4aGYA,patreon:157517952",thumb:"157517952.jpg",length:"41:15" },
+    { title:"Liberal Conservatism",date:"2026-04-07",src:"youtube:Sy33HSFsuu8,patreon:154996870",thumb:"154996870.jpg",length:"2:03:13" },
+    { title:"Abortion",date:"2026-02-24",src:"youtube:CpjJ8TgOxJY,patreon:151884875",thumb:"151884875.jpg",length:"43:04" },
+    { title:"How bad is America, really?",date:"2026-03-04",src:"youtube:W0Dmtyyc7FU,patreon:152288758",thumb:"152288758.jpg",length:"27:04" },
+    { title:"American decline",date:"2026-02-11",src:"youtube:oUOsAdnK2zs,patreon:150555019",thumb:"150555019.jpg",length:"39:47" },
+    { title:"Normalization",src:"youtube:TYoe1jxBYPY,patreon:148679519",date:"2025-09-19",thumb:"148679519.jpg",length:"12:08" },
+    { title:"India",thumb:"148682097.jpg",src:"youtube:Pz0Oq1rb14E,patreon:148682097",date:"2025-10-23",length:"41:17" },
+    { title:"Lies about Ilhan Omar",date:"2025-09-03",src:"youtube:zgE4L-e9yg0,patreon:148679387",thumb:"148679387.jpg",length:"44:50" },
+    { title:"Trans fetishism",date:"2025-04-02",src:"youtube:vk57rvM1zWo",thumb:"vk57rvM1zWo.jpg",length:"22:39" },
+    { title:"Exploring lies about Warren and Clinton",date:"2025-04-09",src:"youtube:LPQD6sxlWOs,patreon:148676394",thumb:"148676394.jpg",length:"34:02" },
+    { title:"Bernie Sanders & the Military Industrial Complex",date:"2025-03-22",length:"12:44",src:"youtube:yt6O0OMdIT0",thumb:"yt6O0OMdIT0.jpg" },
+    { title:"Sex, gender, & transsexuals",date:"2025-10-17",src:"youtube:Hgh3r7gJoWU,patreon:148676474",thumb:"148676474.jpg",length:"1:26:14" }
+].sort((a,b)=>(parseInt(b.date?.replace(/\D/g,''))||0)-(parseInt(a.date?.replace(/\D/g,''))||0)).map(
+    vobj => `
+        <figure class="video-figure">
+            <div class="img-box"><a href="${ linkParse(vobj.src.split(",")[0],0) }"><div class="img" loading="lazy" style="background-image:url('${ getRootPath() }assets/thumbnails/${ vobj.thumb }')">${ vobj.length ?`<span class="timecard no-select">${ vobj.length }</span>` :"" }</div></a></div>
+            <figcaption>
+                <div class="video-title">${ vobj.title }</div>
+                <div class="video-sources">${ vobj.src.split(",").map(n => linkParse(n,1)).join(" | ") }</div>
+                <div class="video-date"><span>${ dateFromISO(vobj.date) }</span></div>
+            </figcaption>
+        </figure>`
+);
+const textElements = pagesMeta.filter(x => !x.unlisted).sort(
+    (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
+).map(
+    tobj => `
+    <div>
+        <div>${ tobj.date ?`<span title="${ dateFromISO(tobj.date) }" class="page-date">${ tobj.date }</span>` :'' }</div>
+        <div><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></div>
+    </div>`
+);
+
+function init() {
+    loadBody();
+    rightMenuSetup();
+    setupLightswitch();
+    tocSetup();
+    Array.from(document.querySelectorAll(".auto-format")).forEach(a => { a.innerHTML = autoFormat(a.innerHTML); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
+    Array.from(document.querySelectorAll(".auto-paragraphs")).forEach(a => {
+        a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(
+            line => {
+                if (line.startsWith('.')) { return `<div class='fine'><p>${ autoFormat(line.substring(1).trimStart()) }</p></div>`; }
+                if (line.startsWith('#')) { return `<h4>${ autoFormat(line.substring(1).trimStart()) }</h4>`; }
+                return `<p>${ autoFormat(line) }</p>`
+            }
+        ).join('');
+        a.classList.remove("auto-paragraphs");
+        if (a.classList.length == 0) {
+            a.removeAttribute("class");
+        }
+    });
+    Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
+    Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
+    Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
+    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", textElements.join(''));
+    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", videoElements.join(''));
+    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", textElements.slice(0, 5).join(''));
+    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", videoElements.slice(0, 3).join(''));
+    if (document.title == "") { document.title = "Iris Embury"; }
+    else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
+    setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
+}
+
+function dateFromISO(datestring, tag = 0, datelength = 0) {
+    /* this converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
+    /* mode 0 = raw datestring return, mode 1 = time element */
+    let input = datestring.replace(/\D/g, "")
+    if (input.length == 8) {
+        const iso = input.substring(0,4) + "-" + input.substring(4,6) + "-" + input.substring(6,8);
+        let [year,month,day] = iso.split("-").map(Number);
+        if (month >= 1 && month <= 12) {
+            
+            if (datelength == 0) {
+                month = { 1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June", 7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec" }[month]
+            }
+            else {
+                month = { 1: "January", 2: "February", 3: "March", 4: "Aprril", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December" }[month]
+            }
+            
+            if (tag == 0) {
+                datestring = year + " " + month + " " + day;
+            }
+            else {
+                datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ year + " " + month + " " + day +'</time>';
+            }
+        }
+    }
+    /* if anything fails, just return the value that was passed unaltered */
+    return datestring;
+}
 function scrollToTop() {
     window.scrollTo({ top: 0 });
     history.replaceState(null, "", window.location.pathname);
     document.getElementById("toc")?.scrollTo({ behavior: "smooth", top: 0 })
-}
-function setLightbox(action) {
-    if (action instanceof HTMLElement) {
-        document.querySelector(".lightbox").classList.remove("hidden");
-        let img = document.querySelector(".lightbox .lb-img-wrapper img")
-        img.src = action.src;
-        img.alt = action.alt;
-        if (action.title != "Click to expand") img.title = action.title;
-        document.querySelector(".lightbox .lb-top-left p").innerHTML = `This image: <a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
-        document.querySelector(".lightbox .lb-caption-panel p").innerHTML = action.alt;
-    }
-    else if (typeof action == "string") {
-        if (action == "close") {
-            document.querySelector(".lightbox").classList.add("hidden");
-        }
-        else {
-            document.querySelector(".lightbox").classList.remove("hidden");
-            let fileName = action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;");
-            document.querySelector(".lightbox .lb-top-left p").innerHTML = `This image: <a href="${ action }">${ fileName }</a>`;
-            let img = document.querySelector(".lightbox .lb-img-wrapper img");
-            img.src = action;
-            img.alt = action;
-            delete img.title;
-            document.querySelector(".lightbox .lb-caption-panel p").innerHTML = fileName + " (no description)";
-        }
-    }
 }
 function linkParse(string_in, mode = 0, separator = ":") {
     /* 0 = link, 1 = tag, 3 = tag with icon */
@@ -92,6 +202,253 @@ function parseObj(entry, ...requiredFields) {
     });
     requiredFields.forEach(r => { if (!Object.hasOwn(obj,r)) { obj[r] = ""; } });
     return obj;
+}
+function linkReplace(chunk) {
+    chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
+        linkUrl = linkUrl.replaceAll('&#41;', ')');
+        displayText = displayText.trim();
+        const external = linkUrl.startsWith("http");
+        const blankDisplay = displayText == "";
+        
+        let linkIndex = '[link]';
+        if (linkUrl.startsWith("http")) {
+            let _link_url = linkUrl;
+            if (_link_url.indexOf("#") != -1) {
+                _link_url = _link_url.substring(0, _link_url.indexOf("#"))
+            }
+            linkIndex = pageLinks.indexOf(_link_url);
+            if (linkIndex == -1) {
+                linkIndex = pageLinks.push(_link_url); }
+        }
+        if (linkUrl.startsWith('#')) {
+            linkUrl = linkUrl.replaceAll(' ', '_');
+        }
+        let a_tag = '<a href="' + linkUrl + '"';
+        let link_title = linkUrl;
+        let link_class = [];
+        let link_inner = displayText || '[' + linkIndex + ']';
+        
+        if (external) {
+            link_class.push("external-link");
+            const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
+            if (iconName) {
+                link_inner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
+            }
+        }
+        else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg")) {
+            a_tag = `<a onclick="setLightbox('${ linkUrl }')"`;
+            link_class.push("pseudo-link");
+            link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
+            let s_ = link_inner.lastIndexOf(" ") + 1;
+            link_inner = link_inner.substring(0, s_) + link_inner.substring(s_) + '<span class="nowrap"><span class="inline-icon lightbox-link"></span></span>';
+        }
+        if (blankDisplay) {
+            link_class.push('super');
+        }
+        a_tag += ' title="' + link_title + '" class="' + link_class.join(' ') + '">' + link_inner + '</a>';
+        if (blankDisplay) {
+            a_tag = '<sup>' + a_tag + '</sup>';
+        }
+        return a_tag;
+    });
+    chunk = chunk.replace(/(?<=^|\s)(https?:\/\/[^\s<$]+)/g, (match, linkUrl) => {
+        let linkAfter = "";
+        if (/[.,?!;]$/.test(linkUrl)) {
+            linkAfter = linkUrl.at(-1);
+            linkUrl = linkUrl.slice(0, -1);
+        }
+        let _link_url = linkUrl;
+        if (_link_url.indexOf("#") != -1) {
+            _link_url = _link_url.substring(0, _link_url.indexOf("#"))
+        }
+        if (pageLinks.indexOf(_link_url) == -1) {
+            pageLinks.push(_link_url);
+        }
+        let linkInner = linkUrl;
+        const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
+        let a_tag = '<a';
+        if (iconName) {
+            linkInner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
+        }
+        a_tag += ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
+        return a_tag;
+    });
+    return chunk;
+}
+function unwrapSeconds(vSQuery) {
+    vSQuery = parseInt(vSQuery);
+    if (!isNaN(vSQuery)) {
+        let seconds = vSQuery % 60; // remainder
+        if ((seconds + "").length == 1) {
+            seconds = '0' + seconds; // e.g. 8 -> 08
+        }
+        if (vSQuery < 60) { // e.g. 08 -> 0:08, 40 -> 0:40
+            return '0:' + seconds;
+        }
+        vSQuery -= (vSQuery % 60); // remove remainder seconds
+        vSQuery /= 60; // convert from seconds to minutes
+        let minutes = vSQuery % 60; // remove minutes above 60
+        if (vSQuery < 60) {
+            return minutes + ':' + seconds;
+        }
+        if ((minutes + "").length == 1) {
+            minutes = '0' + minutes;
+        }
+        vSQuery -= (vSQuery % 60); // remove remainder minutes
+        let hours = vSQuery / 60; // convert from minutes to hours
+        return hours + ':' + minutes + ':' + seconds;
+    }
+    return vSQuery;
+}
+function ageFromISO(argDate) {
+    argDate = argDate.replace(/\D/g, "");
+    if (argDate.length < 8) {
+        return "?";
+    }
+    const entryYear  = parseInt(argDate.substring(0, 4)); // YYYY---- 
+    const entryMonth = parseInt(argDate.substring(4, 6)); // ----MM--
+    const entryDay   = parseInt(argDate.substring(6, 8)); // ------DD
+    if (entryMonth > 12 || entryDay > 31) {
+        return "?";
+    }
+    const todaysDate = new Date();
+    let age = todaysDate.getFullYear() - entryYear;
+    
+    if (todaysDate.getMonth() + 1 < entryMonth) {
+        age -= 1;
+    }
+    else if (todaysDate.getMonth() + 1 == entryMonth && todaysDate.getDate() + 1 <= entryDay) {
+        age -= 1;
+    }
+    return age;
+}
+function getRootPath() {
+    let path = window.location.pathname;
+    if (path.endsWith("index.html")) {
+        path = path.slice(0, -10);
+    }
+    while (path.endsWith("/")) {
+        path = path.slice(0, -1);
+    }
+    path = path.substring(path.indexOf("irisembury"));
+    path = path.replace(/[^/]/g,'');
+    return '../'.repeat(path.length);
+}
+function getDomain() {
+    let path = window.location.pathname;
+    if (path.endsWith("index.html")) {
+        path = path.slice(0, -10);
+    }
+    while (path.endsWith("/")) {
+        path = path.slice(0, -1);
+    }
+    let lastSlash = path.lastIndexOf("/");
+    if (lastSlash == -1) {
+        console.error("Wait no this should be impossible");
+        return "";
+    }
+    return path.substring(lastSlash + 1);
+}
+function autoFormat(_string) {
+    if (!_string) return _string;
+    _string = linkReplace(_string.trim());
+    let output = "";
+    while (true) {
+        const openTag = _string.indexOf("<");
+        const closeTag = _string.substring(openTag).indexOf(">") + openTag;
+        if (openTag == -1 || closeTag - openTag == -1) { break; }
+        output += afAux(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
+        _string = _string.substring(closeTag);
+    }
+    output = output + afAux(_string)
+    output = output.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
+    return output;
+}
+function afAux(str_in) {
+    //curly quotes, dashes
+    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) { str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;") }
+    return str_in.replaceAll("---", '&mdash;').replaceAll("--", "&ndash;");
+}
+function tokenizeByWordChar(stringData) {
+    const result = [];
+    while (stringData.length > 0) {
+        let point = stringData.search( /[a-zA-Z0-9_$]/.test(stringData[0]) ? /[^a-zA-Z0-9_$]/ : /[a-zA-Z0-9_$]/ );
+        if (point == -1) {
+            result.push(stringData);
+            break;
+        }
+        result.push(stringData.substring(0, point));
+        stringData = stringData.substring(point);
+    }
+    return result;
+}
+function colorizeKeywords(stringInput, syntaxClass, customKeywords) {
+    return tokenizeByWordChar(stringInput).map(word => {
+        if (KEYWORDS[syntaxClass] && KEYWORDS[syntaxClass].split(" ").includes(word)) {
+            return `<span class="code-keyword">${ word }</span>`;
+        }
+        else if (customKeywords && customKeywords.includes(word)) {
+            return `<span class="code-cust-keyword">${ word }</span>`;
+        }
+        else if (/^\d+$/.test(word)) {
+            return `<span class="code-number">${ word }</span>`;
+        }
+        return word;
+    }).join("");
+}
+function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
+    let output = "";
+    /* strings in code: */
+    stringInput = stringInput.replace(/"(.+?)"/g, "<span class=\"code-string\">\"$1\"</span>")
+    /* this finds code keywords, while ignoring html tags: */
+    while (true) {
+        const openTag = stringInput.indexOf("<");
+        const closeTag = stringInput.indexOf(">");
+        if (openTag == -1 || closeTag == -1) {
+            break;
+        }
+        let display_text = stringInput.substring(0, openTag);
+        let tag_and_attributes = stringInput.substring(openTag, closeTag + 1);
+        output += colorizeKeywords(display_text, syntaxClass, customKeywords);
+        output += tag_and_attributes;
+        stringInput = stringInput.substring(closeTag + 1);
+    }
+    output += colorizeKeywords(stringInput, syntaxClass, customKeywords);
+    /* line comment: */
+    output = output.replace(/(\/\/.*)/, "<span class=\"code-comment\">$1</span>").replace(/(#.*)/, "<span class=\"code-macro\">$1</span>")
+    return output;
+}
+function codeSanitize(chunk) {
+    return chunk.replace(/`(.+?)`/g, crAux);
+}
+function crAux(match, captured) {
+    return `<code>${ captured.replaceAll("\"", "&quot;").replaceAll("'", "&apos;").replaceAll("-", "&hyphen;").replaceAll("(", "&lpar;").replaceAll(")", "&rpar;").replaceAll("[", "&lbrack;").replaceAll("]", "&rbrack;").replaceAll("*", "&ast;").replaceAll("\n", "<br>") }</code>`;
+}
+function setLightbox(action) {
+    if (action instanceof HTMLElement) {
+        document.querySelector(".lightbox").classList.remove("hidden");
+        let img = document.querySelector(".lightbox .lb-img-wrapper img")
+        img.src = action.src;
+        img.alt = action.alt;
+        if (action.title != "Click to expand") img.title = action.title;
+        document.querySelector(".lightbox .lb-top-left p").innerHTML = `This image: <a href="${ action.src }">${ action.src.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;") }</a>`;
+        document.querySelector(".lightbox .lb-caption-panel p").innerHTML = action.alt;
+    }
+    else if (typeof action == "string") {
+        if (action == "close") {
+            document.querySelector(".lightbox").classList.add("hidden");
+        }
+        else {
+            document.querySelector(".lightbox").classList.remove("hidden");
+            let fileName = action.split("/").slice(-1).join("").replaceAll("%20", "&nbsp;");
+            document.querySelector(".lightbox .lb-top-left p").innerHTML = `This image: <a href="${ action }">${ fileName }</a>`;
+            let img = document.querySelector(".lightbox .lb-img-wrapper img");
+            img.src = action;
+            img.alt = action;
+            delete img.title;
+            document.querySelector(".lightbox .lb-caption-panel p").innerHTML = fileName + " (no description)";
+        }
+    }
 }
 function fileBox(chunk) {
     chunk = chunk.split("\n").slice(1).map(
@@ -151,9 +508,6 @@ function codeblock(chunk) {
         lines = lines.map(line => syntaxHighlight(line, syntaxClass, customKeywords).replaceAll("\\\\", "&#92;").replaceAll("\\<","&lt;").replaceAll("\\>","&gt;"));
     }
     return `<div class="codeblock">${ lines.map(line => `<div>${ line }</div>`).join("") }</div>`;
-}
-function codeReplace(match, captured) {
-    return `<code>${ captured.replaceAll("\"", "&quot;").replaceAll("'", "&apos;").replaceAll("-", "&hyphen;").replaceAll("(", "&lpar;").replaceAll(")", "&rpar;").replaceAll("[", "&lbrack;").replaceAll("]", "&rbrack;").replaceAll("*", "&ast;").replaceAll("\n", "<br>") }</code>`;
 }
 function autoTable(chunk, table_number) {
     let table = `<div class="table-wrapper"><table class="auto-table auto-table-${ table_number }"><tbody>${
@@ -258,88 +612,6 @@ function autoIndent(chunk) {
     }).join('');
     return `<blockquote class="auto-indent">${ chunk }</blockquote>`
 }
-function dateFromISO(datestring, tag = 0, datelength = 0) {
-    /* this converts ISO 8601 date format (YYYYMMDD) into YYYY Month D */
-    /* mode 0 = raw datestring return, mode 1 = time element */
-    let input = datestring.replace(/\D/g, "")
-    if (input.length == 8) {
-        const iso = input.substring(0,4) + "-" + input.substring(4,6) + "-" + input.substring(6,8);
-        let [year,month,day] = iso.split("-").map(Number);
-        if (month >= 1 && month <= 12) {
-            
-            if (datelength == 0) {
-                month = { 1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June", 7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec" }[month]
-            }
-            else {
-                month = { 1: "January", 2: "February", 3: "March", 4: "Aprril", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December" }[month]
-            }
-            
-            if (tag == 0) {
-                datestring = year + " " + month + " " + day;
-            }
-            else {
-                datestring = '<time title="ISO: '+ iso +'" datetime="'+ iso +'">'+ year + " " + month + " " + day +'</time>';
-            }
-        }
-    }
-    /* if anything fails, just return the value that was passed unaltered */
-    return datestring;
-}
-function articleTop() {
-    let pageInfo = pagesMeta.find(p => p.url == getDomain());
-    if (!pageInfo) {
-        return '';
-    }
-    const articleTopContents = [];
-    if (pageInfo.toc) {
-        loadToc = true;
-    }
-    if (pageInfo.wide) {
-        HTML.classList.add("wide");
-    }
-    if (pageInfo.unsetWidth) {
-        document.querySelector('.menu .grid .grid').insertAdjacentHTML("beforeend", '<div><label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width"></div>');
-        if (localStorage.getItem("unset-width-" + window.location.pathname) != 'false') {
-            document.getElementById("unset-width").checked = true;
-            HTML.classList.add("unset-width");
-        }
-        document.getElementById("unset-width")?.addEventListener("change", function() {
-            HTML.classList.toggle(this.id, this.checked);
-            localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
-            tocUpdate();
-        });
-    }
-    if (pageInfo.title) {
-        articleTopContents.push(`<h1 class="for-toc">${ pageInfo.title }</h1>`);
-        document.title = pageInfo.title.replaceAll('---','\u2014').replaceAll('--','\u2013');
-    }
-    if (pageInfo.subtitle) {
-        articleTopContents.push(`<h2>${ pageInfo.subtitle }</h2>`);
-    }
-    if (pageInfo.date || pageInfo.mirrors) {
-        let by = '<div class="article-byline label-external">';
-        if (pageInfo.date) {
-            let d1 = new Date(pageInfo.date);
-            let d2 = new Date();
-            d2.setFullYear(d2.getFullYear() - 2);
-            if (d1 < d2) {
-                pageInfo.date = '<span class="date-ago">' + pageInfo.date + ' (' + (new Date().getFullYear() - d1.getFullYear()) + '+ years ago)</span>';
-            } else {
-                pageInfo.date = '<span>' + dateFromISO(pageInfo.date) + '</span>';
-            }
-            by += pageInfo.date;
-        }
-        if (pageInfo.mirrors) {
-            by += ' \u00b7 ';
-            by += pageInfo.mirrors.split(",").map(m => linkParse(m,2)).join(" ");
-        }
-        articleTopContents.push(by + '</div>');
-    }
-    if (articleTopContents.length != 0) {
-        return '<div class="article__top">' + articleTopContents.map(i => autoFormat(i)).join("\n") + '</div>';
-    }
-    return '';
-}
 function autoHeading(chunk) {
     let number = chunk.indexOf(" ");
     let heading = chunk.slice(number + 1).trim();
@@ -352,77 +624,133 @@ function autoHeading(chunk) {
     heading = autoFormat(heading);
     return `<${ tag } id="${ id }"${ number == 4 ? '' : ' class="for-toc"'}>${ heading }</${ tag }>`;
 }
-function linkReplace(chunk) {
-    chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
-        linkUrl = linkUrl.replaceAll('&#41;', ')');
-        displayText = displayText.trim();
-        const external = linkUrl.startsWith("http");
-        const blankDisplay = displayText == "";
-        
-        let linkIndex = '[link]';
-        if (linkUrl.startsWith("http")) {
-            let _link_url = linkUrl;
-            if (_link_url.indexOf("#") != -1) {
-                _link_url = _link_url.substring(0, _link_url.indexOf("#"))
+function tocUpdate() {
+    if (!canTocUpdate) { return; }
+    if (HTML.classList.contains("hide-toc")) { return; }
+    canTocUpdate = false;
+    setTimeout(() => {
+        canTocUpdate = true;
+        tocUpdate_();
+    }, 500);
+    tocUpdate_();
+}
+function tocUpdate_() {
+    let currentHeading = -1;
+    for (let heading = 0; heading < pageHeadings.length; heading += 1) {
+        let elementDistanceFromPageTop = window.scrollY + pageHeadings[heading].getBoundingClientRect().top;
+        if (pageYOffset < elementDistanceFromPageTop - (0.475 * window.innerHeight)) {
+            break;
+        }
+        currentHeading = heading;
+    }
+    if (currentHeading != tocLastHeading) {
+        rowsInToc.forEach( (row, n) => {
+            if (n == currentHeading && n > 0) {
+                row.classList.add("active-heading");
             }
-            linkIndex = pageLinks.indexOf(_link_url);
-            if (linkIndex == -1) {
-                linkIndex = pageLinks.push(_link_url); }
-        }
-        if (linkUrl.startsWith('#')) {
-            linkUrl = linkUrl.replaceAll(' ', '_');
-        }
-        let a_tag = '<a href="' + linkUrl + '"';
-        let link_title = linkUrl;
-        let link_class = [];
-        let link_inner = displayText || '[' + linkIndex + ']';
-        
-        if (external) {
-            link_class.push("external-link");
-            const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
-            if (iconName) {
-                link_inner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
+            else {
+                row.classList.remove("active-heading");
             }
+        })
+    }
+    tocLastHeading = currentHeading;
+}
+function setupLightswitch() {
+    const lightswitch = document.getElementById("lightswitch");
+    if (!lightswitch) { console.error("couldn't find #lightswitch"); }
+    if (lightswitch) {
+        let scheme = (localStorage.getItem("css-color-scheme") == "dark" ?"dark" :"light");
+        lightswitch.checked = (scheme == "dark");
+        HTML.style.colorScheme = scheme;
+        HTML.classList.toggle("dark", scheme == "dark");
+        lightswitch.addEventListener("change", function() {
+            let val = this.checked ?"dark" :"light";
+            localStorage.setItem("css-color-scheme", val);
+            HTML.style.colorScheme = val;
+            HTML.classList.toggle("dark", this.checked);
+        })
+    }
+}
+function rightMenuSetup() {
+    Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
+        c => {
+            if (localStorage.getItem(c.id) == "true") {
+                c.checked = true;
+                HTML.classList.toggle(c.id, c.checked);
+            }
+            c.addEventListener("change", function() {
+                localStorage.setItem(c.id, c.checked);
+                HTML.classList.toggle(c.id, c.checked);
+                tocUpdate();
+            });
         }
-        else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg")) {
-            a_tag = `<a onclick="setLightbox('${ linkUrl }')"`;
-            link_class.push("pseudo-link");
-            link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
-            let s_ = link_inner.lastIndexOf(" ") + 1;
-            link_inner = link_inner.substring(0, s_) + link_inner.substring(s_) + '<span class="nowrap"><span class="inline-icon lightbox-link"></span></span>';
+    )
+    const _menu_ = document.querySelector(".menu");
+    function rightMenuToggle(option) {
+        if (option == "open") {
+            _menu_.classList.add("open");
         }
-        if (blankDisplay) {
-            link_class.push('super');
+        else if (option == "close") {
+            _menu_.classList.remove("open");
         }
-        a_tag += ' title="' + link_title + '" class="' + link_class.join(' ') + '">' + link_inner + '</a>';
-        if (blankDisplay) {
-            a_tag = '<sup>' + a_tag + '</sup>';
+        else {
+            rightMenuToggle(!_menu_.classList.contains("open") ? "open" : "close");
         }
-        return a_tag;
-    });
-    chunk = chunk.replace(/(?<=^|\s)(https?:\/\/[^\s<$]+)/g, (match, linkUrl) => {
-        let linkAfter = "";
-        if (/[.,?!;]$/.test(linkUrl)) {
-            linkAfter = linkUrl.at(-1);
-            linkUrl = linkUrl.slice(0, -1);
+    }
+    const gear_ = document.querySelector(".gear");
+    const toc_btn_ = document.querySelector(".toc-btn");
+    
+    gear_?.addEventListener("click", rightMenuToggle);
+    
+    if (gear_ && toc_btn_) {
+        window.addEventListener("click", function(e) {
+            if (!_menu_.contains(e.target) && !gear_.contains(e.target)) {
+                rightMenuToggle("close");
+            }
+            if (!tocElement?.contains(e.target) && !toc_btn_.contains(e.target)) {
+                tocHide();
+            }
+        })
+    }
+    else if (gear_) {
+        window.addEventListener("click", function(e) {
+            if (!_menu_.contains(e.target) && !gear_.contains(e.target)) {
+                rightMenuToggle("close");
+            }
+        })
+    }
+    window.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+            rightMenuToggle("close");
+            setLightbox("close");
+            tocHide();
         }
-        let _link_url = linkUrl;
-        if (_link_url.indexOf("#") != -1) {
-            _link_url = _link_url.substring(0, _link_url.indexOf("#"))
+        else if (e.key === "Home") {
+            scrollToTop();
         }
-        if (pageLinks.indexOf(_link_url) == -1) {
-            pageLinks.push(_link_url);
-        }
-        let linkInner = linkUrl;
-        const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
-        let a_tag = '<a';
-        if (iconName) {
-            linkInner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
-        }
-        a_tag += ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
-        return a_tag;
-    });
-    return chunk;
+    })
+}
+function tocToggle() {
+    tocElement?.classList.toggle("attach", !tocElement.classList.contains("attach"));
+}
+function tocHide() {
+    tocElement?.classList.remove("attach");
+}
+function tocSetup() {
+    const page_ = document.getElementById("page");
+    if (page_ && loadToc) {
+        pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
+        pageHeadings.forEach(h => { h.classList.remove("for-toc"); if (h.classList.length == 0) { h.removeAttribute('class'); } });
+        if (pageHeadings.length < 3) { return; }
+        page_.insertAdjacentHTML("afterbegin",`<nav class="toc"></nav>`);
+        page_.insertAdjacentHTML("beforeend",`<div class="page-spacer"></div>`);
+        tocElement = document.querySelector(".toc");
+        tocElement.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
+        tocElement.scrollTo({ behavior: "instant", top: 0 })
+        rowsInToc = Array.from(tocElement.getElementsByClassName("toc-row"));
+        window.addEventListener("scroll", tocUpdate);
+        tocUpdate();
+    }
 }
 function interpreter(argValue) {
     if (argValue instanceof Node) {
@@ -441,8 +769,8 @@ function interpreter(argValue) {
         if (chunk.startsWith("!images")) { return imageGallery(chunk); }
         if (chunk.startsWith("!files")) { return fileBox(chunk); }
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
+        chunk = codeSanitize(chunk);
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
-        chunk = chunk.replace(/`(.+?)`/g, codeReplace);
         if (chunk.startsWith("!table")) { return autoTable(chunk, table_number++); }
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
         let isFine = chunk.startsWith(".");
@@ -461,149 +789,6 @@ function interpreter(argValue) {
         return chunk;
     })
     return input.join('');
-}
-function unwrapSeconds(vSQuery) {
-    vSQuery = parseInt(vSQuery);
-    if (!isNaN(vSQuery)) {
-        let seconds = vSQuery % 60; // remainder
-        if ((seconds + "").length == 1) {
-            seconds = '0' + seconds; // e.g. 8 -> 08
-        }
-        if (vSQuery < 60) { // e.g. 08 -> 0:08, 40 -> 0:40
-            return '0:' + seconds;
-        }
-        vSQuery -= (vSQuery % 60); // remove remainder seconds
-        vSQuery /= 60; // convert from seconds to minutes
-        let minutes = vSQuery % 60; // remove minutes above 60
-        if (vSQuery < 60) {
-            return minutes + ':' + seconds;
-        }
-        if ((minutes + "").length == 1) {
-            minutes = '0' + minutes;
-        }
-        vSQuery -= (vSQuery % 60); // remove remainder minutes
-        let hours = vSQuery / 60; // convert from minutes to hours
-        return hours + ':' + minutes + ':' + seconds;
-    }
-    return vSQuery;
-}
-function ageFromISO(argDate) {
-    argDate = argDate.replace(/\D/g, "");
-    if (argDate.length < 8) {
-        return "?";
-    }
-    const entryYear  = parseInt(argDate.substring(0, 4)); // YYYY---- 
-    const entryMonth = parseInt(argDate.substring(4, 6)); // ----MM--
-    const entryDay   = parseInt(argDate.substring(6, 8)); // ------DD
-    if (entryMonth > 12 || entryDay > 31) {
-        return "?";
-    }
-    const todaysDate = new Date();
-    let age = todaysDate.getFullYear() - entryYear;
-    
-    if (todaysDate.getMonth() + 1 < entryMonth) {
-        age -= 1;
-    }
-    else if (todaysDate.getMonth() + 1 == entryMonth && todaysDate.getDate() + 1 <= entryDay) {
-        age -= 1;
-    }
-    return age;
-}
-function autoFormat(_string) {
-    if (!_string) return _string;
-    _string = linkReplace(_string.trim());
-    let output = "";
-    while (true) {
-        const openTag = _string.indexOf("<");
-        const closeTag = _string.substring(openTag).indexOf(">") + openTag;
-        if (openTag == -1 || closeTag - openTag == -1) { break; }
-        output += afAux(_string.slice(0, openTag + 1)) + _string.slice(openTag + 1, closeTag);
-        _string = _string.substring(closeTag);
-    }
-    output = output + afAux(_string)
-    output = output.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
-    return output;
-}
-function afAux(str_in) {
-    //curly quotes, dashes
-    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) { str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;") }
-    return str_in.replaceAll("---", '&mdash;').replaceAll("--", "&ndash;");
-}
-function tokenizeByWordChar(stringData) {
-    const result = [];
-    while (stringData.length > 0) {
-        let point = stringData.search( /[a-zA-Z0-9_$]/.test(stringData[0]) ? /[^a-zA-Z0-9_$]/ : /[a-zA-Z0-9_$]/ );
-        if (point == -1) {
-            result.push(stringData);
-            break;
-        }
-        result.push(stringData.substring(0, point));
-        stringData = stringData.substring(point);
-    }
-    return result;
-}
-function colorizeKeywords(stringInput, syntaxClass, customKeywords) {
-    return tokenizeByWordChar(stringInput).map(word => {
-        if (KEYWORDS[syntaxClass] && KEYWORDS[syntaxClass].split(" ").includes(word)) {
-            return `<span class="code-keyword">${ word }</span>`;
-        }
-        else if (customKeywords && customKeywords.includes(word)) {
-            return `<span class="code-cust-keyword">${ word }</span>`;
-        }
-        else if (/^\d+$/.test(word)) {
-            return `<span class="code-number">${ word }</span>`;
-        }
-        return word;
-    }).join("");
-}
-function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
-    let output = "";
-    /* strings in code: */
-    stringInput = stringInput.replace(/"(.+?)"/g, "<span class=\"code-string\">\"$1\"</span>")
-    /* this finds code keywords, while ignoring html tags: */
-    while (true) {
-        const openTag = stringInput.indexOf("<");
-        const closeTag = stringInput.indexOf(">");
-        if (openTag == -1 || closeTag == -1) {
-            break;
-        }
-        let display_text = stringInput.substring(0, openTag);
-        let tag_and_attributes = stringInput.substring(openTag, closeTag + 1);
-        output += colorizeKeywords(display_text, syntaxClass, customKeywords);
-        output += tag_and_attributes;
-        stringInput = stringInput.substring(closeTag + 1);
-    }
-    output += colorizeKeywords(stringInput, syntaxClass, customKeywords);
-    /* line comment: */
-    output = output.replace(/(\/\/.*)/, "<span class=\"code-comment\">$1</span>").replace(/(#.*)/, "<span class=\"code-macro\">$1</span>")
-    return output;
-}
-function getRootPath() {
-    let path = window.location.pathname;
-    if (path.endsWith("index.html")) {
-        path = path.slice(0, -10);
-    }
-    while (path.endsWith("/")) {
-        path = path.slice(0, -1);
-    }
-    path = path.substring(path.indexOf("irisembury"));
-    path = path.replace(/[^/]/g,'');
-    return '../'.repeat(path.length);
-}
-function getDomain() {
-    let path = window.location.pathname;
-    if (path.endsWith("index.html")) {
-        path = path.slice(0, -10);
-    }
-    while (path.endsWith("/")) {
-        path = path.slice(0, -1);
-    }
-    let lastSlash = path.lastIndexOf("/");
-    if (lastSlash == -1) {
-        console.error("Wait no this should be impossible")
-        return "";
-    }
-    return path.substring(lastSlash + 1);
 }
 function loadBody() {
     document.body.insertAdjacentHTML("afterbegin", `
@@ -681,250 +866,61 @@ function loadBody() {
     );
     //interpreter(document.querySelector(".article"));
 }
-function tocUpdate() {
-    if (!canTocUpdate) { return; }
-    if (HTML.classList.contains("hide-toc")) { return; }
-    canTocUpdate = false;
-    setTimeout(() => {
-        canTocUpdate = true;
-        tocUpdate_();
-    }, 500);
-    tocUpdate_();
-}
-function tocUpdate_() {
-    let currentHeading = -1;
-    for (let heading = 0; heading < pageHeadings.length; heading += 1) {
-        let elementDistanceFromPageTop = window.scrollY + pageHeadings[heading].getBoundingClientRect().top;
-        if (pageYOffset < elementDistanceFromPageTop - (0.475 * window.innerHeight)) {
-            break;
-        }
-        currentHeading = heading;
+function articleTop() {
+    let pageInfo = pagesMeta.find(p => p.url == getDomain());
+    if (!pageInfo) {
+        return '';
     }
-    if (currentHeading != tocLastHeading) {
-        rowsInToc.forEach( (row, n) => {
-            if (n == currentHeading && n > 0) {
-                row.classList.add("active-heading");
+    const articleTopContents = [];
+    if (pageInfo.toc) {
+        loadToc = true;
+    }
+    if (pageInfo.wide) {
+        HTML.classList.add("wider");
+    }
+    if (pageInfo.unsetWidth) {
+        document.querySelector('.menu .grid .grid').insertAdjacentHTML("beforeend", '<div><label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width"></div>');
+        if (localStorage.getItem("unset-width-" + window.location.pathname) != 'false') {
+            document.getElementById("unset-width").checked = true;
+            HTML.classList.add("unset-width");
+        }
+        document.getElementById("unset-width")?.addEventListener("change", function() {
+            HTML.classList.toggle(this.id, this.checked);
+            localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
+            tocUpdate();
+        });
+    }
+    if (pageInfo.title) {
+        articleTopContents.push(`<h1 class="for-toc">${ pageInfo.title }</h1>`);
+        document.title = pageInfo.title.replaceAll('---','\u2014').replaceAll('--','\u2013');
+    }
+    if (pageInfo.subtitle) {
+        articleTopContents.push(`<h2>${ pageInfo.subtitle }</h2>`);
+    }
+    if (pageInfo.date || pageInfo.mirrors) {
+        let by = '<div class="article-byline label-external">';
+        if (pageInfo.date) {
+            let d1 = new Date(pageInfo.date);
+            let d2 = new Date();
+            d2.setFullYear(d2.getFullYear() - 2);
+            if (d1 < d2) {
+                pageInfo.date = '<span class="date-ago">' + pageInfo.date + ' (' + (new Date().getFullYear() - d1.getFullYear()) + '+ years ago)</span>';
+            } else {
+                pageInfo.date = '<span>' + dateFromISO(pageInfo.date) + '</span>';
             }
-            else {
-                row.classList.remove("active-heading");
-            }
-        })
-    }
-    tocLastHeading = currentHeading;
-}
-function setupLightswitch() {
-    const lightswitch = document.getElementById("lightswitch");
-    if (!lightswitch) { console.error("couldn't find #lightswitch"); }
-    if (lightswitch) {
-        let scheme = (localStorage.getItem("css-color-scheme") == "dark" ?"dark" :"light");
-        lightswitch.checked = (scheme == "dark");
-        HTML.style.colorScheme = scheme;
-        HTML.classList.toggle("dark", scheme == "dark");
-        lightswitch.addEventListener("change", function() {
-            let val = this.checked ?"dark" :"light";
-            localStorage.setItem("css-color-scheme", val);
-            HTML.style.colorScheme = val;
-            HTML.classList.toggle("dark", this.checked);
-        })
-    }
-}
-function rightMenuSetup() {
-    Array.from(document.querySelectorAll(".slide-checkbox.auto")).forEach(
-        c => {
-            if (localStorage.getItem(c.id) == "true") {
-                c.checked = true;
-                HTML.classList.toggle(c.id, c.checked);
-            }
-            c.addEventListener("change", function() {
-                localStorage.setItem(c.id, c.checked);
-                HTML.classList.toggle(c.id, c.checked);
-                tocUpdate();
-            });
+            by += pageInfo.date;
         }
-    )
-    const _menu_ = document.querySelector(".menu");
-    function rightMenuToggle(option) {
-        if (option == "open") {
-            _menu_.classList.add("open");
+        if (pageInfo.mirrors) {
+            by += ' \u00b7 ';
+            by += pageInfo.mirrors.split(",").map(m => linkParse(m,2)).join(" ");
         }
-        else if (option == "close") {
-            _menu_.classList.remove("open");
-        }
-        else {
-            rightMenuToggle(!_menu_.classList.contains("open") ? "open" : "close");
-        }
+        articleTopContents.push(by + '</div>');
     }
-    const _gear_ = document.querySelector(".gear");
-    const _toc_btn_ = document.querySelector(".toc-btn");
-    
-    _gear_?.addEventListener("click", rightMenuToggle);
-    
-    if (_gear_ && _toc_btn_) {
-        window.addEventListener("click", function(e) {
-            if (!_menu_.contains(e.target) && !_gear_.contains(e.target)) {
-                rightMenuToggle("close");
-            }
-            if (!_toc_?.contains(e.target) && !_toc_btn_.contains(e.target)) {
-                tocHide();
-            }
-        })
+    if (articleTopContents.length != 0) {
+        return '<div class="article__top">' + articleTopContents.map(i => autoFormat(i)).join("\n") + '</div>';
     }
-    else if (_gear_) {
-        window.addEventListener("click", function(e) {
-            if (!_menu_.contains(e.target) && !_gear_.contains(e.target)) {
-                rightMenuToggle("close");
-            }
-        })
-    }
-    window.addEventListener("keydown", function(e) {
-        if (e.key === "Escape") {
-            rightMenuToggle("close");
-            setLightbox("close");
-            tocHide();
-        }
-        else if (e.key === "Home") {
-            scrollToTop();
-        }
-    })
+    return '';
 }
-function tocToggle() {
-    _toc_?.classList.toggle("attach", !_toc_.classList.contains("attach"));
-}
-function tocHide() {
-    _toc_?.classList.remove("attach");
-}
-function tocSetup() {
-    const page_ = document.getElementById("page");
-    if (page_ && loadToc) {
-        pageHeadings = Array.from(document.getElementsByClassName("for-toc"));
-        pageHeadings.forEach(h => { h.classList.remove("for-toc"); if (h.classList.length == 0) { h.removeAttribute('class'); } });
-        if (pageHeadings.length < 3) { return; }
-        page_.insertAdjacentHTML("afterbegin",`<nav class="toc"></nav>`);
-        page_.insertAdjacentHTML("beforeend",`<div class="page-spacer"></div>`);
-        _toc_ = document.querySelector(".toc");
-        _toc_.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
-        _toc_.scrollTo({ behavior: "instant", top: 0 })
-        rowsInToc = Array.from(_toc_.getElementsByClassName("toc-row"));
-        window.addEventListener("scroll", tocUpdate);
-        tocUpdate();
-    }
-}
-const toc = 1, wide = 1, unlisted = 1, unsetWidth = 1;
-const pagesMeta = [
-    { url:"destiny-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
-    { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:88392592,tumblr:809547051047272448,patreon:55199340",toc },
-    { url:"afd-victory-2026",title:"On the AfD victory in Saxony-Anhalt",date:"2026-09-08",mirrors:"substack:214741964,tumblr:827199160807817216" },
-    { url:"airport-privatization",title:"Thoughts on airport privatization",date:"2026-09-20",mirrors:"substack:216649667" },
-    { url:"allende-and-pinochet",title:"Allende and Pinochet",date:"2026-08-09",mirrors:"substack:210515116,mediumb:55782f90e9" },
-    { url:"leftist-youtube",title:"Thoughts on Leftist YouTube",date:"2026-10-07",mirrors:"substack:219340446",toc },
-    { url:"public-record",title:"Public record",wide,toc,unlisted,unsetWidth },
-    { url:"stay-the-trenches",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
-    { url:"floor-crossings",title:"Floor crossing (Canadian politics)",date:"2026-04-17",mirrors:"substack:94479253,medium:dfe93bb23bdd" },
-    { url:"india",title:"India",date:"2025-10-24",mirrors:"substack:77071182,tumblr:798351257128615936" },
-    { url:"liberal-conservatism",title:"Liberal conservatism",subtitle:"A philosophy of prudence and humility",date:"2026-03-24",toc },
-    { url:"american-decline",title:"A synopsis of American decline",date:"2026-01-28",mirrors:"substack:86165875,patreon:55201485",toc },
-    { url:"anime-reviews",title:"Anime reviews",date:"2024-12-17",mirrors:"tumblr:770134591113658368",unlisted },
-    { url:"bernie-military-industrial-complex",title:"Bernie Sanders and the Military Industrial Complex",date:"2024-12-16",mirrors:"tumblr:770070077409214464" },
-    { url:"bias-normal-white-men",title:"On our bias for normal white men",date:"2024-11-26",mirrors:"substack:53823028,tumblr:770305075441778688,medium:0c508d4c51b5" },
-    { url:"canada-sovereign-wealth-fund",title:"Canada's plan for a sovereign wealth fund",date:"2026-04-29",mirrors:"substack:95885575,tumblr:815245873447649280" },
-    { url:"data-structures-algorithms",title:"Data structures & algorithms",date:"2021-04-31",wide,toc,unlisted },
-    { url:"elon-musk-nazi-salute",title:"Elon Musk and the Nazi Salute",date:"2025-01-24",mirrors:"substack:55604956,tumblr:773565389405847552" },
-    { url:"fetishism-politics",title:"Fetishism and politics",date:"2024-11-14",mirrors:"tumblr:770364766791352320" },
-    { url:"freedom-convoy",title:"What was the Freedom Convoy?",date:"2026-06-15",wide,toc },
-    { url:"how-bad-is-america-really",title:"How bad is America, really?",date:"2026-07-01" },
-    { url:"immigration",title:"Immigration",date:"2025-11-06",mirrors:"substack:83229652" },
-    { url:"israel-palestine",title:"Israel and Palestine",date:"2025-07-27",toc,wide },
-    { url:"liberalism-not-leftism",title:"Liberalism not leftism",date:"2025-09-19",mirrors:"substack:74062936,tumblr:795164683319574528,patreon:55199811" },
-    { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:73066010,tumblr:794091916138594304,medium:46de1629e138" },
-    { url:"lies-about-warren-clinton",title:"Lies about Elizabeth Warren and Hillary Clinton",date:"2024-12-19",mirrors:"tumblr:770730090759946240,substack:53821886" },
-    { url:"maid",title:"Medical Assistance in Dying",date:"2026-09-14",mirrors:"substack:215626100,medium:378a520d05e0,tumblr:828961026747809793" },
-    { url:"mark-robinson",title:"Mark Robinson",subtitle:"A chronicling of a person too ridiculous to forget",date:"2024-12-15",mirrors:"tumblr:769962893917798400" },
-    { url:"pierre-poilievre",title:"The many problems with Pierre Poilievre",date:"2026-08-03",mirrors:"substack:216081530",toc },
-    { url:"prejudice",title:"Notes on prejudice",date:"2025-10-30",mirrors:"substack:77556410" },
-    { url:"rational-ignorance",title:"Rational ignorance",date:"2026-04-09",mirrors:"substack:193680023,tumblr:813419185909727232,patreon:55199122,medium:7d332cf2dfb5" },
-    { url:"reddit",title:"Reddit",subtitle:"The website's history, what makes it unique, and the intense hatred many people seem to have for it",date:"2025-12-30",mirrors:"substack:83230909" },
-    { url:"relationships",title:"The standard relationship model",date:"2025-11-19" },
-    { url:"sex-gender-transsexuals",title:"Sex, Gender, & Transsexuals",date:"2024-11-19",wide,toc },
-    { url:"somali-day-cares",title:"Nick Shirley and Somali day cares",date:"2026-01-02",mirrors:"substack:83243480,patreon:55200604" },
-    { url:"trans-prison-stats-argument",title:"The trans prison stats argument",date:"2024-09-15",mirrors:"substack:153916145,tumblr:771501478599868416" },
-    { url:"trump-and-russia",title:"Trump and Russia",date:"2025-03-06",mirrors:"tumblr:777321996757450752,substack:58560801" },
-    { url:"trump-appeal",title:"The Trump appeal",subtitle:"How and why does anyone actually like him?",date:"2024-12-03",mirrors:"tumblr:770270265635667968,medium:5c6806252b43" },
-    { url:"types-of-masculinity",title:"On types of masculinity",date:"2024-11-08",mirrors:"tumblr:770310861444300800" },
-    { url:"why-bottom-surgery",title:"Why get bottom surgery?",date:"2025-02-09",mirrors:"tumblr:775036555284856832" }
-];
-const textElements = pagesMeta.filter(x => !x.unlisted).sort(
-    (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
-).map(
-    tobj => `
-    <div>
-        <div>${ tobj.date ?`<span title="${ dateFromISO(tobj.date) }" class="page-date">${ tobj.date }</span>` :'' }</div>
-        <div><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></div>
-    </div>
-    `
-);
-const videoElements = [
-    { title:"Destiny versus Finkelstein",date:"2026-10-20",src:"youtube:2jY-wfdKkyw,patreon:172891823",thumb:"172891823.jpg",length:"44:24" },
-    { title:"Canadian separatism",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
-    { title:"Macklemore, Ed Sheeran",date:"2026-10-10",src:"youtube:_lfRiHlNFbc,patreon:172218877",thumb:"172218877.jpg",length:"41:18" },
-    { title:"Thoughts on Leftist YouTube",date:"2026-09-25",src:"youtube:R_xfJqp3M4g,patreon:171931256",length:"1:17:57",thumb:"1719312562.jpg" },
-    { title:"Medical Assistance in Dying (MAiD)",date:"2026-09-16",src:"patreon:169696851,youtube:0n0edHbri5k",length:"13:32",thumb:"1696968512.jpg" },
-    { title:"Mark Carney",date:"2026-08-18",src:"youtube:5fsJUueUvpw,patreon:167033503",thumb:"167033503.jpg",length:"13:54" },
-    { title:"Am I a liberal?",date:"2026-08-11",src:"youtube:QPNCs5A3iYo,patreon:166429634",length:"16:26",thumb:"166429634.jpg" },
-    { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:ilB3j3BTCTI,patreon:164228303",thumb:"164228303.jpg",length:"2:41:06" },
-    { title:"Canada is under attack",date:"2026-08-09",src:"youtube:cDJ3lQH7m0Y,patreon:166242253",length:"16:21",thumb:"166242253.jpg" },
-    { title:"Floor crossers",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
-    { title:"Liberalism not Leftism",date:"2026-05-06",src:"youtube:DgGf_g4aGYA,patreon:157517952",thumb:"157517952.jpg",length:"41:15" },
-    { title:"Liberal Conservatism",date:"2026-04-07",src:"youtube:Sy33HSFsuu8,patreon:154996870",thumb:"154996870.jpg",length:"2:03:13" },
-    { title:"Abortion",date:"2026-02-24",src:"youtube:CpjJ8TgOxJY,patreon:151884875",thumb:"151884875.jpg",length:"43:04" },
-    { title:"How bad is America, really?",date:"2026-03-04",src:"youtube:W0Dmtyyc7FU,patreon:152288758",thumb:"152288758.jpg",length:"27:04" },
-    { title:"American decline",date:"2026-02-11",src:"youtube:oUOsAdnK2zs,patreon:150555019",thumb:"150555019.jpg",length:"39:47" },
-    { title:"Normalization",src:"youtube:TYoe1jxBYPY,patreon:148679519",date:"2025-09-19",thumb:"148679519.jpg",length:"12:08" },
-    { title:"India",thumb:"148682097.jpg",src:"youtube:Pz0Oq1rb14E,patreon:148682097",date:"2025-10-23",length:"41:17" },
-    { title:"Lies about Ilhan Omar",date:"2025-09-03",src:"youtube:zgE4L-e9yg0,patreon:148679387",thumb:"148679387.jpg",length:"44:50" },
-    { title:"Trans fetishism",date:"2025-04-02",src:"youtube:vk57rvM1zWo",thumb:"vk57rvM1zWo.jpg",length:"22:39" },
-    { title:"Exploring lies about Warren and Clinton",date:"2025-04-09",src:"youtube:LPQD6sxlWOs,patreon:148676394",thumb:"148676394.jpg",length:"34:02" },
-    { title:"Bernie Sanders & the Military Industrial Complex",date:"2025-03-22",length:"12:44",src:"youtube:yt6O0OMdIT0",thumb:"yt6O0OMdIT0.jpg" },
-    { title:"Sex, gender, & transsexuals",date:"2025-10-17",src:"youtube:Hgh3r7gJoWU,patreon:148676474",thumb:"148676474.jpg",length:"1:26:14" }
-].sort((a,b)=>(parseInt(b.date?.replace(/\D/g,''))||0)-(parseInt(a.date?.replace(/\D/g,''))||0)).map(
-    vobj => `
-        <figure class="video-figure">
-            <div class="img-box"><a href="${ linkParse(vobj.src.split(",")[0],0) }"><div class="img" loading="lazy" style="background-image:url('${ getRootPath() }assets/thumbnails/${ vobj.thumb }')">${ vobj.length ?`<span class="timecard no-select">${ vobj.length }</span>` :"" }</div></a></div>
-            <figcaption>
-                <div class="video-title">${ vobj.title }</div>
-                <div class="video-sources">${ vobj.src.split(",").map(n => linkParse(n,1)).join(" | ") }</div>
-                <div class="video-date"><span>${ dateFromISO(vobj.date) }</span></div>
-            </figcaption>
-        </figure>`
-);
 
-function init() {
-    loadBody();
-    rightMenuSetup();
-    setupLightswitch();
-    tocSetup();
-    Array.from(document.querySelectorAll(".auto-format")).forEach(a => { a.innerHTML = autoFormat(a.innerHTML); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
-    Array.from(document.querySelectorAll(".auto-paragraphs")).forEach(a => {
-        a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(
-            line => {
-                if (line.startsWith('.')) { return `<div class='fine'><p>${ autoFormat(line.substring(1).trimStart()) }</p></div>`; }
-                if (line.startsWith('#')) { return `<h4>${ autoFormat(line.substring(1).trimStart()) }</h4>`; }
-                return `<p>${ autoFormat(line) }</p>`
-            }
-        ).join('');
-        a.classList.remove("auto-paragraphs");
-        if (a.classList.length == 0) {
-            a.removeAttribute("class");
-        }
-    });
-    Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
-    Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
-    Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
-    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", textElements.join(''));
-    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", videoElements.join(''));
-    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", textElements.slice(0, 5).join(''));
-    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", videoElements.slice(0, 3).join(''));
-    if (document.title == "") { document.title = "Iris Embury"; }
-    else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
-    setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
-}
 window.addEventListener("load", init);
+

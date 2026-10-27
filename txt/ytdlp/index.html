@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/plaintext.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><main>
+--
+
+**CLI apps notes**
+
+yt-dlp
+
+https://github.com/yt-dlp/yt-dlp
+
+"How do I download from GitHub? Where's the .exe file?"
+
+    Under the green 'Code' button, choose Download in the drop-down (probably 'Download ZIP'). There is no 'installation' after you unzip this folder. To interact with these files, open your console (in Windows, hold the Windows logo key and press 'R' or open the 'Command Prompt' application from your start menu) and navigate to that directory using the 'cd' (change directory) command. If you put the folder on your desktop, the command to get to it would look like this:
+    
+        > cd C:\Users\Iris\Desktop\yt-dlp
+
+    Then you type commands to interact with the software as a command-line interface (CLI) application. This means once you're in the repo you placed it in (e.g. C:\yt-dlp or C:\Users\YourName\yt-dlp), you begin your prompt with "yt-dlp" (which invokes the "yt-dlp.cmd" file in that directory).
+    
+    Instead of navigating to the directory, you can reference it from anywhere by entering the path from root, i.e. saying "C:\yt-dlp\yt-dlp ..." each time.
+    
+    Or, you can add the relevant directory to your system's environment path variables, allowing you to invoke it from anywhere.
+        - Run 'SystemPropertiesAdvanced.exe' and go to the 'Advanced' tab (if you search 'environment variables' in your Start Menu, there may be a link called 'Edit the system environment variables' that takes you to right the Advanced tab of this menu)
+        - Click the 'Environment Variables' button
+        - In the 'System Variables' section of the window this opens, find the 'Path' variable and double-click the associated 'Value' to open a window wherein you can add entries to that value.
+        - Add an entry for your yt-dlp directory (add ffmpeg while you're here). [Reference image of getting to here.](--environment-variables.jpg)
+
+--
+
+**Options and arguments**
+
+An {keyword:option} is the proper term for an inline function prefixed with one or two hyphens depending on whether it's a verbose or short option name (for example, -f or --format, both doing the same thing). This is typically followed by an input value that you send to the option, which is called an {keyword:argument}.
+
+An option which doesn't take an argument is called a {keyword:flag} (e.g. you just say -q or --quiet as part of your command and the command will execute quietly, i.e. with no progress indicator or output logs), and sometimes people imprecisely refer to all options as flags.
+
+The options in an invocation of the program can happen in any order so long as the accompanying argument comes right after.
+
+Common options:
+
+    -o -- Output, tells yt-dlp where to put the file it downloads (defaults to bin) -- e.g. -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s" to save to desktop (you can type in a specific file name if you want)
+
+    -F -- See available file formats; renders a bit list of all available marked by an ID number on the left side. To specify what version you want from that list, use -f followed by your choices by their ID number in a string, e.g. yt-dlp -f "232+251" "video_url_here"
+
+    -f or --format -- This tells yt-dlp to download with a given formatting option as opposed to default formatting (if no format option is given, the default behaviour is equivalent to `-f "bv+ba/b"`
+    
+        Arguments often used in the format string  option:
+            bv -- best video (only video)
+            bv* -- best video (with audio, or only audio)
+            ba -- best audio
+            b -- best combined video+audio file
+
+    --merge-output-format -- Forces the output to be a certain container, useful to say mp4 since it's not guaranteed to be mp4 otherwise
+
+    -v or --verbose -- Gives additional detail, can be useful if something fails and you want more info
+
+Operators:
+
+    + -- Merge -- e.g. bv+ba means best video and best audio
+
+    / -- Fallback -- e.g. bv*+ba/b means try to find best audio track + best video track, but if it can't find both, then look for the best combined file
+    
+    [] -- creates a filter -- e.g. -f "bv*[height<=720]+ba/b[height<=720]" creates a quality ceiling (get the best version not exceeding 720p)
+    
+    * -- Often used to create ambiguity, wildcard, or loosen otherwise standard requirements
+
+See more:
+
+https://github.com/yt-dlp/yt-dlp#general-options
+https://github.com/yt-dlp/yt-dlp#user-content-format-selection
+
+--
+
+**Downloading Parts**
+
+(1) Simple method (slow): --download-sections
+
+        > yt-dlp --download-sections "*2:12-4:00" "https://youtu.be/Q_ltXhrXb6s"
+
+    The * is necessary here to indicate it's a timestamp as opposed to a chapter title, which is the default behaviour. This method can be useful for grabbing specific short clips, however for long selections (more than a few minutes) it will become very time-consuming because yt-dlp is requesting the necessary data chunks from YouTube and then reëncoding the entire video to give you precisely the time selection you ask for, no more or less.
+
+    If you want to download approximately from 30:00 to 1:30:00 from a 4-hour video, it is significantly faster to download the whole video, splice it locally, and delete the excess rather than use --download-sections "*30:00-1:30:00" and wait for the encoding.
+
+(2) Faster method: download it and cut it with ffmpeg
+
+
+    Download the whole video in whatever format you want. Then translate your desired start and end point into seconds. For example, 31:14 is 1874 seconds, and 1:24:03 is 5043 seconds. It will find the nearest keyframe that precedes your start time and the nearest keyframe that comes after your endtime, meaning it may include a few extra seconds at the start or end. However, the trade-off is that this happens very quickly.
+
+    > ffmpeg -ss 3238.120 -to 6123.510 -i "C:\Users\Iris\Desktop\2025-09-28-ar.mp4" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\2024-09-28-ar_cut.mp4"
+
+--
+
+**Example commands I use**
+
+I often download 720p videos and then chunk them as desired using the ffmpeg command above. To download 720p versions of a video and put it into an mp4, use this command:
+
+    > yt-dlp -f "bv*[height<=720]+ba/b[height<=720]" "VIDEO_URL_HERE" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main><script src="../../assets/plaintext.js"></script></body></html>
