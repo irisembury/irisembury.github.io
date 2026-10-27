@@ -34,12 +34,15 @@ function linkReplace(chunk) {
                 if (parts[1].length > 0) {
                     
                     if (parts[1].startsWith('&gt;')) {
-                        parts[1] = '<textarea>' + parts[1].substring(4).trimStart() + '</textarea>';
+                        parts[1] = '<div class="console" contenteditable="true" spellcheck="false">' + parts[1].substring(4).trimStart() + '</div>';
+                    }
+                    else if (parts[1].startsWith("- ")) {
+                        parts[1] = `<div class="hanging">${ parts[1] }</div>`;
                     }
                     parts[1] = linkReplace(parts[1]);
                     parts[1] = parts[1].replace(/\*\*(.+?)\*\*/g, '<span class="emphasis">$1</span>').replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>');
                     
-                    return `<div><div>${ parts[0].replaceAll(' ','&nbsp;') }</div><div ${ parts[0].length!=0? 'class="hanging"' :'' }>${ linkReplace(parts[1]) }</div></div>`
+                    return `<div><div>${ parts[0].replaceAll(' ','&nbsp;') }</div><div>${ parts[1] }</div></div>`
                 }
                 
                 else {

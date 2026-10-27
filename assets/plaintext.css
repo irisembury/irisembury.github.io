@@ -13,8 +13,6 @@
         letter-spacing: -0.25px;
     }
     
-    br { margin-top: -2px; }
-
     main {
         max-width: 1180px;
         margin: auto;
@@ -22,36 +20,36 @@
     }
     main > div {
         display: flex;
-        margin-top: 5px;
+        margin-top: 3px;
     }
     main > div > div:nth-child(2) {
         flex-grow: 1;
     }
     
     .br {
-        margin-bottom: 8px;
+        margin-bottom: 12px;
     }
     
-    .hanging {
-        padding-left: 2ch;
-        text-indent: -2ch;
-    }
-
     .link {
         color: #9ab2e7;
-        text-decoration: dotted underline #4e4845;
+        text-decoration: none;
     }
     .link:hover {
-        filter: hue-rotate(36deg);
-        text-decoration: dotted underline;
+        filter: hue-rotate(40deg);
+        text-decoration: underline;
     }
 
     .emphasis {
         color: #8bc5a2;
     }
     
+    .hanging {
+        text-indent: -2ch;
+        padding-left: 2ch;
+    }
+    
     .keyword {
-        color: #be90be;
+        color: #cbba92;
     }
 
     ::selection {
@@ -59,11 +57,11 @@
         color: #eee;
     }
 
-    textarea {
+    .console {
         width: 100%;
         background-color: inherit;
-        color: #929599;
-        border: 1px solid #191a1d;
+        color: #86898d;
+        border: 0;
         field-sizing: content;
         padding: 3px;
     }
