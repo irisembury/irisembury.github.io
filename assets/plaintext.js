@@ -36,7 +36,7 @@ function linkReplace(chunk) {
                     if (parts[1].startsWith('&gt;')) {
                         parts[1] = '<div class="console" contenteditable="true" spellcheck="false">' + parts[1].substring(4).trimStart() + '</div>';
                     }
-                    else if (parts[1].startsWith("- ")) {
+                    else if (parts[1].startsWith("-")) {
                         parts[1] = `<div class="hanging">${ parts[1] }</div>`;
                     }
                     parts[1] = linkReplace(parts[1]);
@@ -46,11 +46,11 @@ function linkReplace(chunk) {
                 }
                 
                 else {
-                    return `<div class='br'></div>`
+                    return `<div class="br"></div>`
                 }
                 
             }
-        ).join('');
+        ).join('') + `<div class="br"></div><div style="opacity:0.5">END OF DOCUMENT</div>` + `<div class="br"></div>`.repeat(20);
         if (document.title == "") { document.title = "Iris Embury"; }
         else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
     }
