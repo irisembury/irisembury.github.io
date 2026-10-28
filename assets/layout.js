@@ -12,7 +12,7 @@ const pagesMeta = [
     { url:"public-record",title:"Public record",wide,toc,unlisted,unsetWidth },
     { url:"stay-the-trenches",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
     { url:"floor-crossings",title:"Floor crossing (Canadian politics)",date:"2026-04-17",mirrors:"substack:94479253,medium:dfe93bb23bdd" },
-    { url:"india",title:"India",date:"2025-10-24",mirrors:"substack:77071182,tumblr:798351257128615936" },
+    { url:"india",title:"Notes on India",date:"2025-10-24",mirrors:"substack:77071182,tumblr:798351257128615936" },
     { url:"liberal-conservatism",title:"Liberal conservatism",subtitle:"A philosophy of prudence and humility",date:"2026-03-24",toc },
     { url:"american-decline",title:"A synopsis of American decline",date:"2026-01-28",mirrors:"substack:86165875,patreon:55201485",toc },
     { url:"anime-reviews",title:"Anime reviews",date:"2024-12-17",mirrors:"tumblr:770134591113658368",unlisted },
@@ -82,10 +82,7 @@ const textElements = pagesMeta.filter(x => !x.unlisted).sort(
     (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
 ).map(
     tobj => `
-    <div>
-        <div>${ tobj.date ?`<span title="${ dateFromISO(tobj.date) }" class="page-date">${ tobj.date }</span>` :'' }</div>
-        <div><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></div>
-    </div>`
+    <div><span><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></span> / <span>${ tobj.date ?`<span title="${ dateFromISO(tobj.date) }" class="page-date">${ tobj.date }</span>` :'' }</span></div>`
 );
 
 function init() {
