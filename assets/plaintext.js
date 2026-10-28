@@ -50,7 +50,7 @@ function linkReplace(chunk) {
                 }
                 
             }
-        ).join('') + `<div class="br"></div><div style="opacity:0.5">END OF DOCUMENT</div>` + `<div class="br"></div>`.repeat(20);
+        ).join('') + `<div class="br"></div><div style="opacity:0.5">end of page</div>` + `<div class="br"></div>`.repeat(20);
         if (document.title == "") { document.title = "Iris Embury"; }
         else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
     }
