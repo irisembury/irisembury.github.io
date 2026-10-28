@@ -9,7 +9,6 @@
     body { overflow-y: scroll; }
     .article { padding-top: 30px; }
     
-    .latest-videos-front a:not(:hover),
     .article-index a:not(:hover),
     .donate__linkbox a:not(:hover),
     .tab-panel.videos a:not(:hover) {
@@ -21,10 +20,10 @@
         .donate__linkbox a .inline-icon { width: 44px; margin: 0; }
     .donate.tab-panel .donate__linkbox a { min-width: 64px; }
     
-    .tabs { gap: 2px 8px; margin-block: 0px 24px; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; display: flex; flex-wrap: wrap; padding: 0 1rem; border-bottom: 1px solid var(--grey-d,lightgrey); }
-        .tab { padding: 10px 14px 9px; color: var(--grey-6,dimgrey); text-align: center; white-space: nowrap; border-bottom: 2px solid transparent; cursor: pointer; }
-        .tab:hover { background-color: var(--grey-e,gainsboro); }
-        .tab.selected { color: var(--grey-2,black); border-bottom-color: var(--grey-3,black); font-weight: 600; }
+    .tabs { gap: 7px; margin-bottom: 15px; border-bottom: 1px solid var(--grey-c,silver); padding: 0 1em; display: flex; flex-wrap: wrap; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; }
+        .tab { border-bottom: 2px solid transparent; padding: 9px 12px; color: var(--grey-8,grey); text-align: right; cursor: pointer; }
+        .tab:hover { background-color: var(--grey-f,whitesmoke); color: var(--grey-7,grey); }
+        .tab.selected { color: var(--grey-2,black); border-color: var(--grey-3,black); font-weight: 600; }
             .dummy { font-weight: 700; visibility: hidden; height: 0; }
         
     @media (max-width: 480px) {
@@ -33,27 +32,18 @@
     }
     
     .tab-panels__main { font: 17px/1.4 Roboto,Arial,sans-serif; max-width: var(--main-width); }
-        .tab-panel { display: none; padding: 0px 17px; gap: 20px; }
+        .tab-panel { display: none; padding: 10px 18px; gap: 20px; }
         .tab-panel.selected { display: grid; }
         
-        .tab-panel p + p { margin-top: 10px; }
-        .article .fine p, .article .fine li { margin-top: 0 !important; }
+        .tab-panel p + p, .tab-panel p + * { margin-top: 8px; }
+        .tab-panel .fine, .tab-panel .fine * { font-size: inherit; }
         
         .landing.tab-panel { gap: 38px; }
             .landing__about { margin-inline: auto; }
-            @media (max-width: 430px) { .landing__about { grid-template-columns: auto; } }
             .landing__about p { max-width: 528px; }
-            .landing__about p {
-                font: 17px/1.4 Georgia,Times;
-            }
                 .profile-img { width: 140px; aspect-ratio: 0.8; border-radius: 5px; float: left; background-position: center; background-image: url(assets/pf.jpg); background-size: cover; background-repeat: no-repeat; border: 1px solid var(--grey-9,grey); }
                 .dark .profile-img { filter: contrast(0.9); }
-            .latest-videos-front { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
-            .latest-videos-front .video-date { display: none; }
-            @media (max-width: 750px) { .latest-videos-front { grid-template-columns: 1fr 1fr 1fr; } .latest-videos-front > :nth-child(n+4) { display: none; } }
-            @media (max-width: 540px) { .latest-videos-front { grid-template-columns: 1fr 1fr; } .latest-videos-front > :nth-child(n+3) { display: none; } }
             @media (max-width: 430px) { .tab-panel { padding: 0; } }
-            @media (max-width: 380px) { .latest-videos-front { grid-template-columns: 1fr; justify-items: center; } }
     </style>
 </head>
 <body>
@@ -62,17 +52,14 @@
 <div>
     <div class="tabs">
         <div class="tab no-select landing" onclick="fsetTab('landing')">Home</div>
-        <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
         <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
+        <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
     </div>
     <div class="tab-panels__main">
         <div class="landing tab-panel">
-            <div class="landing__about">
-                <div class="auto-paragraphs links-inherit">
-                    I'm Iris Embury. I'm an English Canadian based in Ottawa.
-                    This is a personal site where you can copies of things I do, and links to stuff I put on other websites.
-                    I will probably do more with this domain over time, it's just a domain pointing to a github pages repo. For now it's useful as a place to host some unique content that wouldn't fit well in other places and to have a more centralized "list of everything."
-                </div>
+            <div class="landing__about auto-paragraphs text-center">
+                I'm Iris Embury. I'm an English Canadian based in Ottawa.
+                This is a personal site where you can copies of things I do, and links to stuff I put on other websites.
             </div>
             <div class="panel-switcher--580">
                 <div>
@@ -102,12 +89,10 @@
         </div>
         
         <div class="videos tab-panel">
-            <div>
-                <div class="auto-paragraphs text-center label-external">
-                    This isn't every video I've ever made because I don't bother adding everything here.
-                    Full lists: [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos) | [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=video)
-                    .The patreon links aren't paywalled, it's just an alternate video source in case anything ever goes wrong with YouTube.
-                </div>
+            <div class="auto-paragraphs text-center label-external">
+                This isn't every video I've ever made because I don't bother adding everything here.
+                Full lists: [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos) | [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=video)
+                .The patreon links aren't paywalled, it's just an alternate video source in case anything ever goes wrong with YouTube.
             </div>
             <div class="video-index"></div>
         </div>

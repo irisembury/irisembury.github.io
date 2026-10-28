@@ -82,7 +82,7 @@ const textElements = pagesMeta.filter(x => !x.unlisted).sort(
     (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
 ).map(
     tobj => `
-    <div><span><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></span> / <span>${ tobj.date ?`<span title="${ dateFromISO(tobj.date) }" class="page-date">${ tobj.date }</span>` :'' }</span></div>`
+    <div><span><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></span>${ tobj.date ?`<span class="page-date"> / <span title="${ dateFromISO(tobj.date) }">${ tobj.date }</span></span>` :'' }</div>`
 );
 
 function init() {
@@ -889,7 +889,7 @@ function articleTop() {
     }
     if (pageInfo.title) {
         articleTopContents.push(`<h1 class="for-toc">${ pageInfo.title }</h1>`);
-        document.title = pageInfo.title.replaceAll('---','\u2014').replaceAll('--','\u2013');
+        document.title = pageInfo.title.replaceAll('---', '\u2014').replaceAll('--', '\u2013');
     }
     if (pageInfo.subtitle) {
         articleTopContents.push(`<h2>${ pageInfo.subtitle }</h2>`);
@@ -908,7 +908,6 @@ function articleTop() {
             by += pageInfo.date;
         }
         if (pageInfo.mirrors) {
-            by += ' \u00b7 ';
             by += pageInfo.mirrors.split(",").map(m => linkParse(m,2)).join(" ");
         }
         articleTopContents.push(by + '</div>');
