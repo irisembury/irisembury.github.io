@@ -3,14 +3,20 @@
 
 **CLI apps notes**
 
-yt-dlp
+Want to download videos to archive things cleanly?
+
+{keyword:yt-dlp} (formerly youtube-dl)
 
 https://github.com/yt-dlp/yt-dlp
 https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.zip
 
+"Didn't this get taken down from GitHub at some point?"
+
+    Yes, but after review they concluded there was no actual valid reason for it to be removed. They just took it down in response to legal notices or something while pending review, then it came back.
+
 "How do I download from GitHub? Where's the .exe file?"
 
-    Under the green 'Code' button, choose Download in the drop-down (probably 'Download ZIP'). There is no 'installation' after you unzip this folder. To interact with these files, open your console (in Windows, hold the Windows logo key and press 'R' or open the 'Command Prompt' application from your start menu) and navigate to that directory using the 'cd' (change directory) command. If you put the folder on your desktop, the command to get to it would look like this:
+    Under the green 'Code' button, choose Download in the drop-down (probably 'Download ZIP'). I also linked directly to this zip above, so visiting that url is all you do. There is no 'installation' after you unzip this folder -- once you have those files in a folder, that's it, you can use it. To interact with these files, you open your console (in Windows, hold the Windows logo key and press 'R' or search for the 'Command Prompt' application in your Start Menu) and navigate to that directory using the 'cd' (change directory) command. If you put the folder on your desktop, the command to get to it would look like this:
     
         > cd C:\Users\Iris\Desktop\yt-dlp
 
@@ -71,7 +77,7 @@ https://github.com/yt-dlp/yt-dlp#user-content-format-selection
 
 **Downloading Parts**
 
-(1) Simple method (slow): --download-sections
+(1) Simple method (slow): --download-sections option
 
         > yt-dlp --download-sections "*2:12-4:00" "https://youtu.be/Q_ltXhrXb6s"
 
@@ -81,10 +87,19 @@ https://github.com/yt-dlp/yt-dlp#user-content-format-selection
 
 (2) Faster method: download it and cut it with ffmpeg
 
-
-    Download the whole video in whatever format you want. Then translate your desired start and end point into seconds. For example, 31:14 is 1874 seconds, and 1:24:03 is 5043 seconds. It will find the nearest keyframe that precedes your start time and the nearest keyframe that comes after your endtime, meaning it may include a few extra seconds at the start or end. However, the trade-off is that this happens very quickly.
+    Download the whole video, then cast your desired start and end point into seconds. For example, 31:14 is 1874 seconds, and 1:24:03 is 5043 seconds. This command should find the nearest video keyframe that precedes your start time and the nearest keyframe that comes after your endtime, meaning it may include a few extra seconds at the start or end. However, the trade-off is that this happens very quickly.
 
         > ffmpeg -ss 3238.120 -to 6123.510 -i "path_to_your_local_file" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
+
+    "What's a video keyframe?"
+    
+        A video file might be 60 fps, but to render 5 seconds of video, it doesn't actually save 300 full images. It saves one image, then saves 299 instructions on how to modify that image, saving the difference between frames rather than whole frames. That first frame, which the others are modifying, is called a key frame, or keyframe, also called i-frames.
+        
+        They're not always 5 seconds apart; that is just an example value. Part of rendering a video is deciding where to put these key frames depending on how different each frame is from the next. It's common for them to be 4 to 6 seconds apart. You can examine where the keyframes are in a video file using the ffmpeg tool called ffprobe.
+        
+        If you've ever been watching a video and there's a glitch where everything becomes distorted (often green) but you can still see the movement and make out the bounds of characters, this is because the starting keyframe for that chunk was distorted in some way but the video container is still applying the changes to the faulty starting point.
+        
+        To quickly cut up a video, ffmpeg can easily split them at the key frames, whereas to have the start and end point not at the keyframes would require additional rendering.
 
 --
 
@@ -92,7 +107,9 @@ https://github.com/yt-dlp/yt-dlp#user-content-format-selection
 
 To download 720p versions of a video and put it into an mp4, I use this command below. Then I often chunk them using the ffmpeg command above.
 
-    > yt-dlp -f "bv*[height<=720]+ba/b[height<=720]" "VIDEO_URL_HERE" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
+    > yt-dlp -f "bv*[height<=720]+ba/b[height<=720]" "desired_video_url" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
+
+    > ffmpeg -ss 3238.120 -to 6123.510 -i "path_to_your_local_file" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
 
 
 
