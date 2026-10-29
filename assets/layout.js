@@ -45,6 +45,7 @@ const pagesMeta = [
     { url:"why-bottom-surgery",title:"Why get bottom surgery?",date:"2025-02-09",mirrors:"tumblr:775036555284856832" }
 ];
 const videoElements = [
+    { title:"Toronto mayor",date:"2026-10-28",src:"youtube:gFBtpeRY0LM",thumb:'gFBtpeRY0LM.jpg',length:"17:18" },
     { title:"Destiny versus Finkelstein",date:"2026-10-20",src:"youtube:2jY-wfdKkyw,patreon:172891823",thumb:"172891823.jpg",length:"44:24" },
     { title:"Canadian separatism",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
     { title:"Macklemore, Ed Sheeran",date:"2026-10-10",src:"youtube:_lfRiHlNFbc,patreon:172218877",thumb:"172218877.jpg",length:"41:18" },
@@ -54,7 +55,7 @@ const videoElements = [
     { title:"Am I a liberal?",date:"2026-08-11",src:"youtube:QPNCs5A3iYo,patreon:166429634",length:"16:26",thumb:"166429634.jpg" },
     { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:ilB3j3BTCTI,patreon:164228303",thumb:"164228303.jpg",length:"2:41:06" },
     { title:"Canada is under attack",date:"2026-08-09",src:"youtube:cDJ3lQH7m0Y,patreon:166242253",length:"16:21",thumb:"166242253.jpg" },
-    { title:"Floor crossers",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
+    { title:"How should we feel about floor crossers?",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
     { title:"Liberalism not Leftism",date:"2026-05-06",src:"youtube:DgGf_g4aGYA,patreon:157517952",thumb:"157517952.jpg",length:"41:15" },
     { title:"Liberal Conservatism",date:"2026-04-07",src:"youtube:Sy33HSFsuu8,patreon:154996870",thumb:"154996870.jpg",length:"2:03:13" },
     { title:"Abortion",date:"2026-02-24",src:"youtube:CpjJ8TgOxJY,patreon:151884875",thumb:"151884875.jpg",length:"43:04" },
@@ -68,15 +69,29 @@ const videoElements = [
     { title:"Bernie Sanders & the Military Industrial Complex",date:"2025-03-22",length:"12:44",src:"youtube:yt6O0OMdIT0",thumb:"yt6O0OMdIT0.jpg" },
     { title:"Sex, gender, & transsexuals",date:"2025-10-17",src:"youtube:Hgh3r7gJoWU,patreon:148676474",thumb:"148676474.jpg",length:"1:26:14" }
 ].sort((a,b)=>(parseInt(b.date?.replace(/\D/g,''))||0)-(parseInt(a.date?.replace(/\D/g,''))||0)).map(
-    vobj => `
-        <figure class="video-figure">
-            <div class="img-box"><a href="${ linkParse(vobj.src.split(",")[0],0) }"><div class="img" loading="lazy" style="background-image:url('${ getRootPath() }assets/thumbnails/${ vobj.thumb }')">${ vobj.length ?`<span class="timecard no-select">${ vobj.length }</span>` :"" }</div></a></div>
+    vobj => {
+        vobj.src = vobj.src.split(",").sort();
+        if (vobj.thumb) {
+            vobj.thumb = vobj.thumb ? getRootPath() + 'assets/thumbnails/' + vobj.thumb : '';
+            vobj.thumb = `url('${ vobj.thumb }')`;
+        }
+        else {
+            let indx = vobj.src.findIndex(s => s.startsWith('youtube'));
+            if (indx != -1) {
+                vobj.thumb = `url('https://img.youtube.com/vi/${ vobj.src[indx].substring(vobj.src[indx].indexOf(':') + 1) }/sddefault.jpg')`;
+            }
+            else {
+                vobj.thumb = 'black'
+            }
+        }
+        return `<figure class="video-figure">
+            <div class="img-box"><a href="${ linkParse(vobj.src.reverse()[0],0) }"><div class="img" loading="lazy" style="background-image:${ vobj.thumb }">${ vobj.length ?`<span class="timecard no-select">${ vobj.length }</span>` :"" }</div></a></div>
             <figcaption>
                 <div class="video-title">${ vobj.title }</div>
-                <div class="video-sources">${ vobj.src.split(",").map(n => linkParse(n,1)).join(" | ") }</div>
+                <div class="video-sources">${ vobj.src.map(n => linkParse(n,1)).join(" | ") }</div>
                 <div class="video-date"><span>${ dateFromISO(vobj.date) }</span></div>
             </figcaption>
-        </figure>`
+        </figure>` }
 );
 const textElements = pagesMeta.filter(x => !x.unlisted).sort(
     (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
@@ -201,6 +216,7 @@ function parseObj(entry, ...requiredFields) {
     return obj;
 }
 function linkReplace(chunk) {
+    /* first [this](https://example.com) format */
     chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
         linkUrl = linkUrl.replaceAll('&#41;', ')');
         displayText = displayText.trim();
@@ -248,6 +264,7 @@ function linkReplace(chunk) {
         }
         return a_tag;
     });
+    /*  */
     chunk = chunk.replace(/(?<=^|\s)(https?:\/\/[^\s<$]+)/g, (match, linkUrl) => {
         let linkAfter = "";
         if (/[.,?!;]$/.test(linkUrl)) {

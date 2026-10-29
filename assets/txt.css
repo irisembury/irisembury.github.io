@@ -64,8 +64,15 @@
         border: 0;
         field-sizing: content;
         padding: 3px;
+        margin-left: -3px;
+        overflow-y: hidden;
     }
-
+    .console:hover {
+        resize: vertical;
+    }
+    .console:focus {
+        outline: 1px solid #212223;
+    }
 
 
 

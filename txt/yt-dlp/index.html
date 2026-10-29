@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/plaintext.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><main>
+<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/txt.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><main>
 --
 
 **CLI apps notes**
@@ -7,8 +7,8 @@ Want to download videos to archive things cleanly?
 
 {keyword:yt-dlp} (formerly youtube-dl)
 
-    https://github.com/yt-dlp/yt-dlp
-    https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.zip
+    [https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
+    [https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.zip](https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.zip)
 
 "Didn't this get taken down from GitHub at some point?"
 
@@ -72,8 +72,8 @@ Operators:
 
 See more:
 
-    https://github.com/yt-dlp/yt-dlp#general-options
-    https://github.com/yt-dlp/yt-dlp#user-content-format-selection
+    [https://github.com/yt-dlp/yt-dlp#general-options](https://github.com/yt-dlp/yt-dlp#general-options)
+    [https://github.com/yt-dlp/yt-dlp#user-content-format-selection](https://github.com/yt-dlp/yt-dlp#user-content-format-selection)
 
 --
 
@@ -91,7 +91,7 @@ See more:
 
     Download the whole video, then cast your desired start and end point into seconds. For example, 31:14 is 1874 seconds, and 1:24:03 is 5043 seconds. This command should find the nearest video keyframe that precedes your start time and the nearest keyframe that comes after your endtime, meaning it may include a few extra seconds at the start or end. However, the trade-off is that this happens very quickly.
 
-        > ffmpeg -ss 3238.120 -to 6123.510 -i "path_to_your_local_file" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
+        > ffmpeg -ss 3238.120 -to 6123.510 -i "PATH_TO_YOUR_LOCAL_FILE" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
 
     "What's a video keyframe?"
     
@@ -107,17 +107,30 @@ See more:
 
 **Command I often use**
 
-To download 720p versions of a video (it's very rare that isn't perfectly adequate) and ensure it's put into an mp4, I use this first command.
+I use this command to grab videos I want to archive:
 
-    > yt-dlp -f "bv*[height<=720]+ba/b[height<=720]" "desired_video_url" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
+    > yt-dlp -f "bv*[height<=720][vcodec^=avc1]+ba[acodec!^=opus]/b[height<=720][vcodec^=avc1]" "DESIRED_VIDEO_URL_HERE" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
 
-Then if I only want to keep part of the video, I use this ffmpeg command to make a specific cut and delete the original.
+This command...
+    - gets the highest res video not exceeding 720p, which is generally perfectly sufficient. 1080p or 2160p (often called 4k) can result in a file that's multiple times larger for unnecessary pixel detail. If you want larger copies, simply removing the [height<=720] part.
+    - ensures your output is an mp4 container. This means the file extension of your chosen files (the 'EXT' column in the format table) is unimportant, but the codecs (how information is stored inside the box) still matters. mp4 is the best for general compatibility.
+    - includes a filter to skip the opus audio codec, which is high quality and often served by YouTube while you're watching videos, but doesn't have the best compatibility (you can't post opus audio on Twitter, for example).
+    - includes a filter to ensure the video codec is avc1, better known as H.264, which is usually available and the most common and widely available used video codec by far. If you don't specify a codec, it will often download a version using the AV1 codec, which has more efficient compression (lower file size) and is thus preferred by YouTube itself, but worse in terms of compatibility and decoding (not all software supports it, more likely to lag on slower devices).
+    
+No matter what command you use, your file will be playable in VLC media player, but getting the right codec affects what other programs or websites you can drag your file onto and have it be compatible.
 
-    > ffmpeg -ss 3238 -to 6123 -i "path_to_your_local_file" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
+If you ever have issues getting the right output for your purposes, just use -F and pick the exact files you want yourself.
+
+If I only want to keep a specific part of a video downloaded via the above method, I use this ffmpeg command to make a specific cut, then usually delete the original, though I sometimes retain both a full copy of a video and a separate file that highlights a key part. This runs basically instantly.
+
+    > ffmpeg -ss 21:20 -to 28:30 -i "path_to_your_local_file" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
+
+If you put in the full seconds value (e.g. 21:20 is 1280 seconds), that also works, which might be useful if you have timestamps in the form of YouTube query strings (e.g. https://youtu.be/Q_ltXhrXb6s&t=531)
+
+If I'm only trying to grab a very small part of a video, I might skip the above and just throw in the --download-sections command, because then I can immediately go back to what I was doing while this gets the file in the background instead of it taking multiple steps.
+
+    > yt-dlp --download-sections "*27:12-27:44" -f "bv*[height<=720][vcodec^=avc1]+ba[acodec!^=opus]/b[height<=720][vcodec^=avc1]" "DESIRED_VIDEO_URL_HERE" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
 
 --
 
-
-
-
-</main><script src="../../assets/plaintext.js"></script></body></html>
+</main><script src="../../assets/txt.js"></script></body></html>
