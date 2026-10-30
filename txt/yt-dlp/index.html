@@ -10,7 +10,9 @@ Want to download videos to archive things cleanly?
     [https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
     [https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.zip](https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.zip)
 
-"Didn't this get taken down from GitHub at some point?"
+--
+
+"Hey, didn't this get taken down from GitHub at some point?"
 
     Yes, but after review they concluded there was no actual valid reason for it to be removed. They just took it down in response to legal notices or something while pending review, then it came back.
 
@@ -18,15 +20,15 @@ Want to download videos to archive things cleanly?
 
     Under the green 'Code' button, choose Download in the drop-down (probably 'Download ZIP'). I also linked directly to this zip above, so visiting that url is all you do. There is no 'installation' after you unzip this folder -- once you have those files in a folder, that's it, you can use it.
     
-    To interact with these files, you open your console (in Windows, hold the Windows logo key and press 'R' to open the run prompt, then enter 'cmd' -- or search for the 'Command Prompt' application in your Start Menu -- or navigate to C:\Windows\system32\cmd.exe) and navigate to that directory using the 'cd' (change directory) command. If you put the folder on your desktop, the command to get to it would look like this:
+    To interact with these files, you open your console (in Windows, hold the Windows logo key and press 'R' to open the run prompt, then enter 'cmd' -- or search for the 'Command Prompt' application in your Start Menu), and navigate to that directory using the 'cd' (change directory) command. If you placed the folder on your desktop, for example, the command to get to it would look like this:
 
         > cd C:\Users\Iris\Desktop\yt-dlp
 
-    Then you type commands to interact with the software as a command-line interface (CLI) application. This means once you're in the repo you placed it in (e.g. C:\yt-dlp or C:\Users\YourName\yt-dlp), you begin your prompt with "yt-dlp" (which invokes the "yt-dlp.cmd" file in that directory).
+    Then you type commands to interact with the software inside that console. This is called a command-line interface (CLI) application. Once you're in the repo you placed it in (e.g. C:\yt-dlp or C:\Users\YourName\yt-dlp), you begin your prompt with "yt-dlp" (which invokes the "yt-dlp.cmd" file in that directory).
     
     Instead of navigating to the directory, you can reference it from anywhere by entering the path from root, i.e. saying "C:\yt-dlp\yt-dlp ..." each time.
     
-    Or, you can add the relevant directory to your system's environment path variables, allowing you to invoke it from anywhere.
+    Or, you can add the relevant directory to your system's environment path variables, allowing you to invoke it from anywhere. In Windows 10, you do so with these steps:
         - Run 'SystemPropertiesAdvanced.exe' and go to the 'Advanced' tab (if you search 'environment variables' in your Start Menu, there may be a link called 'Edit the system environment variables' that takes you to right the Advanced tab of this menu)
         - Click the 'Environment Variables' button
         - In the 'System Variables' section of the window this opens, find the 'Path' variable and double-click the associated 'Value' to open a window wherein you can add entries to that value.
@@ -36,11 +38,13 @@ Want to download videos to archive things cleanly?
 
 **Options and arguments**
 
-An {keyword:option} is the proper term for an inline function prefixed with one or two hyphens depending on whether it's a verbose or short option name (for example, -f or --format, both doing the same thing). This is typically followed by an input value that you send to the option, which is called an {keyword:argument}.
+An {keyword:option} is the proper term for an inline function prefixed with one or two hyphens depending on whether it's a verbose or short option name (for example, -f and --format, which both do the same thing). This is typically followed by an input value that you send to the option, which is called an {keyword:argument}.
 
-An option which doesn't take an argument is called a {keyword:flag} (e.g. you just say -q or --quiet as part of your command and the command will execute quietly, i.e. with no progress indicator or output logs), and sometimes people imprecisely refer to all options as flags.
+If you enter `yt-dlp -f "230+180" "https://youtu.be/..."` into your console, that whole line is called a command (hence the Windows name 'Command Prompt'). The `yt-dlp` at the start is the command's executable, referencing a file (something called 'yt-dlp' in the current directory); along the way, there's an -f option, which is accepting the string "230+180" as its argument; and then the YouTube link is the main command argument (logically it must be so because it's the only value that isn't prefixed with a dash, to indicate it's an option, nor comes immediately after an option that was expecting an argument).
 
-The options in an invocation of the program can happen in any order so long as the accompanying argument comes right after.
+An option which doesn't take an argument is called a {keyword:flag} (e.g. if you add `-q` or `--quiet` to your command, it will execute quietly, i.e. with no output logs or progress indicator), and sometimes people imprecisely refer to all options as flags.
+
+The options you include in your command may occur in any order, so long as options and their accompanying arguments are still next to one another -- e.g. `yt-dlp -f "252+180" -o "C:\Users\..." "https://youtu.be/..." -q` is the same as `yt-dlp -q "https://youtu.be/..." -f "252+180" -o "C:\Users\..."`
 
 Common options:
 
@@ -66,9 +70,9 @@ Operators:
 
     / -- Fallback -- e.g. bv*+ba/b means try to find best audio track + best video track, but if it can't find both, then look for the best combined file
 
-    [] -- creates a filter -- e.g. -f "bv*[height<=720]+ba/b[height<=720]" creates a quality ceiling (get the best version not exceeding 720p)
+    [] -- creates a filter -- e.g. `-f "b[height<=1080]"` prevents downloading video with height greater than 1080p
 
-    * -- Often used to create ambiguity, wildcard, or loosen otherwise standard requirements
+    * -- varies contextually, but often used to create ambiguity, wildcard, or loosen otherwise standard requirements
 
 See more:
 
@@ -79,9 +83,9 @@ See more:
 
 **Downloading Parts**
 
-(1) Simple method (slow): --download-sections option
+(1) Simpler method (slow): --download-sections option
 
-        > yt-dlp --download-sections "*2:12-4:00" "https://youtu.be/Q_ltXhrXb6s"
+        > yt-dlp --download-sections "*2:12-4:00" "https://youtu.be/..."
 
     The * is necessary here to indicate it's a timestamp as opposed to a chapter title, which is the default behaviour. This method can be useful for grabbing specific short clips, however for long selections (more than a few minutes) it will become very time-consuming because yt-dlp is requesting the necessary data chunks from YouTube and then reëncoding the entire video to give you precisely the time selection you ask for, no more or less.
 
@@ -125,9 +129,9 @@ If I only want to keep a specific part of a video downloaded via the above metho
 
     > ffmpeg -ss 21:20 -to 28:30 -i "path_to_your_local_file" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
 
-If you put in the full seconds value (e.g. 21:20 is 1280 seconds), that also works, which might be useful if you have timestamps in the form of YouTube query strings (e.g. https://youtu.be/Q_ltXhrXb6s&t=531)
+If you put in the full seconds value (e.g. 21:20 is 1280 seconds), that also works, which might be useful if you have timestamps in the form of YouTube query strings (e.g. https://youtu.be/...&t=531)
 
-If I'm only trying to grab a very small part of a video, I might skip the above and just throw in the --download-sections command, because then I can immediately go back to what I was doing while this gets the file in the background instead of it taking multiple steps.
+However, I also frequently skip this and just use the --download-sections option:
 
     > yt-dlp --download-sections "*27:12-27:44" -f "bv*[height<=720][vcodec^=avc1]+ba[acodec!^=opus]/b[height<=720][vcodec^=avc1]" "DESIRED_VIDEO_URL_HERE" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
 
