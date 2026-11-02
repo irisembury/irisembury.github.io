@@ -29,10 +29,10 @@ Want to download videos to archive things cleanly?
     Instead of navigating to the directory, you can reference it from anywhere by entering the path from root, i.e. saying "C:\yt-dlp\yt-dlp ..." each time.
     
     Or, you can add the relevant directory to your system's environment path variables, allowing you to invoke it from anywhere. In Windows 10, you do so with these steps:
-        - Run 'SystemPropertiesAdvanced.exe' and go to the 'Advanced' tab (if you search 'environment variables' in your Start Menu, there may be a link called 'Edit the system environment variables' that takes you to right the Advanced tab of this menu)
-        - Click the 'Environment Variables' button
-        - In the 'System Variables' section of the window this opens, find the 'Path' variable and double-click the associated 'Value' to open a window wherein you can add entries to that value.
-        - Add an entry for your yt-dlp directory (add ffmpeg while you're here).
+        * Run 'SystemPropertiesAdvanced.exe' and go to the 'Advanced' tab (if you search 'environment variables' in your Start Menu, there may be a link called 'Edit the system environment variables' that takes you to right the Advanced tab of this menu)
+        * Click the 'Environment Variables' button
+        * In the 'System Variables' section of the window this opens, find the 'Path' variable and double-click the associated 'Value' to open a window wherein you can add entries to that value.
+        * Add an entry for your yt-dlp directory (add ffmpeg while you're here).
 
 --
 
@@ -116,10 +116,10 @@ I use this command to grab videos I want to archive:
     > yt-dlp -f "bv*[height<=720][vcodec^=avc1]+ba[acodec!^=opus]/b[height<=720][vcodec^=avc1]" "DESIRED_VIDEO_URL_HERE" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
 
 This command...
-    - gets the highest res video not exceeding 720p, which is generally perfectly sufficient. 1080p or 2160p (often called 4k) can result in a file that's multiple times larger for unnecessary pixel detail. If you want larger copies, simply removing the [height<=720] part.
-    - ensures your output is an mp4 container. This means the file extension of your chosen files (the 'EXT' column in the format table) is unimportant, but the codecs (how information is stored inside the box) still matters. mp4 is the best for general compatibility.
-    - includes a filter to skip the opus audio codec, which is high quality and often served by YouTube while you're watching videos, but doesn't have the best compatibility (you can't post opus audio on Twitter, for example).
-    - includes a filter to ensure the video codec is avc1, better known as H.264, which is usually available and the most common and widely available used video codec by far. If you don't specify a codec, it will often download a version using the AV1 codec, which has more efficient compression (lower file size) and is thus preferred by YouTube itself, but worse in terms of compatibility and decoding (not all software supports it, more likely to lag on slower devices).
+    * gets the highest res video not exceeding 720p, which is generally perfectly sufficient. 1080p or 2160p (often called 4k) can result in a file that's multiple times larger for unnecessary pixel detail. If you want larger copies, simply removing the [height<=720] part.
+    * ensures your output is an mp4 container. This means the file extension of your chosen files (the 'EXT' column in the format table) is unimportant, but the codecs (how information is stored inside the box) still matters. mp4 is the best for general compatibility.
+    * includes a filter to skip the opus audio codec, which is high quality and often served by YouTube while you're watching videos, but doesn't have the best compatibility (you can't post opus audio on Twitter, for example).
+    * includes a filter to ensure the video codec is avc1, better known as H.264, which is usually available and the most common and widely available used video codec by far. If you don't specify a codec, it will often download a version using the AV1 codec, which has more efficient compression (lower file size) and is thus preferred by YouTube itself, but worse in terms of compatibility and decoding (not all software supports it, more likely to lag on slower devices).
     
 No matter what command you use, your file will be playable in VLC media player, but getting the right codec affects what other programs or websites you can drag your file onto and have it be compatible.
 

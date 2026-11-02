@@ -20,14 +20,14 @@
         .donate__linkbox a .inline-icon { width: 44px; margin: 0; }
     .donate.tab-panel .donate__linkbox a { min-width: 64px; }
     
-    .tabs { gap: 7px; margin-block: 0px 14px; border-block: 1px solid var(--grey-d,lightgrey); padding: 0 1em; display: flex; flex-wrap: wrap; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; }
-        .tab { border-bottom: 2px solid transparent; padding: 10px 12px 7px; color: var(--grey-8,grey); text-align: right; cursor: pointer; }
+    .tabs { gap: 10px; margin-block: 0px 14px; border-block: 1px solid var(--grey-d,lightgrey); padding: 0 1em; display: flex; flex-wrap: wrap; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; }
+        .tab { border-bottom: 2px solid transparent; padding: 10px 13px 8px; color: var(--grey-8,grey); text-align: right; cursor: pointer; }
         .tab:hover { background-color: var(--grey-f,whitesmoke); color: var(--grey-7,grey); }
         .tab.selected { color: var(--grey-2,black); border-color: var(--grey-3,black); font-weight: 600; }
             .dummy { font-weight: 700; visibility: hidden; height: 0; }
         
     @media (max-width: 480px) {
-        .tabs { padding: 0; gap: 1px 4px; font-size: 15px; }
+        .tabs { padding: 0; gap: 1px 4px; }
         .tab { padding: 8px 8px 6px; }
     }
     
@@ -61,7 +61,7 @@
                 I'm Iris Embury. I'm an English Canadian based in Ottawa.
                 This is a personal site where you can copies of things I do, and links to stuff I put on other websites.
             </div>
-            <div class="panel-switcher--580">
+            <div class="panel-switcher--600">
                 <div>
                     <div class="line-title"><span>Recently added</span><a onclick="fsetTab('articles')">see all</a></div>
                     <div class="recent-articles"></div>
@@ -74,8 +74,10 @@
         </div>
         
         <div class="articles tab-panel">
-            <div class="article-index label-external">
-                <div><div><a href="page/public-record">Public record (public figure statements)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div></div>
+            <div>
+                <div class="article-index label-external">
+                    <div><div><a href="page/public-record">Public record (public figure statements)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div></div>
+                </div>
             </div>
         </div>
         

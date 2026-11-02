@@ -54,7 +54,7 @@ const videoElements = [
     { title:"Mark Carney",date:"2026-08-18",src:"youtube:5fsJUueUvpw,patreon:167033503",thumb:"167033503.jpg",length:"13:54" },
     { title:"Am I a liberal?",date:"2026-08-11",src:"youtube:QPNCs5A3iYo,patreon:166429634",length:"16:26",thumb:"166429634.jpg" },
     { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:ilB3j3BTCTI,patreon:164228303",thumb:"164228303.jpg",length:"2:41:06" },
-    { title:"Canada is under attack",date:"2026-08-09",src:"youtube:cDJ3lQH7m0Y,patreon:166242253",length:"16:21",thumb:"166242253.jpg" },
+    { title:"Canada is under attack",date:"2026-08-09",src:"youtube:jpigB1SmCcA,patreon:166242253",length:"16:21",thumb:"166242253.jpg" },
     { title:"How should we feel about floor crossers?",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
     { title:"Liberalism not Leftism",date:"2026-05-06",src:"youtube:DgGf_g4aGYA,patreon:157517952",thumb:"157517952.jpg",length:"41:15" },
     { title:"Liberal Conservatism",date:"2026-04-07",src:"youtube:Sy33HSFsuu8,patreon:154996870",thumb:"154996870.jpg",length:"2:03:13" },
@@ -216,12 +216,17 @@ function parseObj(entry, ...requiredFields) {
     return obj;
 }
 function linkReplace(chunk) {
-    /* first [this](https://example.com) format */
-    chunk = chunk.replace(/\[([^\]]*)\]\((.+?[^\\])\)/g, (match, displayText, linkUrl) => {
-        linkUrl = linkUrl.replaceAll('&#41;', ')');
+    /* First: [this](https://example.com) format: */
+    chunk = chunk.replace(/\[([^\]]*)\]\(([^\s]+)\)/g, (match, displayText, linkUrl) => {
+        /* This demands on the user that if your target includes a space, write that in as %20, e.g. /media/George%20Bush.jpg */
         displayText = displayText.trim();
-        const external = linkUrl.startsWith("http");
-        const blankDisplay = displayText == "";
+        
+        if (linkUrl.startsWith('http'))
+        {
+        
+            let linkUrl_2
+        
+        }
         
         let linkIndex = '[link]';
         if (linkUrl.startsWith("http")) {
@@ -241,7 +246,7 @@ function linkReplace(chunk) {
         let link_class = [];
         let link_inner = displayText || '[' + linkIndex + ']';
         
-        if (external) {
+        if (linkUrl.startsWith("http")) {
             link_class.push("external-link");
             const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
             if (iconName) {
@@ -255,11 +260,11 @@ function linkReplace(chunk) {
             let s_ = link_inner.lastIndexOf(" ") + 1;
             link_inner = link_inner.substring(0, s_) + link_inner.substring(s_) + '<span class="nowrap"><span class="inline-icon lightbox-link"></span></span>';
         }
-        if (blankDisplay) {
+        if (displayText == "") {
             link_class.push('super');
         }
         a_tag += ' title="' + link_title + '" class="' + link_class.join(' ') + '">' + link_inner + '</a>';
-        if (blankDisplay) {
+        if (displayText == "") {
             a_tag = '<sup>' + a_tag + '</sup>';
         }
         return a_tag;
@@ -551,7 +556,10 @@ function autoTable(chunk, table_number) {
                                     if (tableCell[i].startsWith(".")) {
                                         tableCell[i] = `<div class="fine"><p>${ tableCell[i].substring(1).trimStart() }</p></div>`;
                                     }
-                                    /* if it starts with a non-link < tag, don't paragraph it: */
+                                    if (tableCell[i].startsWith("* ")) {
+                                        tableCell[i] = `<ul><li>${ tableCell[i].substring(1).trimStart() }</li></ul>`;
+                                    }
+                                    /* if the line starts with a non-link < tag, then I'm not sure what I'm up to, but don't paragraph it: */
                                     else if (tableCell[i].startsWith("<") && !tableCell[i].startsWith("<a")) {
                                         tableCell[i] = tableCell[i];
                                     }
@@ -841,7 +849,7 @@ function loadBody() {
                 </div>
                 ${ getRootPath()?`
                     <footer class="article__footer">
-                        <div class="panel-switcher--580">
+                        <div class="panel-switcher--600">
                             <div>
                                 <div class="line-title"><span>Recently added</span><a href="../../?tab=articles">see all</a></div>
                                 <div class="recent-articles"></div>
