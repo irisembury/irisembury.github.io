@@ -570,7 +570,7 @@ function autoTable(chunk, table_number) {
                             }
                             tableCell[i] = autoFormat(tableCell[i]);
                         }
-                        return `<td class="cell col-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</td>`;
+                        return `<td><div class="cell col-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</div></td>`;
                     }
                 )
                 return `<tr class="row row-${ rowIndex + 1 } row-${ rowIndex % 2 ? 'even' : 'odd' }">${ tableRow.join('') }</tr>`;
