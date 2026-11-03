@@ -168,8 +168,9 @@
                     .auto-table td > p { margin-top: 4px; }
                     .auto-table td > .fine { margin-top: 4px; }
                     .auto-table td > .auto-indent { margin-top: 7px; }
-                    .auto-table td > ul { margin-top: 0; }
-                    .article .auto-table .fine + .fine, .article .auto-table td .fine + .fine p { margin-top: 2px; }
+                    .auto-table td > ul { margin-top: 3px; }
+                    .auto-table .fine { margin-left: 7px; }
+                    .auto-table .fine + .fine, .article .auto-table td .fine + .fine p { margin-top: 2px; }
                     .auto-table .auto-indent { margin-left: 0px; padding: 4px 9px 5px; color: var(--grey-4); background-color: light-dark(#f1f2f3, #1c1d1f); }
             .file-box { background-color: light-dark(#fff0,#242424); border: 1px dashed grey; display: flex; gap: 3px; font-size: 14px; margin: 15px 0 15px 20px; line-height: 1.15; width: min-content; padding: 8px 6px 2px; float: right; }
                 .file-box figure { gap: 1px; width: 102px; display: flex; flex-direction: column; align-items: center; }

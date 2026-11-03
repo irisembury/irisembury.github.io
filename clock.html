@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            color: #fff7;
+            font: 16px/1 system-ui;
+        }
+        main {
+            display: flex;
+            gap: 1em;
+            padding: 12px;
+            justify-content: space-between;
+            background-color: #0006;
+            align-items: center;
+        }
+        
+        </style>
+    </head>
+    <body>
+        <main>
+            <div>@irisembury | irisembury.com</div>
+            <div id="clock"></div>
+        </main>
+        <script>
+            function updateClock() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('clock').innerText = `${year}/${month}/${day}, ${hours}:${minutes}`;
+            }
+            setInterval(updateClock, 60000);
+            updateClock();
+        </script>
+    </body>
+</html>
