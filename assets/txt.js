@@ -8,12 +8,10 @@ function linkReplace(chunk) {
     });
     return chunk;
 }
+function init()
 {
-    function init()
-    {
-        const main = document.querySelector('main');
-        if (main == null) { return; }
-        
+    const main = document.querySelector('main');
+    if (main != null) {
         main.innerHTML = main.innerHTML.split("\n").map(
             line => {
                 if (line.startsWith('<')) return line;
@@ -22,7 +20,11 @@ function linkReplace(chunk) {
                 if (parts[1].length > 0) {
                     
                     if (parts[1].startsWith('&gt;')) {
-                        parts[1] = '<div class="console" contenteditable="true" spellcheck="false">' + parts[1].substring(4).trimStart() + '</div>';
+                       /* separates left-pad spaces: */
+                        let cparts = parts[1].substring(4).match(/^(\s*)(.*)$/).slice(1);
+                       /* floor preceding to multiple of 4 spaces: */
+                        cparts[0] = '&nbsp;'.repeat(cparts[0].length - cparts[0].length % 4);
+                        parts[1] = '<div class="console" contenteditable="true" spellcheck="false">' + cparts[0] + cparts[1] + '</div>';
                     }
                     else if (parts[1].startsWith("-") || parts[1].startsWith("* ")) {
                         parts[1] = `<div class="hanging">${ parts[1] }</div>`;
@@ -39,11 +41,10 @@ function linkReplace(chunk) {
                 
             }
         ).join('') + `<div class="br"></div><div style="opacity:0.5">end of page</div>` + `<div class="br"></div>`.repeat(20);
-        if (document.title == "") { document.title = "Iris Embury"; }
-        else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
     }
-    window.addEventListener("load", init);
+    if (document.title == "") { document.title = "Iris Embury"; }
+    else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
 }
-
+window.addEventListener("load", init);
 
 

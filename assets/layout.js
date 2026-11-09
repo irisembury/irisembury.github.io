@@ -2,15 +2,15 @@
 let tocElement = null,canTocUpdate = true, tocLastHeading = 0,rowsInToc = [],pageHeadings = [],loadToc = false,pageLinks = [];
 const HTML = document.documentElement, toc = 1, wide = 1, unlisted = 1, unsetWidth = 1, siteIcons = { 'youtube.com':'youtube-logo', 'youtu.be':'youtube-logo', 'twitch.tv':'twitch-logo', 'bsky.app':'bluesky-logo', 'x.com':'twitter-logo', 'twitter.com':'twitter-logo', 'facebook.com':'facebook-logo', 'substack.com':'substack-logo', 'instagram.com':'instagram-logo', 'reddit.com':'reddit-logo', 'medium.com':'medium-logo', 'wikipedia.org':'wikipedia-logo', 'patreon.com':'patreon-logo', 'tumblr.com':'tumblr-logo', 'discord.gg':'discord-logo', 'discord.com':'discord-logo' }, KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
 
-const pagesMeta = [
+const pagesData = [
     { url:"destiny-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
     { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:88392592,tumblr:809547051047272448,patreon:55199340",toc },
     { url:"afd-victory-2026",title:"On the AfD victory in Saxony-Anhalt",date:"2026-09-08",mirrors:"substack:214741964,tumblr:827199160807817216" },
     { url:"airport-privatization",title:"Thoughts on airport privatization",date:"2026-09-20",mirrors:"substack:216649667" },
     { url:"allende-and-pinochet",title:"Allende and Pinochet",date:"2026-08-09",mirrors:"substack:210515116,medium:55782f90e9" },
-    { url:"leftist-youtube",title:"Thoughts on Leftist YouTube",date:"2026-10-07",mirrors:"substack:219340446",toc },
+    { url:"leftist-youtube",title:"Thoughts on Leftist YouTube",date:"2026-10-07",mirrors:"substack:219340446" },
     { url:"public-record",title:"Public record",wide,toc,unlisted,unsetWidth },
-    { url:"stay-the-trenches",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
+    { url:"poor-things",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
     { url:"floor-crossings",title:"Floor crossing (Canadian politics)",date:"2026-04-17",mirrors:"substack:94479253,medium:dfe93bb23bdd" },
     { url:"india",title:"Notes on India",date:"2025-10-24",mirrors:"substack:77071182,tumblr:798351257128615936" },
     { url:"liberal-conservatism",title:"Liberal conservatism",subtitle:"A philosophy of prudence and humility",date:"2026-03-24",toc },
@@ -45,9 +45,9 @@ const pagesMeta = [
     { url:"why-bottom-surgery",title:"Why get bottom surgery?",date:"2025-02-09",mirrors:"tumblr:775036555284856832" }
 ];
 const videoElements = [
-    { title:"Toronto mayor",date:"2026-10-28",src:"youtube:gFBtpeRY0LM",thumb:'gFBtpeRY0LM.jpg',length:"17:18" },
+    { title:"Olivia Chow wins the Toronto mayoral race",date:"2026-10-28",src:"youtube:gFBtpeRY0LM",thumb:'gFBtpeRY0LM.jpg',length:"17:18" },
     { title:"Destiny versus Finkelstein",date:"2026-10-20",src:"youtube:2jY-wfdKkyw,patreon:172891823",thumb:"172891823.jpg",length:"44:24" },
-    { title:"Canadian separatism",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
+    { title:"Is Canada going to split up?",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
     { title:"Macklemore, Ed Sheeran",date:"2026-10-10",src:"youtube:_lfRiHlNFbc,patreon:172218877",thumb:"172218877.jpg",length:"41:18" },
     { title:"Thoughts on Leftist YouTube",date:"2026-09-25",src:"youtube:R_xfJqp3M4g,patreon:171931256",length:"1:17:57",thumb:"1719312562.jpg" },
     { title:"Medical Assistance in Dying (MAiD)",date:"2026-09-16",src:"patreon:169696851,youtube:0n0edHbri5k",length:"13:32",thumb:"1696968512.jpg" },
@@ -93,7 +93,7 @@ const videoElements = [
             </figcaption>
         </figure>` }
 );
-const textElements = pagesMeta.filter(x => !x.unlisted).sort(
+const articlesList = pagesData.filter(x => !x.unlisted).sort(
     (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
 ).map(
     tobj => `
@@ -101,6 +101,7 @@ const textElements = pagesMeta.filter(x => !x.unlisted).sort(
 );
 
 function init() {
+    setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
     loadBody();
     rightMenuSetup();
     setupLightswitch();
@@ -122,13 +123,15 @@ function init() {
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
-    document.querySelector(".article-index")?.insertAdjacentHTML("beforeend", textElements.join(''));
-    document.querySelector(".video-index")?.insertAdjacentHTML("beforeend", videoElements.join(''));
-    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", textElements.slice(0, 5).join(''));
+    
+    document.querySelectorAll(".pages-index.articles").forEach(vi => vi.insertAdjacentHTML("beforeend", articlesList.join('')));
+    document.querySelectorAll(".video-index").forEach(vi => vi.insertAdjacentHTML("beforeend", videoElements.join('')));
+    
+    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", articlesList.slice(0, 5).join(''));
     document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", videoElements.slice(0, 3).join(''));
+    
     if (document.title == "") { document.title = "Iris Embury"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
-    setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
 }
 
 function dateFromISO(datestring, tag = 0, datelength = 0) {
@@ -215,59 +218,35 @@ function parseObj(entry, ...requiredFields) {
     requiredFields.forEach(r => { if (!Object.hasOwn(obj,r)) { obj[r] = ""; } });
     return obj;
 }
+/*
+    if (a.innerText == '#' && a.href.indexOf("?t=") != -1) {
+        a.innerHTML = a.innerHTML.substring(1);
+        a.insertAdjacentHTML("afterbegin", unwrapSeconds(a.href.substring(a.href.indexOf("?t=") + 3)));
+    }
+*/
 function linkReplace(chunk) {
     /* First: [this](https://example.com) format: */
     chunk = chunk.replace(/\[([^\]]*)\]\(([^\s]+)\)/g, (match, displayText, linkUrl) => {
-        /* This demands on the user that if your target includes a space, write that in as %20, e.g. /media/George%20Bush.jpg */
+        /* This demands on the user that if your target includes a space, write that in as %20, e.g. /media/Chrystia%20Freeland.jpg */
         displayText = displayText.trim();
         
-        if (linkUrl.startsWith('http'))
-        {
-        
-            let linkUrl_2
-        
+        if (!linkUrl.startsWith('http') && (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg"))) {
+            let lastSpace = displayText.lastIndexOf(' ') + 1;
+            return `<a onclick="setLightbox('${ linkUrl}')" class="pseudo-link" title="View in gallery: ${ linkUrl.split("/").slice(-1).join('') }">${ displayText.substring(0, lastSpace) + displayText.substring(lastSpace) }<span class="nowrap"><span class="inline-icon lightbox-link"></span></a>`
         }
-        
-        let linkIndex = '[link]';
-        if (linkUrl.startsWith("http")) {
-            let _link_url = linkUrl;
-            if (_link_url.indexOf("#") != -1) {
-                _link_url = _link_url.substring(0, _link_url.indexOf("#"))
+        if (displayText == '') {
+            return `<a class="link-icon label-external" href="${ linkUrl }" title="${ linkUrl }"><span class="inline-icon link-icon"></span></a>`;
+        }
+        else if (linkUrl.startsWith('http')) {
+            const icon = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
+            if (displayText == '#' && linkUrl.indexOf("?t=" != -1)) {
+                displayText = unwrapSeconds(linkUrl.substring(linkUrl.indexOf("?t=") + 3));
             }
-            linkIndex = pageLinks.indexOf(_link_url);
-            if (linkIndex == -1) {
-                linkIndex = pageLinks.push(_link_url); }
-        }
-        if (linkUrl.startsWith('#')) {
-            linkUrl = linkUrl.replaceAll(' ', '_');
-        }
-        let a_tag = '<a href="' + linkUrl + '"';
-        let link_title = linkUrl;
-        let link_class = [];
-        let link_inner = displayText || '[' + linkIndex + ']';
-        
-        if (linkUrl.startsWith("http")) {
-            link_class.push("external-link");
-            const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
-            if (iconName) {
-                link_inner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
+            if (icon) {
+                displayText += `<span class="nowrap"><span class="${ icon } inline-icon"></span></span>`;
             }
         }
-        else if (linkUrl.endsWith(".png") || linkUrl.endsWith(".jpg") || linkUrl.endsWith(".jpeg")) {
-            a_tag = `<a onclick="setLightbox('${ linkUrl }')"`;
-            link_class.push("pseudo-link");
-            link_title = 'View in gallery: ' + linkUrl.split("/").slice(-1).join("");
-            let s_ = link_inner.lastIndexOf(" ") + 1;
-            link_inner = link_inner.substring(0, s_) + link_inner.substring(s_) + '<span class="nowrap"><span class="inline-icon lightbox-link"></span></span>';
-        }
-        if (displayText == "") {
-            link_class.push('super');
-        }
-        a_tag += ' title="' + link_title + '" class="' + link_class.join(' ') + '">' + link_inner + '</a>';
-        if (displayText == "") {
-            a_tag = '<sup>' + a_tag + '</sup>';
-        }
-        return a_tag;
+        return `<a href="${ linkUrl }" title="${ linkUrl }">${ displayText }</a>`;
     });
     /*  */
     chunk = chunk.replace(/(?<=^|\s)(https?:\/\/[^\s<$]+)/g, (match, linkUrl) => {
@@ -276,21 +255,12 @@ function linkReplace(chunk) {
             linkAfter = linkUrl.at(-1);
             linkUrl = linkUrl.slice(0, -1);
         }
-        let _link_url = linkUrl;
-        if (_link_url.indexOf("#") != -1) {
-            _link_url = _link_url.substring(0, _link_url.indexOf("#"))
+        let displayText = linkUrl;
+        const icon = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
+        if (icon) {
+            displayText += '<span class="nowrap"><span class="' + icon + ' inline-icon"></span></span>';
         }
-        if (pageLinks.indexOf(_link_url) == -1) {
-            pageLinks.push(_link_url);
-        }
-        let linkInner = linkUrl;
-        const iconName = siteIcons[Object.keys(siteIcons).find(site => linkUrl.includes(site))];
-        let a_tag = '<a';
-        if (iconName) {
-            linkInner += '<span class="nowrap"><span class="' + iconName + ' inline-icon"></span></span>';
-        }
-        a_tag += ' href="' + linkUrl + '">' + linkInner + '</a>' + linkAfter;
-        return a_tag;
+        return `<a href="${ linkUrl }" title="${ linkUrl }">${ displayText }</a>${ linkAfter }`;
     });
     return chunk;
 }
@@ -370,6 +340,7 @@ function getDomain() {
 }
 function autoFormat(_string) {
     if (!_string) return _string;
+    _string = _string.replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;");
     _string = linkReplace(_string.trim());
     let output = "";
     while (true) {
@@ -781,7 +752,7 @@ function interpreter(argValue) {
     }
     if (!argValue) return;
     let table_number = 1;
-    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
+    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
         if (chunk.startsWith("<") && !chunk.startsWith("<a")) { return chunk; }
@@ -876,7 +847,7 @@ function loadBody() {
                     </div>
                 </div>
                 <div class="page-footer__about">
-                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. • Aspects of this site might not load ideally if you're on mobile. If you're a mobile user, I hate you, the small amount of effort I put into making it so things don't break completely is more than you deserve, get off your bed and use a normal computer. • For general inquiry: contact@irisembury.com</p>
+                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. / Aspects of this site might not load ideally if you're on mobile. If you're a mobile user, I hate you and the small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. / For general inquiry: contact@irisembury.com</p>
                 </div>
             </footer>`);
     }
@@ -886,10 +857,9 @@ function loadBody() {
             <div class="lb-caption-panel"><p></p></div>
         </div>`
     );
-    //interpreter(document.querySelector(".article"));
 }
 function articleTop() {
-    let pageInfo = pagesMeta.find(p => p.url == getDomain());
+    let pageInfo = pagesData.find(p => p.url == getDomain());
     if (!pageInfo) {
         return '';
     }

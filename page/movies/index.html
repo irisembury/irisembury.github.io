@@ -4,7 +4,7 @@
 
 Here's a list of every movie I've ever seen. Yes, really. I mean, I think.
 
-!table this td { padding: 0 15px; }
+!table this { margin-inline: auto; } this .col-1 { padding-right: 50px; }
 My Neighbor Totoro | 1988
 The Princess Bride | 1987
 The Cat Returns | 2002
@@ -265,7 +265,7 @@ Back to the Future Part III | 1990
 
 That's {movie-count} movies (a script on the page counts automatically).
 
-I grew up without television until I was a preteen. I only went to theatres a few times, which I didn't enjoy. I mostly only saw movies when my parents occasionally brought home VHS tapes or DVDs. I remember our livingroom had a few Disney movies like Lion King, and a random movie called Mouse Hunt. In my late 20s I noticed I was missing a lot of cultural touchpoints when talking to other people and movie references were a big part of the broader culture, so I made an effort to patch that by going back and watching the movies it felt like "everybody knows" --- Back to the Future, Star Wars, Harry Potter, Pirates of the Caribbean, Top Gun. You know, the kind of movies that, if told somebody you hadn't seen them, made people reply "What? How have you never seen blank?!" I watched over 100 new movies in 2024. I'm not going to do a rating for every movie, but some of my favourites were:
+I grew up without television and rarely went to theatres, only a few times really. I remember having a few movies on tape but in my mid-20s I'd seen very few movies overall, os then I started trying to catch up and watch all the movies it seemed like "everyone knows" that I'd missed out on. So probably like half of this list I didn't see til I was 27 or so. I'm not going to do a rating for everything, but some of my favourites have been:
 
 * Poor Things
 * Dial M for Murder
@@ -275,17 +275,15 @@ I grew up without television until I was a preteen. I only went to theatres a fe
 * Taken
 * A Few Good Men
 
-*Dial M for Murder* was my favourite movie until I saw *Poor Things*. There's no particular order except for those being top two.
+I think *Dial M for Murder* was my favourite movie until I saw *Poor Things*. There's no particular order except for those being top two.
 
 A few negative notes:
 
-* **Star Trek: Section 31**. This was shockingly bad. *Star Trek* already didn't translate that well into movies anyway --- the TNG movies had some good moments, but were overall badly written --- but this one somehow blew all previous attempts away. *Nothing* worked. They shouldn't have even released it.
-* **Whiplash**. This movie was fucking stupid. I understand why people like the idea that it's *trying* to convey about rising to the occasion and becoming great under pressure, but the way it tried to convey that was not good. The teacher was just an idiot. I'd have cracked up laughing at him. I don't know how people took it seriously.
+* **Star Trek: Section 31**. This was shockingly bad. *Star Trek* already didn't translate well into film --- the TNG movies had a few good moments but were overall bad --- and this one somehow blew all previous attempts away. *Nothing* worked. They shouldn't have even released it.
+* **Whiplash**. This movie was fucking stupid. I understand why people like the idea that it's *trying* to convey about rising to the occasion, becoming great under pressure, okay, but the way it tried to convey that was not good. The teacher was just an idiot. I'd have cracked up laughing at him. I don't know how people took it seriously.
 * **Elf**. Fuck this stupid, unfunny movie. Oh my god.
-* **Zoolander**. It's not the worst, but I had to accept Ben Stiller's sense of comedy just doesn't do it for me. I just sit there uncomfortably waiting for him to stop.
+* **Zoolander**. It's not the worst, but I had to accept Ben Stiller's sense of comedy just doesn't do it for me. I kind of just sit there waiting for him to stop.
 
 Why haven't I seen a single movie released in 2020 or 2021? Just a coincidence? I don't know.
-
-Anyway.
 
 </main><script src="../../assets/layout.js"></script><script>window.addEventListener("load", function() { let table = document.querySelector(".auto-table tbody"); let rows = Array.from(table.rows); document.querySelector(".movie-count").innerHTML = rows.length; rows.sort((a, b) => parseInt(a.cells[1].textContent) - parseInt(b.cells[1].textContent)); rows.forEach(row => table.appendChild(row)); });</script></body></html>

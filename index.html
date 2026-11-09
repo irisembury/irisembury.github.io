@@ -6,121 +6,111 @@
     <link rel="stylesheet" href="assets/main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-    body { overflow-y: scroll; }
+    body { overflow-y: scroll; --main-width: 848px; }
     .article { padding-top: 30px; }
+    .article a:not(:hover) { text-decoration: none; }
     
-    .article-index a:not(:hover),
-    .donate__linkbox a:not(:hover),
-    .tab-panel.videos a:not(:hover) {
-        text-decoration: none;
-    }
+    .text-panel { padding-left: 10px; padding-right: 10px; margin-inline: auto; }
+        .text-panel * + * { margin-top: 8px; }
+        .text-panel .fine { color: var(--grey-6,#666); font-size: inherit; }
     
-    .donate__linkbox { margin-block: 8px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
-        .donate__linkbox a { gap: 2px; display: flex; flex-direction: column; align-items: center; }
-        .donate__linkbox a .inline-icon { width: 44px; margin: 0; }
-    .donate.tab-panel .donate__linkbox a { min-width: 64px; }
-    
-    .tabs { gap: 10px; margin-block: 0px 14px; border-block: 1px solid var(--grey-d,lightgrey); padding: 0 1em; display: flex; flex-wrap: wrap; font: 16px/1 'DM Sans',Roboto,Arial,sans-serif; }
-        .tab { border-bottom: 2px solid transparent; padding: 10px 13px 8px; color: var(--grey-8,grey); text-align: right; cursor: pointer; }
-        .tab:hover { background-color: var(--grey-f,whitesmoke); color: var(--grey-7,grey); }
-        .tab.selected { color: var(--grey-2,black); border-color: var(--grey-3,black); font-weight: 600; }
-            .dummy { font-weight: 700; visibility: hidden; height: 0; }
+    .tab-buttons { color: var(--grey-8,grey); font: 400 16px/1 Roboto,sans-serif,sans-serif; gap: 15px; margin-block: 0px 14px; border-bottom: 1px solid var(--grey-c,silver); padding: 0 20px; display: flex; flex-wrap: wrap; text-align: center; }
+        .tab-buttons > div { min-width: 50px; border-bottom: 2px solid transparent; padding: 10px 14px 8px; cursor: pointer; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+        .tab-buttons > div:hover { background-color: var(--grey-e,#eee); color: var(--grey-7,grey); }
+        .tab-buttons > div.selected {
+            color: var(--grey-3,#3);
+            border-color: light-dark(#5c76c2,#7077ad);
+            font-weight: 600;
+        }
         
-    @media (max-width: 480px) {
-        .tabs { padding: 0; gap: 1px 4px; }
-        .tab { padding: 8px 8px 6px; }
-    }
+        @media (max-width: 480px) {
+            .tab-buttons { padding: 0; gap: 1px 4px; }
+            .tab-buttons > div { padding: 8px 8px 6px; }
+        }
     
-    .tab-panels__main { font: 17px/1.4 Roboto,Arial,sans-serif; max-width: var(--main-width); }
-        .tab-panel { display: none; padding: 10px 18px; gap: 20px; }
-        .tab-panel.selected { display: grid; }
+    .tab-panels { font: 17px/24px Roboto,Arial,sans-serif; }
+        .tab-panels > div { display: none; padding: 10px 18px; gap: 24px; }
+        .tab-panels > div.selected { display: grid; }
         
-        .tab-panel p + p, .tab-panel p + * { margin-top: 8px; }
-        .tab-panel .fine, .tab-panel .fine * { font-size: inherit; }
+        /* index section elements */
+        .pages-index { color: var(--grey-4,#444); }
+            .pages-index > div + div { margin-top: 10px }
         
-        .landing.tab-panel { gap: 38px; }
-            .landing__about { margin-inline: auto; }
-            .landing__about p { max-width: 528px; }
-                .profile-img { width: 140px; aspect-ratio: 0.8; border-radius: 5px; float: left; background-position: center; background-image: url(assets/pf.jpg); background-size: cover; background-repeat: no-repeat; border: 1px solid var(--grey-9,grey); }
-                .dark .profile-img { filter: contrast(0.9); }
-            @media (max-width: 430px) { .tab-panel { padding: 0; } }
+        .video-index { display: grid; gap: 8px 16px; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); }
+            .video-index .video-figure { max-width: unset; width: 100%; margin-inline: auto; }
+        
+        .video-index.list-view { grid-template-columns: auto; gap: 6px; }
+            .video-index.list-view .img-box { display: none; }
+            .video-index.list-view figcaption { display: flex; gap: 5px; }
+    
+    .landing { gap: 38px; }
+        .landing__about { margin-inline: auto; }
+        .landing__about p { max-width: 528px; }
+        @media (max-width: 430px) { .tab-panel { padding: 0; } }
+    
+    .text-index {  }
+    
     </style>
 </head>
 <body>
 
 <div id="page">
 <div>
-    <div class="tabs">
-        <div class="tab no-select landing" onclick="fsetTab('landing')">Home</div>
-        <div class="tab no-select articles" onclick="fsetTab('articles')">Articles</div>
-        <div class="tab no-select videos" onclick="fsetTab('videos')">Videos</div>
+    <div class="main-layout tab-buttons">
+        <div class="text-docs">Text docs</div>
+        <div class="videos">Videos</div>
     </div>
-    <div class="tab-panels__main">
-        <div class="landing tab-panel">
-            <div class="landing__about auto-paragraphs text-center">
-                I'm Iris Embury. I'm an English Canadian based in Ottawa.
-                This is a personal site where you can copies of things I do, and links to stuff I put on other websites.
-            </div>
-            <div class="panel-switcher--600">
-                <div>
-                    <div class="line-title"><span>Recently added</span><a onclick="fsetTab('articles')">see all</a></div>
-                    <div class="recent-articles"></div>
-                </div>
-                <div>
-                    <div class="line-title"><span>Recent videos</span><a onclick="fsetTab('videos')">see all</a></div>
-                    <div class="recent-videos"></div>
-                </div>
-            </div>
+    <div class="tab-panels">
+        <div class="about">
+            <div></div>
         </div>
-        
-        <div class="articles tab-panel">
+        <div class="text-docs">
             <div>
-                <div class="article-index label-external">
-                    <div><div><a href="page/public-record">Public record (public figure statements)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a></div></div>
+                <div class="text-panel auto-paragraphs">
+                    I write stuff, often in Google docs at first, then eventually I paste that into various websites that let me easily host text. I have accounts on [Substack](https://irisembury.substack.com/), [Tumblr](https://irisembury.tumblr.com/), [Medium](https://medium.com/@irisembury), and [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=text).
+                </div>
+            </div>
+            <div style="max-width:634px; width:100%; margin-inline:auto;">
+                <div class="pages-index articles label-external">
+                    <div><a href="page/public-record">Public record (public figure statements)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a> — An ongoing, continually-updated catalogue of various public figure’s statements with full receipts.</div>
                 </div>
             </div>
         </div>
-        
-        <div class="donate tab-panel">
-            <div class="donate__linkbox label-external">
-                <a target="_blank" href="https://paypal.me/irisembury"><div class="paypal-logo inline-icon"></div><div class="link-text">PayPal</div></a>
-                <a target="_blank" href="https://patreon.com/cw/irisembury"><div class="patreon-logo inline-icon"></div><div class="link-text">Patreon</div></a>
-                <a target="_blank" href="https://ko-fi.com/irisembury"><div class="kofi-logo inline-icon"></div><div class="link-text">Ko-fi</div></a>
-                <a target="_blank" href="https://buy.stripe.com/9B628s08Q0yldNpeay9AA00"><div class="stripe-logo inline-icon"></div><div class="link-text">Stripe</div></a>
+        <div class="videos">
+            <div class="text-panel auto-paragraphs" style="max-width: 800px;">
+                For a more complete list, check my uploads tab on [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos).
+                .The patreon links aren't paywalled. It's just an alternate video source in case anything ever goes wrong with YouTube.
             </div>
-        </div>
-        
-        <div class="videos tab-panel">
-            <div class="auto-paragraphs text-center label-external">
-                This isn't every video I've ever made because I don't bother adding everything here.
-                Full lists: [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos) | [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=video)
-                .The patreon links aren't paywalled, it's just an alternate video source in case anything ever goes wrong with YouTube.
+            <div style="max-width:714px; width:100%; margin-inline:auto;">
+                <div>
+                    <div class="video-index"></div>
+                </div>
             </div>
-            <div class="video-index"></div>
         </div>
     </div>
 </div>
 <script src="assets/layout.js"></script>
 <script>
-    function fsetTab(tabName) {
-        document.querySelectorAll('.tabs .tab').forEach(t => t.classList.toggle('selected', t.classList.contains(tabName)));
-        document.querySelectorAll('.tab-panels__main .tab-panel').forEach(c => c.classList.toggle('selected', c.classList.contains(tabName)));
-        localStorage.setItem("index-tab", tabName);
+window.addEventListener('load', function() {
+    function setTab(e) {
+        const clickedTab = e.currentTarget;
+        const clickedTabClass = Array.from(clickedTab.classList).filter(c => c != 'selected').join(' ');
+        Array.from(clickedTab.parentNode.children).forEach(tab => tab.classList.toggle('selected', tab == clickedTab));
+        Array.from(clickedTab.parentNode.nextElementSibling.children).forEach(panel => panel.classList.toggle('selected', panel.classList.contains(clickedTabClass)));
+        if (clickedTab.parentNode.classList.contains("main-layout")) { localStorage.setItem("main-tab",clickedTabClass); }
     }
-    const tabParam = new URLSearchParams(window.location.search).get("tab");
-    if (tabParam) {
-        history.replaceState(null, '', location.pathname);
-    }
-    const tabInput = tabParam || localStorage.getItem("index-tab");
-    if (tabInput) {
-        fsetTab(tabInput);
-    } else {
-        fsetTab(Array.from(document.querySelector('.tabs .tab').classList).find(c => !['tab','no-select','selected'].includes(c)))
-    }
-    document.querySelectorAll('.tabs .tab').forEach(t => {
-        t.innerHTML = `<div>${ t.innerHTML }</div><div class="dummy">${ t.innerHTML }</div>`;
+    document.querySelectorAll('.tab-buttons > div').forEach(tab => {
+        tab.innerHTML = `<div>${ tab.innerHTML }</div><div style="font-weight:700;visibility:hidden;height:0;">${ tab.innerHTML }</div>`;
+        tab.addEventListener('click', setTab);
     })
-    history.replaceState(null, '', window.location.pathname);
+    
+    if (localStorage.getItem("main-tab") != null) {
+        document.querySelector('.main-layout.tab-buttons .' + localStorage.getItem("main-tab"))?.click();
+    }
+    else {
+        document.querySelector(".main-layout.tab-buttons")?.firstElementChild.click();
+    }
+})
 </script></div></body></html>
 
 

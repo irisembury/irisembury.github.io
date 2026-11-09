@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/txt.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><main>
+--
+
+If I have an mp4 that I've rendered, and it's not a very efficient render and thus the file size is very large, this command reduces the file size drastically (often to around 10 percent of the starting file) with basically no noticeable change in quality for most videos:
+
+    > ffmpeg -i "target_starting_file_path" -c:v libx264 -crf 24 -preset slow -r 29.97 -c:a aac -b:a 128k "G:\archive\public-record\output_file_path.mp4"
+
+Here's a similar thing for reducing inefficiently rendered audio, reducing it to just-okay quality at a much smaller file size:
+
+    > ffmpeg -i "target_starting_file_path" -vn -c:a libmp3lame -b:a 128k "G:\archive\public-record\output_file_path.mp4"
+
+I sometimes want to do this for multiple videos at once. You can do this as a batch in Windows powershell by running a loop command like below after navigating to the directory with cd. This will apply the ffmpeg command to every file in a folder. It will also then start applying to its own output, since it's outputting to the same place, so I just wrote it to append "_out" to the file name and then to ignore files whose names end with "_out".
+
+    > Get-ChildItem -Path . -File | ForEach-Object {
+    >     $baseName = $_.BaseName
+    >     if ($baseName -like "*_out") { return }
+    >     $output = "${baseName}_out.mp4"
+    >     ffmpeg -i $_.Name -c:v libx264 -crf 20 -c:a aac -b:a 192k $output
+    > }
+
+
+
+
+
+
+
+--
+
+</main><script src="../../assets/txt.js"></script></body></html>

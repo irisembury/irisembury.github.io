@@ -63,6 +63,10 @@ Common options:
     --merge-output-format -- Forces the output to be a certain container, useful to say mp4 since it's not guaranteed to be mp4 otherwise
 
     -v or --verbose -- Gives additional detail, can be useful if something fails and you want more info
+    
+    --force-keyframes-at-cuts -- Prevents keyframe padding in output file (see below)
+    
+    -ppa or --postprocessor-args -- To apply encoding commands to your output file after downloading (complicated)
 
 Operators:
 
@@ -81,59 +85,60 @@ See more:
 
 --
 
-**Downloading Parts**
+**Making cuts of specific parts of videos**
 
-(1) Simpler method (slow): --download-sections option
+(1) Directly download the part you want with the {keyword:--download-sections} option
 
         > yt-dlp --download-sections "*2:12-4:00" "https://youtu.be/..."
 
-    The * is necessary here to indicate it's a timestamp as opposed to a chapter title, which is the default behaviour. This method can be useful for grabbing specific short clips, however for long selections (more than a few minutes) it will become very time-consuming because yt-dlp is requesting the necessary data chunks from YouTube and then reëncoding the entire video to give you precisely the time selection you ask for, no more or less.
+    The * is necessary here to indicate it's a timestamp as opposed to a chapter title, which is the default behaviour. This method is useful for simply grabbing specific short clips.
 
-    If you want to download approximately from 30:00 to 1:30:00 from a 4-hour video, it is significantly faster to download the whole video, splice it locally, and delete the excess rather than use --download-sections "*30:00-1:30:00" and wait for the encoding.
+(2) Download the whole video (just using `yt-dlp "https://youtu.be/..."` with whatever options you want), then also make separate cuts locally using ffmpeg.
 
-(2) Faster method: download it and cut it with ffmpeg
+    For example, if you have a large file and want to create a cut between 31:14 and 1:24:03:
 
-    Download the whole video, then cast your desired start and end point into seconds. For example, 31:14 is 1874 seconds, and 1:24:03 is 5043 seconds. This command should find the nearest video keyframe that precedes your start time and the nearest keyframe that comes after your endtime, meaning it may include a few extra seconds at the start or end. However, the trade-off is that this happens very quickly.
+        > ffmpeg -ss 31:14 -to 1:24:03 -i "PATH_TO_YOUR_LOCAL_FILE" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
 
-        > ffmpeg -ss 3238.120 -to 6123.510 -i "PATH_TO_YOUR_LOCAL_FILE" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
+    The time argument in these commands also accepts raw seconds, e.g. if you say 1874 instead of 31:14 and 5043 instead of 1:24:03. This may be useful to note if you have timestamps in the form of YouTube query strings (e.g. https://youtu.be/...&t=531) which measures time in total seconds.
 
-    "What's a video keyframe?"
+These methods both may result in your video having some extra seconds at the beginning or end. This is because the command is looking at the video keyframes and finding the nearest one that precedes your start time and the nearest one that comes after your endtime. For example, if you ask for 31:14 to 1:24:03, you might get an output of 31:12 to 1:24:06 (but you will always get at least the part you wanted).
+
+"What's a video keyframe?"
+
+    A video file might be 30 fps, but to render 5 seconds of video, it doesn't actually save 150 full images. It saves one image, then saves 149 instructions on how to modify that image each frame, saving the difference between frames rather than whole pictures. That starting frame, which the others are modifying, is called a key frame, or keyframe, also called i-frames.
     
-        A video file might be 60 fps, but to render 5 seconds of video, it doesn't actually save 300 full images. It saves one image, then saves 299 instructions on how to modify that image, saving the difference between frames rather than whole frames. That first frame, which the others are modifying, is called a key frame, or keyframe, also called i-frames.
-        
-        They're not always 5 seconds apart; that is just an example value. Part of rendering a video is deciding where to put these key frames depending on how different each frame is from the next. It's common for them to be 4 to 6 seconds apart. You can examine where the keyframes are in a video file using the ffmpeg tool called ffprobe.
-        
-        If you've ever been watching a video and there's a glitch where everything becomes distorted (often green) but you can still see the movement and make out the bounds of characters, this is because the starting keyframe for that chunk was distorted in some way but the video container is still applying the changes to the faulty starting point.
-        
-        To quickly cut up a video, ffmpeg can easily split them at the key frames, whereas to have the start and end point not at the keyframes would require additional rendering.
+    The space between keyframes isn't constant (they're often between 2 and 10 seconds apart), and part of what your computer is doing when you render a new video is figuring out where it makes the most sense to put these frames across your video. You can examine the location of keyframes in a video file using the ffmpeg tool called ffprobe.
+    
+    If you've ever been watching a video and there's a glitch where everything becomes distorted (often green) but you can still see movement or make out the bounds of characters, this is because the starting keyframe for that chunk was corrupted or distorted, but the player is still applying the changes in the other frames to that faulty starting point.
+
+To avoid ending up with extra padding due to it snapping to the nearest keyframes, you can use the --force-keyframes-at-cuts flag in your command. This will cause yt-dlp to reencode the video and thus takes significantly longer, but gives you a precise start and end point. This can also often solve video/audio desync if you're making cuts from longer videos.
 
 --
 
 **Command I often use**
 
-I use this command to grab videos I want to archive:
+This is the exact command I use to archive a full video:
 
-    > yt-dlp -f "bv*[height<=720][vcodec^=avc1]+ba[acodec!^=opus]/b[height<=720][vcodec^=avc1]" "DESIRED_VIDEO_URL_HERE" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
+    > yt-dlp -f "bv*[height<=720][fps<=30][vcodec^=avc1]+ba[acodec!^=opus]/b[height<=720][vcodec^=avc1][fps<=30]" "DESIRED_VIDEO_URL_HERE" --merge-output-format mp4 -o "G:\archive\public-record\%(title)s.%(ext)s"
 
-This command...
-    * gets the highest res video not exceeding 720p, which is generally perfectly sufficient. 1080p or 2160p (often called 4k) can result in a file that's multiple times larger for unnecessary pixel detail. If you want larger copies, simply removing the [height<=720] part.
-    * ensures your output is an mp4 container. This means the file extension of your chosen files (the 'EXT' column in the format table) is unimportant, but the codecs (how information is stored inside the box) still matters. mp4 is the best for general compatibility.
-    * includes a filter to skip the opus audio codec, which is high quality and often served by YouTube while you're watching videos, but doesn't have the best compatibility (you can't post opus audio on Twitter, for example).
-    * includes a filter to ensure the video codec is avc1, better known as H.264, which is usually available and the most common and widely available used video codec by far. If you don't specify a codec, it will often download a version using the AV1 codec, which has more efficient compression (lower file size) and is thus preferred by YouTube itself, but worse in terms of compatibility and decoding (not all software supports it, more likely to lag on slower devices).
-    
+Notes about this command:
+    * The -o flag ensures the output is an mp4 container. This means the file extension of your chosen files (the 'EXT' column in the format table) is unimportant, but the codecs (how information is stored inside the box) still matters. At this point in time mp4 remains the best option for general compatibility.
+    * A filter in the -f option argument (height<=720) gets the highest video resolution available not exceeding 720p (1280x720). That is generally sufficient. 1080p or 2160p (often called 4k) files will be at least multiple times larger for what is in many cases unnecessary pixel detail. If you want larger copies, remove the [height<=720] filter.
+    * A filter in the -f option argument (vcodec^=avc1) forces a download of the avc1 video codec, better known as H.264. This is by far the most common and widely available used video codec in general, which I therefore prefer to maximize file compatibility. If you don't include this, yt-dlp will often download a video file using the AV1 codec, which has more efficient compression (lower file size) and is thus preferred by YouTube itself to reduce bandwidth.
+    * A filter in the -f option argument (acodec!^=opus) prevents downloading audio using the opus codec. This is a high quality codec often served by YouTube while you're watching videos, but it doesn't have the best compatibility (not all software can read it and you can't post opus audio on Twitter, for example).
+    * A filter in the -f option argument (fps<=30) gets the highest frame rate available not exceeding 30. Many modern YouTube uploads have 60-fps video files available, but I find the extra frames pointless for most videos being archived. A 60-fps file will typically be between 1.5x and 2x the file size of an equivalent 30-fps file.
+
 No matter what command you use, your file will be playable in VLC media player, but getting the right codec affects what other programs or websites you can drag your file onto and have it be compatible.
 
-If you ever have issues getting the right output for your purposes, just use -F and pick the exact files you want yourself.
+If you ever have issues getting the right output for your purposes, you can always use -F and pick the exact files you want yourself. It might be intimidating for a second because a lot of information comes up at once but if you take a minute to parse what's shown it shouldn't be that hard to understand.
 
-If I only want to keep a specific part of a video downloaded via the above method, I use this ffmpeg command to make a specific cut, then usually delete the original, though I sometimes retain both a full copy of a video and a separate file that highlights a key part. This runs basically instantly.
+If I want to make a cut of the full video after downloading it via the above I use the exact ffmpeg command already shown:
 
     > ffmpeg -ss 21:20 -to 28:30 -i "path_to_your_local_file" -c copy -avoid_negative_ts make_zero "C:\Users\Iris\Desktop\example_output--cut.mp4"
 
-If you put in the full seconds value (e.g. 21:20 is 1280 seconds), that also works, which might be useful if you have timestamps in the form of YouTube query strings (e.g. https://youtu.be/...&t=531)
+However, I frequently skip all this and only download sections when I'm archiving interesting parts of very long videos by using the --download-sections option. The exact command would be just like the above but with that option added, like this:
 
-However, I also frequently skip this and just use the --download-sections option:
-
-    > yt-dlp --download-sections "*27:12-27:44" -f "bv*[height<=720][vcodec^=avc1]+ba[acodec!^=opus]/b[height<=720][vcodec^=avc1]" "DESIRED_VIDEO_URL_HERE" --merge-output-format mp4 -o "C:\Users\Iris\Desktop\%(title)s.%(ext)s"
+    > yt-dlp --download-sections "*1:22:33-4:55:66" -f "bv*[height<=720][fps<=30][vcodec^=avc1]+ba[acodec!^=opus]/b[height<=720][fps<=30][vcodec^=avc1]" "DESIRED_VIDEO_URL_HERE" --merge-output-format mp4 -o "G:\archive\public-record\%(title)s.%(ext)s"
 
 --
 
