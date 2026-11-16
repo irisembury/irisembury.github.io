@@ -7,19 +7,23 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
     body { overflow-y: scroll; --main-width: 848px; }
-    .article { padding-top: 30px; }
+    .article { padding-top: 32px; }
     .article a:not(:hover) { text-decoration: none; }
+    .page-footer__links { display: none; }
     
     .text-panel { padding-left: 10px; padding-right: 10px; margin-inline: auto; }
-        .text-panel * + * { margin-top: 8px; }
-        .text-panel .fine { color: var(--grey-6,#666); font-size: inherit; }
+        .text-panel > :first-child { margin-top: 0px; }
+        .text-panel p { margin-top: 10px; }
+        .text-panel h3 { margin-top: 16px; }
+        .text-panel li { margin-top: 6px; }
+        .text-panel h3 { font-family: inherit; font-size: inherit; }
     
     .tab-buttons { color: var(--grey-8,grey); font: 400 16px/1 Roboto,sans-serif,sans-serif; gap: 15px; margin-block: 0px 14px; border-bottom: 1px solid var(--grey-c,silver); padding: 0 20px; display: flex; flex-wrap: wrap; text-align: center; }
-        .tab-buttons > div { min-width: 50px; border-bottom: 2px solid transparent; padding: 10px 14px 8px; cursor: pointer; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+        .tab-buttons > div { min-width: 50px; border-bottom: 3px solid transparent; padding: 10px 14px 7px; cursor: pointer; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
         .tab-buttons > div:hover { background-color: var(--grey-e,#eee); color: var(--grey-7,grey); }
         .tab-buttons > div.selected {
             color: var(--grey-3,#3);
-            border-color: light-dark(#5c76c2,#7077ad);
+            border-color: light-dark(#6377b1,#7077ad);
             font-weight: 600;
         }
         
@@ -29,12 +33,12 @@
         }
     
     .tab-panels { font: 17px/24px Roboto,Arial,sans-serif; }
-        .tab-panels > div { display: none; padding: 10px 18px; gap: 24px; }
+        .tab-panels > div { display: none; padding: 10px 18px; gap: 20px; }
         .tab-panels > div.selected { display: grid; }
         
         /* index section elements */
-        .pages-index { color: var(--grey-4,#444); }
-            .pages-index > div + div { margin-top: 10px }
+        .pages-index { color: var(--grey-4,#444); max-width: 654px; width: 100%; margin-inline: auto; }
+            .pages-index > div + div { margin-top: 10px; }
         
         .video-index { display: grid; gap: 8px 16px; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); }
             .video-index .video-figure { max-width: unset; width: 100%; margin-inline: auto; }
@@ -42,6 +46,9 @@
         .video-index.list-view { grid-template-columns: auto; gap: 6px; }
             .video-index.list-view .img-box { display: none; }
             .video-index.list-view figcaption { display: flex; gap: 5px; }
+    
+    .links-panel { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+        .links-panel .inline-icon { border-radius: 23% !important; width: 38px; margin: 0; display: block; }
     
     .landing { gap: 38px; }
         .landing__about { margin-inline: auto; }
@@ -57,34 +64,35 @@
 <div id="page">
 <div>
     <div class="main-layout tab-buttons">
-        <div class="text-docs">Text docs</div>
+        <div class="text-docs">Text</div>
         <div class="videos">Videos</div>
     </div>
     <div class="tab-panels">
-        <div class="about">
-            <div></div>
-        </div>
         <div class="text-docs">
-            <div>
-                <div class="text-panel auto-paragraphs">
-                    I write stuff, often in Google docs at first, then eventually I paste that into various websites that let me easily host text. I have accounts on [Substack](https://irisembury.substack.com/), [Tumblr](https://irisembury.tumblr.com/), [Medium](https://medium.com/@irisembury), and [Patreon](https://www.patreon.com/cw/irisembury/posts?filters%5Bmedia_types%5D=text).
+            <div class="text-panel auto-format">
+                I'm Iris. This is my little website where I compile, host, and link to stuff.
+                <div class="links-panel label-external center">
+                    <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="inline-icon youtube-logo"></span></a>
+                    <a href="https://x.com/irisembury"><span class="inline-icon twitter-logo"></span></a>
+                    <a href="https://irisembury.substack.com"><span class="inline-icon substack-logo"></span></a>
+                    <a href="https://discord.com/invite/aK83BPKQ5G"><span class="inline-icon discord-logo"></span></a>
+                    <a href="https://irisembury.tumblr.com/"><span class="inline-icon tumblr-logo"></span></a>
+                    <a href="https://www.patreon.com/cw/irisembury"><span class="inline-icon patreon-logo"></span></a>
                 </div>
             </div>
-            <div style="max-width:634px; width:100%; margin-inline:auto;">
+            <div>
                 <div class="pages-index articles label-external">
                     <div><a href="page/public-record">Public record (public figure statements)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a> — An ongoing, continually-updated catalogue of various public figure’s statements with full receipts.</div>
                 </div>
             </div>
         </div>
         <div class="videos">
-            <div class="text-panel auto-paragraphs" style="max-width: 800px;">
+            <div class="text-panel auto-format" style="max-width: 800px;">
                 For a more complete list, check my uploads tab on [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos).
-                .The patreon links aren't paywalled. It's just an alternate video source in case anything ever goes wrong with YouTube.
+                Patreon links aren't paywalled. It's just an alternate video source in case anything ever goes wrong with YouTube.
             </div>
             <div style="max-width:714px; width:100%; margin-inline:auto;">
-                <div>
-                    <div class="video-index"></div>
-                </div>
+                <div class="video-index"></div>
             </div>
         </div>
     </div>

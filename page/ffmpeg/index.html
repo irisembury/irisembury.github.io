@@ -3,13 +3,17 @@
 
 If I have an mp4 that I've rendered, and it's not a very efficient render and thus the file size is very large, this command reduces the file size drastically (often to around 10 percent of the starting file) with basically no noticeable change in quality for most videos:
 
-    > ffmpeg -i "target_starting_file_path" -c:v libx264 -crf 24 -preset slow -r 29.97 -c:a aac -b:a 128k "G:\archive\public-record\output_file_path.mp4"
+    > ffmpeg -i "target_starting_file_path" -c:v libx264 -crf 24 -preset slow -r 29.97 -c:a aac -b:a 128k "output_file_path"
 
-Here's a similar thing for reducing inefficiently rendered audio, reducing it to just-okay quality at a much smaller file size:
+To do that but also remove the audio track and just keep the video, do this instead:
 
-    > ffmpeg -i "target_starting_file_path" -vn -c:a libmp3lame -b:a 128k "G:\archive\public-record\output_file_path.mp4"
+    > ffmpeg -i "target_starting_file_path" -c:v libx264 -crf 24 -preset slow -r 29.97 -an "output_file_path"
 
-I sometimes want to do this for multiple videos at once. You can do this as a batch in Windows powershell by running a loop command like below after navigating to the directory with cd. This will apply the ffmpeg command to every file in a folder. It will also then start applying to its own output, since it's outputting to the same place, so I just wrote it to append "_out" to the file name and then to ignore files whose names end with "_out".
+If you have a big audio file, you can reduce it to just-okay quality mp3 at a much smaller file size with:
+
+    > ffmpeg -i "target_starting_file_path" -vn -c:a libmp3lame -b:a 128k "output_file_path"
+
+I sometimes want to reformat a bunch of videos at once if I have inefficient old renders. Just repack them into mp4s with H.264 and aac audio, in many cases getting much smaller file sizes for no noticeable quality loss. Instead of running the command 20 times manually, this can be done as a batch in Windows powershell by running a loop command like below (after navigating to the directory with cd).
 
     > Get-ChildItem -Path . -File | ForEach-Object {
     >     $baseName = $_.BaseName
@@ -18,8 +22,7 @@ I sometimes want to do this for multiple videos at once. You can do this as a ba
     >     ffmpeg -i $_.Name -c:v libx264 -crf 20 -c:a aac -b:a 192k $output
     > }
 
-
-
+The reason this appends _out to the file name is because otherwise the loop will start appling to its own output, since it has no other way of seeing whether the file it grabs from the folder was a file that it just created. Not the only solution, but a simple one.
 
 
 

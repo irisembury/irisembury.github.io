@@ -3,6 +3,7 @@ let tocElement = null,canTocUpdate = true, tocLastHeading = 0,rowsInToc = [],pag
 const HTML = document.documentElement, toc = 1, wide = 1, unlisted = 1, unsetWidth = 1, siteIcons = { 'youtube.com':'youtube-logo', 'youtu.be':'youtube-logo', 'twitch.tv':'twitch-logo', 'bsky.app':'bluesky-logo', 'x.com':'twitter-logo', 'twitter.com':'twitter-logo', 'facebook.com':'facebook-logo', 'substack.com':'substack-logo', 'instagram.com':'instagram-logo', 'reddit.com':'reddit-logo', 'medium.com':'medium-logo', 'wikipedia.org':'wikipedia-logo', 'patreon.com':'patreon-logo', 'tumblr.com':'tumblr-logo', 'discord.gg':'discord-logo', 'discord.com':'discord-logo' }, KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
 
 const pagesData = [
+    { url:"dismal-politics-of-livestreaming",title:"The Dismal Politics of Livestreaming",date:"2026-11-15" },
     { url:"destiny-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
     { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:88392592,tumblr:809547051047272448,patreon:55199340",toc },
     { url:"afd-victory-2026",title:"On the AfD victory in Saxony-Anhalt",date:"2026-09-08",mirrors:"substack:214741964,tumblr:827199160807817216" },
@@ -106,30 +107,28 @@ function init() {
     rightMenuSetup();
     setupLightswitch();
     tocSetup();
-    Array.from(document.querySelectorAll(".auto-format")).forEach(a => { a.innerHTML = autoFormat(a.innerHTML); a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); } });
-    Array.from(document.querySelectorAll(".auto-paragraphs")).forEach(a => {
+    Array.from(document.querySelectorAll(".auto-format")).forEach(a => {
         a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(
             line => {
+                if (line.startsWith('<')) { return line; }
                 if (line.startsWith('.')) { return `<div class='fine'><p>${ autoFormat(line.substring(1).trimStart()) }</p></div>`; }
-                if (line.startsWith('#')) { return `<h4>${ autoFormat(line.substring(1).trimStart()) }</h4>`; }
+                if (line.startsWith('# ')) { return `<h3>${ autoFormat(line.substring(1).trimStart()) }</h3>`; }
+                if (line.startsWith('- ') || line.startsWith('* ')) { return `<ul><li>${ autoFormat(line.substring(1).trimStart()) }</li></ul>`; }
                 return `<p>${ autoFormat(line) }</p>`
             }
-        ).join('');
-        a.classList.remove("auto-paragraphs");
+        ).join('').replaceAll('</ul><ul>','');
+        a.classList.remove("auto-format");
         if (a.classList.length == 0) {
             a.removeAttribute("class");
         }
     });
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
-    Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = ageFromISO(a.innerHTML));
+    Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = `<span title="Update to date based on birthday: ${ a.innerHTML }">${ ageFromISO(a.innerHTML) }</span>`);
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
-    
+
     document.querySelectorAll(".pages-index.articles").forEach(vi => vi.insertAdjacentHTML("beforeend", articlesList.join('')));
     document.querySelectorAll(".video-index").forEach(vi => vi.insertAdjacentHTML("beforeend", videoElements.join('')));
-    
-    document.querySelector(".recent-articles")?.insertAdjacentHTML("beforeend", articlesList.slice(0, 5).join(''));
-    document.querySelector(".recent-videos")?.insertAdjacentHTML("beforeend", videoElements.slice(0, 3).join(''));
-    
+
     if (document.title == "") { document.title = "Iris Embury"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
 }
@@ -409,9 +408,9 @@ function syntaxHighlight(stringInput, syntaxClass, customKeywords) {
     return output;
 }
 function codeSanitize(chunk) {
-    return chunk.replace(/`(.+?)`/g, crAux);
+    return chunk.replace(/`(.+?)`/g, csAux);
 }
-function crAux(match, captured) {
+function csAux(match, captured) {
     return `<code>${ captured.replaceAll("\"", "&quot;").replaceAll("'", "&apos;").replaceAll("-", "&hyphen;").replaceAll("(", "&lpar;").replaceAll(")", "&rpar;").replaceAll("[", "&lbrack;").replaceAll("]", "&rbrack;").replaceAll("*", "&ast;").replaceAll("\n", "<br>") }</code>`;
 }
 function setLightbox(action) {
@@ -507,39 +506,78 @@ function autoTable(chunk, table_number) {
                 tableRow = tableRow.map(
                     (tableCell, cellIndex) => {
                         tableCell = tableCell.split('\n');
-                        let i = 0, j;
-                        for (; i < tableCell.length; i += 1) {
-                            if (tableCell[i].search(/[^ ]/) >= 8) {
-                                j = i + 1;
-                                for (; j < tableCell.length; j += 1) {
-                                    if (tableCell[j].search(/[^ ]/) < 8) {
+                        /*
+                        Okay, so, note to me in case I ever forget what I was doing here:
+                        This function (autoTable) has specific indenting rules:
+                            * No indent on the line means it's a new row.
+                            * If there's an indent on the line, it's continuing from the last cell in the previous row.
+                            * If there's an indent of 8 or more on the line, it's also is a block quote.
+                        So for example:
+                            row-1,cell-1 | row-1,cell-2
+                                another paragraph that will go in row-1,cell-2
+                                    text that will also go in row-1,cell-2 but as a blockquote element
+                                still row-1,cell-2
+                            row-2,cell-1 | row-2,cell-2
+                        
+                        The `chunk.split(/\n(?! )/g)` function above is important to make this work: it's splitting by new lines only if the character immediately after the new line isn't a space, meaning a new line that has indenting doesn't get broken into the next row and instead ends up being a continuation of the last cell in the previous row.
+                        
+                        A | will create a new cell regardless of where it appears within any line of input. To actually use a | in a table, just \| to escape it in the input.
+                        
+                        So first: is this a blockquote line? (8+ spaces)
+                        If so, find the end of the blockquote -- i.e. search forward in the tableCell (where tableCell means the tableRow split by |) until you find the end of the blockquote (a line that doesn't have 8+ indent). Then join those lines and pass it to the autoIndent function, since this can just be handled normally (the same way as non-table input) at that point.
+                        */
+                        for (let i = 0; i < tableCell.length; i += 1) {
+                            if (tableCell[i].startsWith(" ".repeat(8))) {
+                                let j = i + 1;
+                                while (j < tableCell.length) {
+                                    if (!tableCell[j].startsWith(" ".repeat(8))) {
                                         break;
                                     }
+                                    j += 1;
                                 }
                                 tableCell[i] = autoIndent(tableCell.slice(i, j).join('\n'));
                                 for (let k = i + 1; k < j; k += 1) {
                                     tableCell[k] = "";
                                 }
+                                i = j - 1;
                             }
                             else {
+                                /* ---- Not blockquote, apply trim(), proceed if something remains: ----*/
                                 tableCell[i] = tableCell[i].trim();
                                 if (tableCell[i]) {
-                                    if (tableCell[i].startsWith(".")) {
-                                        tableCell[i] = `<div class="fine"><p>${ tableCell[i].substring(1).trimStart() }</p></div>`;
+                                    /* ---- This is a list: ---- */
+                                    if (tableCell[i].startsWith("* ") || tableCell[i].startsWith("- ")) {
+                                        let j = i + 1;
+                                        /* Similar logic as the blockquote loops above: when you find a list-formatted line, search ahead to find the end of the list. */
+                                        while (j < tableCell.length) {
+                                            if (tableCell[j].startsWith(" ".repeat(8))) {
+                                                break;
+                                            }
+                                            tableCell[j] = tableCell[j].trimStart();
+                                            if (!(tableCell[j].startsWith("* ") || tableCell[j].startsWith("- "))) {
+                                                break;
+                                            }
+                                            j += 1;
+                                        }
+                                        tableCell[i] = `<ul>${ tableCell.slice(i, j).map(c => `<li>${ autoFormat(c.substring(1).trimStart()) }</li>`).join('') }</ul>`;
+                                        for (let k = i + 1; k < j; k += 1) {
+                                            tableCell[k] = "";
+                                        }
+                                        i = j - 1;
                                     }
-                                    if (tableCell[i].startsWith("* ")) {
-                                        tableCell[i] = `<ul><li>${ tableCell[i].substring(1).trimStart() }</li></ul>`;
-                                    }
-                                    /* if the line starts with a non-link < tag, then I'm not sure what I'm up to, but don't paragraph it: */
-                                    else if (tableCell[i].startsWith("<") && !tableCell[i].startsWith("<a")) {
-                                        tableCell[i] = tableCell[i];
-                                    }
+                                    /* ---- Not a list: ---- */
                                     else {
-                                        tableCell[i]= `<p>${ tableCell[i] }</p>`;
+                                        
+                                        if (tableCell[i].startsWith(".")) {
+                                            tableCell[i] = `<p class="fine">${ autoFormat(tableCell[i].substring(1).trimStart()) }</p>`;
+                                        }
+                                        else {
+                                            tableCell[i]= `<p>${ autoFormat(tableCell[i]) }</p>`;
+                                        }
+                                    
                                     }
                                 }
                             }
-                            tableCell[i] = autoFormat(tableCell[i]);
                         }
                         return `<td><div class="cell col-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</div></td>`;
                     }
@@ -556,7 +594,7 @@ function autoTable(chunk, table_number) {
     }
     return table;
 }
-function autoList(chunk) {
+function autoList(chunk, isFine_ = false) {
     const closeTags = [];
     let prevIndent = -1;
     const list = chunk.split("\n").map(
@@ -585,7 +623,7 @@ function autoList(chunk) {
             return li;
         }
     ).join("") + closeTags.join("");
-    let output = list.substring(0, 3) + ' class="auto-list"' + list.substring(3);
+    let output = list.substring(0, 3) + ' class="auto-list' + (isFine_?' fine':'') + '"' + list.substring(3);
     return output;
 }
 function autoIndent(chunk) {
@@ -596,7 +634,7 @@ function autoIndent(chunk) {
             line = '<p class="attribution">' + line + '</p>';
         }
         else if (line.startsWith(".")) {
-            line = '<div class="fine"><p>' + line.substring(1).trimStart() + '</p></div>'
+            line = '<p class="fine">' + line.substring(1).trimStart() + '</p>'
         }
         else {
             line = '<p>' + line + '</p>';
@@ -773,12 +811,16 @@ function interpreter(argValue) {
             return '<ul class="auto-list condensed">' + chunk.split("\n").map(l => '<li class="text-block">' + autoFormat(l.replace(/^\-\- /,'').trim()) + '</li>').join('') + '</ul>'
         }
         else if (/^[\*\-] /.test(chunk) || /^\d+\. /.test(chunk)) {
-            chunk = autoList(chunk);
+            chunk = autoList(chunk,isFine);
         }
         else {
-            chunk = `<p>${ autoFormat(chunk).replaceAll('  \n','<br>') }</p>`;
+            if (isFine) {
+                chunk = `<p class="fine">${ autoFormat(chunk).replaceAll('  \n','<br>') }</p>`;
+            }
+            else {
+                chunk = `<p>${ autoFormat(chunk).replaceAll('  \n','<br>') }</p>`;
+            }
         }
-        if (isFine) { chunk = '<div class="fine">' + chunk + '</div>'; }
         return chunk;
     })
     return input.join('');
@@ -823,11 +865,11 @@ function loadBody() {
                         <div class="panel-switcher--600">
                             <div>
                                 <div class="line-title"><span>Recently added</span><a href="../../?tab=articles">see all</a></div>
-                                <div class="recent-articles"></div>
+                                <div class="recent-articles">${ articlesList.slice(0, 5).join('') }</div>
                             </div>
                             <div>
                                 <div class="line-title"><span>Recent videos</span><a href="../../?tab=videos">see all</a></div>
-                                <div class="recent-videos"></div>
+                                <div class="recent-videos">${ videoElements.slice(0, 3).join('') }</div>
                             </div>
                         </div>
                     </footer>`:'' }
