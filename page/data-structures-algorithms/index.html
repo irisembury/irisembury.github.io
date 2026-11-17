@@ -1,9 +1,16 @@
 <!DOCTYPE html><html lang="en" dir="ltr" style="opacity:0"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/main.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><main id="page">
 
 <style>
-.auto-table .cell {
-    border: 1px solid var(--grey-a);
-}
+    .auto-table td {
+        border: 1px solid var(--grey-a);
+    }
+    .auto-table code {
+        background-color: transparent;
+    }
+    .auto-table.l-blue .col-1 { background-color: var(--bg-light-blue); }
+    .auto-table.l-nowrap .col-1 { white-space: nowrap; }
+    .auto-table.l-text-center .col-1 { text-align: center; }
+    .auto-table.cf { margin-inline: auto; }
 </style>
 
 # Big-O notation
@@ -14,7 +21,7 @@ O stands for *order*, as the extent to which a function grows in relation to the
 
 Common big-O values and their meaning:
 
-!table this .col-1 { background: var(--bg-light-blue); white-space: nowrap; }
+!table l-blue l-nowrap
 O(1) | Runs the same number of operations no matter the size of the data (does not scale).
 O(N) | Runs once per N (linear scaling).
 O(N<sup>2</sup>) | Runs N operations N times. Consider a loop that runs for the length of the passed array (N), in which there is another loop that also runs for the length of the array (N). The number of operations will thus be (N)(N).<br>O(N3) would be three loops, and so on.
@@ -32,7 +39,7 @@ src:media/big-o-graph.png
 
 The big-O values of some common algorithms:
 
-!table this { margin-inline: auto; } this .col-1 { background: var(--bg-light-blue); }
+!table l-blue code-transparent center-float
 bubble sort | O(N<sup>2</sup>)
 selection sort | O(N<sup>2</sup>)*
 insertion sort | O(N<sup>2</sup>)
@@ -41,8 +48,7 @@ quick sort | O(n<sup>2</sup>)**
 linear search | O(N)
 binary search | O(log N)
 
-.
-\* Merge sort and selection sort have no variation in their complexity. In other words, there is technically no difference between their worst-case, average, or best-case scenarios, as they cannot possibly finish early.
+.\* Merge sort and selection sort have no variation in their complexity. In other words, there is technically no difference between their worst-case, average, or best-case scenarios, as they cannot possibly finish early.  
 \** Quick sort almost never performs its theoretical worst-case, and this big-O value is thus particularly misleading compared to the others listed. Its average performance is closer to O(N log N).
 
 Big-O doesn't tell us everything. Just because two algorithms have the same big-O value doesn't make them identical or equivalent. Insertion sort, selection sort, and bubble sort are each O(N2), and are therefore in a different class of algorithm from something like merge sort in terms of scaling, but in terms of their average performance we may still say bubble tends to be worse than selection, and selection tends to be worse than insertion. It's just their theoretical worst-case performance, and the extent to which they scale with N, that is the same.
@@ -58,19 +64,19 @@ It's possible in nearly every programming language to interact with our data at 
 
 These accept 2 values and return 1 value:
 
-!table this .col-1 { background:var(--bg-light-blue); } this code { background-color: transparent; }
+!table l-blue
 `&amp;` (AND) | Each bit of the result is a 1 only if **both** input values also had a 1 in that position.
 `\|` (OR) | Each bit of the result is a 1 if **either** of the input values had a 1 in that position.
 `^` (XOR) | Each bit of the result is a 1 if the input values have a **different** bit in that position.
 
 There's also a `NOT` operator (~), which accepts only 1 value:
 
-!table this .col-1 { background: var(--bg-light-blue); } this code { background-color: transparent; }
+!table l-blue
 `~` (NOT) | Each bit of the result is a 1 only if the input value has a 0 in that position (it *inverses* the bits).
 
 Examples of each operator in action:
 
-!table this { margin-inline: auto; font-family: 'Consolas',monospace; } this .col-1 { text-align: center; background: var(--bg-light-blue); }
+!table l-blue monospace
 (1110 & 0101) | = 0100
 (1010 \| 0111) | = 1111
 (1100 ^ 1010) | = 0110
@@ -91,7 +97,7 @@ This is because a signed number (like the default `int` data-type, a 32-bit sign
 
 This can be observed clearly by tracking the binary representation of an int as it crosses the zero line:
 
-!table this { margin-inline: auto; } this .col-1 { background: var(--bg-light-blue); text-align: center; }
+!table cf l-blue monospace text-right
 2 | 0000000000000000000000000000<mark>0010</mark>
 1 | 0000000000000000000000000000<mark>0001</mark>
 0 | 0000000000000000000000000000<mark>0000</mark>
@@ -134,21 +140,32 @@ These operators return a number with their bits shifted in the direction specifi
 
 The long story short is that shifting to the left will double the value of a number while shifting to the right halves it (and rounds down odd number results, because the last bit just falls off).
 
-!table this { text-align: center; width: 100%; } this td:nth-child(2n) { vertical-align: middle; } this span { color: var(--blue); }
+<style>
+.bitshift-eg { text-align: center; width: 100%; }
+.bitshift-eg td:nth-child(2n) { display: flex; align-items: center; justify-content: center; }
+.bitshift-eg span { color: var(--blue,blue); }
+</style>
+
+!table bitshift-eg
 <span>94</span><br>01011110 | >> | <span>47</span><br>00101111 | >> | <span>23</span><br>00010111
 
-Shifting by multiple places is the same as doubling or halving that many times. This means a shift is the same as dividing or multiplying by 2 to the power of the places shifted by.
+Shifting by multiple places is the same as doubling or halving that many times. This means a shift is the same as dividing or multiplying by 2 to the power of the number of places by which you've shifted.
 
-<div class="align-center gap-15">
+<div class="panel-switcher--600">
+<style>
+.bitshift-eg-2 .row-1 .col-1 { border-top: none; border-left: none; }
+.bitshift-eg-2 .row-1 .col-2 { border-top: none; border-right: none; }
+.bitshift-eg-2 tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) }
+</style>
 
-!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
-shifting by x places | is the same as multiplying
+!table bitshift-eg-2
+shifting by x places | is the same as ...
 << 1 | * 2
 << 2 | * 2<sup>2</sup> (i.e. \*2\*2)
 << 3 | * 2<sup>3</sup> (i.e. \*2\*2\*2)
 
-!table this .row-1 .col-1 { border-top: none; border-left: none; } this .row-1 .col-2 { border-top: none; border-right: none; } this tr:nth-child(n+2) .col-1 { background-color: var(--bg-light-blue) } this tr:nth-child(n+2) .col-2 { background-color: var(--grey-f) }
-shifting by x places | is the same as multiplying
+!table bitshift-eg-2
+shifting by x places | is the same as ...
 >> 1 | / 2
 >> 2 | / 2<sup>2</sup> (i.e. \*2\*2)
 >> 3 | / 2<sup>3</sup> (i.e. \*2\*2\*2)
@@ -164,13 +181,15 @@ print(q); // prints 5
 
 To get 20, you'd need to actually say `q = q << 2`;
 
+***
+
 # Search algorithms
 
 The two main search algorithms are simply linear or binary search. They both look through an array and return the index of the found item, or -1 if not found.
 
 #### Terminology:
 
-!table this .col-1 { background-color: var(--bg-light-blue); }
+!table left-col-blue
 key | the item the algorithm is searching for
 
 ## Linear search
@@ -215,13 +234,13 @@ int binarySearch(int[] arr, int len, int key) {
 
 If the key is less than the middle item, then logically it could only be in the first half of the array, so everything else can be ruled out and the next pass can check only that section.
 
-For example, think about trying to find the value 32 in this sorted array. I'll mark 32, the key, in red.
+For example, think about trying to find the value 32 in this sorted array. I'll mark 32, the key (i.e. the thing we're looking for), in red.
 
 <div style="text-align:center; font-family:'Segoe UI',system-ui; font-size:16px;">
-    [ 3, 5, 12, 15, 18, 21, 26, 27, 30, <span class="red-text">32</span>, 44, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
+    [ 3, 5, 12, 15, 18, 21, 26, 27, 30, {red:32}, 44, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
 </div>
 
-It has 23 items, from index 0 to index 22.
+It has 23 items, meaning it runs from index 0 to index 22.
 
 <div style="width:min-content; font-size:16px; margin:0 auto; font-family:'Consolas',monospace; white-space:pre; line-height:1.15;">
 arr[0]: 3
@@ -233,7 +252,7 @@ arr[5]: 21
 arr[6]: 26
 arr[7]: 27
 arr[8]: 30
-arr[9]: <span class="red-text">32</span>
+arr[9]: <span class="red">32</span>
 arr[10]: 44
 arr[11]: 46
 arr[12]: 51
@@ -252,7 +271,7 @@ arr[22]: 95
 We look at the middle value, which is the 11th item, 46. We then *conceptualize* the areas to the right and left of this mid-point as two "sub-arrays," like so:
 
 <div style="text-align:center; font-family:'Segoe UI',system-ui; font-size:16px;">
-    [ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <span class="red-text">32</span>, 44</mark>, 46, <mark>51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95</mark> ]
+    [ <mark>3, 5, 12, 15, 18, 21, 26, 27, 30, <span class="red">32</span>, 44</mark>, 46, <mark>51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95</mark> ]
 </div>
 
 .
@@ -261,28 +280,36 @@ If the array had an even number of items, the mid-point would round down and the
 Since the key we're looking for, 32, is less than the middle value, we narrow our focus to only the left side, and repeat this logic to that area. The middle value of the left-side is at index 5, with a value of 21, so we ask if this is the key (it's not), and then split this conceptual sub-array around that value.
 
 <div style="text-align:center; font-family:'Segoe UI',system-ui; font-size:16px;">
-    [ <mark>3, 5, 12, 15, 18</mark>, 21, <mark>26, 27, 30, <span class="red-text">32</span>, 44</mark>, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
+    [ <mark>3, 5, 12, 15, 18</mark>, 21, <mark>26, 27, 30, <span class="red">32</span>, 44</mark>, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
 </div>
 
 We repeat this logic until either the mid-point value is the same as your key, or the length of the conceptual sub-array reaches zero, meaning the key was not present in the array.
 
 <div style="text-align:center; font-family:'Segoe UI',system-ui; font-size:16px;">
-    [ 3, 5, 12, 15, 18, 21, <mark>26, 27</mark>, 30, <mark><span class="red-text">32</span>, 44</mark>, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
+    [ 3, 5, 12, 15, 18, 21, <mark>26, 27</mark>, 30, <mark><span class="red">32</span>, 44</mark>, 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
 </div>
 
 <div style="text-align:center; font-family:'Segoe UI',system-ui; font-size:16px;">
-    [ 3, 5, 12, 15, 18, 21, 26, 27, 30, <mark><span class="red-text">32</span></mark>, <mark>44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
+    [ 3, 5, 12, 15, 18, 21, 26, 27, 30, <mark><span class="red">32</span></mark>, <mark>44,</mark> 46, 51, 57, 58, 60, 67, 69, 73, 75, 79, 82, 95 ]
 </div>
 
 At this point, the mid-point value rounds down to the first item, and that matches the key, so we return a value of 9 (the index the key was found in).
 
 This is an O(log n) algorithm. To search a 10,000,000-length array with linear search would require comparing the key value to, at most, **all 10,000,000** items (in the event your key is the last item or absent from the array). For binary search it takes, at most, **24** comparisons to confirm whether the value is present in the array. This shows the power of having sorted data.
 
+***
+
 # Sorting algorithms
 
 This section covers the following:
 
-!table this .row-1 { font-weight: 700; background-color: var(--bg-light-blue); } this tr:nth-child(n+5) .col-1 { border: none; } this td { padding-inline: 20px; } this { margin-inline: auto; }
+<style>
+.sorts-covered .row-1 { font-weight: 700; background-color: var(--bg-light-blue); }
+.sorts-covered tr:nth-child(n+5) .col-1 { border: none; }
+.sorts-covered td { padding-inline: 20px; }
+</style>
+
+!table sorts-covered cf
 basic sorts | more advanced
 bubble sort | merge sort
 selection sort | quick sort
@@ -926,7 +953,13 @@ Let's take this example array and throw each number into a bucket based on its r
 <br>
 51, 45, 9, 37, 48, 72, 19, 16, 7, 88, 92, 12, 30, 36, 3, 42, 96, 25
 
-!table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--bg-light-blue); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: 'Consolas',monospace; min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+<style>
+.radix-buckets { margin-inline: auto; }
+.radix-buckets .row-1 { font-weight: bold; text-align: center; background-color: var(--bg-light-blue); }
+.radix-buckets tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: 'Consolas',monospace; min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+</style>
+
+!table radix-buckets
 0|1|2|3|4|5|6|7|8|9
 30|51|72|3||45|16|37|48|9
 ||92|||25|36|7|88|19
@@ -937,7 +970,7 @@ Then you just grab those numbers in order, and repeat for the next column (leftw
 <br>
 30, 51, 72, 92, 12, 42, 3, 45, 25, 16, 36, 37, 7, 48, 88, 9, 19, 96
 
-!table this { margin-inline: auto; } this .row-1 { font-weight: bold; text-align: center; background-color: var(--bg-light-blue); } this tr:nth-child(n+2) td { min-width: 20px; text-align: right; font-family: 'Consolas',monospace; min-width: 28px; border-top: none; border-bottom: none; padding: 3px 8px 0; }
+!table radix-buckets
 0_ | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90
 3|12|25|30|42|51||72|88|92
 7|16||36|45|||||96
@@ -1018,7 +1051,7 @@ Sorting by pure ASCII value creates a pseudo-alphabetization, like ABCDabcd. If 
 
 Practically every language has some kind of built-in string comparison function for you:
 
-!table this .col-1 { background: var(--bg-light-blue); }
+!table l-blue
 C | `strcomp(string1, string2)`
 Java | `string1.compareTo(string2)`
 C++ | `string1.compare(string2)`
@@ -1030,7 +1063,7 @@ Ruby | `string1 <=> string2`
 
 In most cases, the return value is an integer, which indicates the relationship between string1 and string2:
 
-!table
+!table l-blue
 0 | strings are identical
 -1 | string1 comes first
 1 | string2 comes first
@@ -1061,7 +1094,7 @@ These functions both ignore case, except when case is the only difference betwee
 
 They also contain some logic to make special characters, like `]`, always precede letters, again going against their ASCII value, though for some reason they both order these special characters differently.
 
-!table this .col-1 { background-color: var(--bg-light-blue) }
+!table l-blue
 sorted by ASCII | ` !"#$%&'()*+,-./123:;&lt;=&gt;?ABC[\]^_\`abc{\|}~`
 CompareTo | `'- !"#$%&()*,./:;?[\]^_\`{\|}~+&lt;=&gt;123aAbBcC`
 localeCompare | ` _-,;:!?.'"()[]{}*/\&#%\`^+&lt;=&gt;\|~$123aAbBcC`
@@ -1124,6 +1157,8 @@ void stringSort(String[] arr) {
         arr[j] = key;
     }
 }
+
+***
 
 # Memoization
 
@@ -1233,7 +1268,7 @@ src:media/circular-linked-list.png | alt:A circular doubly-linked list
 
 ### Terminology
 
-!table this .col-1 { background:var(--bg-light-blue); }
+!table l-blue
 linked list | an allocation of data that's dynamically sized because it's not stored contiguously
 stack | a linked list that behaves as first-in, last-out
 queue | a linked list that behaves as first-in, first-out

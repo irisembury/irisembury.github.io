@@ -12,11 +12,11 @@
     }
     .article, .auto-indent, .auto-table, .fine { font: 16px/22px 'Segoe UI',system-ui; }
     .article h1 { font-size: 1.5em; }
-        .auto-table tr { border-block: 1px dashed var(--grey-8,grey) !important; }
-            .auto-table .cell { max-height: 675px; margin: 5px 0; padding: 0 5px; }
-            .auto-table .col-1 { color: var(--red,red); }
+    .auto-table tr { border-block: 1px dashed var(--grey-8,grey) !important; }
+        .auto-table .col-1 div { color: var(--red,red); }
+        .auto-table .cell div { max-height: 675px; margin: 3px 0; padding: 0 3px; }
     .article b, .article strong { font-weight: 600; color: light-dark(#111,#e3e3e3); }
-    .citelist-container { display: none; }
+    
 </style>
 
 Anything I felt like bookmarking. Nothing on this page is censored. Some quotes include offensive claims or language. Presented without commentary. Emphasis (bold) is always mine (unless I specify otherwise). If the subject is talking to somebody in the room or on call with them, that's included as a line in the transcript, whereas if they're watching a video and reacting to it (but the person isn't there to respond), that is put in a stylized blockquote.
@@ -260,7 +260,7 @@ See [Steven Bonnell](#Steven_Bonnell).
 
 # Elon Musk
 
-!table
+!table Elon_Musk
 2018-06-16 | "I am actually a socialist. Just not the kind that shifts resources from most productive to least productive, pretending to do good, while actually causing harm. True socialism seeks greatest good for all." [src](https://x.com/elonmusk/status/1008013111058526209) / [img](media/elonmusk-20180616.jpg)
 2022-01-30 | "It would appear that the so-called 'fringe minority' is actually the government. If the government had the mandate of the people, there would be a significant counter-protest. There is not, therefore they do not." [src](https://x.com/elonmusk/status/1487876118870777856) / [img](media/elonmusk-20220130.jpg)
 2022-10-24 | Musk: "While it's true that Kasparov is almost as good at playing chess as my iPhone, he is otherwise an idiot" [src](https://x.com/elonmusk/status/1584533444444332033)
@@ -396,7 +396,7 @@ Morgan Majed, age {age-from:1997-01-02}, [@frogan](https://twitch.tv/frogan), [@
 
 Age {age-from:1991-07-25}, political livestreamer [@HasanAbi](https://twitch.tv/hasanabi) ("abi": Turks for "older brother," colloquially like bro, dude), [@HasanTheHun](https://x.com/hasanthehun). Related to [Cenk Uygur](#Cenk_Uygur) (Cenk's nephew). Career started at The Young Turks.
 
-!table
+!table Hasan_Piker
 2017-09-28 | "I'm here to talk to you today about --- music, arts, fashion --- one of the greatest problems that our generations are facing, the biggest scourge --- scourage --- that affects our society, against all of the cultural and social progress we've seen, is the battle against intellectual thought. --- Are you are you guys comfortable with that? --- This is a war against critical thinking, a battle against intellectualism, the war --- war, war --- against rational behavior. And we're not even aware of it. And that's terrifying. Wew! What kind of an example are we setting? The problem with America is that because of cultural imperialism we are literally teaching the rest of the world how to think, what to wear. --- The Kardashians are lying to you! --- Culture used to be the backbone of the resistance all it seeks to do is sedate the masses. Culture now seeks to appeal to our primal urges, our base needs. We're now in the age of mediocrity. You can bring about the positive change you want to see in this world, because the revolution will not be televised. The revolution will not be televised. Only you can bring about the revolution by taking it to the streets. --- The girl's gonna be upset if we don't talk about fashion you know what I mean?" [src](https://www.youtube.com/watch?v=HPx1zkzciqI)
 2018-10-09 | From the first time he interacted with Steven Bonnell (Destiny) [src](https://youtu.be/r9iPLU3fAFA?t=34):
     **Piker**: "By the way what I was gonna say is, for those of you who are on my side of the stream: Destiny's awesome. A couple of the, it was like, some of my moderators, including Space and also some of the fans like RagBang, were telling me that I should link up with this guy, and then I started watching his videos and they're, they're excellent. I really like what he's about, so I'm excited and I hope you guys get to know him a little bit better and you can enjoy his videos as well. So that's what we're doing."
@@ -1830,7 +1830,6 @@ window.addEventListener("load",function() {
     
     tables.forEach(
         table => {
-            
             let rows = Array.from(table.querySelectorAll("tr"));
             
             let numUnsorted = 0;
@@ -1852,8 +1851,18 @@ window.addEventListener("load",function() {
                 row => table.appendChild(row)
             )
             
+            /* ---- adding id to left column of marked tables ---- */
+            let tableClasses = Array.from(table.classList).filter(c => c != 'auto-table');
+            if (tableClasses.length == 1) {
+                
+                Array.from(table.querySelectorAll('.col-1 p')).forEach(
+                    p => p.insertAdjacentHTML('afterbegin',`<span id="${ tableClasses.join('') + '-' + p.innerHTML }"></span>`)
+                );
+                
+            }
         }
     )
+    
     
 })
 

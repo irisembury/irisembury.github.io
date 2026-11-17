@@ -499,105 +499,110 @@ function codeblock(chunk) {
     }
     return `<div class="codeblock">${ lines.map(line => `<div>${ line }</div>`).join("") }</div>`;
 }
-function autoTable(chunk, table_number) {
-    let table = `<div class="table-wrapper"><table class="auto-table auto-table-${ table_number }"><tbody>${
-        chunk.split(/\n(?! )/g).slice(1).map(
-            (tableRow, rowIndex) => {
-                tableRow = tableRow.replaceAll('\\|','&verbar;').split('|');
-                tableRow = tableRow.map(
-                    (tableCell, cellIndex) => {
-                        tableCell = tableCell.split('\n');
-                        /*
-                        Okay, so, note to me in case I ever forget what I was doing here:
-                        This function (autoTable) has specific indenting rules:
-                            * No indent on the line means it's a new row.
-                            * If there's an indent on the line, it's continuing from the last cell in the previous row.
-                            * If there's an indent of 8 or more on the line, it's also is a block quote.
-                        So for example:
-                            row-1,cell-1 | row-1,cell-2
-                                another paragraph that will go in row-1,cell-2
-                                    text that will also go in row-1,cell-2 but as a blockquote element
-                                still row-1,cell-2
-                            row-2,cell-1 | row-2,cell-2
-                        
-                        The `chunk.split(/\n(?! )/g)` function above is important to make this work: it's splitting by new lines only if the character immediately after the new line isn't a space, meaning a new line that has indenting doesn't get broken into the next row and instead ends up being a continuation of the last cell in the previous row.
-                        
-                        A | will create a new cell regardless of where it appears within any line of input. To actually use a | in a table, just \| to escape it in the input.
-                        
-                        So first: is this a blockquote line? (8+ spaces)
-                        If so, find the end of the blockquote -- i.e. search forward in the tableCell (where tableCell means the tableRow split by |) until you find the end of the blockquote (a line that doesn't have 8+ indent). Then join those lines and pass it to the autoIndent function, since this can just be handled normally (the same way as non-table input) at that point.
-                        */
-                        for (let i = 0; i < tableCell.length; i += 1) {
-                            if (tableCell[i].startsWith(" ".repeat(8))) {
-                                let j = i + 1;
-                                while (j < tableCell.length) {
-                                    if (!tableCell[j].startsWith(" ".repeat(8))) {
-                                        break;
-                                    }
-                                    j += 1;
+function autoTable(chunk) {
+    /*
+        Anything given after "!table" becomes additional classes of the table.
+        e.g.
+        correct input:
+        
+        !table bold red
+            -->
+                <table class="autotable bold red"><tbod...
+    */
+    let firstRow = chunk.substring(0, chunk.indexOf('\n')).replace(/["']/g, '').split(" ");
+    firstRow[0] = "auto-table";
+    firstRow = firstRow.join(" ");
+    
+    return `<div class="table-wrapper"><table class="${ firstRow }"><tbody>${ chunk.split(/\n(?! )/g).slice(1).map(
+        (tableRow, rowIndex) => {
+            tableRow = tableRow.replaceAll('\\|','&verbar;').split('|');
+            tableRow = tableRow.map(
+                (tableCell, cellIndex) => {
+                    tableCell = tableCell.split('\n');
+                    /*
+                    Okay, so, note to me in case I ever forget what I was doing here:
+                    This function (autoTable) has specific indenting rules:
+                        * No indent on the line means it's a new row.
+                        * If there's an indent on the line, it's continuing from the last cell in the previous row.
+                        * If there's an indent of 8 or more on the line, it's also is a block quote.
+                    So for example:
+                        row-1,cell-1 | row-1,cell-2
+                            another paragraph that will go in row-1,cell-2
+                                text that will also go in row-1,cell-2 but as a blockquote element
+                            still row-1,cell-2
+                        row-2,cell-1 | row-2,cell-2
+                    
+                    The `chunk.split(/\n(?! )/g)` function above is important to make this work: it's splitting by new lines only if the character immediately after the new line isn't a space, meaning a new line that has indenting doesn't get broken into the next row and instead ends up being a continuation of the last cell in the previous row.
+                    
+                    A | will create a new cell regardless of where it appears within any line of input. To actually use a | in a table, just \| to escape it in the input.
+                    
+                    So first: is this a blockquote line? (8+ spaces)
+                    If so, find the end of the blockquote -- i.e. search forward in the tableCell (where tableCell means the tableRow split by |) until you find the end of the blockquote (a line that doesn't have 8+ indent). Then join those lines and pass it to the autoIndent function, since this can just be handled normally (the same way as non-table input) at that point.
+                    */
+                    for (let i = 0; i < tableCell.length; i += 1) {
+                        if (tableCell[i].startsWith(" ".repeat(8))) {
+                            let j = i + 1;
+                            while (j < tableCell.length) {
+                                if (!tableCell[j].startsWith(" ".repeat(8))) {
+                                    break;
                                 }
-                                tableCell[i] = autoIndent(tableCell.slice(i, j).join('\n'));
-                                for (let k = i + 1; k < j; k += 1) {
-                                    tableCell[k] = "";
-                                }
-                                i = j - 1;
+                                j += 1;
                             }
-                            else {
-                                /* ---- Not blockquote, apply trim(), proceed if something remains: ----*/
-                                tableCell[i] = tableCell[i].trim();
-                                if (tableCell[i]) {
-                                    if (tableCell[i].startsWith("!images")) {
-                                        tableCell[i] = tableCell[i].substring("!images".length).trimStart();
-                                        tableCell[i] = imageGallery('\n' + tableCell[i]);
+                            tableCell[i] = autoIndent(tableCell.slice(i, j).join('\n'));
+                            for (let k = i + 1; k < j; k += 1) {
+                                tableCell[k] = "";
+                            }
+                            i = j - 1;
+                        }
+                        else {
+                            /* ---- Not blockquote, apply trim(), proceed if something remains: ----*/
+                            tableCell[i] = tableCell[i].trim();
+                            if (tableCell[i]) {
+                                /* ---- in-table image embed ---- */
+                                if (tableCell[i].startsWith("!images")) {
+                                    tableCell[i] = tableCell[i].substring("!images".length).trimStart();
+                                    tableCell[i] = imageGallery('\n' + tableCell[i]);
+                                }
+                                /* ---- This is a list: ---- */
+                                else if (tableCell[i].startsWith("* ") || tableCell[i].startsWith("- ")) {
+                                    let j = i + 1;
+                                    /* Similar logic as the blockquote loops above: when you find a list-formatted line, search ahead to find the end of the list. */
+                                    while (j < tableCell.length) {
+                                        if (tableCell[j].startsWith(" ".repeat(8))) {
+                                            break;
+                                        }
+                                        tableCell[j] = tableCell[j].trimStart();
+                                        if (!(tableCell[j].startsWith("* ") || tableCell[j].startsWith("- "))) {
+                                            break;
+                                        }
+                                        j += 1;
                                     }
-                                    /* ---- This is a list: ---- */
-                                    else if (tableCell[i].startsWith("* ") || tableCell[i].startsWith("- ")) {
-                                        let j = i + 1;
-                                        /* Similar logic as the blockquote loops above: when you find a list-formatted line, search ahead to find the end of the list. */
-                                        while (j < tableCell.length) {
-                                            if (tableCell[j].startsWith(" ".repeat(8))) {
-                                                break;
-                                            }
-                                            tableCell[j] = tableCell[j].trimStart();
-                                            if (!(tableCell[j].startsWith("* ") || tableCell[j].startsWith("- "))) {
-                                                break;
-                                            }
-                                            j += 1;
-                                        }
-                                        tableCell[i] = `<ul>${ tableCell.slice(i, j).map(c => `<li>${ autoFormat(c.substring(1).trimStart()) }</li>`).join('') }</ul>`;
-                                        for (let k = i + 1; k < j; k += 1) {
-                                            tableCell[k] = "";
-                                        }
-                                        i = j - 1;
+                                    tableCell[i] = `<ul>${ tableCell.slice(i, j).map(c => `<li>${ autoFormat(c.substring(1).trimStart()) }</li>`).join('') }</ul>`;
+                                    for (let k = i + 1; k < j; k += 1) {
+                                        tableCell[k] = "";
                                     }
-                                    /* ---- Paragraph: ---- */
-                                    else {
-                                        
-                                        if (tableCell[i].startsWith(".")) {
-                                            tableCell[i] = `<p class="fine">${ autoFormat(tableCell[i].substring(1).trimStart()) }</p>`;
-                                        }
-                                        else {
-                                            tableCell[i]= `<p>${ autoFormat(tableCell[i]) }</p>`;
-                                        }
+                                    i = j - 1;
+                                }
+                                /* ---- Paragraph: ---- */
+                                else {
                                     
+                                    if (tableCell[i].startsWith(".")) {
+                                        tableCell[i] = `<p class="fine">${ autoFormat(tableCell[i].substring(1).trimStart()) }</p>`;
                                     }
+                                    else {
+                                        tableCell[i]= `<p>${ autoFormat(tableCell[i]) }</p>`;
+                                    }
+                                
                                 }
                             }
                         }
-                        return `<td><div class="cell col-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }">${ tableCell.join('') }</div></td>`;
                     }
-                )
-                return `<tr class="row row-${ rowIndex + 1 } row-${ rowIndex % 2 ? 'even' : 'odd' }">${ tableRow.join('') }</tr>`;
-        }).join('')
-    }</tbody></table></div>`;
-    let first_row = chunk.substring(0, chunk.indexOf('\n'));
-    if (first_row.indexOf(' ') != -1) {
-        first_row = first_row.substring(first_row.indexOf(' ')).trim();
-    }
-    if (first_row.replace(/\s/g, '').length > 0) {
-        table += `<style>${ first_row.replace(/this/g, ".auto-table-" + table_number).replaceAll(";", "!important;") }</style>`
-    }
-    return table;
+                    return `<td class="cell col-${ cellIndex + 1 } col-${ cellIndex % 2 ? 'even' : 'odd' }"><div>${ tableCell.join('') }</div></td>`;
+                }
+            )
+            return `<tr class="row row-${ rowIndex + 1 } row-${ rowIndex % 2 ? 'even' : 'odd' }">${ tableRow.join('') }</tr>`;
+        }
+    ).join('') }</tbody></table></div>`;
 }
 function autoList(chunk, isFine_ = false) {
     const closeTags = [];
@@ -794,7 +799,6 @@ function interpreter(argValue) {
         return;
     }
     if (!argValue) return;
-    let table_number = 1;
     let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
@@ -807,7 +811,7 @@ function interpreter(argValue) {
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         chunk = codeSanitize(chunk);
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
-        if (chunk.startsWith("!table")) { return autoTable(chunk, table_number++); }
+        if (chunk.startsWith("!table")) { return autoTable(chunk); }
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
         let isFine = chunk.startsWith(".");
         if (isFine) { chunk = chunk.slice(1).trimStart(); }
@@ -868,7 +872,6 @@ function loadBody() {
                 ${ getRootPath()?`
                     <footer class="article__footer">
                         <div class="footer-recommendation">
-                            <h3>More of my content on this site:</h3>
                             <div class="panel-switcher--600">
                                 <div>
                                     <div class="line-title"><span>Recently added</span><a href="../../?tab=articles">see all</a></div>
@@ -945,11 +948,7 @@ function articleTop() {
             let d1 = new Date(pageInfo.date);
             let d2 = new Date();
             d2.setFullYear(d2.getFullYear() - 2);
-            if (d1 < d2) {
-                pageInfo.date = '<span class="date-ago">' + pageInfo.date + ' (' + (new Date().getFullYear() - d1.getFullYear()) + '+ years ago)</span>';
-            } else {
-                pageInfo.date = '<span>' + dateFromISO(pageInfo.date) + '</span>';
-            }
+            pageInfo.date = '<span>' + dateFromISO(pageInfo.date) + '</span>';
             by += pageInfo.date;
         }
         if (pageInfo.mirrors) {
