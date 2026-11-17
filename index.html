@@ -40,7 +40,7 @@
         .pages-index { color: var(--grey-4,#444); max-width: 654px; width: 100%; margin-inline: auto; }
             .pages-index > div + div { margin-top: 10px; }
         
-        .video-index { display: grid; gap: 8px 16px; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); }
+        .video-index { display: grid; gap: 12px 16px; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); }
             .video-index .video-figure { max-width: unset; width: 100%; margin-inline: auto; }
         
         .video-index.list-view { grid-template-columns: auto; gap: 6px; }
@@ -118,6 +118,22 @@ window.addEventListener('load', function() {
     else {
         document.querySelector(".main-layout.tab-buttons")?.firstElementChild.click();
     }
+    
+    {
+        const tabKey = new URLSearchParams(window.location.search).get('tab');
+        if (tabKey) {
+            if (['text','articles','text-docs'].includes(tabKey)) {
+                document.querySelector('.main-layout.tab-buttons .text-docs').click();
+            }
+            else if (['videos','video'].includes(tabKey)) {
+                document.querySelector('.main-layout.tab-buttons .videos').click();
+            }
+            else document.querySelector('.tab-buttons ' + tabKey)?.click();
+            
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+        }
+    }
+    
 })
 </script></div></body></html>
 

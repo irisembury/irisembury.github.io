@@ -4,7 +4,7 @@ const HTML = document.documentElement, toc = 1, wide = 1, unlisted = 1, unsetWid
 
 const pagesData = [
     { url:"dismal-politics-of-livestreaming",title:"The Dismal Politics of Livestreaming",date:"2026-11-15" },
-    { url:"destiny-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
+    { url:"bonnell-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
     { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:88392592,tumblr:809547051047272448,patreon:55199340",toc },
     { url:"afd-victory-2026",title:"On the AfD victory in Saxony-Anhalt",date:"2026-09-08",mirrors:"substack:214741964,tumblr:827199160807817216" },
     { url:"airport-privatization",title:"Thoughts on airport privatization",date:"2026-09-20",mirrors:"substack:216649667" },
@@ -27,6 +27,7 @@ const pagesData = [
     { url:"how-bad-is-america-really",title:"How bad is America, really?",date:"2026-07-01" },
     { url:"immigration",title:"Immigration",date:"2025-11-06",mirrors:"substack:83229652" },
     { url:"israel-palestine",title:"Israel and Palestine",date:"2025-07-27",toc,wide },
+    { url:"destiny-lawsuit",title:"Bonnell lawsuit",date:"2025-07-27",toc,unsetWidth,unlisted },
     { url:"liberalism-not-leftism",title:"Liberalism not leftism",date:"2025-09-19",mirrors:"substack:74062936,tumblr:795164683319574528,patreon:55199811" },
     { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:73066010,tumblr:794091916138594304,medium:46de1629e138" },
     { url:"lies-about-warren-clinton",title:"Lies about Elizabeth Warren and Hillary Clinton",date:"2024-12-19",mirrors:"tumblr:770730090759946240,substack:53821886" },
@@ -46,7 +47,7 @@ const pagesData = [
     { url:"why-bottom-surgery",title:"Why get bottom surgery?",date:"2025-02-09",mirrors:"tumblr:775036555284856832" }
 ];
 const videoElements = [
-    { title:"Olivia Chow wins the Toronto mayoral race",date:"2026-10-28",src:"youtube:gFBtpeRY0LM",thumb:'gFBtpeRY0LM.jpg',length:"17:18" },
+    { title:"Toronto mayoral race (Olivia Chow)",date:"2026-10-28",src:"youtube:gFBtpeRY0LM",thumb:'gFBtpeRY0LM.jpg',length:"17:18" },
     { title:"Destiny versus Finkelstein",date:"2026-10-20",src:"youtube:2jY-wfdKkyw,patreon:172891823",thumb:"172891823.jpg",length:"44:24" },
     { title:"Is Canada going to split up?",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
     { title:"Macklemore, Ed Sheeran",date:"2026-10-10",src:"youtube:_lfRiHlNFbc,patreon:172218877",thumb:"172218877.jpg",length:"41:18" },
@@ -468,13 +469,13 @@ function imageGallery(chunk) {
         row.title = row.title || row.alt || "Click to expand";
         row.alt = row.alt || row.caption;
         if (row.caption) { row.caption = '<figcaption>' + autoFormat(row.caption.replaceAll('&quot;','"')) + '</figcaption>'; }
-        return `<figure>
-            <img style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setLightbox(this)">
-            ${ row.caption }
-        </figure>`;
+        return `<figure><img onerror="console.log('image src missing? ${ row.src }'); this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22transparent%22/><text text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22sans-serif%22 x=%2250%25%22 y=%2250%25%22 fill=%22%23888%22>image src error</text></svg>';" style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setLightbox(this)">${ row.caption }</figure>`;
     }).join("")}</div>`;
     return chunk;
 }
+/*
+onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22250%22 height=%22150%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22rgba(0,0,0,0.8)%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23aaa%22 font-family=%22sans-serif%22 font-size=%2214%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>Image Error</text></svg>';">
+*/
 function autoVideo(chunk) {
     let data = chunk.split("\n").slice(1)[0].split("|").map(c => c.trim());
     let fileUrl = data[0];
@@ -545,8 +546,12 @@ function autoTable(chunk, table_number) {
                                 /* ---- Not blockquote, apply trim(), proceed if something remains: ----*/
                                 tableCell[i] = tableCell[i].trim();
                                 if (tableCell[i]) {
+                                    if (tableCell[i].startsWith("!images")) {
+                                        tableCell[i] = tableCell[i].substring("!images".length).trimStart();
+                                        tableCell[i] = imageGallery('\n' + tableCell[i]);
+                                    }
                                     /* ---- This is a list: ---- */
-                                    if (tableCell[i].startsWith("* ") || tableCell[i].startsWith("- ")) {
+                                    else if (tableCell[i].startsWith("* ") || tableCell[i].startsWith("- ")) {
                                         let j = i + 1;
                                         /* Similar logic as the blockquote loops above: when you find a list-formatted line, search ahead to find the end of the list. */
                                         while (j < tableCell.length) {
@@ -565,7 +570,7 @@ function autoTable(chunk, table_number) {
                                         }
                                         i = j - 1;
                                     }
-                                    /* ---- Not a list: ---- */
+                                    /* ---- Paragraph: ---- */
                                     else {
                                         
                                         if (tableCell[i].startsWith(".")) {
@@ -862,14 +867,17 @@ function loadBody() {
                 </div>
                 ${ getRootPath()?`
                     <footer class="article__footer">
-                        <div class="panel-switcher--600">
-                            <div>
-                                <div class="line-title"><span>Recently added</span><a href="../../?tab=articles">see all</a></div>
-                                <div class="recent-articles">${ articlesList.slice(0, 5).join('') }</div>
-                            </div>
-                            <div>
-                                <div class="line-title"><span>Recent videos</span><a href="../../?tab=videos">see all</a></div>
-                                <div class="recent-videos">${ videoElements.slice(0, 3).join('') }</div>
+                        <div class="footer-recommendation">
+                            <h3>More of my content on this site:</h3>
+                            <div class="panel-switcher--600">
+                                <div>
+                                    <div class="line-title"><span>Recently added</span><a href="../../?tab=articles">see all</a></div>
+                                    <div class="recent-articles">${ articlesList.slice(0, 5).join('') }</div>
+                                </div>
+                                <div>
+                                    <div class="line-title"><span>Recent videos</span><a href="../../?tab=videos">see all</a></div>
+                                    <div class="recent-videos">${ videoElements.slice(0, 3).join('') }</div>
+                                </div>
                             </div>
                         </div>
                     </footer>`:'' }
@@ -889,7 +897,7 @@ function loadBody() {
                     </div>
                 </div>
                 <div class="page-footer__about">
-                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. / Aspects of this site might not load ideally if you're on mobile. If you're a mobile user, I hate you and the small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. / For general inquiry: contact@irisembury.com</p>
+                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. • Aspects of this site might not load perfectly if you're on mobile. If you're a mobile user, I hate you and the small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. • For general inquiry: contact@irisembury.com</p>
                 </div>
             </footer>`);
     }
