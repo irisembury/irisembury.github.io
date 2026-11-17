@@ -112,16 +112,23 @@ function init() {
         a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(
             line => {
                 if (line.startsWith('<')) { return line; }
-                if (line.startsWith('.')) { return `<div class='fine'><p>${ autoFormat(line.substring(1).trimStart()) }</p></div>`; }
+                if (/^\.[^\. \\]/.test(line)) { return `<div class='fine'><p>${ autoFormat(line.substring(1).trimStart()) }</p></div>`; }
                 if (line.startsWith('# ')) { return `<h3>${ autoFormat(line.substring(1).trimStart()) }</h3>`; }
                 if (line.startsWith('- ') || line.startsWith('* ')) { return `<ul><li>${ autoFormat(line.substring(1).trimStart()) }</li></ul>`; }
                 return `<p>${ autoFormat(line) }</p>`
             }
         ).join('').replaceAll('</ul><ul>','');
-        a.classList.remove("auto-format");
-        if (a.classList.length == 0) {
-            a.removeAttribute("class");
-        }
+        a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); }
+    });
+    Array.from(document.querySelectorAll(".auto-format-2")).forEach(a => {
+        a.innerHTML = a.innerHTML.split("\n").filter(l => l).map(
+            line => {
+                line = line.replace(/  /g, '&nbsp;&nbsp;').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+                return `<p>${ line }</p>`
+            }
+        ).join('');
+        a.classList.remove("auto-format-2");
+        if (a.classList.length == 0) { a.removeAttribute("class"); }
     });
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = `<span title="Update to date based on birthday: ${ a.innerHTML }">${ ageFromISO(a.innerHTML) }</span>`);
@@ -351,7 +358,7 @@ function autoFormat(_string) {
         _string = _string.substring(closeTag);
     }
     output = output + afAux(_string)
-    output = output.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>')
+    output = output.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/\{([^:}]+):([^}]+)\}/g, '<span class="$1">$2</span>').replace(/\{([^}]+)\}/g, '<span class="$1"></span>');
     return output;
 }
 function afAux(str_in) {
@@ -586,7 +593,7 @@ function autoTable(chunk) {
                                 /* ---- Paragraph: ---- */
                                 else {
                                     
-                                    if (tableCell[i].startsWith(".")) {
+                                    if (/^\.[^\. \\]/.test(tableCell[i])) {
                                         tableCell[i] = `<p class="fine">${ autoFormat(tableCell[i].substring(1).trimStart()) }</p>`;
                                     }
                                     else {
@@ -619,7 +626,7 @@ function autoList(chunk, isFine_ = false) {
             li = autoFormat(li);
             if (liType =='none') {
                 if (li.startsWith("#")) { li = '<blockquote class="auto-indent"><div class="text-block">' + li.slice(1).trimStart() + '</div></blockquote>\n' }
-                if (li.startsWith(".")) { li = '<div class="fine">' + li.slice(1).trimStart() + '</div>\n' }
+                if (/^\.[^\. \\]/.test(li)) { li = '<div class="fine">' + li.slice(1).trimStart() + '</div>\n' }
                 else { li = '<div class="text-block">' + li + '</div>\n'; }
             } else { li = '<li class="text-block">' + li + '</li>' };
             li = " ".repeat(indent * 4) + li;
@@ -643,7 +650,7 @@ function autoIndent(chunk) {
         if (line.startsWith("---")) {
             line = '<p class="attribution">' + line + '</p>';
         }
-        else if (line.startsWith(".")) {
+        else if (/^\.[^\. \\]/.test(line)) {
             line = '<p class="fine">' + line.substring(1).trimStart() + '</p>'
         }
         else {
@@ -799,7 +806,7 @@ function interpreter(argValue) {
         return;
     }
     if (!argValue) return;
-    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\^", "&#94;").replaceAll("\\.","&#46;").replaceAll("...", "\u2026").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").trim().split("\n\n");
+    let input = argValue.replace(/\n\n+/g, "\n\n").replace(/\r/g, "").replace(/\t/g, "    ").replace("\\\\", "&#92;").replaceAll("\\*", "&#42;").replaceAll('\\"', "&#34;").replaceAll("\\'", "&#39;").replaceAll("\\|", "&#124;").replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;").replaceAll("\\^", "&#94;").replaceAll("\\`", "&#96;").replaceAll("\\:", "&#58;").replaceAll("\\-","&hyphen;").replaceAll("\\.", "&#46;").trim().split("\n\n");
     input = input.map( chunk => {
         if (chunk.startsWith("//")) { return ""; }
         if (chunk.startsWith("<") && !chunk.startsWith("<a")) { return chunk; }
@@ -813,7 +820,7 @@ function interpreter(argValue) {
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         if (chunk.startsWith("!table")) { return autoTable(chunk); }
         if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
-        let isFine = chunk.startsWith(".");
+        let isFine = /^\.[^\. \\]/.test(chunk);
         if (isFine) { chunk = chunk.slice(1).trimStart(); }
         if (chunk.startsWith("!list")) { chunk = autoList(chunk.substring(chunk.indexOf('\n') + 1)); }
         if (chunk.startsWith("-- ")) {
@@ -824,10 +831,10 @@ function interpreter(argValue) {
         }
         else {
             if (isFine) {
-                chunk = `<p class="fine">${ autoFormat(chunk).replaceAll('  \n','<br>') }</p>`;
+                chunk = `<p class="fine">${ autoFormat(chunk).replaceAll('  \n','<br>').replaceAll("...", "\u2026") }</p>`;
             }
             else {
-                chunk = `<p>${ autoFormat(chunk).replaceAll('  \n','<br>') }</p>`;
+                chunk = `<p>${ autoFormat(chunk).replaceAll('  \n','<br>').replaceAll("...", "\u2026") }</p>`;
             }
         }
         return chunk;

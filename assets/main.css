@@ -50,7 +50,7 @@
     html.reduce-margins .article__body > p + p, html.reduce-margins .article__body > .image-gallery.float + p { margin-top: 0px; } html.reduce-margins .article .auto-list li.text-block { margin-top: 3px; } html.reduce-margins .article .auto-list div.text-block { margin-top: 3px; }
 
     html:not(.animate) * { transition: none !important; }
-    html { word-break: break-word; color: var(--grey-2,#222); font: 16px/1.4 'Segoe UI',system-ui; background-color: var(--page-bg); scroll-padding-top: 20px; scrollbar-color: light-dark(#6f90ba,#888) light-dark(#ddd,#222); padding: 0; min-height: 100dvh; }
+    html { color: var(--grey-2,#222); font: 16px/1.4 'Segoe UI',system-ui; background-color: var(--page-bg); scroll-padding-top: 20px; scrollbar-color: light-dark(#6f90ba,#888) light-dark(#ddd,#222); padding: 0; min-height: 100dvh; }
     body { min-height: 100dvh; margin: 0; display: grid; grid-template-rows: min-content 1fr auto; }
 
     .gear { z-index: 3; }
