@@ -90,7 +90,7 @@
             .menu.open ~ .toc-btn { border-color: light-dark(#adadad,#252525); }
             .toc-btn { display: none; width: 40px; height: 36px; border-radius: 3px; background-color: light-dark(#fff,#1D1D1F); border: 1px solid light-dark(#e8e8e8,#272727); color: light-dark(#333,#aaa); cursor: pointer; top: 12px; left: 13px; position: fixed; justify-content: center; align-items: center; z-index: 2; }
 
-        .article { font: 17px/1.6 'Georgia Pro Digits',Georgia,'Georgia Pro',Roboto,sans-serif; background-color: var(--content-bg); padding: 50px; width: 100%; max-width: var(--main-width); }
+        .article { font: 17px/1.6471 'Georgia Pro Digits',Georgia,'Georgia Pro',Roboto,sans-serif; background-color: var(--content-bg); padding: 50px; width: 100%; max-width: var(--main-width); }
             .article .article__top { margin-bottom: 24px; }
             .article .article__top > * { margin: 0; }
                 .article .article__top h1 { font: 700 40px/1.2 Lora,sans-serif; color: light-dark(black,white); }
