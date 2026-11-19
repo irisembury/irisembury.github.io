@@ -6,16 +6,17 @@
 .auto-table .image-gallery { max-width: 100%; width: 400px; margin-top: 0.5em; }
 .auto-table .image-gallery img { aspect-ratio: 1.5; object-fit: contain; }
 
+.article .article__body mark { background-color: light-dark(#f1e3ff,#4a4056); color: inherit; }
+
 .footer-recommendation, .page-footer__links { display: none; }
 
-    .timeline.auto-table { max-width: 1300px; margin-inline: auto; }
+    .timeline.auto-table { max-width: 1300px; margin-inline: auto; word-break: break-all; }
     .timeline.auto-table td { min-height: 100px; padding-block: 10px; font: 15px/19px Arial,sans-serif; }
     .timeline.auto-table .col-1 { max-width: 254px; }
     .timeline.auto-table .col-1 img { max-width: 200px; }
     .timeline.auto-table tr + tr { border-block: 1px solid var(--grey-c,silver); }
     .timeline .col-2 {
         position: relative;
-        height: 1px;
         width: 100%;
     }
     .timeline .col-2 div {
@@ -59,30 +60,31 @@ Not everything, but key files from the docket that I picked out for their import
 <style>
 .files a { text-decoration: none; }
 .files .cell { padding-inline: 10px; }
+.files .row-1 .cell { font-weight: 600; white-space: nowrap; }
 .files .col-1 { text-align: center; }
 .files tr:nth-child(n+2) .col-1 { padding-left: 1em; font-family: Consolas,monospace; }
 </style>
 
 !table files
-**Docket number** 
-1 | [2025-02-18: Doe initial complaint.pdf](media/2025-02-18-doe-initial-complaint.pdf)
-24 | [2025-04-04: Doe subpoena list.pdf](media/2025-04-04-doe-subpoena-list.pdf)
-42 | [2025-04-25: Bonnell opposition to injunction.pdf](media/2025-04-25-bonnell-opposition-to-injunction.pdf)
+Docket number | Filed by | Document
+1 | Pxie | [2025-02-18: Doe initial complaint.pdf](media/2025-02-18-doe-initial-complaint.pdf)
+24 | Pxie | [2025-04-04: Doe subpoena list.pdf](media/2025-04-04-doe-subpoena-list.pdf)
+42 | Bonnell | [2025-04-25: Bonnell opposition to injunction.pdf](media/2025-04-25-bonnell-opposition-to-injunction.pdf)
     [2025-04-25: Bonnell affidavit.pdf](media/2025-04-25-bonnell-affidavit.pdf)
     [exh. A](media/2025-04-25-document-42-exhibit-a.pdf) / [exh. B](media/2025-04-25-document-42-exhibit-b.pdf) / [exh. C](media/2025-04-25-document-42-exhibit-c.pdf) / [exh. D](media/2025-04-25-document-42-exhibit-d.pdf) / [exh. E](media/2025-04-25-document-42-exhibit-e.pdf) / [exh. F](media/2025-04-25-document-42-exhibit-f.pdf) / [exh. G](media/2025-04-25-document-42-exhibit-g.pdf) / [exh. H](media/2025-04-25-document-42-exhibit-h.pdf) / [exh. I](media/2025-04-25-document-42-exhibit-i.pdf)
-49 | [2025-05-02: Doe declaration](media/2025-05-02-doe-declaration.pdf)
+49 | Pxie | [2025-05-02: Doe declaration](media/2025-05-02-doe-declaration.pdf)
     [2025-05-02: affidavit of declarant 1 - Abbymc](media/2025-05-02-affidavit-declarant-1-abbymy.pdf)
     [2025-05-02: affidavit of declarant 2](media/2025-05-02-affidavit-declarant-2.pdf)
     [2025-05-02: affidavit of declarant 3](media/2025-05-02-affidavit-declarant-3.pdf)
-50 | [exh. A](media/2025-05-03-document-50-exhibit-a.pdf) / [exh. B](media/2025-05-03-document-50-exhibit-b.pdf) / [exh. C](media/2025-05-03-document-50-exhibit-c.pdf)
-51 | [exh. D](media/2025-05-03-document-51-exhibit-d.pdf) / [exh. E](2025-05-03-document-51-exhibit-e.pdf) / [exh. F](2025-05-03-document-51-exhibit-f.pdf)
-52 | [exh. G](media/2025-05-03-document-51-exhibit-g.pdf) / [exh. H](2025-05-03-document-51-exhibit-h.pdf) / [exh. I](2025-05-03-document-51-exhibit-i.pdf)
-91 | [2025-06-06: Preliminary Injunction hearing](media\2025-06-06-hearing.pdf)
-    This was published to the docket on June 6th but sealed until an 2025-10-27 order to unseal (document 154).
-204 | [2026-01-07: Rose deposition.pdf](media/2026-01-07-rose-deposition.pdf)
-269 | [2026-05-30: Bonnell deposition (excerpt).pdf](media/2026-05-30-bonnell-deposition-excerpt.pdf)
+50 | Pxie | [exh. A](media/2025-05-03-document-50-exhibit-a.pdf) / [exh. B](media/2025-05-03-document-50-exhibit-b.pdf) / [exh. C](media/2025-05-03-document-50-exhibit-c.pdf)
+51 | Pxie | [exh. D](media/2025-05-03-document-51-exhibit-d.pdf) / [exh. E](media/2025-05-03-document-51-exhibit-e.pdf) / [exh. F](media/2025-05-03-document-51-exhibit-f.pdf)
+52 | Pxie | [exh. G](media/2025-05-03-document-51-exhibit-g.pdf) / [exh. H](media/2025-05-03-document-51-exhibit-h.pdf) / [exh. I](media/2025-05-03-document-51-exhibit-i.pdf)
+90 | Court | [2025-06-06: Preliminary Injunction hearing](media/2025-06-06-hearing.pdf)
+    This was published to the docket on 2025-06-06 but sealed until an 2025-10-27 order to unseal (document 154).
+204 | Court | [2026-01-07: Rose deposition.pdf](media/2026-01-07-rose-deposition.pdf)
+269 | Court | [2026-05-30: Bonnell deposition (excerpt).pdf](media/2026-05-30-bonnell-deposition-excerpt.pdf)
     The deposition was held on 2026-04-30. First a limited excerpt was released, then a fuller one in October.
-293 | [2026-08-20: Bonnell deposition (full).pdf](media/2026-08-20-bonnell-deposition.pdf)
+293 | Court | [2026-08-20: Bonnell deposition (full).pdf](media/2026-08-20-bonnell-deposition.pdf)
 
 *Files are named by when they were made available on the docket, not by when the recorded events happened.*
 
@@ -442,7 +444,7 @@ src: media/2024-12-12-1-bonnell-pxie.png | caption: Pxie's description: "Destiny
     * [document 52, exhibit I](https://www.courtlistener.com/docket/69650487/51/1/doe-v-bonnell/)
     * [mirror](media/2025-05-03-document-51-exhibit-d.pdf)
     |
-    Kiwi Farms
+    **Kiwi Farms**
     .@KiwiFarmsDotNet
     The Surge of traffic to the Kiwi Farms related to Destiny's blowjob video has caused a fatal database error and I will need to do a rollback to a recent bakcup.
     .4:03 PM · Nov 30, 2024
@@ -475,6 +477,48 @@ src: media/2024-12-12-1-bonnell-pxie.png | caption: Pxie's description: "Destiny
     Not really sure how I can prove the revenge porn angle, it would seem that only the girls involved or Steven himself would be able to confirm that.
     I will say while I don't want to Dox Rose myself, and she probably wouldn't be happy about it either. Anyone here is free to do so if they can, I knew the risks of leaking all this stuff in the first place so you won't hear me complaining if it happens.
     Am I missing anything?
+**2024 December 5**
+    !images src:media/2024-12-05-pxie-bonnell.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 51, exhibit F](https://www.courtlistener.com/docket/69650487/51/3/doe-v-bonnell/);
+    * [mirror (pdf)](media/2025-05-03-document-51-exhibit-f.pdf)
+    |
+    **Pxie** 12/5/24, 1:01 AM
+    Another website to remove it from please
+    https
+**2024 December 5**
+    !images src:media/2024-12-05-pxie-bonnell-2.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 51, exhibit F](https://www.courtlistener.com/docket/69650487/51/3/doe-v-bonnell/);
+    * [mirror (pdf)](media/2025-05-03-document-51-exhibit-f.pdf)
+    |
+    **Destiny** 12/5/24, 1:23 AM
+    holy fuck I cannot find a DMCA/email/contact or anything off of this
+    where was this site linked off of? is it linked from KF or something?
+    **Destiny** 12/5/24, 1:42 AM
+    Okay I emailed the registrar, "namesake", so it should be removed once they respond
+    I asked around about removing material online and a friend sent me this:
+    "im guessing you know this already but if you don't, there's also this forum if you want stuff taken off of google search results if thesite itself wont remove the video, google will not show the site anymore if people try to find it https://support.google.com/websearch/answer/6302812?sjid=958594866788839361-NC
+    **Pxie** 12/5/24, 1:56 AM
+    I found it here, I assume someone downloaded from kw and then uploaded here.
+    https://www.reddit.com/r/LengfOrGirf/comments/1h3gbta/comment/m0g388a/?utm_source=share?utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+**2024 December 5**
+    !images src:media/2024-12-05-pxie-bonnell-3.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 51, exhibit F](https://www.courtlistener.com/docket/69650487/51/3/doe-v-bonnell/);
+    * [mirror (pdf)](media/2025-05-03-document-51-exhibit-f.pdf)
+    |
+    **Destiny** 12/5/24, 1:57 AM
+    kk, you're reporting the comments as well, right? I reported
+    **Pxie** 12/5/24, 1:58 AM
+    yes
+    well i'm using the google form
+    how do you report the comments?
+    **Destiny** 12/5/24, 2:04 AM
+    Just click the report button near the comment, I already did it, though
+    **Pxie** 12/5/24, 2:08 AM
+    and they dont get a file of the report/your name right?
+    https://www.reddit.com/r/LengfOrGirf/comments/1h3gbta/comment/m0g36hw/?utm_source=share?utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
 **2024 December 12**
     !images src:media/2024-12-12-1-bonnell-pxie.png
     image source: uploaded by Pxie on [her Substack post](#Pxie's_Substack)
@@ -580,12 +624,42 @@ src: media/2024-12-12-1-bonnell-pxie.png | caption: Pxie's description: "Destiny
     Destinygg 2025-01-23 \| 11:05:41 (CST) **destiny:** !ipban Gorm
     Destinygg 2025-01-23 \| 11:05:38 (CST) **destiny:** anyway, like I said before, I've definitely made mistakes and fucked up, all I can do is promise to do better and change behavior going forward, I'll figure out and settle what needs to be settled in the background, if it's too much then leave, if not then welcome to 2025
 **2025 January 30**
-    !images src:2025-01-30-bonnell-chat.png
+    !images src:media/2025-01-30-bonnell-chat.png
     image source: exhibit in legal filing, by Pxie's side;
     * [document 51, exhibit E](https://www.courtlistener.com/docket/69650487/51/2/doe-v-bonnell/);
     * [mirror (pdf)](media/2025-05-03-document-51-exhibit-e.pdf)
     |
-**2025 February 2**
+    [2025-01-30 21:18:04.654 UTC] deegeejeepers: Destiny to be clear if she said yes i want those videos what would you have PepoThink
+    [2025-01-30 21:18:05.672 UTC] vyneer: Keah PepoG yeah that doesnt seem that hard
+    [2025-01-30 21:18:06.612 UTC] archer: REE
+    [2025-01-30 21:18:07.690 UTC] larrypenos: gpt71 can you summarize what or who's "kiwi farms" for someone who got here like a month ago
+    [2025-01-30 21:18:08.307 UTC] archer: REE Chatting
+    [2025-01-30 21:18:09.395 UTC] typez: hesRight
+    [2025-01-30 21:18:08.607 UTC] cotions: OMEGALUL
+    [2025-01-30 21:18:09.721 UTC] eisenhead: Darius DankWave
+    [2025-01-30 21:18:09.764 UTC] erraticmensch: > MAKE DARIUS A DGG MOD CINEMA > MAKE DARIUS A DGG MOD CINEMA
+    [2025-01-30 21:18:10.688 UTC] gpt71: LarryPenos Kiwi Farms is an online forum known for its controversial discussions, often centered around internet personalities and drama, but it has changed significant backlash for its harsh and often problematic content. FeelsOkayMan
+    [2025-01-30 21:18:12.713 UTC] sp00nerluv: Darius is at his best when he's not driving around in cars, content is real this afternoon
+    [2025-01-30 21:18:14.024 UTC] destiny: deegeejeepers I'D PROBABLY JUST TELL HER TO GO TO KF LOL
+**2025 February 9**
+    !images src:media/2025-02-09-bonnell-twitter.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 52, exhibit h](https://www.courtlistener.com/docket/69650487/52/2/doe-v-bonnell/)
+    * [mirror (pdf)](media/2025-05-03-document-52-exhibit-h.pdf)
+    *original tweet was deleted*
+    |
+    **Destiny \| Steven Bonnell II**
+    .@TheOmniLiberal
+    I just wanna say how absolutely fucking hilarious it is that you fat soy fucks were screeching and screaming about how horrible and evil cancel culture is and the #metoo shit was, "innocent until proven guilty!!!!" but you're super content to take a side on this because of where the popular support is when only one side has spoken.
+    I'll respond with more substance when I can, but I'm being attacked by people who have literally nothing to lose and everything to gain by saying whatever insane shti they can publicly while trying to squeeze me, legally, privately, which puts me in the most annoying fucking spot imaginable when dealing with dipshits like you.
+    If you really want to show your nuts, why not attack places like Kiwifarms WHERE THE CONTENT IS LITERALLY STILL BEING HOSTED AND BLASTED TO THE WORLD? Oh, because that's a scarier party to go after, eh.
+    Talk about cowards.
+    **Nicholas DeOrio** @nicholasdeorio
+    .Replying to @nicholasdeorio
+    Also this goes without saying, idrc if you like my Hasan/Ethan coverage. If you think Destiny should still have a career as a respected political creator after what he did to Pxie, I invite you to unsubscribe unfollow so I don't have to go through the trouble of purging you
+    Show more
+    .11:59 AM · Feb 9, 2025
+**2025 February 20**
     !images src:media/2025-02-20-pxie-twitter.png
     [twt-1](https://x.com/pxielovee/status/1892683978592698817) / [twt-2](https://x.com/pxielovee/status/1892683981570621923) / [twt-3](https://x.com/pxielovee/status/1892683983315714207)
     that first tweet had 3 images attached:
@@ -606,8 +680,21 @@ src: media/2024-12-12-1-bonnell-pxie.png | caption: Pxie's description: "Destiny
     **Pxie** @pxielovee · Feb 20, 2025
     Destiny, you were the second person I ever slept with. I thought I could trust you, now you're using the intimate details of my life against me. I need you to stop. You already shared some of my most intimate moments for the world to see, why are you forcing me to share more? What do you gain from this?
     .4:13 PM · Feb 20, 2025
-
-
+**2025 April 28**
+    !images src:media/2025-04-28-bonnell-pxie.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 52, exhibit K](https://www.courtlistener.com/docket/69650487/53/2/doe-v-bonnell/)
+    * [mirror (pdf)](media/2025-05-03-document-53-exhibit-k.pdf)
+    references:
+    * Bonnell's tweet was deleted
+    * Pxie's tweet [here](https://x.com/i/status/1916874271550243135)
+    |
+    **Destiny \| Steven Bonnell II**
+    .@TheOmniLiberal
+    Ngl it's kind of distressing to have thousands of people believe blatant lies about you with little to no basis in reality 🥲
+    .11:20 AM · 4/28/25
+    **Pxie** @pxielovee
+    Ngl it's kind of distressing to have thousands of people believe blatant lies about you with little to no basis in reality 🥲
 
 
 
@@ -619,13 +706,77 @@ src: media/2024-12-12-1-bonnell-pxie.png | caption: Pxie's description: "Destiny
 
 # Court transcripts
 
-*The files that Bonnell shared with Rose were leaked by somebody who goes by the pseudonym Solo.*
+## Hearings
+
+### Preliminary injunction hearing, June 3
+
+There was a hearing attended by Bonnell and Pxie on June 3, 2025. This was about whether the court would issue a restraining order and preliminary injunction. The court identifies it as "a preliminary injunction case" on page 4.
+
+Courtlistener: [https://www.courtlistener.com/docket/69650487/90/doe-v-bonnell/](https://www.courtlistener.com/docket/69650487/90/doe-v-bonnell/)  
+mirror: [2025-06-06-hearing.pdf](media/2025-06-06-hearing.pdf)
+
+Select parts:
+
+<h4 class="depo-page-label">pg <a href="media/2025-06-06-hearing.pdf#page=13">13–14</a>:</h4>
+<div class="depos auto-format-2">
+BY MR. LAGE:
+    **Q. So, Ms. Doe, at some point <mark>was any of the content from your encounter, sexual encounter with Mr. Bonnell circulated, to your knowledge?</mark>**
+    A. Like publicly or?
+    **Q. Well, how -- was it ever circulated in any fashion?**
+    A. <mark>I sent it to my previous partner</mark>, and that was it.
+    **Q. Was there consent from Mr. Bonnell?**
+...
+BY MR. LAGE:
+    **Q. Was that with Mr. Bonnell's consent?**
+    A. Yes.
+    **Q. All right. Did there come a time that Mr. Bonnell disseminated your video to any other individuals without your consent?**
+    A. Yes.
+    **Q. All right. And when did he do that?**
+    A. He apparently did this on multiple occasions.
+</div>
+<h4 class="depo-page-label">pg <a href="media/2025-06-06-hearing.pdf#page=16">16</a>:</h4>
+<div class="depos auto-format-2">
+    **Q. What other occasions are you aware of that he shared it with other individuals without your consent?**
+    A. After I spoke about this issue and what was happening, I found out that the Abby MC apparently received a video of me in 2023. I also -- I got a couple of messages as well of people who said that they think that they received a video of me. <mark>One of those people said that they think that their sister received a video of me or that the sister recognized me from a video just a few months ago, but, unfortunately, some of these people have deleted their accounts.</mark>
+</div>
+<h4 class="depo-page-label">pg <a href="media/2025-06-06-hearing.pdf#page=22">22</a>:</h4>
+<div class="depos auto-format-2">
+    **THE COURT: Well, let me ask you this question: Did they know about your relationship with the Defendant?**
+    (No audible response.)
+    **THE COURT: Okay. And who all -- did other people know?**
+    THE WITNESS: Only -- there should have been only two people who should have known, my ex-boyfriend and Steven's ex-wife, Melina. And to be clear, I told -- like, I told him he could tell her, but I didn't say anything about showing her anything, but those were the only two people who should have.
+</div>
+<h4 class="depo-page-label">pg <a href="media/2025-06-06-hearing.pdf#page=38">38–40</a>:</h4>
+<div class="depos auto-format-2">
+BY MR. BRETTLER:
+    **Q. It was your idea, Ms. Doe, to make a sexually explicit video with Mr. Bonnell, correct?**
+    A. That I'm not completely sure of.
+    Q. On March 19th, 2020, at 5:12 in the morning --
+    **THE COURT: I thought you said that he suggested it. Did I misunderstand that?**
+    THE WITNESS: No, I'm pretty -- well, again, like, I don't have the messages, so it's hard for me to exactly recall. I remember him sending me something of Melina's earlier on, and me assuming, oh, like, do you want to make videos together? As a response to that. But, again, I don't have the messages, I can't recall perfectly, but that's --
+    **THE COURT: It's possible that you brought up the topic of recording with him?**
+    THE WITNESS: It's possible.
+    **THE COURT: Okay.**
+    ...
+BY MR. BRETTLER:
+    **Q. Not only is it possible, but on March 19th, 2020, at 5:12 in the morning, do you recall sending a message to Mr. Bonnell: Mmm, it's going to be so nice when you do, question mark. Would you want to make some videos together? And Mr. Bonnell responded at 5:13, one minute later: If you want to, yeah, for sure. Do you remember that exchange?**
+    A. Yeah, and I remember before that was when he sent the stuff about Melina, but, yeah, continue.
+    **Q. So, does that impact your testimony at all that it was Mr. Bonnell's idea to make the video? Or do you now realize that you were the one that first raised the idea about making videos together?**
+    A. What I claimed was that he sent me Melina's stuff, and as a response to that, I was like: Oh, do you want to make stuff together? Because I thought him sending Melina's stuff was like, oh, yeah, like, you know, he's into recording stuff.
+    **Q. My question was: Does it refresh your recollection that it was your idea to actually suggest making a video with Mr. Bonnell?**
+    A. I'm trying to think how to phrase this in a way that makes sense. If I'm like. All right, I'll use this analogy. If I have like a cup of water, and I drink it, and I'm like, oh, my God, you know, water is really cool, I love water. You know, water's awesome. And you go, oh, hey, do you want some water? Because you keep, you know, you sat here talking about water. Is it -- okay -- I'm not sure how to phrase this. The way that --
+    **THE COURT: Well, is it safe to say you're not sure whether it was your idea or his idea initially?**
+    THE WITNESS: Yeah, because --
+</div>
+
 
 ## Depositions
 
 ### Rose depo
 
 Rose was deposed on 2026-01-07.
+
+*The files that Bonnell shared with Rose were leaked by somebody who goes by the pseudonym Solo.*
 
 CourtListener: [https://www.courtlistener.com/docket/69650487/204/1/doe-v-bonnell/](https://www.courtlistener.com/docket/69650487/204/1/doe-v-bonnell/)  
 mirror: [2026-01-07-rose-deposition.pdf](media/2026-01-07-rose-deposition.pdf)
