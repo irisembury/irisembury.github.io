@@ -56,7 +56,6 @@ const videoElements = [
     { title:"Mark Carney",date:"2026-08-18",src:"youtube:5fsJUueUvpw,patreon:167033503",thumb:"167033503.jpg",length:"13:54" },
     { title:"Am I a liberal?",date:"2026-08-11",src:"youtube:QPNCs5A3iYo,patreon:166429634",length:"16:26",thumb:"166429634.jpg" },
     { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:ilB3j3BTCTI,patreon:164228303",thumb:"164228303.jpg",length:"2:41:06" },
-    { title:"Canada is under attack",date:"2026-08-09",src:"youtube:jpigB1SmCcA,patreon:166242253",length:"16:21",thumb:"166242253.jpg" },
     { title:"How should we feel about floor crossers?",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
     { title:"Liberalism not Leftism",date:"2026-05-06",src:"youtube:DgGf_g4aGYA,patreon:157517952",thumb:"157517952.jpg",length:"41:15" },
     { title:"Liberal Conservatism",date:"2026-04-07",src:"youtube:Sy33HSFsuu8,patreon:154996870",thumb:"154996870.jpg",length:"2:03:13" },

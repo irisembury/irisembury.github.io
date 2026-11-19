@@ -3,13 +3,31 @@
 .article { font: 17px/1.5 Roboto,Arial,sans-serif; }
 .article img { object-fit: contain; }
 .image-gallery { margin-inline: unset; }
-.auto-table.timeline .col-1 { max-width: 145px; }
-html.unset-width .auto-table.timeline .col-1 { max-width: 190px; }
 .auto-table .image-gallery { max-width: 100%; width: 400px; margin-top: 0.5em; }
 .auto-table .image-gallery img { aspect-ratio: 1.5; object-fit: contain; }
-.auto-table.timeline td { padding-block: 10px; font: 15px/19px Arial,sans-serif; }
-.auto-table.timeline tr + tr { border-block: 1px solid var(--grey-c,silver); }
+
 .footer-recommendation, .page-footer__links { display: none; }
+
+    .timeline.auto-table { max-width: 1300px; margin-inline: auto; }
+    .timeline.auto-table td { min-height: 100px; padding-block: 10px; font: 15px/19px Arial,sans-serif; }
+    .timeline.auto-table .col-1 { max-width: 254px; }
+    .timeline.auto-table .col-1 img { max-width: 200px; }
+    .timeline.auto-table tr + tr { border-block: 1px solid var(--grey-c,silver); }
+    .timeline .col-2 {
+        position: relative;
+        height: 1px;
+        width: 100%;
+    }
+    .timeline .col-2 div {
+        position: absolute;
+        overflow-y: auto;
+        inset: 10px 5px;
+        padding: 1px 5px;
+    }
+
+    .paper-esque.auto-table { margin-left: 1em; max-width: 824px; border: 2px solid var(--grey-c,silver); }
+    .paper-esque.auto-table td { padding: 20px 24px; }
+    .paper-esque.auto-table td p { margin-top: 0.5em; }
 </style>
 <main id="page">
 
@@ -34,39 +52,75 @@ The defense:
 2. Regardless of the truth value of (1), Bonnell shared this video prior to the relevant law being enacted, ergo the court cannot punish him for violating a law before it existed (this would be *ex post facto* enforcement, which is illegal per the U.S. Constitution).
 
 
-# Key files
+## Files
 
 Not everything, but key files from the docket that I picked out for their importance:
 
--- [2025-02-18: Doe initial complaint.pdf](media/2025-02-18-doe-initial-complaint.pdf)
--- [2025-04-04: Doe subpoena list.pdf](media/2025-04-04-doe-subpoena-list.pdf)
--- [2025-04-25: Bonnell response.pdf](media/2025-04-25-bonnell-response.pdf)
--- [2025-04-25: Bonnell opposition to injunction.pdf](media/2025-04-25-bonnell-opposition-to-injunction.pdf)
--- [2026-01-07: Rose deposition.pdf](media/2026-01-07-rose-deposition.pdf)
--- [2026-08-20: Bonnell deposition (full).pdf](media/2026-08-20-bonnell-deposition.pdf)
--- [2026-08-20: Bonnell deposition (excerpt).pdf](media/2026-08-20-bonnell-deposition-excerpt.pdf)
+<style>
+.files a { text-decoration: none; }
+.files .cell { padding-inline: 10px; }
+.files .col-1 { text-align: center; }
+.files tr:nth-child(n+2) .col-1 { padding-left: 1em; font-family: Consolas,monospace; }
+</style>
+
+!table files
+**Docket number** 
+1 | [2025-02-18: Doe initial complaint.pdf](media/2025-02-18-doe-initial-complaint.pdf)
+24 | [2025-04-04: Doe subpoena list.pdf](media/2025-04-04-doe-subpoena-list.pdf)
+42 | [2025-04-25: Bonnell opposition to injunction.pdf](media/2025-04-25-bonnell-opposition-to-injunction.pdf)
+    [2025-04-25: Bonnell affidavit.pdf](media/2025-04-25-bonnell-affidavit.pdf)
+    [exh. A](media/2025-04-25-document-42-exhibit-a.pdf) / [exh. B](media/2025-04-25-document-42-exhibit-b.pdf) / [exh. C](media/2025-04-25-document-42-exhibit-c.pdf) / [exh. D](media/2025-04-25-document-42-exhibit-d.pdf) / [exh. E](media/2025-04-25-document-42-exhibit-e.pdf) / [exh. F](media/2025-04-25-document-42-exhibit-f.pdf) / [exh. G](media/2025-04-25-document-42-exhibit-g.pdf) / [exh. H](media/2025-04-25-document-42-exhibit-h.pdf) / [exh. I](media/2025-04-25-document-42-exhibit-i.pdf)
+49 | [2025-05-02: Doe declaration](media/2025-05-02-doe-declaration.pdf)
+    [2025-05-02: affidavit of declarant 1 - Abbymc](media/2025-05-02-affidavit-declarant-1-abbymy.pdf)
+    [2025-05-02: affidavit of declarant 2](media/2025-05-02-affidavit-declarant-2.pdf)
+    [2025-05-02: affidavit of declarant 3](media/2025-05-02-affidavit-declarant-3.pdf)
+50 | [exh. A](media/2025-05-03-document-50-exhibit-a.pdf) / [exh. B](media/2025-05-03-document-50-exhibit-b.pdf) / [exh. C](media/2025-05-03-document-50-exhibit-c.pdf)
+51 | [exh. D](media/2025-05-03-document-51-exhibit-d.pdf) / [exh. E](2025-05-03-document-51-exhibit-e.pdf) / [exh. F](2025-05-03-document-51-exhibit-f.pdf)
+52 | [exh. G](media/2025-05-03-document-51-exhibit-g.pdf) / [exh. H](2025-05-03-document-51-exhibit-h.pdf) / [exh. I](2025-05-03-document-51-exhibit-i.pdf)
+91 | [2025-06-06: Preliminary Injunction hearing](media\2025-06-06-hearing.pdf)
+    This was published to the docket on June 6th but sealed until an 2025-10-27 order to unseal (document 154).
+204 | [2026-01-07: Rose deposition.pdf](media/2026-01-07-rose-deposition.pdf)
+269 | [2026-05-30: Bonnell deposition (excerpt).pdf](media/2026-05-30-bonnell-deposition-excerpt.pdf)
+    The deposition was held on 2026-04-30. First a limited excerpt was released, then a fuller one in October.
+293 | [2026-08-20: Bonnell deposition (full).pdf](media/2026-08-20-bonnell-deposition.pdf)
+
+*Files are named by when they were made available on the docket, not by when the recorded events happened.*
 
 
-# Starting facts
+## Facts
 
-At the onset of the case, these facts were easily established and agreed upon:
+**When did they first meet?**
 
--- Bonnell and Pxie met in late 2019, probably October. They had a sexual relationship by March 2020, talking sexually and discussing future sexual encounters.
--- Bonnell was in an open relationship (partner's name: Melina Goransson).
--- Prior to their legal dispute, both people had shared videos with each other of their past sexual encounters.
+Bonnell recalls he first met Pxie in late 2020, likely October (see [Bonnell's 2026-04-30 deposition](media/2026-08-20-bonnell-deposition.pdf#page=31), pg. 30). Pxie implies, in her initial complaint, [pg. 3, para. 10](media/2025-02-18-doe-initial-complaint.pdf#page=3), that she first talked to him 2 years prior, describing September 2020 as "approximately two years later." However, they seem to agree they first met in September 2020, which is when they recorded the videos that would later be leaked in November 2025.
 
-Statements made by Pxie via social media (**not** in legal filings):
+**When was a video that depicted Pxie shared with Rose?**
+
+This question is critical to the case as it determines whether the law in question even applies. If Bonnell shared the video no later than **October 1, 2022**, then the court has no authority to punish him for that transmission under the law being cited. This is because [15 U.S. Code § 6851](https://www.law.cornell.edu/uscode/text/15/6851) was passed on March 15, 2022 as part of legislation called the [Consolidated Appropriations Act, 2022](https://www.congress.gov/117/plaws/publ103/PLAW-117publ103.pdf), which specifies that it doesn't come into effect until October of the next fiscal year. (In the U.S., a "fiscal year" means from October 1st until September 30th the following year. Fiscal years are identified by the later of the two years they include, e.g. from 2021-10-01 to 2022-09-30 is called Fiscal Year 2022, or FY22.)
+
+This means all other facts notwithstanding, if the transmission cannot be shown to have occurred later than 2022-09-30, the lawsuit would be dismissed. Bonnell provided an exhibit showing the transmission to Rose, which he claims was the video depicting Pxie, occurring on 2022-04-09.
+
+<style>
+.gifsfdh { ; }
+.gifsfdh .col-1 { max-width: 300px; }
+.gifsfdh .col-1 img { aspect-ratio: unset; }
+.gifsfdh .col-2 { vertical-align: middle; max-width: 600px; }
+</style>
+
+!table gifsfdh
+!images src:media/PLAW-117publ103-effective-date.png | "[T]he amendments made by this Act shall not take effect until October 1 of the first fiscal year beginning after the date of enactment of this Act."
+
+**Statements made by Pxie via social media** (i.e. **not** in legal filings):
 
 * **Substack**:
     * "When I was 19 (over 5 years ago) I was extremely sexually inexperienced and sheltered"
-    * Bonnell "non-consensually shared pornographic content of me online"
+    * "[Bonnell] non-consensually shared pornographic content of me online"
     * "he distributed pornographic content of me"
     * "to a random 19 year old e-girl discord kitten whom he had never met"
     * "I am at least the third person he has done this to"
     * "it is just as likely that he used her as a proxy to widely distribute this material"
     * "I do not understand why Destiny would knowingly and willingly put me in a position where I would receive non-stop sexual abuse and harassment"
 * **Twitter**/**Bluesky**:
-    * "Destiny non consensually shared my nudes, making me a victim of revenge porn" (she said the same thing on [Twitter](https://x.com/pxielovee/status/1881382195891515559) and [Bluesky](https://bsky.app/profile/pxie.bsky.social/post/3lgdw2sxm2c2h)\)
+    * "Destiny non consensually shared my nudes, making me a victim of revenge porn"
 * **Discord**:
     * "I have never ever sent videos of other people to steven ever"
 
@@ -78,13 +132,81 @@ Facts that later came to light:
 
 ***
 
+# Pxie's public allegations
+
+Before the first legal complaint was filed on February 18, Pxie made public accusations toward Bonnell on Twitter and Bluesky, which linked to a Substack post elaborating on those accusations. She also linked (on Twitter, Substack, and Bluesky) to a fundraiser on a website called GiveSendGo, asking for money to pay for legal fees.
+
+-- Pxie's [Twitter post](https://x.com/pxielovee/status/1881382195891515559)
+-- Pxie's [Bluesky post](https://bsky.app/profile/pxie.bsky.social/post/3lgdw2sxm2c2h)
+
+The fundraiser was originally at [https://www.givesendgo.com/suedestiny](https://www.givesendgo.com/suedestiny), but this was later removed.
+
+-- archive.org: [https://web.archive.org/web/20250121075021/https://www.givesendgo.com/suedestiny](https://web.archive.org/web/20250121075021/https://www.givesendgo.com/suedestiny)
+-- archive.is: [https://archive.is/GkC9U](https://archive.is/GkC9U)
+
+Here's a searchable copy of what it said on the GiveGoSend fundraiser page:
+
+!table paper-esque
+Suing Destiny Steven Kenneth Bonnell II
+    On November 29th I learned that Destiny had non-consenually shared pornographic images of me towards others. If you wish to read more details of the situation here is my official statement below:
+    https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell
+    I will be suing him for violating US Federal Code, 15 U.S.C. § 6851; Civil action relating to disclosure of intimate images and for Publication of Private Facts in Florida. I will be seeking emotional and punitive damages for his actions. I currently do not have the funds to protect myself or pursue legal action to the fullest extent, and have been told a case like this can cost over tens of thousands of dollars. If by miracle there is a surplus of funds (although this is extremely unlikely), it will be split between the endless amount of therapy I will need to receive and donated to charity that focuses on sexual abuse victims.
+    Please help me bring this man to justice. 
+
+# Pxie's Substack
+
+The Substack post made by pxie was originally at [https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell](https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell), but this was later removed.
+
+-- archive.org: [https://web.archive.org/web/20250121025923/https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell](https://web.archive.org/web/20250121025923/https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell)
+-- archive.is: [https://archive.is/9Z7Op](https://archive.is/9Z7Op)
+-- screen capture: [2025-01-20-pxie-substack-screenshot.png](media/2025-01-20-pxie-substack-screenshot.png)
+
+Below is a searchable copy of the original text of the Substack post, including the inline links she included.
+
+!table paper-esque
+I will be suing Steven Kenneth Bonnell II
+    On November 29th, I learned that the streamer Destiny had non-consensually shared pornographic content of me online. My dignity, peace of mind, and hopes for the future, were stripped away in a mere matter of seconds following the betrayal of someone I previously trusted.
+    I am at least the third person he has done this to. I hope to be the last. I will not be commenting on the experience of the other women he has hurt, as it is not my place or story to tell. I will however share my story in the hopes of preventing this from occurring again.
+    I have known Destiny for around 5-6 years now, and often find myself in heavy disagreement with him. Despite this, I do my best to see the best sides of all people, trying my hardest to spread positivity and create understanding where I can. It's corny, but I want to meet people where they are, and focus on which ways we can build bridges together towards a better future for everyone. Some people call this a fault of mine, they claim I am naive and should be more careful. Those people are right.
+    When I was 19 (over 5 years ago) I was extremely sexually inexperienced and sheltered. Being severely terrified of leading someone on or SA, I thought I could trust Destiny who I had multiple long conversations with regarding consent and boundaries.
+    So you can imagine my surprise when I discover he distributed pornographic content of me, without my consent.
+    Yes, you read that right. Steven Kenneth Bonnell II, sent pornographic content of me to a random 19 year old e-girl discord kitten whom he had never met before, and then she published it to the whole world. Rest assured, despite never having met her, he at least spoke to her [plenty of times on the phone.](https://imgur.com/a/NqT7tXF)
+    Of course, this is what he says happened. I think it is just as likely that he used her as a proxy to widely distribute this material, while claiming deniability.
+    I do not understand why Destiny would knowingly and willingly put me in a position where I would receive non-stop sexual abuse and harassment. If we believe him, he was trying to impress a barely-legal teenager using my body and my privacy.
+    The betrayal, coupled with the hundreds of messages I've received filled with sexual harassment and abuse, have left me feeling hopeless and devoid of almost all happiness.
+    The only thing that has kept me going is the hope that I can bring this man to justice, and have him face legal consequences for his actions. For the past month I have been speaking to lawyers about my situation and what to do, and have decided this is the best course of action.
+    I will be suing him for violating US Federal Code, 15 U.S.C. § 6851; Civil action relating to disclosure of intimate images and for Publication of Private Facts in Florida. I will be seeking emotional and punitive damages for his actions.
+    I have been told that a court case like this could potentially cost over tens of thousands of dollars. I am terrified. I mean, this guy talks about [potentially suing Hasan](https://youtu.be/rE3Hn3NbCak?si=OMuJAc7tcBBAdziQ) (as if for fun), and Hasan actually has the resources to defend himself. I cannot imagine what he might try to do to me in this process. Sometimes, I wonder if he does this as an intimidation tactic. I wonder if he is purposely trying to put fear into my heart when he casually talks about throwing money into a lawsuit with a multi-millionaire who can fight back. As if it's an indirect flaunt/warning over his capability of out spending me in whatever legal case I throw at him. At the request of my friends, I have been encouraged to link my give send go regarding this case here, in hopes that we can raise enough for me to legally succeed. [https://www.givesendgo.com/suedestiny](https://www.givesendgo.com/suedestiny)
+    Whoever the next “Joe Rogan of the Left” is, it cannot be someone that crosses sexual boundaries, violates consent, and puts women's well being and safety at risk. It cannot be someone who puts women in positions where they will be sexually abused and harassed. It concerns me that Destiny has been interviewing potential DNC chair candidates such as [Marianne Williamson](https://x.com/TheOmniLiberal/status/1881036213618147651) or [Martin O'Malley](https://x.com/TheOmniLiberal/status/1875622136447975731), who have no idea of what he's done. As time passes and he tries to position himself to have interviews with increasingly powerful figure [such as Zelenskyy](https://web.archive.org/web/20250126134913/https://www.reddit.com/r/Destiny/comments/1hvsfnr/destiny_shot_his_shot_at_a_chance_of_interviewing/), I can't help be filled with fear that Destiny might continue to succeed, despite facing no repercussions for his actions. If the Democratic Party wishes to succeed in the future, it cannot be a party that accepts the sexual exploitation of women. It cannot be a party that allows men like Destiny to break into the mainstream; for allowing him access to such spaces would be a direct endorsement of his behavior.
+    I have been told that the payout might not be worth the harassment and attention I will receive. In an ideal world, I would do this privately, but have been told there is no realistic way the court will grant me anonymity. This means my only option is public. I have been told by a variety of people to not go public. I have been told by some people that Steven "really does feel sorry", but I am not inclined to believe them, especially taking into consideration his actions regarding me. Regardless, what Destiny did is unacceptable, and I believe he will do this again unless if he faces justice.
+    Let me be clear:
+    Destiny's has violated federal law in his transgressions against me.
+    He has violated my consent, and is directly responsible for the sexual abuse I have received.
+    I am terrified.
+    Evidence Log:
+    [Destiny "apologizing" to me for his actions. Note, I had to contact him asking about the situation before he sent me this message.](https://imgur.com/a/NqT7tXF)
+    [Destiny downplaying the pain I felt and my concerns.](https://imgur.com/a/gG6i4ag)
+    [Destiny offering to pay some bills I guess to try to make me feel better? I'm sorry is a water bill being paid going to make me feel okay about the lifelong trauma I've received?](https://imgur.com/a/eUZHDZZ)
+
+The images that she attached at the bottom (archived here because the imgur links might be removed someday). The first one she linked to (under "plenty of times on the phone") is a repeated link to the first image below ("Destiny 'apologizing' for his actions"), as that's where he mentions talking to Rose. These are also found in the table in [Timeline](#Timeline), but repeated here for clarity that these are the ones she linked to in the Substack post.
+
+!images
+src: media/2024-11-29-2-bonnell-pxie.png | caption: Pxie's description: "Destiny 'apologizing' to me for his actions. Note, I had to contact him asking about the situation before he sent me this message."
+src: media/2024-12-12-2-pxie-bonnell.png | caption: Pxie's description: "Destiny downplaying the pain I felt and my concerns."
+src: media/2024-12-12-1-bonnell-pxie.png | caption: Pxie's description: "Destiny offering to pay some bills I guess to try to make me feel better? I'm sorry is a water bill being paid going to make me feel okay about the lifelong trauma I've received?"
+
+***
+
 # Timeline
 
-*First column is the image as it appears in the court filings; **column two is the text exactly as it appears in the image**, without any added notes or commentary. These are presented in chronological order of their contents, not the order in which they were made publicly available. Most images depict communications via [Discord](https://discord.com).*
+*First column is the image as it appears in the court filings; **column two is the text exactly as it appears in the image** (\*except straight/curly quotes distinction), without any added notes or commentary, mainly so you can search on the page to quickly find the image with the text that contained what you're looking for. These are presented in chronological order of their contents, not the order in which they were made publicly available. Most images depict communications via [Discord](https://discord.com).*
 
-!table timeline label-external
+!table timeline
 **2020 February 26**
     !images src:media/2020-02-26-pxie-bonnell.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 50, exhibit B](https://www.courtlistener.com/docket/69650487/50/2/doe-v-bonnell/)
+    * [mirror](media/2025-04-25-document-50-exhibit-b.pdf)
     |
     **Pxie** 2/26/20, 11:20 PM
     So 1) publicly I'm okay with people knowing we're hanging out but if anyone asks questions about having sex or anything along those lines I rather deny and keep that private between us. 2) Preferably I'd stay with you since you're the person I know best in LA but I do know you could get tired with other people easily so I could also try finding another place that would make things easier for you/on you.0
@@ -93,9 +215,9 @@ Facts that later came to light:
     You being a streamer was just a long con to meet girls so you could ted bundy them
 **2020 April 27**
     !images src:media/2020-04-27-pxie-bonnell.png
-    image source: exhibit in court filings;
+    image source: exhibit in legal filings, Bonnell's side;
     * [document 42, exhibit A](https://www.courtlistener.com/docket/69650487/42/2/doe-v-bonnell/);
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-2-exhibit-a.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-a.pdf)
     |
     **Pxie** 4/27/2020 12:47 AM
     Mmm i cant wait to feel that in me....
@@ -115,7 +237,7 @@ Facts that later came to light:
     !images src:media/2020-03-17-pxie-bonnell.png
     image source: exhibit in court filings;
     * [document 42, exhibit A](https://www.courtlistener.com/docket/69650487/42/2/doe-v-bonnell/);
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-2-exhibit-a.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-a.pdf)
     |
     **Pxie** 3/17/2020 5:00 AM
     I took some videos with the guy i can send you later if you're interested also
@@ -134,9 +256,9 @@ Facts that later came to light:
     yaya it's okies
 **2020 March 19**
     !images src:media/2020-03-19-1-bonnell-pxie.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit A](https://www.courtlistener.com/docket/69650487/42/2/doe-v-bonnell/);
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-2-exhibit-a.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-a.pdf)
     |
     **Destiny** 3/19/2020 1:22 AM
     Oooo you're streaming again
@@ -171,10 +293,10 @@ Facts that later came to light:
     Yeah do it now hell yeah
 **2020 March 19**
     !images src:media/2020-03-19-2-pxie-bonnell-instagram.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit A](https://www.courtlistener.com/docket/69650487/42/2/doe-v-bonnell/)
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-2-exhibit-a.pdf)
-    image depicts Pxie sending 4 videos to Bonnell via Instagram, Bonnell's POV
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-a.pdf)
+    depicts Pxie sending 4 videos to Bonnell via Instagram
     |
     **Pxie**
     .pxielove
@@ -188,9 +310,9 @@ Facts that later came to light:
     Video
 **2020 March 19**
     !images src:media/2020-03-19-3-pxie-bonnell.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit A](https://www.courtlistener.com/docket/69650487/42/2/doe-v-bonnell/)
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-2-exhibit-a.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-a.pdf)
     |
     **Pxie** 3/19/2020 5:01 AM
     Did you get the video?
@@ -206,9 +328,9 @@ Facts that later came to light:
     Jaja yes it felt really good when he was being dominant and making sure I was a good girl for him
 **2020 March 19**
     !images src:media/2020-03-19-4-bonnell-pxie.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit B](https://www.courtlistener.com/docket/69650487/42/3/doe-v-bonnell/)
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-3-exhibit-b.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-b.pdf)
     |
     **Pxie** 3/19/2020 5:12 AM
     Mmmm it's gonna be so nice when you do lol
@@ -217,9 +339,9 @@ Facts that later came to light:
     If you want to yeah for sure
 **2020 September 6**
     !images src:media/2020-09-06-pxie-bonnell.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit B](https://www.courtlistener.com/docket/69650487/42/3/doe-v-bonnell/)
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-3-exhibit-b.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-b.pdf)
     |
     **Pxie** 9/6/2020 12:07 PM
     it's okay! since i've never felt it I don't really know what I'm missing... and I also still feel really good anyways imagining what you're going to do to me.... do you have a favorite message/picture/video?
@@ -242,11 +364,11 @@ Facts that later came to light:
     |
     **Pxie** 2/27/20, 10:38 AM
     Yes I'm still talking to that one guy lol I still have feelings for him rip 😭. And he won't get super mad if I visit him in LA as long as I talk to him about it before and I'm honest with him ☺️
-**April 9, 2022**
+**2022 April 9**
     !images src:media/2022-04-09-rose-bonnell.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit C](https://www.courtlistener.com/docket/69650487/42/4/doe-v-bonnell/)
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-4-exhibit-c.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-c.pdf)
     **screen capture from Bonnell's perspective**
     |
     **Rose** 4/9/2022 8:05 PM
@@ -257,11 +379,11 @@ Facts that later came to light:
     **Rose** 4/9/2022 8:33 PM
     Id love it omg
     That was amazing, I can't wait to blow you now
-**April 10, 2022**
+**2022 April 10**
     !images src:media/2022-04-10-bonnell-rose.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit C](https://www.courtlistener.com/docket/69650487/42/4/doe-v-bonnell/)
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-4-exhibit-c.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-c.pdf)
     **screen capture from Rose's perspective**, ergo time zone is 5 hours ahead (next day) and {red bold:date is formatted as DD/MM/YYYY}
     |
     **Destiny** 10/04/22 1:06 am
@@ -275,30 +397,56 @@ Facts that later came to light:
     Id love it omg
     **Destiny** 10/04/2022 1:36 am
     [video embed]
-**March 5, 2023**
+**2023 March 5**
     !images src:media/2023-03-05-pxie-bonnell.png
     image source: pxie [posted it on Twitter](https://x.com/pxielovee/status/1892683978592698817) on 2025-02-25
+    also exhibit by Pxie's lawyers:
+    * [document 50, exhibit C](https://www.courtlistener.com/docket/69650487/50/3/doe-v-bonnell/)
+    * [mirror (pdf)](media/2025-05-03-document-50-exhibit-c.pdf)
     |
     **Pxie** 3/5/23, 1:21 AM
     No one knows either on my end (except my ex bf), I trust you/believe you, do you think they're gonna make up a bunch of stuff?
     Jesus Christ where did you get this info? Is max claiming it or lav or both? I can see lav making it up from thin air but I feel like max takes a sliver of information and then twists it until it becomes a new monster/creature
-**November 29, 2024**
+**2024 November 29**
+    !images src:media/2024-11-29-3-kf.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 51, exhibit D](https://www.courtlistener.com/docket/69650487/51/1/doe-v-bonnell/)
+    * [mirror](media/2025-05-03-document-51-exhibit-d.pdf)
+    I tracked down the forum post this was a screenshot of to get one that's higher quality: [2024-12-04-sol...](media/2024-11-29-3-kf--higher-quality.png)
+    |
+    Blav
+    Frunk https://www.youtube.com/watch?v=OiKuW3xXwmA
+    Joined: Apr 7, 2022
+    Nov 29, 2024
+    So he has genuinely fucked all his orbiters. So when he went to that canvassing and him and Pxie + Straighterade were hanging out it was because they were fucking / having threesomes.
+    So not only does he fuck all his female orbiters, his male orbiters date the female orbiters that he fucks lol.
+**2024 November 29**
     !images src:media/2024-11-29-1-pxie-bonnell.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit D](https://www.courtlistener.com/docket/69650487/42/5/doe-v-bonnell/)
-    * [mirror](media/2025-04-25-docket-42-attachment-5-exhibit-d.pdf)
+    * [mirror](media/2025-04-25-document-42-exhibit-d.pdf)
     |
     **Pxie** 11/29/2024 9:06 PM
     I need to know if you sent our videos to anyone/if you sent anything beyond the bj one
     I'm 100% denying it's me btw since it's not super clear my face or anything like that
     But I need to be mentally prepared in case there's anything else (edited)
-**November 29, 2024**
+**2024 November 29**
     !images src:media/2024-11-29-2-bonnell-pxie.png
     image source: uploaded by Pxie on [her Substack post](#Pxie's_Substack)
     |
     **Destiny** 11/29/24, 0:09 PM
     Ughhhh there shouldn't be no, I'm so sorry there's literally zero excuse, I'd had phone convos and stuff with this person they were fairly close to me, it's worthless to say it at this point but I'm super sorry, there's literally no excuse. I won't say or confirm anything about them, if there's any particular action or thing I can do just let me know.
-**December 4, 2024**
+**2024 November 30**
+    !images src:media/2025-11-30-kiwifarms-twitter.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 52, exhibit I](https://www.courtlistener.com/docket/69650487/51/1/doe-v-bonnell/)
+    * [mirror](media/2025-05-03-document-51-exhibit-d.pdf)
+    |
+    Kiwi Farms
+    .@KiwiFarmsDotNet
+    The Surge of traffic to the Kiwi Farms related to Destiny's blowjob video has caused a fatal database error and I will need to do a rollback to a recent bakcup.
+    .4:03 PM · Nov 30, 2024
+**2024 December 4**
     !images src:media/2024-12-04-solotinyleaks-kiwifarms.png
     image source: ? wait I saved this and forgot where it came from, I'll update this when I come across it again
     I tracked down the forum post this was a screenshot of to get one that's higher quality: [2024-12-04-sol...](media/2024-12-04-solotinyleaks-kiwifarms--higher-quality.png)
@@ -327,13 +475,13 @@ Facts that later came to light:
     Not really sure how I can prove the revenge porn angle, it would seem that only the girls involved or Steven himself would be able to confirm that.
     I will say while I don't want to Dox Rose myself, and she probably wouldn't be happy about it either. Anyone here is free to do so if they can, I knew the risks of leaking all this stuff in the first place so you won't hear me complaining if it happens.
     Am I missing anything?
-**December 12, 2024**
+**2024 December 12**
     !images src:media/2024-12-12-1-bonnell-pxie.png
     image source: uploaded by Pxie on [her Substack post](#Pxie's_Substack)
     |
     **Destiny** 12/12/24, 2:05 AM
     This feels super lame and I don't at all want to imply that somehow just giving you money helps anything go away or fixes everything for you, but if you have any bills or owe money on anything or have any financial stuff I can help with, I can at the very least chip in and help with any of that, so it's at least one less thing you have to worry about or stress over while you're worrying and getting through this.
-**December 12, 2024**
+**2024 December 12**
     !images src:media/2024-12-12-2-pxie-bonnell.png
     image source: uploaded by Pxie on [her Substack post](#Pxie's_Substack)
     |
@@ -341,11 +489,11 @@ Facts that later came to light:
     It's more complicated than that, I feel like there's no justice for what's been done, I feel like people for the rest of my life are going to try to send it to my family or workplace or wherever I go, I feel extremely violated with how so many people saw me nonconsensually in a vulnerable position, i feel like people are always going to use this as "proof" that I slept my way into whatever achievement I garner, I feel like it's evidence that everything would be better with me gone.
     **Destiny** 12/12/24, 2:17 AM
     I think the number of people who know or even keep up with it enough to go after you on this is probably almost 0, I think people hate others involved (me, Lauren, Nick (lol)) way way way more and it overshadows everything a lot more. As for any achievements or anything like that, the majority of the work and stuff you've done has been completely independent from me anyway, so the only people who would say anything like that are people who would have said shit like that anyway and aren't worth the time.
-**December 12, 2024**
+**2024 December 12**
     !images src:media/2024-12-12-3-bonnell-pxie.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit E](https://www.courtlistener.com/docket/69650487/42/6/doe-v-bonnell/)
-    * [mirror (pdf)](media/2025-04-25-docket-42-attachment-6-exhibit-e.pdf)
+    * [mirror (pdf)](media/2025-04-25-document-42-exhibit-e.pdf)
     |
     2:05 AM **Destiny** This feels super lame and I don't at all want to imply that somehow just giving you money helps anything go away or fixes everything for you, but if you have any bills or owe money on anything or have any financial stuff I can help with, I can at the very least chip in and help with any of that, so it's at least one less thing you have to worry about or stress over while you're worrying and getting through this.
     2:12 AM **Pxie** It's more complicated than that, I feel like there's no justice for what's been done, I feel like people for the rest of my life are going to try to send it to my family or workplace or wherever I go, I feel extremely violated with how so many people saw me nonconsensually in a vulnerable position, i feel like people are always going to use this as "proof" that I slept my way into whatever achievement I garner, I feel like it's evidence that everything would be better with me gone.
@@ -353,14 +501,19 @@ Facts that later came to light:
     2:17 AM **Destiny** I think the number of people who know or even keep up with it enough to go after you on this is probably almost 0, I think people hate others involved (me, Lauren, Nick (lol)) way way way more and it overshadows everything a lot more. As for any achievements or anything like that, the majority of the work and stuff you've done has been completely independent from me anyway, so the only people who would say anything like that are people who would have said shit like that anyway and aren't worth the time.
 **2025 January 3**
     !images src:media/2025-01-03-pxie-saltman-2.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit A](https://www.courtlistener.com/docket/69650487/42/2/doe-v-bonnell/)
-    * [mirror](media/2025-04-25-docket-42-attachment-2-exhibit-a.pdf)
+    * [mirror](media/2025-04-25-document-42-exhibit-a.pdf)
     |
     **Pxie** 1/3/25, 10:37 PM
     I have never ever sent videos of other people to steven ever.
 **2025 January 3**
-    !images src:media/2025-01-03-pxie-saltman.png | **Pxie** 1/3/25, 10:37 PM
+    !images src:media/2025-01-03-pxie-saltman.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 50, exhibit A](https://www.courtlistener.com/docket/69650487/50/1/doe-v-bonnell/)
+    * [mirror](media/2025-05-03-document-50-exhibit-a.pdf)
+    |
+    **Pxie** 1/3/25, 10:37 PM
     I have never ever sent videos of other people to steven ever.
     **Dan** 1/3/25, 10:37 PM
     sorry
@@ -372,10 +525,7 @@ Facts that later came to light:
     people prob jsut assume it was only melina anyways
 **2025 January 20**
     !images src:media/2025-01-20-pxie-twitter.png
-    * [tweet-1](https://x.com/pxielovee/status/1881382195891515559)
-    * [tweet-2](https://x.com/pxielovee/status/1881382197594398817)
-    * [tweet-3](https://x.com/pxielovee/status/1881382199662129617)
-    * [tweet-4](https://x.com/pxielovee/status/1881500598018994506)
+    [twt-1](https://x.com/pxielovee/status/1881382195891515559) / [twt-2](https://x.com/pxielovee/status/1881382197594398817) / [twt-3](https://x.com/pxielovee/status/1881382199662129617) / [twt-4](https://x.com/pxielovee/status/1881500598018994506)
     |
     **Pxie** @pxielovee · Jan 20, 2025
     On Nov 29, the streamer Destiny non consensually shared my nudes, making me a victim of revenge porn.
@@ -394,7 +544,7 @@ Facts that later came to light:
     7:34 PM · Jan 20, 2025
 **2025 January 20**
     !images src:media/2025-01-20-pxie-twitter-2.png
-    image source: exhibit in court filings;
+    image source: exhibit in court filings, Bonnell's side;
     * [document 42, exhibit I](https://www.courtlistener.com/docket/69650487/42/10/doe-v-bonnell/);
     * [mirror (pdf)](media/2025-04-25-docket-42-attachment-10-exhibit-i.pdf)
     |
@@ -412,15 +562,36 @@ Facts that later came to light:
     I will be suing him in federal court.
     Here is my story;
     pxie412.substack.com/p/i-will-be-...
+**2025 January 23**
+    !images src:media/2025-01-23-pxie-twitter.png
+    |
+    **Pxie**
+    .@pxielovee
+    To all the people claiming that I "only cared about personal profit" and that "Destiny tried to make things right".
+    Here's some DMs between Destiny and a close friend of his. Destiny knew about these DMs and never got back to me.
+    .11:58 AM · Jan 23, 2025
+**2025 January 23**
+    !images src:media/2025-01-23-bonnell-chat.png
+    image source: [twitter post](https://x.com/VaranautH/status/1882496224261271645)
+    |
+    Destinygg 2025-01-23 \| 11:10:31 (CST) **destiny:** FrozenBroccoli_ "sex therapy" LULW like I said if I need "sex therapy" then so do like 100 other streamers, the reality is ever since I've started my Vyvanse my desire for any of these types of interactions has fallen off a clif, that's why all this shit is pre 2024
+    Destinygg 2025-01-23 \| 11:08:05 (CST) **destiny:** Trius the naturalized citizen one is pretty SWEATSTINY but I haven't read what any legal scholars are saying about it, it's a little spooky that this Supreme Court is gonna be evaluating so many constitutional matters
+    Destinygg 2025-01-23 \| 11:07:41 (CST) **destiny:** !ipban trumbus
+    Destinygg 2025-01-23 \| 11:05:41 (CST) **destiny:** !ipban Gorm
+    Destinygg 2025-01-23 \| 11:05:38 (CST) **destiny:** anyway, like I said before, I've definitely made mistakes and fucked up, all I can do is promise to do better and change behavior going forward, I'll figure out and settle what needs to be settled in the background, if it's too much then leave, if not then welcome to 2025
+**2025 January 30**
+    !images src:2025-01-30-bonnell-chat.png
+    image source: exhibit in legal filing, by Pxie's side;
+    * [document 51, exhibit E](https://www.courtlistener.com/docket/69650487/51/2/doe-v-bonnell/);
+    * [mirror (pdf)](media/2025-05-03-document-51-exhibit-e.pdf)
+    |
 **2025 February 2**
     !images src:media/2025-02-20-pxie-twitter.png
-    * [tweet-1](https://x.com/pxielovee/status/1892683978592698817)
-    * [tweet-2](https://x.com/pxielovee/status/1892683981570621923)
-    * [tweet-3](https://x.com/pxielovee/status/1892683983315714207)
-    that first tweet had 3 images:
-    * [twt-1-attach-1](media/2020-09-08-pxie-bonnell.png)
-    * [twt-1-attach-2](media/2020-02-27-pxie-bonnell.png)
-    * [twt-1-attach-3](media/2023-03-05-pxie-bonnell.png)
+    [twt-1](https://x.com/pxielovee/status/1892683978592698817) / [twt-2](https://x.com/pxielovee/status/1892683981570621923) / [twt-3](https://x.com/pxielovee/status/1892683983315714207)
+    that first tweet had 3 images attached:
+    * [attach-1](https://x.com/pxielovee/status/1892683978592698817/photo/1) / [mirror](media/2020-09-08-pxie-bonnell.png)
+    * [attach-1](https://x.com/pxielovee/status/1892683978592698817/photo/2) / [mirror](media/2020-02-27-pxie-bonnell.png)
+    * [attach-1](https://x.com/pxielovee/status/1892683978592698817/photo/3) / [mirror](media/2023-03-05-pxie-bonnell.png)
     |
     **Pxie** @pxielovee · Feb 20, 2025
     Destiny is implying that I am guilty of the same crime he is. This is false. The "guy" was my ex, who consented to sharing.
@@ -437,83 +608,22 @@ Facts that later came to light:
     .4:13 PM · Feb 20, 2025
 
 
-# Pxie's fundraiser (GiveSendGo)
 
-Before the first legal complaint was filed on February 18, Pxie made public accusations toward Bonnell on Twitter and Bluesky, linking to a Substack post which elaborated on this accusation further, and linking to a fundraiser on a website called GiveSendGo to ask for help to cover her legal fees.
 
-The fundraiser was originally at [https://www.givesendgo.com/suedestiny](https://www.givesendgo.com/suedestiny), but that was later removed.
 
--- archive.org: [https://web.archive.org/web/202501...](https://web.archive.org/web/20250121075021/https://www.givesendgo.com/suedestiny)
--- archive.is: [https://archive.is/GkC9U](https://archive.is/GkC9U)
 
-Here's a searchable copy of what it said on the GiveGoSend fundraiser page:
 
-<style>
-.auto-table.paper-esque { margin-left: 1em; max-width: 824px; border: 2px solid var(--grey-c,silver); }
-.auto-table.paper-esque td { padding: 20px 24px; }
-.auto-table.paper-esque td p { margin-top: 0.5em; }
-</style>
 
-!table paper-esque
-Suing Destiny Steven Kenneth Bonnell II
-    On November 29th I learned that Destiny had non-consenually shared pornographic images of me towards others. If you wish to read more details of the situation here is my official statement below:
-    https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell
-    I will be suing him for violating US Federal Code, 15 U.S.C. § 6851; Civil action relating to disclosure of intimate images and for Publication of Private Facts in Florida. I will be seeking emotional and punitive damages for his actions. I currently do not have the funds to protect myself or pursue legal action to the fullest extent, and have been told a case like this can cost over tens of thousands of dollars. If by miracle there is a surplus of funds (although this is extremely unlikely), it will be split between the endless amount of therapy I will need to receive and donated to charity that focuses on sexual abuse victims.
-    Please help me bring this man to justice. 
-
-# Pxie's Substack
-
-The Substack post made by pxie was originally at [https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell](https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell), but this was later removed.
-
--- archive.org: [https://web.archive.org/web/20250121025923/https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell](https://web.archive.org/web/20250121025923/https://pxie412.substack.com/p/i-will-be-suing-steven-kenneth-bonnell)
--- archive.is: [https://archive.is/9Z7Op](https://archive.is/9Z7Op)
--- screen capture: [2025-01-20-pxie-substack-screenshot.png](media/2025-01-20-pxie-substack-screenshot.png)
-
-Here's a searchable copy of the original text of the Substack post, including the inline links she included:
-
-!table paper-esque
-I will be suing Steven Kenneth Bonnell II
-    On November 29th, I learned that the streamer Destiny had non-consensually shared pornographic content of me online. My dignity, peace of mind, and hopes for the future, were stripped away in a mere matter of seconds following the betrayal of someone I previously trusted.
-    I am at least the third person he has done this to. I hope to be the last. I will not be commenting on the experience of the other women he has hurt, as it is not my place or story to tell. I will however share my story in the hopes of preventing this from occurring again.
-    I have known Destiny for around 5-6 years now, and often find myself in heavy disagreement with him. Despite this, I do my best to see the best sides of all people, trying my hardest to spread positivity and create understanding where I can. It's corny, but I want to meet people where they are, and focus on which ways we can build bridges together towards a better future for everyone. Some people call this a fault of mine, they claim I am naive and should be more careful. Those people are right.
-    When I was 19 (over 5 years ago) I was extremely sexually inexperienced and sheltered. Being severely terrified of leading someone on or SA, I thought I could trust Destiny who I had multiple long conversations with regarding consent and boundaries.
-    So you can imagine my surprise when I discover he distributed pornographic content of me, without my consent.
-    Yes, you read that right. Steven Kenneth Bonnell II, sent pornographic content of me to a random 19 year old e-girl discord kitten whom he had never met before, and then she published it to the whole world. Rest assured, despite never having met her, he at least spoke to her [plenty of times on the phone.](https://imgur.com/a/NqT7tXF)
-    Of course, this is what he says happened. I think it is just as likely that he used her as a proxy to widely distribute this material, while claiming deniability.
-    I do not understand why Destiny would knowingly and willingly put me in a position where I would receive non-stop sexual abuse and harassment. If we believe him, he was trying to impress a barely-legal teenager using my body and my privacy.
-    The betrayal, coupled with the hundreds of messages I've received filled with sexual harassment and abuse, have left me feeling hopeless and devoid of almost all happiness.
-    The only thing that has kept me going is the hope that I can bring this man to justice, and have him face legal consequences for his actions. For the past month I have been speaking to lawyers about my situation and what to do, and have decided this is the best course of action.
-    I will be suing him for violating US Federal Code, 15 U.S.C. § 6851; Civil action relating to disclosure of intimate images and for Publication of Private Facts in Florida. I will be seeking emotional and punitive damages for his actions.
-    I have been told that a court case like this could potentially cost over tens of thousands of dollars. I am terrified. I mean, this guy talks about [potentially suing Hasan](https://youtu.be/rE3Hn3NbCak?si=OMuJAc7tcBBAdziQ) (as if for fun), and Hasan actually has the resources to defend himself. I cannot imagine what he might try to do to me in this process. Sometimes, I wonder if he does this as an intimidation tactic. I wonder if he is purposely trying to put fear into my heart when he casually talks about throwing money into a lawsuit with a multi-millionaire who can fight back. As if it's an indirect flaunt/warning over his capability of out spending me in whatever legal case I throw at him. At the request of my friends, I have been encouraged to link my give send go regarding this case here, in hopes that we can raise enough for me to legally succeed. [https://www.givesendgo.com/suedestiny](https://www.givesendgo.com/suedestiny)
-    Whoever the next “Joe Rogan of the Left” is, it cannot be someone that crosses sexual boundaries, violates consent, and puts women's well being and safety at risk. It cannot be someone who puts women in positions where they will be sexually abused and harassed. It concerns me that Destiny has been interviewing potential DNC chair candidates such as [Marianne Williamson](https://x.com/TheOmniLiberal/status/1881036213618147651) or [Martin O'Malley](https://x.com/TheOmniLiberal/status/1875622136447975731), who have no idea of what he's done. As time passes and he tries to position himself to have interviews with increasingly powerful figure [such as Zelenskyy](https://web.archive.org/web/20250126134913/https://www.reddit.com/r/Destiny/comments/1hvsfnr/destiny_shot_his_shot_at_a_chance_of_interviewing/), I can't help be filled with fear that Destiny might continue to succeed, despite facing no repercussions for his actions. If the Democratic Party wishes to succeed in the future, it cannot be a party that accepts the sexual exploitation of women. It cannot be a party that allows men like Destiny to break into the mainstream; for allowing him access to such spaces would be a direct endorsement of his behavior.
-    I have been told that the payout might not be worth the harassment and attention I will receive. In an ideal world, I would do this privately, but have been told there is no realistic way the court will grant me anonymity. This means my only option is public. I have been told by a variety of people to not go public. I have been told by some people that Steven "really does feel sorry", but I am not inclined to believe them, especially taking into consideration his actions regarding me. Regardless, what Destiny did is unacceptable, and I believe he will do this again unless if he faces justice.
-    Let me be clear:
-    Destiny's has violated federal law in his transgressions against me.
-    He has violated my consent, and is directly responsible for the sexual abuse I have received.
-    I am terrified.
-    Evidence Log:
-    [Destiny "apologizing" to me for his actions. Note, I had to contact him asking about the situation before he sent me this message.](https://imgur.com/a/NqT7tXF)
-    [Destiny downplaying the pain I felt and my concerns.](https://imgur.com/a/gG6i4ag)
-    [Destiny offering to pay some bills I guess to try to make me feel better? I'm sorry is a water bill being paid going to make me feel okay about the lifelong trauma I've received?](https://imgur.com/a/eUZHDZZ)
-
-The images that she attached at the bottom (archived here because the imgur links might be removed someday). The first one she linked to (under "plenty of times on the phone") is a repeated link to the first image below ("Destiny 'apologizing' for his actions"), as that's where he mentions talking to Rose. These are also found in the table in [Timeline](#Timeline), but repeated here for clarity that these are the ones she linked to in the Substack post.
-
-!images
-src: media/2024-11-29-2-bonnell-pxie.png | caption: Pxie's description: "Destiny 'apologizing' to me for his actions. Note, I had to contact him asking about the situation before he sent me this message."
-src: media/2024-12-12-2-pxie-bonnell.png | caption: Pxie's description: "Destiny downplaying the pain I felt and my concerns."
-src: media/2024-12-12-1-bonnell-pxie.png | caption: Pxie's description: "Destiny offering to pay some bills I guess to try to make me feel better? I'm sorry is a water bill being paid going to make me feel okay about the lifelong trauma I've received?"
-
-# Miscellaneous
-
--- [2025-03-05.png](media/2025-03-05.png)
 
 ***
 
-# Depositions
+# Court transcripts
 
 *The files that Bonnell shared with Rose were leaked by somebody who goes by the pseudonym Solo.*
 
-## Rose
+## Depositions
+
+### Rose depo
 
 Rose was deposed on 2026-01-07.
 
@@ -526,7 +636,6 @@ Select parts:
 .depos { max-width: 1100px; margin-top: 0; margin-left: 1em; border-left: 2px solid var(--grey-b,#bbb); padding-left: 10px; white-space:pre-wrap; font:15px/24px Consolas,monospace; }
 .depo-page-label { margin-bottom: 3px; font-family: 'DM Sans',Roboto,sans-serif; }
 </style>
-
 
 <h4 class="depo-page-label">pg 13–16:</h4>
 <div class="depos auto-format-2">
@@ -550,7 +659,6 @@ BY MS. SCHLUMP PETERS:
     **Q. Is that like a dating app or --**
     A. It's supposed to be an app for kids to make friends, so you have to be under the age of 18 technically.
 </div>
-
 <h4 class="depo-page-label">pg 24–26:</h4>
 <div class="depos auto-format-2">
     **Q. Did Ben have a Twitter account?**
@@ -574,7 +682,6 @@ BY MS. SCHLUMP PETERS:
     **Q. Yes.**
     A. Oh. No.
 </div>
-
 <h4 class="depo-page-label">pg 32–34:</h4>
 <div class="depos auto-format-2">
 BY MS. SCHLUMP PETERS:
@@ -596,8 +703,6 @@ BY MS. SCHLUMP PETERS:
     **Q. Okay. And do you recognize, at least from that page, any of those messages?**
     A. No.
 </div>
-
-
 <h4 class="depo-page-label">pg 35:</h4>
 <div class="depos auto-format-2">
     **Q. So were you aware, did Ben tell you that he created a Discord account under the name RoseOfTheGarden or Rose in which he communicated with Destiny?**
@@ -615,8 +720,6 @@ BY MS. SCHLUMP PETERS:
     **Q. Ben didn't tell you?**
     A. No.
 </div>
-
-
 <h4 class="depo-page-label">pg 49:</h4>
 <div class="depos auto-format-2">
     **Q. Okay. Do you know if your cell phone number was ever given to the defendant, Destiny, in this case?**
@@ -626,8 +729,6 @@ BY MS. SCHLUMP PETERS:
     **Q. Okay. And you never spoke to him?**
     A. No.
 </div>
-
-
 <h4 class="depo-page-label">pg 52:</h4>
 <div class="depos auto-format-2">
     **Q. And did you ever tell Ben that you'd be willing to speak to Destiny?**
@@ -635,7 +736,6 @@ BY MS. SCHLUMP PETERS:
     **Q. Okay. Any idea why he would have written that?**
     A. Just 'cause I didn't give Ben consent to do so something doesn't mean I didn't have to do it. Ben would just make me do things whether or not I wanted to or not.
 </div>
-
 <h4 class="depo-page-label">pg 74:</h4>
 <div class="depos auto-format-2">
     **Q. Did he ever threaten you?**
@@ -643,7 +743,6 @@ BY MS. SCHLUMP PETERS:
     **Q. What did he say to you, if you remember?**
     A. First time he started threatening me, he threatened to kill himself; and then once it got worse, he said that he'd kill my family and he would come and kidnap me and use me as a sex slave.
 </div>
-
 <h4 class="depo-page-label">pg 78–80:</h4>
 <div class="depos auto-format-2">
 BY MR. CAMARA:
@@ -663,6 +762,38 @@ BY MR. CAMARA:
     **Q. Okay.**
 </div>
 
+### Bonnell depo
+
+Steven Bonnell was deposed on 2026-04-30.
+
+CourtListener: [https://www.courtlistener.com/docket/69650487/204/1/doe-v-bonnell/](https://www.courtlistener.com/docket/69650487/204/1/doe-v-bonnell/)  
+mirror: [2026-01-07-rose-deposition.pdf](media/2026-08-20-bonnell-deposition.pdf)
+
+Select parts:
+
+<h4 class="depo-page-label">pg <a href="media/2026-08-20-bonnell-deposition.pdf#page=30">29–30</a>:</h4>
+<div class="depos auto-format-2">
+BY MS. SCHLUMP PETERS:
+    **Q. Thank you for that clarification. When did you first communicate with plaintiff about -- approximately?**
+    A. I would say sometime in late 2019.
+    **Q. October 2019?**
+    A. Based on my production it would probably be about then, yes. I believe the first message she sent me was pretty quickly after we had an online panel together. So my guess is it would have been a few days before the 23rd of October 2019.
+    **Q. And that online panel that you had together was that the first time you met plaintiff?**
+    A. I believe so.
+    **Q. And that was in person?**
+    A. No.
+    **Q. That was online?**
+    A. Yes.
+    **Q. When did you first meet her in person?**
+    A. I believe it was September 11, 2020.
+<div class="depos auto-format-2">
+</div>
+
+</div>
+<h4 class="depo-page-label">pg 78–80:</h4>
+<div class="depos auto-format-2">
+
+</div>
 
 
 
@@ -678,8 +809,15 @@ BY MR. CAMARA:
 
 "The timestamps on page 2 of the Exhibit reflect that Rose was corresponding from a time zone five hours ahead of me in Miami, Florida. It was April 10, 2022, at 1:06 a.m. UTC (i.e., April 9, 2022 at 8:06 p.m. EDT), when Rose and I began corresponding regarding the Video. Since April 9, 2022, I have not shared, or otherwise transmitted the Video to any other third party and will not do so." --- [Bonnell's declaration, 2025-04-25](media/2025-04-25-bonnell-response.pdf), p. 3
 
+***
 
-{italic bold red:I will update this page further as I review more material. Last updated: 2026-11-16.}
+# Miscellaneous
+
+Things I have saved but don't know where else to put:
+
+-- [2025-03-05.png](media/2025-03-05.png)
+
+
 
 
 
