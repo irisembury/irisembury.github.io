@@ -2,15 +2,15 @@
 <style>
 .article { font: 17px/1.5 Roboto,Arial,sans-serif; }
 .article img { object-fit: contain; }
-.image-gallery { margin-inline: unset; }
-.auto-table .image-gallery { max-width: 100%; width: 400px; margin-top: 0.5em; }
-.auto-table .image-gallery img { aspect-ratio: 1.5; object-fit: contain; }
+.gallery { margin-inline: unset; }
+.auto-table .gallery { max-width: 100%; width: 400px; margin-top: 0.5em; }
+.auto-table .gallery img { aspect-ratio: 1.5; object-fit: contain; }
 
 .article .article__body mark { background-color: light-dark(#f1e3ff,#4a4056); color: inherit; }
 
 .footer-recommendation, .page-footer__links { display: none; }
 
-    .timeline.auto-table { max-width: 1300px; margin-inline: auto; word-break: break-all; }
+    .timeline.auto-table { max-width: 1300px; margin-inline: auto; word-break: break-word; }
     .timeline.auto-table td { min-height: 100px; padding-block: 10px; font: 15px/19px Arial,sans-serif; }
     .timeline.auto-table .col-1 { max-width: 254px; }
     .timeline.auto-table .col-1 img { max-width: 200px; }
@@ -62,7 +62,6 @@ Not everything, but key files from the docket that I picked out for their import
 .files a { text-decoration: none; }
 .files .cell { padding-inline: 10px; }
 .files .row-1 .cell { font-weight: 600; white-space: nowrap; }
-.files .col-1 { text-align: center; }
 .files tr:nth-child(n+2) .col-1 { padding-left: 1em; font-family: Consolas,monospace; }
 </style>
 
@@ -81,13 +80,15 @@ Docket number | Filed by | Document
 51 | Pxie | [exh. D](media/2025-05-03-document-51-exhibit-d.pdf) / [exh. E](media/2025-05-03-document-51-exhibit-e.pdf) / [exh. F](media/2025-05-03-document-51-exhibit-f.pdf)
 52 | Pxie | [exh. G](media/2025-05-03-document-51-exhibit-g.pdf) / [exh. H](media/2025-05-03-document-51-exhibit-h.pdf) / [exh. I](media/2025-05-03-document-51-exhibit-i.pdf)
 90 | Court | [2025-06-06: Preliminary Injunction hearing](media/2025-06-06-hearing.pdf)
-    This was published to the docket on 2025-06-06 but sealed until an 2025-10-27 order to unseal (document 154).
+    This was published to the docket on 2025-06-06 but sealed until an 2025-10-27 order to unseal (docket 154).
 204 | Court | [2026-01-07: Rose deposition.pdf](media/2026-01-07-rose-deposition.pdf)
 269 | Court | [2026-05-30: Bonnell deposition (excerpt).pdf](media/2026-05-30-bonnell-deposition-excerpt.pdf)
     The deposition was held on 2026-04-30. First a limited excerpt was released, then a fuller one in October.
 293 | Court | [2026-08-20: Bonnell deposition (full).pdf](media/2026-08-20-bonnell-deposition.pdf)
 
 *Files are named by when they were made available on the docket, not by when the recorded events happened.*
+
+*On the website, the first column is labelled "Document Number." Each of them have multiple documents within them, so calling it a document number was confusing. The name "Docket number" makes more sense, because they're rows in the docket.*
 
 
 ## Facts
@@ -726,7 +727,7 @@ BY MR. LAGE:
     **Q. Well, how -- was it ever circulated in any fashion?**
     A. <mark>I sent it to my previous partner</mark>, and that was it.
     **Q. Was there consent from Mr. Bonnell?**
-...
+    ...
 BY MR. LAGE:
     **Q. Was that with Mr. Bonnell's consent?**
     A. Yes.
@@ -785,7 +786,7 @@ mirror: [2026-01-07-rose-deposition.pdf](media/2026-01-07-rose-deposition.pdf)
 Select parts:
 
 <style>
-.depos { max-width: 1100px; margin-top: 0; margin-left: 1em; border-left: 2px solid var(--grey-b,#bbb); padding-left: 10px; white-space:pre-wrap; font:15px/24px Consolas,monospace; }
+.depos { max-width: 1100px; margin-top: 0; margin-left: 1em; border-left: 2px solid var(--grey-b,#bbb); padding-left: 10px; white-space: pre-wrap; font: 14px/22px Consolas,monospace; }
 .depo-page-label { margin-bottom: 3px; font-family: 'DM Sans',Roboto,sans-serif; }
 </style>
 
@@ -963,13 +964,11 @@ BY MS. SCHLUMP PETERS:
 
 # Miscellaneous
 
-Things I have saved but don't know where else to put:
-
 -- [2025-03-05.png](media/2025-03-05.png)
 
 
 
 
-
+***
 
 </main><script src="../../assets/layout.js"></script></body></html>

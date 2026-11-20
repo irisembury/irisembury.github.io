@@ -103,10 +103,12 @@ const articlesList = pagesData.filter(x => !x.unlisted).sort(
 
 function init() {
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
-    loadBody();
+    
+    loadBody(); /* <-- path to interpreter() */
     rightMenuSetup();
     setupLightswitch();
     tocSetup();
+    
     Array.from(document.querySelectorAll(".auto-format")).forEach(a => {
         a.innerHTML = a.innerHTML.split("\n").map(l => l.trim()).filter(l => l).map(
             line => {
@@ -119,6 +121,7 @@ function init() {
         ).join('').replaceAll('</ul><ul>','');
         a.classList.remove("auto-format"); if (a.classList.length == 0) { a.removeAttribute("class"); }
     });
+    
     Array.from(document.querySelectorAll(".auto-format-2")).forEach(a => {
         a.innerHTML = a.innerHTML.split("\n").filter(l => l).map(
             line => {
@@ -129,6 +132,7 @@ function init() {
         a.classList.remove("auto-format-2");
         if (a.classList.length == 0) { a.removeAttribute("class"); }
     });
+    
     Array.from(document.querySelectorAll(".seconds")).forEach(a => a.innerHTML = unwrapSeconds(a.innerHTML));
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = `<span title="Update to date based on birthday: ${ a.innerHTML }">${ ageFromISO(a.innerHTML) }</span>`);
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
@@ -462,26 +466,72 @@ function fileBox(chunk) {
     )
     return `<div class="file-box">${ chunk.join('') }</div>`;
 }
+let galleryNum = 1;
 function imageGallery(chunk) {
-    chunk = chunk.split("\n");
-    let meta = chunk.shift() + " ";
-    meta = ("image-gallery " + meta.substring(meta.indexOf(" "))).trim();
-    let galleryClass = "image-gallery";
-    ["float","oar","contain"].forEach(x => { if (meta.includes(x)) galleryClass += ' ' + x; })
-    let maxHeight = meta.replace(/[^\d]/g, "") || (meta.includes("float") ? 200 : 250);
-    chunk = `<div class="${ galleryClass }">${ chunk.map( row => {
-        row = parseObj(row,"src","caption","alt","title");
-        if (row.src == "") { return ""; }
-        row.title = row.title || row.alt || "Click to expand";
-        row.alt = row.alt || row.caption;
-        if (row.caption) { row.caption = '<figcaption>' + autoFormat(row.caption.replaceAll('&quot;','"')) + '</figcaption>'; }
-        return `<figure><img onerror="console.log('image src missing? ${ row.src }'); this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22transparent%22/><text text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22sans-serif%22 x=%2250%25%22 y=%2250%25%22 fill=%22%23888%22>image src error</text></svg>';" style="max-height:${ maxHeight }px;" src="${ row.src }" alt="${ row.alt }" title="${ row.title }" loading="lazy" onclick="setLightbox(this)">${ row.caption }</figure>`;
-    }).join("")}</div>`;
-    return chunk;
+    const classes = ["gallery"];
+    const rows = chunk.split("\n").filter(n => n);
+    
+    let firstRow='', maxHeight='', style='';
+    
+    if (rows[0].startsWith("!images")) {
+        firstRow = rows.shift().split(" ").slice(1);
+        if (firstRow) {
+            maxHeight = firstRow.find(r => /^\d+$/.test(r));
+            firstRow.forEach(c => {if (!/^\d+$/.test(c)) classes.push(c)});
+        }
+    }
+    let numChildren = Math.min(rows.length,4);
+    classes.push('gal-' + numChildren)
+    if (maxHeight) {
+        let cn = "image-gallery-style-" + galleryNum;
+        classes.push(cn);
+        style = `<style> .${ cn } img { max-height: ${ maxHeight } } </style>`;
+        galleryNum += 1;
+    }
+    
+    /*
+        classes that do something here:
+            .oar
+                - "original aspect ratio"
+                - by default, images in a gallery are styled to a uniform aspect ratio for consistency, but this will override that
+            .contain
+                - sets `object-fit: contain`
+                - makes it so no aspect of the image gets cut off (but unless you also set .oar, this results in the object being inside a box with the designated aspect ratio, like a letterboxed movie)
+            .float
+                - sets `float: right` (and some other style changes)
+                - changes the gallery to a vertical column that floats on the right side of the page
+    */
+    
+    
+    let gallery = `<div class="${ classes.join(' ') }">
+        ${
+            rows.map(row => {
+                row = parseObj(row,'src','caption','alt','title');
+                if (row.src == '') {
+                    console.log('gallery: an item had no source');
+                    return;
+                }
+                row.title = row.title | row.alt;
+                row.alt = row.alt || row.caption;
+                if (row.caption) {
+                    row.caption = `<figcaption>${ autoFormat(row.caption.replaceAll('&quot;','"')) }</figcaption>`
+                }
+                return `<figure>
+                            <img 
+                                onerror="console.log('img src cannot be found'); this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22transparent%22/><text text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22sans-serif%22 x=%2250%25%22 y=%2250%25%22 fill=%22%23888%22>image src error</text></svg>';" 
+                                src="${ row.src }" 
+                                title="${ row.title }" 
+                                loading="lazy" 
+                                onclick="setLightbox(this)"
+                            >
+                            ${ row.caption }
+                        </figure>`.replace(/\n +/g,'')
+            }).join('')
+        }
+    </div>`;
+    return gallery + style;
 }
-/*
-onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22250%22 height=%22150%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22rgba(0,0,0,0.8)%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23aaa%22 font-family=%22sans-serif%22 font-size=%2214%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>Image Error</text></svg>';">
-*/
+
 function autoVideo(chunk) {
     let data = chunk.split("\n").slice(1)[0].split("|").map(c => c.trim());
     let fileUrl = data[0];
@@ -526,24 +576,24 @@ function autoTable(chunk) {
                 (tableCell, cellIndex) => {
                     tableCell = tableCell.split('\n');
                     /*
-                    Okay, so, note to me in case I ever forget what I was doing here:
-                    This function (autoTable) has specific indenting rules:
-                        * No indent on the line means it's a new row.
-                        * If there's an indent on the line, it's continuing from the last cell in the previous row.
-                        * If there's an indent of 8 or more on the line, it's also is a block quote.
-                    So for example:
-                        row-1,cell-1 | row-1,cell-2
-                            another paragraph that will go in row-1,cell-2
-                                text that will also go in row-1,cell-2 but as a blockquote element
-                            still row-1,cell-2
-                        row-2,cell-1 | row-2,cell-2
-                    
-                    The `chunk.split(/\n(?! )/g)` function above is important to make this work: it's splitting by new lines only if the character immediately after the new line isn't a space, meaning a new line that has indenting doesn't get broken into the next row and instead ends up being a continuation of the last cell in the previous row.
-                    
-                    A | will create a new cell regardless of where it appears within any line of input. To actually use a | in a table, just \| to escape it in the input.
-                    
-                    So first: is this a blockquote line? (8+ spaces)
-                    If so, find the end of the blockquote -- i.e. search forward in the tableCell (where tableCell means the tableRow split by |) until you find the end of the blockquote (a line that doesn't have 8+ indent). Then join those lines and pass it to the autoIndent function, since this can just be handled normally (the same way as non-table input) at that point.
+                        This function (autoTable) has specific indenting rules:
+                            * No indent on the line means it's a new row.
+                            * If there's an indent on the line, it's continuing from the last cell in the previous row.
+                            * If there's an indent of 8 or more on the line, it's also is a block quote.
+                        
+                        So for example:
+                            row-1,cell-1 | row-1,cell-2
+                                another paragraph that will go in row-1,cell-2
+                                    text that will also go in row-1,cell-2 but as a blockquote element
+                                still row-1,cell-2
+                            row-2,cell-1 | row-2,cell-2
+                        
+                        The `chunk.split(/\n(?! )/g)` function above is important to make this work: it's splitting by new lines only if the character immediately after the new line isn't a space, meaning a new line that has indenting doesn't get broken into the next row and instead ends up being a continuation of the last cell in the previous row.
+                        
+                        A | will create a new cell regardless of where it appears within any line of input. To actually use a | in a table, just \| to escape it in the input.
+                        
+                        So first: is this a blockquote line? (8+ spaces)
+                        If so, find the end of the blockquote -- i.e. search forward in the tableCell (where tableCell means the tableRow split by |) until you find the end of the blockquote (a line that doesn't have 8+ indent). Then join those lines and pass it to the autoIndent function, since this can just be handled normally (the same way as non-table input) at that point.
                     */
                     for (let i = 0; i < tableCell.length; i += 1) {
                         if (tableCell[i].startsWith(" ".repeat(8))) {
@@ -843,7 +893,7 @@ function interpreter(argValue) {
 function loadBody() {
     document.body.insertAdjacentHTML("afterbegin", `
         <header class="page-header">
-            <a class="header__name" href="${getRootPath()}index.html">Iris Embury</a>
+            <a class="header__name" href="${ getRootPath() }index.html">Iris Embury</a>
             <div class="gear"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentcolor" d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle fill="currentcolor" cx="12" cy="12" r="3.5"></circle></svg></div>
         </header>
         <div class="menu">
