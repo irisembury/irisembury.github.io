@@ -119,11 +119,12 @@
             .article .drop-cap::first-letter { float: left; font-size: 3em; padding: 0.15em 0.2em 0.1em }
             .article mark { background-color: #fff496; color: #2f2f2f; }
             .auto-list + .auto-list { margin-top: 0; }
-            .auto-list.condensed { line-height: 1.4; }
                 .auto-list li.text-block { margin-top: 0.355em;  }
                 .auto-list div.text-block { margin-top: 0.1875em;  }
                 .auto-list ol + .text-block,
                 .auto-list ul + .text-block { margin-top: 0.65em; }
+            .auto-list.condensed { line-height: 1.333; }
+            .auto-list.condensed li.text-block { margin-top: 0.3em; }
             .article a { color: var(--link-color); text-decoration: var(--grey-9,#909090) 1px dotted underline; }
             .article a:hover { color: var(--link-hover); text-decoration: underline; }
             .article a[href^="#"] {
