@@ -27,7 +27,7 @@ const pagesData = [
     { url:"how-bad-is-america-really",title:"How bad is America, really?",date:"2026-07-01" },
     { url:"immigration",title:"Immigration",date:"2025-11-06",mirrors:"substack:83229652" },
     { url:"israel-palestine",title:"Israel and Palestine",date:"2025-07-27",toc,wide },
-    { url:"destiny-lawsuit",title:"Bonnell lawsuit",date:"2025-07-27",toc,unsetWidth,unlisted },
+    { url:"destiny-lawsuit",title:"Steven Bonnell: Lawsuit",date:"2026-11-20",toc,unsetWidth },
     { url:"liberalism-not-leftism",title:"Liberalism not leftism",date:"2025-09-19",mirrors:"substack:74062936,tumblr:795164683319574528,patreon:55199811" },
     { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:73066010,tumblr:794091916138594304,medium:46de1629e138" },
     { url:"lies-about-warren-clinton",title:"Lies about Elizabeth Warren and Hillary Clinton",date:"2024-12-19",mirrors:"tumblr:770730090759946240,substack:53821886" },
@@ -565,11 +565,11 @@ function autoTable(chunk) {
             -->
                 <table class="autotable bold red"><tbod...
     */
-    let firstRow = chunk.substring(0, chunk.indexOf('\n')).replace(/["']/g, '').split(" ");
-    firstRow[0] = "auto-table";
-    firstRow = firstRow.join(" ");
+    let classes = chunk.substring(0, chunk.indexOf('\n')).replace(/["']/g, '').split(" ");
+    classes[0] = "auto-table";
+    classes = classes.join(" ");
     
-    return `<div class="table-wrapper"><table class="${ firstRow }"><tbody>${ chunk.split(/\n(?! )/g).slice(1).map(
+    const table = chunk.split(/\n(?! )/g).slice(1).map(
         (tableRow, rowIndex) => {
             tableRow = tableRow.replaceAll('\\|','&verbar;').split('|');
             tableRow = tableRow.map(
@@ -658,8 +658,11 @@ function autoTable(chunk) {
             )
             return `<tr class="row row-${ rowIndex + 1 } row-${ rowIndex % 2 ? 'even' : 'odd' }">${ tableRow.join('') }</tr>`;
         }
-    ).join('') }</tbody></table></div>`;
+    ).join('')
+    
+    return `<div class="table-wrapper"><table class="${ classes }"><tbody>${ table }</tbody></table></div>`;
 }
+
 function autoList(chunk, isFine_ = false) {
     const closeTags = [];
     let prevIndent = -1;
@@ -693,6 +696,35 @@ function autoList(chunk, isFine_ = false) {
     return output;
 }
 function autoIndent(chunk) {
+    let classes = chunk.substring(0, chunk.indexOf('\n')).replace(/["']/g, '').split(" ");
+    classes[0] = "auto-table";
+    classes = classes.join(" ");
+    
+    let blockquote = chunk.split("\n").slice(1).map(
+        line => {
+            line = line.trim();
+            if (line == '') return '';
+            if (line === "---") {
+                line = "<br>";
+            }
+            else if (line.startsWith("---")) {
+                line = '<p class="attribution">' + line + '</p>';
+            }
+            else if (/^\.[^\. \\]/.test(line)) {
+                line = '<p class="fine">' + line.substring(1).trimStart() + '</p>';
+            }
+            else {
+                line = '<p>' + line + '</p>';
+            }
+            return autoFormat(line);
+        }
+    ).join('');
+    
+    let firstRow = chunk.substring(0, chunk.indexOf('\n')).replace(/["']/g, '').split(" ");
+    firstRow[0] = "auto-table";
+    firstRow = firstRow.join(" ");
+    
+    
     if (chunk.startsWith("!indent\n")) { chunk = chunk.substring(chunk.indexOf('\n')) }
     chunk = chunk.split("\n").map( line => {
         line = line.trim();
@@ -700,7 +732,7 @@ function autoIndent(chunk) {
             line = '<p class="attribution">' + line + '</p>';
         }
         else if (/^\.[^\. \\]/.test(line)) {
-            line = '<p class="fine">' + line.substring(1).trimStart() + '</p>'
+            line = '<p class="fine">' + line.substring(1).trimStart() + '</p>';
         }
         else {
             line = '<p>' + line + '</p>';
