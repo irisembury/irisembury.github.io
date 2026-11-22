@@ -12,36 +12,36 @@ const pagesData = [
     { url:"leftist-youtube",title:"Thoughts on Leftist YouTube",date:"2026-10-07",mirrors:"substack:219340446" },
     { url:"public-record",title:"Public record",wide,toc,unlisted,unsetWidth },
     { url:"poor-things",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
-    { url:"floor-crossings",title:"Floor crossing (Canadian politics)",date:"2026-04-17",mirrors:"substack:94479253,medium:dfe93bb23bdd" },
-    { url:"india",title:"Notes on India",date:"2025-10-24",mirrors:"substack:77071182,tumblr:798351257128615936" },
+    { url:"floor-crossings",title:"Floor crossing (Canadian politics)",date:"2026-04-17",mirrors:"substack:194479253,medium:dfe93bb23bdd" },
+    { url:"india",title:"Notes on India",date:"2025-10-24",mirrors:"substack:177071182,tumblr:798351257128615936" },
     { url:"liberal-conservatism",title:"Liberal conservatism",subtitle:"A philosophy of prudence and humility",date:"2026-03-24",toc },
-    { url:"american-decline",title:"A synopsis of American decline",date:"2026-01-28",mirrors:"substack:86165875,patreon:55201485",toc },
+    { url:"american-decline",title:"A synopsis of American decline",date:"2026-01-28",mirrors:"substack:186165875,patreon:55201485",toc },
     { url:"anime-reviews",title:"Anime reviews",date:"2024-12-17",mirrors:"tumblr:770134591113658368",unlisted },
     { url:"bernie-military-industrial-complex",title:"Bernie Sanders and the Military Industrial Complex",date:"2024-12-16",mirrors:"tumblr:770070077409214464" },
-    { url:"bias-normal-white-men",title:"On our bias for normal white men",date:"2024-11-26",mirrors:"substack:53823028,tumblr:770305075441778688,medium:0c508d4c51b5" },
-    { url:"canada-sovereign-wealth-fund",title:"Canada's plan for a sovereign wealth fund",date:"2026-04-29",mirrors:"substack:95885575,tumblr:815245873447649280" },
+    { url:"bias-normal-white-men",title:"On our bias for normal white men",date:"2024-11-26",mirrors:"substack:153823028,tumblr:770305075441778688,medium:0c508d4c51b5" },
+    { url:"canada-sovereign-wealth-fund",title:"Canada's plan for a sovereign wealth fund",date:"2026-04-29",mirrors:"substack:195885575,tumblr:815245873447649280" },
     { url:"data-structures-algorithms",title:"Data structures & algorithms",date:"2021-04-31",wide,toc,unlisted },
-    { url:"elon-musk-nazi-salute",title:"Elon Musk and the Nazi Salute",date:"2025-01-24",mirrors:"substack:55604956,tumblr:773565389405847552" },
+    { url:"elon-musk-nazi-salute",title:"Elon Musk and the Nazi Salute",date:"2025-01-24",mirrors:"substack:155604956,tumblr:773565389405847552" },
     { url:"fetishism-politics",title:"Fetishism and politics",date:"2024-11-14",mirrors:"tumblr:770364766791352320" },
     { url:"freedom-convoy",title:"What was the Freedom Convoy?",date:"2026-06-15",wide,toc },
     { url:"how-bad-is-america-really",title:"How bad is America, really?",date:"2026-07-01" },
-    { url:"immigration",title:"Immigration",date:"2025-11-06",mirrors:"substack:83229652" },
+    { url:"immigration",title:"Immigration",date:"2025-11-06",mirrors:"substack:183229652" },
     { url:"israel-palestine",title:"Israel and Palestine",date:"2025-07-27",toc,wide },
-    { url:"destiny-lawsuit",title:"Steven Bonnell: Lawsuit",date:"2026-11-20",toc,unsetWidth },
-    { url:"liberalism-not-leftism",title:"Liberalism not leftism",date:"2025-09-19",mirrors:"substack:74062936,tumblr:795164683319574528,patreon:55199811" },
-    { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:73066010,tumblr:794091916138594304,medium:46de1629e138" },
+    { url:"destiny-lawsuit",title:"Steven Bonnell: Lawsuit",date:"",toc,unsetWidth },
+    { url:"liberalism-not-leftism",title:"Liberalism not leftism",date:"2025-09-19",mirrors:"substack:174062936,tumblr:795164683319574528,patreon:55199811" },
+    { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:173066010,tumblr:794091916138594304,medium:46de1629e138" },
     { url:"lies-about-warren-clinton",title:"Lies about Elizabeth Warren and Hillary Clinton",date:"2024-12-19",mirrors:"tumblr:770730090759946240,substack:53821886" },
     { url:"maid",title:"Medical Assistance in Dying",date:"2026-09-14",mirrors:"substack:215626100,medium:378a520d05e0,tumblr:828961026747809793" },
     { url:"mark-robinson",title:"Mark Robinson",subtitle:"A chronicling of a person too ridiculous to forget",date:"2024-12-15",mirrors:"tumblr:769962893917798400" },
     { url:"pierre-poilievre",title:"The many problems with Pierre Poilievre",date:"2026-08-03",mirrors:"substack:216081530",toc },
-    { url:"prejudice",title:"Notes on prejudice",date:"2025-10-30",mirrors:"substack:77556410" },
+    { url:"prejudice",title:"Notes on prejudice",date:"2025-10-30",mirrors:"substack:177556410" },
     { url:"rational-ignorance",title:"Rational ignorance",date:"2026-04-09",mirrors:"substack:193680023,tumblr:813419185909727232,patreon:55199122,medium:7d332cf2dfb5" },
-    { url:"reddit",title:"Reddit",subtitle:"The website's history, what makes it unique, and the intense hatred many people seem to have for it",date:"2025-12-30",mirrors:"substack:83230909" },
+    { url:"reddit",title:"Reddit",subtitle:"The website's history, what makes it unique, and the intense hatred many people seem to have for it",date:"2025-12-30",mirrors:"substack:183230909" },
     { url:"relationships",title:"The standard relationship model",date:"2025-11-19" },
     { url:"sex-gender-transsexuals",title:"Sex, Gender, & Transsexuals",date:"2024-11-19",wide,toc },
-    { url:"somali-day-cares",title:"Nick Shirley and Somali day cares",date:"2026-01-02",mirrors:"substack:83243480,patreon:55200604" },
+    { url:"somali-day-cares",title:"Nick Shirley and Somali day cares",date:"2026-01-02",mirrors:"substack:183243480,patreon:55200604" },
     { url:"trans-prison-stats-argument",title:"The trans prison stats argument",date:"2024-09-15",mirrors:"substack:153916145,tumblr:771501478599868416" },
-    { url:"trump-and-russia",title:"Trump and Russia",date:"2025-03-06",mirrors:"tumblr:777321996757450752,substack:58560801" },
+    { url:"trump-and-russia",title:"Trump and Russia",date:"2025-03-06",mirrors:"tumblr:777321996757450752,substack:158560801" },
     { url:"trump-appeal",title:"The Trump appeal",subtitle:"How and why does anyone actually like him?",date:"2024-12-03",mirrors:"tumblr:770270265635667968,medium:5c6806252b43" },
     { url:"types-of-masculinity",title:"On types of masculinity",date:"2024-11-08",mirrors:"tumblr:770310861444300800" },
     { url:"why-bottom-surgery",title:"Why get bottom surgery?",date:"2025-02-09",mirrors:"tumblr:775036555284856832" }
@@ -696,14 +696,13 @@ function autoList(chunk, isFine_ = false) {
     return output;
 }
 function autoIndent(chunk) {
-    let classes = chunk.substring(0, chunk.indexOf('\n')).replace(/["']/g, '').split(" ");
-    classes[0] = "auto-table";
-    classes = classes.join(" ");
-    
-    let blockquote = chunk.split("\n").slice(1).map(
+    const blockquote = chunk.split("\n").map(
         line => {
             line = line.trim();
             if (line == '') return '';
+            if (line === "---") {
+                line = "<br>";
+            }
             if (line === "---") {
                 line = "<br>";
             }
@@ -719,27 +718,7 @@ function autoIndent(chunk) {
             return autoFormat(line);
         }
     ).join('');
-    
-    let firstRow = chunk.substring(0, chunk.indexOf('\n')).replace(/["']/g, '').split(" ");
-    firstRow[0] = "auto-table";
-    firstRow = firstRow.join(" ");
-    
-    
-    if (chunk.startsWith("!indent\n")) { chunk = chunk.substring(chunk.indexOf('\n')) }
-    chunk = chunk.split("\n").map( line => {
-        line = line.trim();
-        if (line.startsWith("---")) {
-            line = '<p class="attribution">' + line + '</p>';
-        }
-        else if (/^\.[^\. \\]/.test(line)) {
-            line = '<p class="fine">' + line.substring(1).trimStart() + '</p>';
-        }
-        else {
-            line = '<p>' + line + '</p>';
-        }
-        return autoFormat(line);
-    }).join('');
-    return `<blockquote class="auto-indent">${ chunk }</blockquote>`
+    return `<blockquote class="auto-indent">${ blockquote }</blockquote>`
 }
 function autoHeading(chunk) {
     let number = chunk.indexOf(" ");
@@ -892,7 +871,7 @@ function interpreter(argValue) {
         if (chunk.startsWith("//")) { return ""; }
         if (chunk.startsWith("<") && !chunk.startsWith("<a")) { return chunk; }
         if (chunk == "---") { return "<hr>"; }
-        if (chunk == "***") { return '<div class="dinkus no-select">***</div>'; }
+        if (chunk == "***") { return '<div class="dinkus"></div>'; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
         if (chunk.startsWith("!images")) { return imageGallery(chunk); }
         if (chunk.startsWith("!files")) { return fileBox(chunk); }
@@ -900,7 +879,7 @@ function interpreter(argValue) {
         chunk = codeSanitize(chunk);
         if (chunk.startsWith("!codeblock")) { return codeblock(chunk) ; }
         if (chunk.startsWith("!table")) { return autoTable(chunk); }
-        if (chunk.startsWith("!indent") || chunk.startsWith("    ")) { return autoIndent(chunk); }
+        if (chunk.startsWith("    ")) { return autoIndent(chunk); }
         let isFine = /^\.[^\. \\]/.test(chunk);
         if (isFine) { chunk = chunk.slice(1).trimStart(); }
         if (chunk.startsWith("!list")) { chunk = autoList(chunk.substring(chunk.indexOf('\n') + 1)); }
