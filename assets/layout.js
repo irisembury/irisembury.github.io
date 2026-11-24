@@ -366,7 +366,17 @@ function autoFormat(_string) {
 }
 function afAux(str_in) {
     //curly quotes, dashes
-    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) { str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1").replaceAll(/(>|^| |\()'/g, "$1&lsquo;").replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2").replaceAll(/'/g, "&rsquo;").replaceAll(/(>|^| |\()"/g, "$1&ldquo;").replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2").replaceAll(/"/g, "&rdquo;") }
+    if (str_in.indexOf("'") != -1 || str_in.indexOf('"') != -1) {
+        str_in = str_in.replaceAll(/ '(\d{2}\D)/g, " &rsquo;$1")
+            .replaceAll(/ '(cause)/g, " &rsquo;$1")
+            .replaceAll(/ '(em[,\.\? !])/g, " &rsquo;$1")
+            .replaceAll(/(>|^| |\()'/g, "$1&lsquo;")
+            .replaceAll(/(\*|>|-)'(\w)/g, "$1&lsquo;$2")
+            .replaceAll(/'/g, "&rsquo;")
+            .replaceAll(/(>|^| |\()"/g, "$1&ldquo;")
+            .replaceAll(/(\*|>|-)"(\w)/g, "$1&ldquo;$2")
+            .replaceAll(/"/g, "&rdquo;")
+    }
     return str_in.replaceAll("---", '&mdash;').replaceAll("--", "&ndash;");
 }
 function tokenizeByWordChar(stringData) {
@@ -467,11 +477,18 @@ function fileBox(chunk) {
     return `<div class="file-box">${ chunk.join('') }</div>`;
 }
 let galleryNum = 1;
-function imageGallery(chunk) {
+function autoGallery(chunk) {
     const classes = ["gallery"];
     const rows = chunk.split("\n").filter(n => n);
     
     let firstRow='', maxHeight='', style='';
+    
+    if (maxHeight) {
+        let gstyclass = '.gallery-style-'+galleryNum;
+        classes.push(gstyclass);
+        style = `<style> .${ gstyclass } img { max-height: ${ maxHeight } } </style>`;
+        galleryNum += 1;
+    }
     
     if (rows[0].startsWith("!images")) {
         firstRow = rows.shift().split(" ").slice(1);
@@ -480,14 +497,104 @@ function imageGallery(chunk) {
             firstRow.forEach(c => {if (!/^\d+$/.test(c)) classes.push(c)});
         }
     }
-    let numChildren = Math.min(rows.length,4);
-    classes.push('gal-' + numChildren)
-    if (maxHeight) {
-        let cn = "image-gallery-style-" + galleryNum;
-        classes.push(cn);
-        style = `<style> .${ cn } img { max-height: ${ maxHeight } } </style>`;
-        galleryNum += 1;
+    
+    let gWidth = 1;
+    if (rows.length == 2) {
+        gWidth = 2;
     }
+    if ([3,5,6].includes(rows.length)) {
+        gWidth = 3;
+    }
+    else if (rows.length >= 4) {
+        gWidth = 4;
+    }
+    
+    classes.push('gal-' + gWidth)
+    
+    /*
+        default sizing based on number of children:
+        
+        1 -- just centre, allow full-width
+        
+              . O----------------------------------------------O .
+              . |                                              | .
+              . |                        AA                    | .
+              . |                                              | .
+              . O----------------------------------------------O .
+        
+        2 -- sized like 3-width, can't fill whole space
+        
+              .      O--------------O      O--------------O      .
+              .      |              |      |              |      .
+              .      |      AA      |      |      BB      |      .
+              .      |              |      |              |      .
+              .      O--------------O      O--------------O      .
+        
+        3 -- 1/3 width, to full
+        
+              . O--------------OO--------------OO--------------O .
+              . |              ||              ||              | .
+              . |      AA      ||      BB      ||      CC      | .
+              . |              ||              ||              | .
+              . O--------------OO--------------OO--------------O .
+        
+        4 -- 1/4 width, to full
+        
+              . O----------OO----------OO----------OO----------O .
+              . |          ||          ||          ||          | .
+              . |    AA    ||    BB    ||    CC    ||    DD    | .
+              . |          ||          ||          ||          | .
+              . O----------OO----------OO----------OO----------O .
+        
+        5 -- split to 3 and 2
+        
+              . O--------------OO--------------OO--------------O .
+              . |              ||              ||              | .
+              . |      AA      ||      BB      ||      CC      | .
+              . |              ||              ||              | .
+              . O--------------OO--------------OO--------------O .
+              .      O--------------O      O--------------O      .
+              .      |              |      |              |      .
+              .      |      DD      |      |      EE      |      .
+              .      |              |      |              |      .
+              .      O--------------O      O--------------O      .
+        
+        6 -- two rows of 3
+        
+              . O--------------OO--------------OO--------------O .
+              . |              ||              ||              | .
+              . |      AA      ||      BB      ||      CC      | .
+              . |              ||              ||              | .
+              . O--------------OO--------------OO--------------O .
+              . |              ||              ||              | .
+              . |      DD      ||      EE      ||      FF      | .
+              . |              ||              ||              | .
+              . O--------------OO--------------OO--------------O .
+        
+        7 or more -- max 25%-width each item, thus 4-wide rows
+        
+              . O----------OO----------OO----------OO----------O .
+              . |          ||          ||          ||          | .
+              . |    AA    ||    BB    ||    CC    ||    DD    | .
+              . |          ||          ||          ||          | .
+              . O----------OO----------OO----------OO----------O .
+              .       O----------OO----------OO----------O       .
+              .       |          ||          ||          |       .
+              .       |    EE    ||    FF    ||    GG    |       .
+              .       |          ||          ||          |       .
+              .       O----------OO----------OO----------O       .
+        
+              . O----------OO----------OO----------OO----------O .
+              . |          ||          ||          ||          | .
+              . |    AA    ||    BB    ||    CC    ||    DD    | .
+              . |          ||          ||          ||          | .
+              . O----------OO----------OO----------OO----------O .
+              . |          ||          ||          ||          | .
+              . |    EE    ||    FF    ||    GG    ||    HH    | .
+              . |          ||          ||          ||          | .
+              . O----------OO----------OO----------OO----------O .
+            
+    */
     
     /*
         classes that do something here:
@@ -500,8 +607,9 @@ function imageGallery(chunk) {
             .float
                 - sets `float: right` (and some other style changes)
                 - changes the gallery to a vertical column that floats on the right side of the page
+            .banner
+                - for one child, sets image width to 100%
     */
-    
     
     let gallery = `<div class="${ classes.join(' ') }">
         ${
@@ -511,7 +619,7 @@ function imageGallery(chunk) {
                     console.log('gallery: an item had no source');
                     return;
                 }
-                row.title = row.title | row.alt;
+                row.title = row.title || row.alt;
                 row.alt = row.alt || row.caption;
                 if (row.caption) {
                     row.caption = `<figcaption>${ autoFormat(row.caption.replaceAll('&quot;','"')) }</figcaption>`
@@ -617,7 +725,7 @@ function autoTable(chunk) {
                                 /* ---- in-table image embed ---- */
                                 if (tableCell[i].startsWith("!images")) {
                                     tableCell[i] = tableCell[i].substring("!images".length).trimStart();
-                                    tableCell[i] = imageGallery('\n' + tableCell[i]);
+                                    tableCell[i] = autoGallery('\n' + tableCell[i]);
                                 }
                                 /* ---- This is a list: ---- */
                                 else if (tableCell[i].startsWith("* ") || tableCell[i].startsWith("- ")) {
@@ -873,7 +981,7 @@ function interpreter(argValue) {
         if (chunk == "---") { return "<hr>"; }
         if (chunk == "***") { return '<div class="dinkus"></div>'; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
-        if (chunk.startsWith("!images")) { return imageGallery(chunk); }
+        if (chunk.startsWith("!images")) { return autoGallery(chunk); }
         if (chunk.startsWith("!files")) { return fileBox(chunk); }
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
         chunk = codeSanitize(chunk);

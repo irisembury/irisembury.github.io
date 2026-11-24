@@ -1,36 +1,56 @@
 <!DOCTYPE html><html lang="en" dir="ltr" style="opacity:0"><head><meta charset="utf-8"><link rel="stylesheet" href="../../assets/main.css"><link rel="icon" type="image/x-icon" href="../../favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body>
 <style>
-.article { font: 17px/1.5 Roboto,Arial,sans-serif; }
-.article img { object-fit: contain; }
-.gallery { margin-inline: unset; }
-.auto-table .gallery { max-width: 100%; width: 400px; margin-top: 0.5em; }
-.auto-table .gallery img { aspect-ratio: 1.5; object-fit: contain; }
+    .article { font: 17px/1.5 Roboto,Arial,sans-serif; }
+    .article img { object-fit: contain; }
 
-.article .article__body mark { background-color: light-dark(#f1e2ff,#2e2342); color: inherit; }
+    .article .article__body mark { background-color: light-dark(#f1e2ff,#2e2342); color: inherit; }
 
-.footer-recommendation, .page-footer__links { display: none; }
+    .footer-recommendation,
+    .page-footer__links { display: none; }
 
-    .timeline.auto-table { max-width: 1300px; margin-inline: auto; word-break: break-word; }
-    .timeline.auto-table td { min-height: 100px; padding-block: 10px; font: 15px/19px Arial,sans-serif; }
-    .timeline.auto-table .col-1 { max-width: 222px; }
-    .timeline.auto-table .col-1 img { max-width: min(100%,190px); }
-    .timeline.auto-table .col-2 a { pointer-events: none; color: inherit; text-decoration: none; }
-    .timeline.auto-table tr + tr { border-top: 1px solid var(--grey-c,silver); }
+    .auto-table.timeline { max-width: 1300px; margin-inline: auto; word-break: break-word; }
+    .auto-table.timeline tr + tr { border-top: 1px solid var(--grey-c,silver); }
+        .auto-table.timeline td { min-height: 100px; padding-block: 10px; font: 15px/19px Arial,sans-serif; }
+        .auto-table.timeline .col-1 { max-width: 222px; }
+            .auto-table.timeline .col-1 img { max-width: min(100%,190px); }
+        .auto-table.timeline .col-2 { position: relative; width: 100%; }
+            .auto-table.timeline .col-2 div { position: absolute; overflow-y: auto; inset: 10px 5px; padding: 1px 5px; }
+            .auto-table.timeline .col-2 a { pointer-events: none; color: inherit; text-decoration: none; }
+    .auto-table .gallery { max-width: 100%; width: 400px; margin-top: 0.5em; }
+    .auto-table .gallery img { aspect-ratio: 1.5; object-fit: contain; }
     
-    .timeline .col-2 {
-        position: relative;
-        width: 100%;
-    }
-    .timeline .col-2 div {
-        position: absolute;
-        overflow-y: auto;
-        inset: 10px 5px;
-        padding: 1px 5px;
+    .gallery { max-width: var(--main-width); margin-inline: unset; }
+    
+    .auto-table.paper-esque { margin-left: 1em; max-width: 824px; border: 2px solid var(--grey-c,silver); }
+        .auto-table.paper-esque td { padding: 20px 24px; }
+        .auto-table.paper-esque td p { margin-top: 0.5em; }
+    
+    .auto-table.files a { text-decoration: none; }
+        .auto-table.files .cell { padding-inline: 10px; }
+        .auto-table.files .row-1 .cell { font-weight: 600; white-space: nowrap; }
+        .auto-table.files tr:nth-child(n+2) .col-1 { padding-left: 1em; font-family: Consolas,monospace; }
+        .auto-table.files .cell * + * { margin-top: 2px; }
+    .article__body > .fine { font-size: 15px; }
+    
+    .law-exh.auto-table { ; }
+        .law-exh.auto-table .col-2 { vertical-align: middle; max-width: 600px; }
+        .law-exh.auto-table .col-1 { max-width: 300px; }
+            .law-exh.auto-table .col-1 img { aspect-ratio: unset; }
+    
+    .depo-page-label { margin-block: 9px 5px; font-family: 'DM Sans',Roboto,sans-serif; }
+        .depo-page-label > :nth-child(1) { font-weight: 700; }
+        .depo-page-label > :nth-child(2) { font-size: 16px; }
+    
+    .depos-page {
+        max-width: 1100px;
+        margin-top: 0;
+        margin-left: 1em;
+        border-left: 2px solid var(--grey-b,#bbb);
+        padding-left: 10px;
+        white-space: pre-wrap;
+        font: 15px/20px Consolas,monospace;
     }
     
-    .paper-esque.auto-table { margin-left: 1em; max-width: 824px; border: 2px solid var(--grey-c,silver); }
-    .paper-esque.auto-table td { padding: 20px 24px; }
-    .paper-esque.auto-table td p { margin-top: 0.5em; }
 </style>
 <main id="page">
 
@@ -58,14 +78,6 @@ The court case is called 25-cv-20757, S.D. Florida, assigned to district judge J
 ## Files
 
 Not everything, but key files from the docket that I picked out for their importance:
-
-<style>
-.files a { text-decoration: none; }
-.files .cell { padding-inline: 10px; }
-.files .row-1 .cell { font-weight: 600; white-space: nowrap; }
-.files tr:nth-child(n+2) .col-1 { padding-left: 1em; font-family: Consolas,monospace; }
-.article__body > .fine { font-size: 15px; }
-</style>
 
 !table files
 Docket number | Filed by | Document
@@ -109,13 +121,6 @@ Bonnell recalls he first met Pxie in late 2020, likely October (see [Bonnell's 2
 This question is critical to the case as it determines whether the law in question even applies. If Bonnell shared the video no later than **October 1, 2022**, then the court has no authority to punish him for that transmission under the law being cited. This is because [15 U.S. Code § 6851](https://www.law.cornell.edu/uscode/text/15/6851) was passed on March 15, 2022 as part of legislation called the [Consolidated Appropriations Act, 2022](https://www.congress.gov/117/plaws/publ103/PLAW-117publ103.pdf), which specifies that it doesn't come into effect until October of the next fiscal year. (In the U.S., a "fiscal year" means from October 1st until September 30th the following year. Fiscal years are identified by the later of the two years they include, e.g. from 2021-10-01 to 2022-09-30 is called Fiscal Year 2022, or FY22.)
 
 This means all other facts notwithstanding, if the transmission cannot be shown to have occurred later than 2022-09-30, the lawsuit would be dismissed. Bonnell provided an exhibit showing the transmission to Rose, which he claims was the video depicting Pxie, occurring on 2022-04-09.
-
-<style>
-.law-exh { ; }
-.law-exh .col-1 { max-width: 300px; }
-.law-exh .col-1 img { aspect-ratio: unset; }
-.law-exh .col-2 { vertical-align: middle; max-width: 600px; }
-</style>
 
 !table law-exh
 !images src:media/PLAW-117publ103-effective-date.png | "[T]he amendments made by this Act shall not take effect until October 1 of the first fiscal year beginning after the date of enactment of this Act."
@@ -182,6 +187,7 @@ The fundraiser was originally at [https://www.givesendgo.com/suedestiny](https:/
 
 -- archive.org: [https://web.archive.org/web/20250121075021/https://www.givesendgo.com/suedestiny](https://web.archive.org/web/20250121075021/https://www.givesendgo.com/suedestiny)
 -- archive.is: [https://archive.is/GkC9U](https://archive.is/GkC9U)
+-- screen capture: [2025-01-21-pxie-givesendgo-screenshot](media/2025-01-21-pxie-givesendgo-screenshot.png)
 
 Here's a searchable copy of what it said on the GiveGoSend fundraiser page:
 
@@ -229,7 +235,7 @@ I will be suing Steven Kenneth Bonnell II
     [Destiny downplaying the pain I felt and my concerns.](https://imgur.com/a/gG6i4ag)
     [Destiny offering to pay some bills I guess to try to make me feel better? I'm sorry is a water bill being paid going to make me feel okay about the lifelong trauma I've received?](https://imgur.com/a/eUZHDZZ)
 
-The images that she attached at the bottom (archived here because the imgur links might be removed someday). The first one she linked to (under "plenty of times on the phone") is a repeated link to the first image below ("Destiny 'apologizing' for his actions"), as that's where he mentions talking to Rose. These are also found in the table in [Timeline](#Timeline), but repeated here for clarity that these are the ones she linked to in the Substack post.
+The images that she attached at the bottom (archived here because the imgur links might be removed someday). The first one she linked to (under "plenty of times on the phone") is a repeated link to the first image below ("Destiny 'apologizing' for his actions"), as that's where he mentions talking to Rose. These are also found in the table in [Timeline](#Timeline), repeated here for clarity that these are the ones she linked to in the Substack post.
 
 !images
 src: media/2024-11-29-2-bonnell-pxie.png | caption: Pxie's description: "Destiny 'apologizing' to me for his actions. Note, I had to contact him asking about the situation before he sent me this message."
@@ -477,6 +483,18 @@ src: media/2024-12-12-1-bonnell-pxie.png | caption: Pxie's description: "Destiny
     |
     **Destiny** 11/29/24, 0:09 PM
     Ughhhh there shouldn't be no, I'm so sorry there's literally zero excuse, I'd had phone convos and stuff with this person they were fairly close to me, it's worthless to say it at this point but I'm super sorry, there's literally no excuse. I won't say or confirm anything about them, if there's any particular action or thing I can do just let me know.
+**2024 November 29**
+    !images src:media/2024-11-29-bonnell-unknown.png
+    image source: leaked onto Discord by the other person at some point
+    |
+    oh no more leaked stuff ): is pixie ok?
+    **Destiny** 11/29/2024 9:54 PM
+    Zzzzz sorry >.< I would have responded
+    I don't actually think that harem story or whatever was real, I think this is just some random guy that hacked her account
+    {censored:...........................}
+    hmmmm I saw in the messages that he had recordings of voice calls between you and the rose girl, and if she was recording your vc's she probably gave him all the leaks willingly no?
+    **Destiny** 11/29/2024 9:58 PM
+    
 **2024 November 30**
     !images src:media/2025-11-30-kiwifarms-twitter.png
     image source: exhibit in legal filing, by Pxie's side;
@@ -759,7 +777,7 @@ Present:
 Select parts:
 
 <div class="depo-page-label"><span>pg <a href="media/2025-06-06-hearing.pdf#page=13">13–14</a>:</span> <span>Pxie answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MR. LAGE:
     **Q. So, Ms. Doe, at some point <mark>was any of the content from your encounter, sexual encounter with Mr. Bonnell circulated, to your knowledge?</mark>**
     A. Like publicly or?
@@ -776,19 +794,19 @@ BY MR. LAGE:
     A. He apparently did this on multiple occasions.
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2025-06-06-hearing.pdf#page=16">16</a>:</span> <span>Pxie answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
     **Q. What other occasions are you aware of that he shared it with other individuals without your consent?**
     A. After I spoke about this issue and what was happening, I found out that the Abby MC apparently received a video of me in 2023. I also -- I got a couple of messages as well of people who said that they think that they received a video of me. One of those people said that <mark>they think that their sister received a video of me or that the sister recognized me from a video just a few months ago</mark>, but, unfortunately, <mark>some of these people have deleted their accounts.</mark>
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2025-06-06-hearing.pdf#page=22">22</a>:</span> <span>Pxie answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
     **THE COURT: Well, let me ask you this question: Did they know about your relationship with the Defendant?**
     (No audible response.)
     **THE COURT: Okay. And who all -- did other people know?**
     THE WITNESS: Only -- there should have been only two people who should have known, my ex-boyfriend and Steven's ex-wife, Melina. And to be clear, I told -- like, I told him he could tell her, but I didn't say anything about showing her anything, but those were the only two people who should have.
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2025-06-06-hearing.pdf#page=38">38–40</a>:</span> <span>Pxie answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MR. BRETTLER:
     **Q. It was your idea, Ms. Doe, to make a sexually explicit video with Mr. Bonnell, correct?**
     A. That I'm not completely sure of.
@@ -829,15 +847,8 @@ Present:
 
 Select parts:
 
-<style>
-.depos { max-width: 1100px; margin-top: 0; margin-left: 1em; border-left: 2px solid var(--grey-b,#bbb); padding-left: 10px; white-space: pre-wrap; font: 15px/20px Consolas,monospace; }
-.depo-page-label { margin-block: 9px 5px; font-family: 'DM Sans',Roboto,sans-serif; }
-.depo-page-label > :nth-child(1) { font-weight: 700; }
-.depo-page-label > :nth-child(2) { font-size: 16px; }
-</style>
-
 <div class="depo-page-label"><span>pg <a href="media/2026-01-07-rose-deposition.pdf#page=15">13–16</a>:</span> <span>Rose answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MS. SCHLUMP PETERS:
     **Q. Okay. So can you tell me what these 8 pages are?**
     A. These were e-mails I got from someone named Callum telling me that I got doxxed online, and he sent me lots of e-mails about screenshots he found online and stuff.
@@ -859,7 +870,7 @@ BY MS. SCHLUMP PETERS:
     A. It's supposed to be an app for kids to make friends, so you have to be under the age of 18 technically.
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2026-01-07-rose-deposition.pdf#page=26">24–26</a>:</span> <span>Rose answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MS. SCHLUMP PETERS:
     ...
     **Q. Did Ben have a Twitter account?**
@@ -884,7 +895,7 @@ BY MS. SCHLUMP PETERS:
     A. Oh. No.
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2026-01-07-rose-deposition.pdf#page=34">32–35</a>:</span> <span>Rose answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MS. SCHLUMP PETERS:
     **Q. So do you recognize this as a --**
     MR. CAMARA: Excuse me, Joan, which -- which page are you on right now?
@@ -920,7 +931,7 @@ BY MS. SCHLUMP PETERS:
     A. No.
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2026-01-07-rose-deposition.pdf#page=51">49</a>:</span> <span>Rose answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MS. SCHLUMP PETERS:
     **Q. Okay. Do you know if your cell phone number was ever given to the defendant, Destiny, in this case?**
     A. No.
@@ -930,14 +941,14 @@ BY MS. SCHLUMP PETERS:
     A. No.
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2026-01-07-rose-deposition.pdf#page=54">52</a>:</span> <span>Rose answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
     **Q. And did you ever tell Ben that you'd be willing to speak to Destiny?**
     A. No.
     **Q. Okay. Any idea why he would have written that?**
     A. Just 'cause I didn't give Ben consent to do so something doesn't mean I didn't have to do it. Ben would just make me do things whether or not I wanted to or not.
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2026-01-07-rose-deposition.pdf#page=75">73–74</a>:</span> <span>Rose answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MR. CAMARA:
     ...
     **Q. If you go to the last page, there's a photo that Solo posted, again, impersonating you. Is that a photograph of you?
@@ -951,7 +962,7 @@ BY MR. CAMARA:
     A. First time he started threatening me, he threatened to kill himself; and then once it got worse, he said that he'd kill my family and he would come and kidnap me and use me as a sex slave.
 </div>
 <div class="depo-page-label"><span>pg <a href="media/2026-01-07-rose-deposition.pdf#page=80">78–80</a>:</span> <span>Rose answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MR. CAMARA:
     **Q. So when you were shown these Discord chats with -- between Rose and Destiny today, you had never seen them before in your life; is that correct?**
     A. I saw the one that was, like, this one. (Indicating.) Because I saw it -- oh, that's not Discord.
@@ -979,7 +990,7 @@ mirror: [2026-01-07-rose-deposition.pdf](media/2026-08-20-bonnell-deposition.pdf
 Select parts:
 
 <div class="depo-page-label">pg <a href="media/2026-08-20-bonnell-deposition.pdf#page=30">29–30</a>: <span>Bonnell answering questions</span></div>
-<div class="depos auto-format-2">
+<div class="depos-page auto-format-2">
 BY MS. SCHLUMP PETERS:
     **Q. Thank you for that clarification. When did you first communicate with plaintiff about -- approximately?**
     A. I would say sometime in late 2019.

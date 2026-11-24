@@ -8,10 +8,10 @@
         --toc-width: 264px;
         --bold-spacing: -0.2px;
         --grey-1: light-dark(#121212, hsl(230, 3%, 78%));
-        --grey-2: light-dark(#252525, hsl(230, 3%, 73%));
-        --grey-3: light-dark(#313131, hsl(230, 3%, 68%));
+        --grey-2: light-dark(#232424, hsl(230, 3%, 73%));
+        --grey-3: light-dark(#313234, hsl(230, 3%, 68%));
         --grey-4: light-dark(#3f4247, hsl(230, 3%, 63%));
-        --grey-5: light-dark(#52555c, hsl(230, 4%, 58%));
+        --grey-5: light-dark(#52545a, hsl(230, 4%, 58%));
         --grey-6: light-dark(#5d636b, hsl(230, 4%, 53%));
         --grey-7: light-dark(#6f7177, hsl(230, 4%, 48%));
         --grey-8: light-dark(#808080, hsl(230, 4%, 43%));
@@ -128,19 +128,17 @@
             .auto-list.condensed li.text-block { margin-top: 0.3em; }
             .article a { color: var(--link-color); text-decoration: var(--grey-9,#909090) 1px dotted underline; }
             .article a:hover { color: var(--link-hover); text-decoration: underline; }
-            .article a[href^="#"] {
-                color: inherit;
-                text-decoration: dotted underline var(--grey-7,#808080);
-            }
+            .article a[href^="#"] { color: inherit; text-decoration: dotted underline var(--grey-7,#808080); }
             .article a.link-icon { display: inline-block; transform: translateY(-2px); }
             .article a.link-icon:hover { border-bottom: 1px solid currentcolor; }
             .article sub { vertical-align: sub; line-height: 1; }
             .article sup { vertical-align: text-top; line-height: 1; }
-            .article .fine { font: 15px/22px Roboto,sans-serif; color: light-dark(#60636a, #82838a); }
+            .article .fine { font: 15px/1.4 Roboto,sans-serif; color: light-dark(#60636a, #82838a); }
             .article .fine *, .article .fine ::marker { font-family: inherit; font-size: inherit; color: inherit; }
                 .article .fine + .fine { margin-top: 5px; }
                 .article .fine a { text-decoration: 1px dotted underline var(--grey-8,#808080); }
                 .article .fine p + p, .article .fine li + li { margin-top: 5px; }
+            .article .censored { background-color: currentcolor; user-select: none; }
             .article code { background-color: var(--grey-f,whitesmoke); vertical-align: baseline; font: 15px/1 Consolas,monospace; padding-inline: 2px; letter-spacing: -0.3px; white-space: pre-wrap; }
             .article code * { font-size: inherit !important; font-family: inherit !important; }
             .codeblock { background-color: light-dark(#f4f4f4,#222); color: light-dark(#222,#ddd); white-space: pre-wrap; font: 15px/18px Consolas,monospace; padding: 8px 11px; border-left: 2px solid light-dark(#488,#255); }
@@ -157,7 +155,7 @@
             .auto-indent { color: var(--grey-4,#444); line-height: 1.5; padding: 0 2em; }
                 .auto-indent > :nth-child(n+2) { margin-top: 0.225em; }
                 .auto-indent .attribution { margin-left: 2em; }
-                .auto-indent .attribution, .auto-indent .attribution * { color: var(--grey-6,#666); }
+                .auto-indent .attribution, .auto-indent .attribution * { color: var(--grey-5,#555); }
             .auto-video { }
                 .auto-video video { display: block; margin-inline: auto; }
             .table-wrapper { text-align: left; }
@@ -166,12 +164,9 @@
                     .auto-table ul { padding: 0 18px; }
                     .auto-table .cell { padding: 3px 5px; vertical-align: top; height: inherit; box-sizing: border-box; }
                     .auto-table .cell div { overflow-y: auto; }
-                    .auto-table .cell :nth-child(1) { margin-top: 0; }
-                    .auto-table .cell p { margin-top: 5px; }
+                    .auto-table .cell * + *,
                     .auto-table .cell ul,
-                    .auto-table .cell li { margin-top: 4px; }
-                    .auto-table .cell .auto-indent { margin-top: 6px; }
-                    .auto-table .gallery { margin: 0; }
+                    .auto-table .cell li { margin-block: 4px 0; }
                     .auto-table .fine + .fine, .article .auto-table .cell .fine + .fine p { margin-top: 2px; }
                     .auto-table .auto-indent { padding: 2px 8px 3px; }
             .file-box { background-color: light-dark(#fff0,#242424); border: 1px dashed grey; display: flex; gap: 3px; font-size: 14px; margin: 15px 0 15px 20px; line-height: 1.15; width: min-content; padding: 8px 6px 2px; float: right; }
@@ -179,10 +174,13 @@
                     .file-box .pdf { width: 35px; aspect-ratio: 1; background: url(pdf-icon.png); background-size: contain; }
                     .file-box figcaption { padding: 3px; }
                         .file-box figcaption a { word-break: break-word; text-decoration: none; }
-            .gallery { overflow: hidden; display: flex; flex-wrap: wrap; margin: 18px auto; gap: 12px; align-items: baseline; }
-            .gallery.gal-2:not(.float) figure { max-width: calc(50% - 12px); }
+            .gallery { overflow: hidden; display: flex; flex-wrap: wrap; margin-block: 18px; gap: 12px; align-items: baseline; }
+            .gallery.gal-1:not(.float) figure { max-width: calc(94%); }
+            .gallery.gal-2:not(.float) figure { max-width: calc(47.5% - 12px); }
             .gallery.gal-3:not(.float) figure { max-width: calc(33.3% - (12px * 2 / 3)); }
             .gallery.gal-4:not(.float) figure { max-width: calc(25% - (12px * 3 / 4)); }
+            .gallery.gal-5:not(.float) figure { max-width: calc(25% - (12px * 3 / 4)); }
+            .gallery.gal-6:not(.float) figure { max-width: calc(25% - (12px * 3 / 4)); }
             .gallery:has(> :nth-child(2)) img { aspect-ratio: 1.3; }
             
             .gallery figure { margin-inline: auto; display: flex; flex-direction: column; align-items: center; max-width: 100%; max-height: 100%; }
@@ -193,6 +191,7 @@
                 .gallery.float { float: right; max-width: 185px; grid-template-columns: auto !important; margin: 20px 0 20px 20px; background-color: var(--content-bg); }
                 .gallery.float img { width: 100%; aspect-ratio: unset; }
             }
+            .gallery.gal-1.banner figure { max-width: 100%; width: 100%; }
             .gallery.oar img { aspect-ratio: unset !important; }
             .gallery.contain img { object-fit: contain; }
 
@@ -200,13 +199,6 @@
             .dinkus::after { content: '***' }
                 .dinkus + * { margin-top: 0; }
             
-            @media (max-width: 640px) { .gallery:has(> :nth-child(4)) { grid-template-columns: 1fr 1fr; } }
-            @media (max-width: 540px) {
-                .gallery:has(> :nth-child(3)) { grid-template-columns: 1fr; max-width: 280px; }
-                .gallery:has(> :nth-child(4)) { grid-template-columns: 1fr 1fr; max-width: unset; }
-            }
-            @media (max-width: 440px) { .gallery { grid-template-columns: 1fr !important;  max-width: 280px !important; } }
-
         .article__footer { margin-top: 42px; padding-top: 42px; color: var(--grey-3,#333); border-top: 1px solid var(--grey-c,silver); font: 17px/23px Roboto,Arial,sans-serif; max-width: var(--main-width); margin-inline: auto; }
             .article__footer a { text-decoration: none; }
             .article__footer a:hover { text-decoration: underline; }
@@ -238,7 +230,7 @@
                 .recent-articles > * + * { margin-top: 10px; }
                 .recent-articles .page-date { display: none; }
 
-    .page-footer__main { color: light-dark(#6d7073,#aaa); font: 15px/1.4 Roboto,sans-serif; display: grid; grid-template-columns: minmax(0px,var(--main-width)); justify-content: center; padding: 22px 18px 34px; gap: 14px; }
+    .page-footer__main { color: light-dark(#75787b,#656869); font: 15px/1.4 Roboto,sans-serif; display: grid; grid-template-columns: minmax(0px,var(--main-width)); justify-content: center; padding: 22px 18px 34px; gap: 14px; }
         .page-footer__main a { text-decoration: underline; text-underline-offset: 1px; }
         .page-footer__about { font-size: 13px; text-align: justify; }
             .page-footer__links p { margin: 6px 0; }
