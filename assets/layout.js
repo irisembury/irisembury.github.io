@@ -5,7 +5,7 @@ const HTML = document.documentElement, toc = 1, wide = 1, unlisted = 1, unsetWid
 const pagesData = [
     { url:"dismal-politics-of-livestreaming",title:"The Dismal Politics of Livestreaming",date:"2026-11-15",unlisted },
     { url:"bonnell-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
-    { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:88392592,tumblr:809547051047272448,patreon:55199340",toc },
+    { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:188392592,tumblr:809547051047272448,patreon:55199340",toc },
     { url:"afd-victory-2026",title:"On the AfD victory in Saxony-Anhalt",date:"2026-09-08",mirrors:"substack:214741964,tumblr:827199160807817216" },
     { url:"airport-privatization",title:"Thoughts on airport privatization",date:"2026-09-20",mirrors:"substack:216649667" },
     { url:"allende-and-pinochet",title:"Allende and Pinochet",date:"2026-08-09",mirrors:"substack:210515116,medium:55782f90e9" },

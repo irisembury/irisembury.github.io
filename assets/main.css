@@ -3,7 +3,7 @@
     
     :root {
         color-scheme: light dark;
-        --main-width: 814px;
+        --main-width: 787px;
         --header-height: 84px;
         --toc-width: 264px;
         --bold-spacing: -0.2px;
@@ -77,7 +77,7 @@
                     .toc-row a:hover { color: light-dark(#666,#9d9d9d); color: var(--grey-3,#333); }
             .menu { font-family: 'Open Sans',Roboto,sans-serif; top: 42px; right: 10px; gap: 18px; font-size: 14px; position: fixed; line-height: 1.15; background-color: light-dark(#f5f5f5,#232529); color: light-dark(#474747,#999); padding: 20px 23px 16px; box-sizing: border-box; display: none; border: 1px solid light-dark(#c9c9c9,#37383f); border-radius: 4px; }
             .menu.open { display: grid; }
-                .menu .grid { gap: 16px; }
+                .menu .grid { gap: 12px; }
                 .menu .grid .grid div { display: flex; }
                 .menu h3 { font-size: 1em; color: var(--grey-4,#444); font-weight: 700; }
                 .menu hr { margin: 0; }
@@ -90,7 +90,7 @@
             .menu.open ~ .toc-btn { border-color: light-dark(#adadad,#252525); }
             .toc-btn { display: none; width: 40px; height: 36px; border-radius: 3px; background-color: light-dark(#fff,#1D1D1F); border: 1px solid light-dark(#e8e8e8,#272727); color: light-dark(#333,#aaa); cursor: pointer; top: 12px; left: 13px; position: fixed; justify-content: center; align-items: center; z-index: 2; }
 
-        .article { font: 17px/1.6471 'Georgia Pro Digits',Georgia,'Georgia Pro',Roboto,sans-serif; background-color: var(--content-bg); padding: 50px; width: 100%; max-width: var(--main-width); }
+        .article { font: 17px/1.6 'Georgia Pro Digits',Georgia,'Georgia Pro',Roboto,sans-serif; background-color: var(--content-bg); padding: 50px; width: 100%; max-width: var(--main-width); }
             .article .article__top { margin-bottom: 24px; }
             .article .article__top > * { margin: 0; }
                 .article .article__top h1 { font: 700 40px/1.2 Lora,sans-serif; color: light-dark(black,white); }
@@ -168,7 +168,7 @@
                     .auto-table .cell ul,
                     .auto-table .cell li { margin-block: 4px 0; }
                     .auto-table .fine + .fine, .article .auto-table .cell .fine + .fine p { margin-top: 2px; }
-                    .auto-table .auto-indent { padding: 2px 8px 3px; }
+                    .auto-table .auto-indent { padding: 2px 8px 4px; }
             .file-box { background-color: light-dark(#fff0,#242424); border: 1px dashed grey; display: flex; gap: 3px; font-size: 14px; margin: 15px 0 15px 20px; line-height: 1.15; width: min-content; padding: 8px 6px 2px; float: right; }
                 .file-box figure { gap: 1px; width: 102px; display: flex; flex-direction: column; align-items: center; }
                     .file-box .pdf { width: 35px; aspect-ratio: 1; background: url(pdf-icon.png); background-size: contain; }
