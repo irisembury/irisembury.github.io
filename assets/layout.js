@@ -736,7 +736,7 @@ function autoHeading(chunk) {
         number = 4;
     }
     const tag = 'h' + number;
-    const id = heading.replaceAll(" ", "_").replaceAll("---", '\u2014').replaceAll("--", "\u2013").replace(/[\*<>]/g, "");
+    const id = heading.replaceAll(" ", "_").replaceAll("---", '\u2014').replaceAll("--", "\u2013").replace(/[\*<>]/g, "").replaceAll('?','');
     
     heading = autoFormat(heading);
     return `<${ tag } id="${ id }"${ number == 4 ? '' : ' class="for-toc"'}>${ heading }</${ tag }>`;
@@ -953,12 +953,12 @@ function loadBody() {
                 <div class="page-footer__links">
                     <p>Find, join, and follow me in other places</p>
                     <div class="icons label-external">
-                        <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="inline-icon youtube-logo-bw"></span></a>
-                        <a href="https://x.com/irisembury"><span class="inline-icon twitter-logo-bw"></span></a>
-                        <a href="https://irisembury.substack.com"><span class="inline-icon substack-logo-bw"></span></a>
-                        <a href="https://discord.com/invite/aK83BPKQ5G"><span class="inline-icon discord-logo-bw"></span></a>
-                        <a href="https://irisembury.tumblr.com/"><span class="inline-icon tumblr-logo-bw"></span></a>
-                        <a href="https://www.patreon.com/cw/irisembury"><span class="inline-icon patreon-logo-bw"></span></a>
+                        <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="inline-icon youtube-logo"></span></a>
+                        <a href="https://x.com/irisembury"><span class="inline-icon twitter-logo"></span></a>
+                        <a href="https://irisembury.substack.com"><span class="inline-icon substack-logo"></span></a>
+                        <a href="https://discord.com/invite/aK83BPKQ5G"><span class="inline-icon discord-logo"></span></a>
+                        <a href="https://irisembury.tumblr.com/"><span class="inline-icon tumblr-logo"></span></a>
+                        <a href="https://www.patreon.com/cw/irisembury"><span class="inline-icon patreon-logo"></span></a>
                     </div>
                 </div>
                 <div class="page-footer__about">
@@ -974,13 +974,13 @@ function loadBody() {
     );
 }
 function articleTop(chunk) {
-    const output = { title:'', subtitle:'', date:'', mirrors:'', byline:'' }
+    const output = { title:'', subtitle:'', date:'', mirrors:'' }
     const rows = chunk.split("\n").forEach(
         x => {
-            if (x.startsWith("title:")) { output.title = x.substring(x.indexOf(":") + 1).trim(); }
-            if (x.startsWith("subtitle:")) { output.subtitle = x.substring(x.indexOf(":") + 1).trim(); }
-            if (x.startsWith("mirrors:")) { output.mirrors = x.substring(x.indexOf(":") + 1).trim(); }
-            if (x.startsWith("date:")) { output.date = x.substring(x.indexOf(":") + 1).trim(); }
+            if (x.startsWith("title:")) { output.title = `<h1>${ autoFormat(x.substring(x.indexOf(":") + 1).trim()) }</h1>`; }
+            if (x.startsWith("subtitle:")) { output.subtitle = `<h2>${ autoFormat(x.substring(x.indexOf(":") + 1).trim()) }</h2>`; }
+            if (x.startsWith("date:")) { output.date = `<div class="page-date">${ dateFromISO(x.substring(x.indexOf(":") + 1).trim()) }</div>`; }
+            if (x.startsWith("mirrors:")) { output.mirrors = `<div class="page-mirrors label-external">This page's contents were also posted in other places: ${ x.substring(x.indexOf(":") + 1).trim().split(",").map(m => linkParse(m,2)).join("") }</div>`; }
             if (x == "toc") { loadToc = true; }
             if (x == "wide") { HTML.classList.add("wider"); }
             if (x.toLowerCase() == "unsetwidth") {
@@ -997,25 +997,13 @@ function articleTop(chunk) {
             }
         }
     );
-    if (output.date || output.mirrors) {
-        output.byline = '<div class="article-byline label-external">';
-        if (output.date) {
-            let d1 = new Date(output.date);
-            let d2 = new Date();
-            d2.setFullYear(d2.getFullYear() - 2);
-            output.date = '<span>' + dateFromISO(output.date) + '</span>';
-            output.byline += output.date;
-        }
-        if (output.mirrors) {
-            output.byline += `<span class="mirrors">${ output.mirrors.split(",").map(m => linkParse(m,2)).join("") }</span>`;
-        }
-        output.byline += '</div>';
-    }
     
-    if (output.title) { output.title = `<h1>${ output.title }</h1>` }
-    if (output.subtitle) { output.subtitle = `<h2>${ output.subtitle }</h2>` }
-    
-    document.querySelector('.article')?.insertAdjacentHTML('afterbegin', `<div class="article__top">${ output.title }${ output.subtitle }${ output.byline }</div>`);
+    document.querySelector('.article')?.insertAdjacentHTML('afterbegin', `<div class="article__top">
+        ${ output.title }
+        ${ output.subtitle }
+        ${ output.date }
+        ${ output.mirrors }
+    </div>`);
     return '';
 }
 
