@@ -1,105 +1,6 @@
 "use strict"
 let tocElement = null,canTocUpdate = true, tocLastHeading = 0,rowsInToc = [],pageHeadings = [],loadToc = false,pageLinks = [];
-const HTML = document.documentElement, toc = 1, wide = 1, unlisted = 1, unsetWidth = 1, siteIcons = { 'youtube.com':'youtube-logo', 'youtu.be':'youtube-logo', 'twitch.tv':'twitch-logo', 'bsky.app':'bluesky-logo', 'x.com':'twitter-logo', 'twitter.com':'twitter-logo', 'facebook.com':'facebook-logo', 'substack.com':'substack-logo', 'instagram.com':'instagram-logo', 'reddit.com':'reddit-logo', 'medium.com':'medium-logo', 'wikipedia.org':'wikipedia-logo', 'patreon.com':'patreon-logo', 'tumblr.com':'tumblr-logo', 'discord.gg':'discord-logo', 'discord.com':'discord-logo' }, KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
-
-const pagesData = [
-    { url:"dismal-politics-of-livestreaming",title:"The Dismal Politics of Livestreaming",date:"2026-11-15",unlisted },
-    { url:"bonnell-finkelstein-debate",title:"The 2024 Destiny, Morris, Finkelstein, Rabbani debate",date:"2026-10-14",mirrors:"substack:220450387" },
-    { url:"abortion",title:"The case for abortion",date:"2026-02-18",mirrors:"substack:188392592,tumblr:809547051047272448,patreon:55199340",toc },
-    { url:"afd-victory-2026",title:"On the AfD victory in Saxony-Anhalt",date:"2026-09-08",mirrors:"substack:214741964,tumblr:827199160807817216" },
-    { url:"airport-privatization",title:"Thoughts on airport privatization",date:"2026-09-20",mirrors:"substack:216649667" },
-    { url:"allende-and-pinochet",title:"Allende and Pinochet",date:"2026-08-09",mirrors:"substack:210515116,medium:55782f90e9" },
-    { url:"leftist-youtube",title:"Thoughts on Leftist YouTube",date:"2026-10-07",mirrors:"substack:219340446" },
-    { url:"public-record",title:"Public record",wide,toc,unlisted,unsetWidth },
-    { url:"poor-things",title:"Poor Things",date:"2024-10-31",mirrors:"tumblr:769969807464464384" },
-    { url:"floor-crossings",title:"Floor crossing (Canadian politics)",date:"2026-04-17",mirrors:"substack:194479253,medium:dfe93bb23bdd" },
-    { url:"india",title:"Notes on India",date:"2025-10-24",mirrors:"substack:177071182,tumblr:798351257128615936" },
-    { url:"liberal-conservatism",title:"Liberal conservatism",subtitle:"A philosophy of prudence and humility",date:"2026-03-24",toc },
-    { url:"american-decline",title:"A synopsis of American decline",date:"2026-01-28",mirrors:"substack:186165875,patreon:55201485",toc },
-    { url:"anime-reviews",title:"Anime reviews",date:"2024-12-17",mirrors:"tumblr:770134591113658368",unlisted },
-    { url:"bernie-military-industrial-complex",title:"Bernie Sanders and the Military Industrial Complex",date:"2024-12-16",mirrors:"tumblr:770070077409214464" },
-    { url:"bias-normal-white-men",title:"On our bias for normal white men",date:"2024-11-26",mirrors:"substack:153823028,tumblr:770305075441778688,medium:0c508d4c51b5" },
-    { url:"canada-sovereign-wealth-fund",title:"Canada's plan for a sovereign wealth fund",date:"2026-04-29",mirrors:"substack:195885575,tumblr:815245873447649280" },
-    { url:"data-structures-algorithms",title:"Data structures & algorithms",date:"2021-04-31",wide,toc,unlisted },
-    { url:"elon-musk-nazi-salute",title:"Elon Musk and the Nazi Salute",date:"2025-01-24",mirrors:"substack:155604956,tumblr:773565389405847552" },
-    { url:"fetishism-politics",title:"Fetishism and politics",date:"2024-11-14",mirrors:"tumblr:770364766791352320" },
-    { url:"freedom-convoy",title:"What was the Freedom Convoy?",date:"2026-06-15",wide,toc },
-    { url:"how-bad-is-america-really",title:"How bad is America, really?",date:"2026-07-01" },
-    { url:"immigration",title:"Immigration",date:"2025-11-06",mirrors:"substack:183229652" },
-    { url:"israel-palestine",title:"Israel and Palestine",date:"2025-07-27",toc,wide },
-    { url:"destiny-lawsuit",title:"Steven Bonnell: Lawsuit",date:"",toc,unsetWidth },
-    { url:"liberalism-not-leftism",title:"Liberalism not leftism",date:"2025-09-19",mirrors:"substack:174062936,tumblr:795164683319574528,patreon:55199811" },
-    { url:"lies-about-ilhan-omar",title:"Lies about Ilhan Omar",date:"2025-08-25",mirrors:"substack:173066010,tumblr:794091916138594304,medium:46de1629e138" },
-    { url:"lies-about-warren-clinton",title:"Lies about Elizabeth Warren and Hillary Clinton",date:"2024-12-19",mirrors:"tumblr:770730090759946240,substack:53821886" },
-    { url:"maid",title:"Medical Assistance in Dying",date:"2026-09-14",mirrors:"substack:215626100,medium:378a520d05e0,tumblr:828961026747809793" },
-    { url:"mark-robinson",title:"Mark Robinson",subtitle:"A chronicling of a person too ridiculous to forget",date:"2024-12-15",mirrors:"tumblr:769962893917798400" },
-    { url:"pierre-poilievre",title:"The many problems with Pierre Poilievre",date:"2026-08-03",mirrors:"substack:216081530",toc },
-    { url:"prejudice",title:"Notes on prejudice",date:"2025-10-30",mirrors:"substack:177556410" },
-    { url:"rational-ignorance",title:"Rational ignorance",date:"2026-04-09",mirrors:"substack:193680023,tumblr:813419185909727232,patreon:55199122,medium:7d332cf2dfb5" },
-    { url:"reddit",title:"Reddit",subtitle:"The website's history, what makes it unique, and the intense hatred many people seem to have for it",date:"2025-12-30",mirrors:"substack:183230909" },
-    { url:"relationships",title:"The standard relationship model",date:"2025-11-19" },
-    { url:"sex-gender-transsexuals",title:"Sex, Gender, & Transsexuals",date:"2024-11-19",wide,toc },
-    { url:"somali-day-cares",title:"Nick Shirley and Somali day cares",date:"2026-01-02",mirrors:"substack:183243480,patreon:55200604" },
-    { url:"trans-prison-stats-argument",title:"The trans prison stats argument",date:"2024-09-15",mirrors:"substack:153916145,tumblr:771501478599868416" },
-    { url:"trump-and-russia",title:"Trump and Russia",date:"2025-03-06",mirrors:"tumblr:777321996757450752,substack:158560801" },
-    { url:"trump-appeal",title:"The Trump appeal",subtitle:"How and why does anyone actually like him?",date:"2024-12-03",mirrors:"tumblr:770270265635667968,medium:5c6806252b43" },
-    { url:"types-of-masculinity",title:"On types of masculinity",date:"2024-11-08",mirrors:"tumblr:770310861444300800" },
-    { url:"why-bottom-surgery",title:"Why get bottom surgery?",date:"2025-02-09",mirrors:"tumblr:775036555284856832" }
-];
-const videoElements = [
-    { title:"Toronto mayoral race (Olivia Chow)",date:"2026-10-28",src:"youtube:gFBtpeRY0LM",thumb:'gFBtpeRY0LM.jpg',length:"17:18" },
-    { title:"Destiny versus Finkelstein",date:"2026-10-20",src:"youtube:2jY-wfdKkyw,patreon:172891823",thumb:"172891823.jpg",length:"44:24" },
-    { title:"Is Canada going to split up?",date:"2026-10-12",src:"patreon:172199226,youtube:Q_ltXhrXb6s",thumb:"172199226.jpg",length:"10:13" },
-    { title:"Macklemore, Ed Sheeran",date:"2026-10-10",src:"youtube:_lfRiHlNFbc,patreon:172218877",thumb:"172218877.jpg",length:"41:18" },
-    { title:"Thoughts on Leftist YouTube",date:"2026-09-25",src:"youtube:R_xfJqp3M4g,patreon:171931256",length:"1:17:57",thumb:"1719312562.jpg" },
-    { title:"Medical Assistance in Dying (MAiD)",date:"2026-09-16",src:"patreon:169696851,youtube:0n0edHbri5k",length:"13:32",thumb:"1696968512.jpg" },
-    { title:"Mark Carney",date:"2026-08-18",src:"youtube:5fsJUueUvpw,patreon:167033503",thumb:"167033503.jpg",length:"13:54" },
-    { title:"Am I a liberal?",date:"2026-08-11",src:"youtube:QPNCs5A3iYo,patreon:166429634",length:"16:26",thumb:"166429634.jpg" },
-    { title:"The Freedom Convoy",date:"2026-07-19",src:"youtube:ilB3j3BTCTI,patreon:164228303",thumb:"164228303.jpg",length:"2:41:06" },
-    { title:"How should we feel about floor crossers?",date:"2026-05-17",src:"youtube:N3csai2IFDU,patreon:158476239",thumb:"158476239.jpg",length:"56:34" },
-    { title:"Liberalism not Leftism",date:"2026-05-06",src:"youtube:DgGf_g4aGYA,patreon:157517952",thumb:"157517952.jpg",length:"41:15" },
-    { title:"Liberal Conservatism",date:"2026-04-07",src:"youtube:Sy33HSFsuu8,patreon:154996870",thumb:"154996870.jpg",length:"2:03:13" },
-    { title:"Abortion",date:"2026-02-24",src:"youtube:CpjJ8TgOxJY,patreon:151884875",thumb:"151884875.jpg",length:"43:04" },
-    { title:"How bad is America, really?",date:"2026-03-04",src:"youtube:W0Dmtyyc7FU,patreon:152288758",thumb:"152288758.jpg",length:"27:04" },
-    { title:"American decline",date:"2026-02-11",src:"youtube:oUOsAdnK2zs,patreon:150555019",thumb:"150555019.jpg",length:"39:47" },
-    { title:"Normalization",src:"youtube:TYoe1jxBYPY,patreon:148679519",date:"2025-09-19",thumb:"148679519.jpg",length:"12:08" },
-    { title:"India",thumb:"148682097.jpg",src:"youtube:Pz0Oq1rb14E,patreon:148682097",date:"2025-10-23",length:"41:17" },
-    { title:"Lies about Ilhan Omar",date:"2025-09-03",src:"youtube:zgE4L-e9yg0,patreon:148679387",thumb:"148679387.jpg",length:"44:50" },
-    { title:"Trans fetishism",date:"2025-04-02",src:"youtube:vk57rvM1zWo",thumb:"vk57rvM1zWo.jpg",length:"22:39" },
-    { title:"Exploring lies about Warren and Clinton",date:"2025-04-09",src:"youtube:LPQD6sxlWOs,patreon:148676394",thumb:"148676394.jpg",length:"34:02" },
-    { title:"Bernie Sanders & the Military Industrial Complex",date:"2025-03-22",length:"12:44",src:"youtube:yt6O0OMdIT0",thumb:"yt6O0OMdIT0.jpg" },
-    { title:"Sex, gender, & transsexuals",date:"2025-10-17",src:"youtube:Hgh3r7gJoWU,patreon:148676474",thumb:"148676474.jpg",length:"1:26:14" }
-].sort((a,b)=>(parseInt(b.date?.replace(/\D/g,''))||0)-(parseInt(a.date?.replace(/\D/g,''))||0)).map(
-    vobj => {
-        vobj.src = vobj.src.split(",").sort();
-        if (vobj.thumb) {
-            vobj.thumb = vobj.thumb ? getRootPath() + 'assets/thumbnails/' + vobj.thumb : '';
-            vobj.thumb = `url('${ vobj.thumb }')`;
-        }
-        else {
-            let indx = vobj.src.findIndex(s => s.startsWith('youtube'));
-            if (indx != -1) {
-                vobj.thumb = `url('https://img.youtube.com/vi/${ vobj.src[indx].substring(vobj.src[indx].indexOf(':') + 1) }/sddefault.jpg')`;
-            }
-            else {
-                vobj.thumb = 'black'
-            }
-        }
-        return `<figure class="video-figure">
-            <div class="img-box"><a href="${ linkParse(vobj.src.reverse()[0],0) }"><div class="img" loading="lazy" style="background-image:${ vobj.thumb }">${ vobj.length ?`<span class="timecard no-select">${ vobj.length }</span>` :"" }</div></a></div>
-            <figcaption>
-                <div class="video-title">${ vobj.title }</div>
-                <div class="video-sources">${ vobj.src.map(n => linkParse(n,1)).join(" | ") }</div>
-                <div class="video-date"><span>${ dateFromISO(vobj.date) }</span></div>
-            </figcaption>
-        </figure>` }
-);
-const articlesList = pagesData.filter(x => !x.unlisted).sort(
-    (a,b) => (parseInt(b.date?.replace(/\D/g, "")) || 0) - (parseInt(a.date?.replace(/\D/g,"")) || 0)
-).map(
-    tobj => `
-    <div><span><a title="${ tobj.title }" href="${ getRootPath() }page/${ tobj.url }/index.html">${ autoFormat(tobj.title) + (tobj.subtitle ? ': '+autoFormat(tobj.subtitle) : '') }</a></span>${ tobj.date ?`<span class="page-date"> / <span title="${ dateFromISO(tobj.date) }">${ tobj.date }</span></span>` :'' }</div>`
-);
+const HTML = document.documentElement, siteIcons = { 'youtube.com':'youtube-logo', 'youtu.be':'youtube-logo', 'twitch.tv':'twitch-logo', 'bsky.app':'bluesky-logo', 'x.com':'twitter-logo', 'twitter.com':'twitter-logo', 'facebook.com':'facebook-logo', 'substack.com':'substack-logo', 'instagram.com':'instagram-logo', 'reddit.com':'reddit-logo', 'medium.com':'medium-logo', 'wikipedia.org':'wikipedia-logo', 'patreon.com':'patreon-logo', 'tumblr.com':'tumblr-logo', 'discord.gg':'discord-logo', 'discord.com':'discord-logo' }, KEYWORDS = { cpp: "alignas alignof and and_eq asm auto bitand bitor bool break case catch char char16_t char32_t char8_t class co_await co_return co_yield compl concept const const_cast consteval constexpr constinit continue decltype default delete do double dynamic_cast else enum explicit export extern false final float for friend goto if inline int import long module mutable namespace new noexcept not not_eq nullptr operator or or_eq private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq", cs: "abstract add alias allows and args as ascending async await base bool break by byte case catch char checked class const continue decimal default delegate descending do double dynamic else enum equals event explicit extension extern false field file finally fixed float for foreach from get global goto group if implicit in init int interface internal into is join let lock long managed nameof namespace new nint not notnull nuint null object on operator or orderby out override params partial partial private protected public readonly record ref remove required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unmanaged unmanaged unsafe ushort using value var virtual void volatile when where where while with yield", java: "String abstract continue for new switch assert default goto package synchronized boolean do if private this break double implements protected throw byte else import public throws case enum instanceof return transient catch extends int short try char final interface static void class finally long strictfp volatile const float native super while", js: "await break case catch class const constructor continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield implements interface package private protected public static setInterval" }
 
 function init() {
     setTimeout(() => { HTML.style.removeProperty("opacity"); HTML.classList.add("animate"); }, 250);
@@ -137,8 +38,8 @@ function init() {
     Array.from(document.querySelectorAll(".age-from")).forEach(a => a.innerHTML = `<span title="Update to date based on birthday: ${ a.innerHTML }">${ ageFromISO(a.innerHTML) }</span>`);
     Array.from(document.querySelectorAll(".current-year")).forEach(a => a.innerHTML = new Date().getFullYear());
 
-    document.querySelectorAll(".pages-index.articles").forEach(vi => vi.insertAdjacentHTML("beforeend", articlesList.join('')));
-    document.querySelectorAll(".video-index").forEach(vi => vi.insertAdjacentHTML("beforeend", videoElements.join('')));
+    // document.querySelectorAll(".pages-index.articles").forEach(vi => vi.insertAdjacentHTML("beforeend", articlesList.join('')));
+    // document.querySelectorAll(".video-index").forEach(vi => vi.insertAdjacentHTML("beforeend", videoElements.join('')));
 
     if (document.title == "") { document.title = "Iris Embury"; }
     else if (!document.title.endsWith("Iris Embury")) { document.title += " | Iris Embury"; }
@@ -960,8 +861,9 @@ function tocSetup() {
         if (pageHeadings.length < 3) { return; }
         page_.insertAdjacentHTML("afterbegin",`<nav class="toc"></nav>`);
         page_.insertAdjacentHTML("beforeend",`<div class="page-spacer"></div>`);
+        if (!document.querySelector('.article__top h1')) { pageHeadings = pageHeadings.slice(1); }
         tocElement = document.querySelector(".toc");
-        tocElement.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.slice(1).map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
+        tocElement.innerHTML = '<div class="toc-title">This page contents</div><div class="toc-row"><a class="pseudo-link" onclick="scrollToTop()">(Top)</a></div>' + pageHeadings.map( heading => `<div class="toc-row ${ heading.tagName.toLowerCase() }"><a href="#${ heading.id }">${ heading.innerHTML }</a></div>` ).join('');
         tocElement.scrollTo({ behavior: "instant", top: 0 })
         rowsInToc = Array.from(tocElement.getElementsByClassName("toc-row"));
         window.addEventListener("scroll", tocUpdate);
@@ -981,6 +883,7 @@ function interpreter(argValue) {
         if (chunk == "---") { return "<hr>"; }
         if (chunk == "***") { return '<div class="dinkus"></div>'; }
         if (/^#{1,6} /.test(chunk)) { return autoHeading(chunk); }
+        if (chunk.startsWith("!articletop")) { return articleTop(chunk); }
         if (chunk.startsWith("!images")) { return autoGallery(chunk); }
         if (chunk.startsWith("!files")) { return fileBox(chunk); }
         if (chunk.startsWith("!video")) { return autoVideo(chunk); }
@@ -1040,25 +943,9 @@ function loadBody() {
     if (page) {
         page.innerHTML = `
             <article class="article">
-                ${ articleTop() }
                 <div class="article__body">
                     ${ page.innerHTML }
                 </div>
-                ${ getRootPath()?`
-                    <footer class="article__footer">
-                        <div class="footer-recommendation">
-                            <div class="panel-switcher--600">
-                                <div>
-                                    <div class="line-title"><span>Recently added</span><a href="../../?tab=articles">see all</a></div>
-                                    <div class="recent-articles">${ articlesList.slice(0, 5).join('') }</div>
-                                </div>
-                                <div>
-                                    <div class="line-title"><span>Recent videos</span><a href="../../?tab=videos">see all</a></div>
-                                    <div class="recent-videos">${ videoElements.slice(0, 3).join('') }</div>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>`:'' }
             </article>`;
         interpreter(page.querySelector('.article__body'));
         page.insertAdjacentHTML("afterend",`
@@ -1075,7 +962,7 @@ function loadBody() {
                     </div>
                 </div>
                 <div class="page-footer__about">
-                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. • Aspects of this site might not load perfectly if you're on mobile. If you're a mobile user, I hate you and the small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. • For general inquiry: contact@irisembury.com</p>
+                    <p>This site is hosted via <a href="https://github.com/irisembury/irisembury.github.io">GitHub</a>. I have no association with any other person or organization. · Aspects of this site might not load perfectly if you're on mobile. If you're a mobile user, I hate you and the small amount of effort I put into making it so things don't break completely is more than you deserve. Get off your bed and use a normal computer. · For general inquiry: contact@irisembury.com</p>
                 </div>
             </footer>`);
     }
@@ -1086,54 +973,49 @@ function loadBody() {
         </div>`
     );
 }
-function articleTop() {
-    let pageInfo = pagesData.find(p => p.url == getDomain());
-    if (!pageInfo) {
-        return '';
-    }
-    const articleTopContents = [];
-    if (pageInfo.toc) {
-        loadToc = true;
-    }
-    if (pageInfo.wide) {
-        HTML.classList.add("wider");
-    }
-    if (pageInfo.unsetWidth) {
-        document.querySelector('.menu .grid .grid').insertAdjacentHTML("beforeend", '<div><label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width"></div>');
-        if (localStorage.getItem("unset-width-" + window.location.pathname) != 'false') {
-            document.getElementById("unset-width").checked = true;
-            HTML.classList.add("unset-width");
+function articleTop(chunk) {
+    const output = { title:'', subtitle:'', date:'', mirrors:'', byline:'' }
+    const rows = chunk.split("\n").forEach(
+        x => {
+            if (x.startsWith("title:")) { output.title = x.substring(x.indexOf(":") + 1).trim(); }
+            if (x.startsWith("subtitle:")) { output.subtitle = x.substring(x.indexOf(":") + 1).trim(); }
+            if (x.startsWith("mirrors:")) { output.mirrors = x.substring(x.indexOf(":") + 1).trim(); }
+            if (x.startsWith("date:")) { output.date = x.substring(x.indexOf(":") + 1).trim(); }
+            if (x == "toc") { loadToc = true; }
+            if (x == "wide") { HTML.classList.add("wider"); }
+            if (x.toLowerCase() == "unsetwidth") {
+                document.querySelector('.menu .grid .grid').insertAdjacentHTML("beforeend", '<div><label for="unset-width">Unlimited page width:</label><input type="checkbox" class="slide-checkbox" id="unset-width"></div>');
+                if (localStorage.getItem("unset-width-" + window.location.pathname) != 'false') {
+                    document.getElementById("unset-width").checked = true;
+                    HTML.classList.add("unset-width");
+                }
+                document.getElementById("unset-width")?.addEventListener("change", function() {
+                    HTML.classList.toggle(this.id, this.checked);
+                    localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
+                    tocUpdate();
+                });
+            }
         }
-        document.getElementById("unset-width")?.addEventListener("change", function() {
-            HTML.classList.toggle(this.id, this.checked);
-            localStorage.setItem("unset-width-" + window.location.pathname, this.checked)
-            tocUpdate();
-        });
-    }
-    if (pageInfo.title) {
-        articleTopContents.push(`<h1 class="for-toc">${ pageInfo.title }</h1>`);
-        document.title = pageInfo.title.replaceAll('---', '\u2014').replaceAll('--', '\u2013');
-    }
-    if (pageInfo.subtitle) {
-        articleTopContents.push(`<h2>${ pageInfo.subtitle }</h2>`);
-    }
-    if (pageInfo.date || pageInfo.mirrors) {
-        let by = '<div class="article-byline label-external">';
-        if (pageInfo.date) {
-            let d1 = new Date(pageInfo.date);
+    );
+    if (output.date || output.mirrors) {
+        output.byline = '<div class="article-byline label-external">';
+        if (output.date) {
+            let d1 = new Date(output.date);
             let d2 = new Date();
             d2.setFullYear(d2.getFullYear() - 2);
-            pageInfo.date = '<span>' + dateFromISO(pageInfo.date) + '</span>';
-            by += pageInfo.date;
+            output.date = '<span>' + dateFromISO(output.date) + '</span>';
+            output.byline += output.date;
         }
-        if (pageInfo.mirrors) {
-            by += pageInfo.mirrors.split(",").map(m => linkParse(m,2)).join(" ");
+        if (output.mirrors) {
+            output.byline += `<span class="mirrors">${ output.mirrors.split(",").map(m => linkParse(m,2)).join("") }</span>`;
         }
-        articleTopContents.push(by + '</div>');
+        output.byline += '</div>';
     }
-    if (articleTopContents.length != 0) {
-        return '<div class="article__top">' + articleTopContents.map(i => autoFormat(i)).join("\n") + '</div>';
-    }
+    
+    if (output.title) { output.title = `<h1>${ output.title }</h1>` }
+    if (output.subtitle) { output.subtitle = `<h2>${ output.subtitle }</h2>` }
+    
+    document.querySelector('.article')?.insertAdjacentHTML('afterbegin', `<div class="article__top">${ output.title }${ output.subtitle }${ output.byline }</div>`);
     return '';
 }
 

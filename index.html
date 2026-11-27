@@ -32,24 +32,34 @@
             .tab-buttons > div { padding: 8px 8px 6px; }
         }
     
-    .tab-panels { font: 17px/23px Arial,Roboto,sans-serif; }
-        .tab-panels > div { display: none; padding: 10px 18px; gap: 21px; }
-        .tab-panels > div.selected { display: grid; }
-        
-        /* index section elements */
-        .pages-index { color: var(--grey-6,#666); }
-            .pages-index > div + div { margin-top: 10px; }
-        
-        .video-index { display: grid; gap: 12px 16px; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); }
-            .video-index .video-figure { max-width: unset; width: 100%; margin-inline: auto; }
-        
-        .video-index.list-view { grid-template-columns: auto; gap: 6px; }
-            .video-index.list-view .img-box { display: none; }
-            .video-index.list-view figcaption { display: flex; gap: 5px; }
+    .tab-panels { font: 17px/23px Roboto,sans-serif; }
+        .tab-panels > div { padding: 10px 18px; gap: 20px; }
+        .tab-panels > div:not(.selected) { display: none; }
     
-    .intro-box {
-        text-align: center;
-    }
+    
+    /* ---- text tab ---- */
+        
+        .page-list {
+            display: grid;
+            grid-template-columns: auto min-content;
+            gap: 9px 10px;
+            margin-inline: auto;
+            line-height: 1.25;
+            align-items: center;
+            max-width: 575px;
+            color: var(--grey-7,#777);
+        }
+            .page-list .col-1 { grid-column: 1; }
+            .page-list .col-2 { grid-column: 2; white-space: nowrap; }
+            .page-list .col-1:hover + .col-2 { color: var(--grey-3,#333); }
+    
+    
+    /* ---- video tab ---- */
+        
+        .video-index-grid { display: grid; gap: 12px 16px; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); }
+            .video-index-grid .video-figure { max-width: unset; width: 100%; margin-inline: auto; }
+    
+    
     .links-panel { display: flex; gap: 10px 14px; flex-wrap: wrap; margin-top: 7px; }
         .links-panel .inline-icon { border-radius: 23% !important; width: 38px; margin: 0; display: block; }
     
@@ -57,9 +67,6 @@
         .landing__about { margin-inline: auto; }
         .landing__about p { max-width: 528px; }
         @media (max-width: 430px) { .tab-panel { padding: 0; } }
-    
-    .text-index {  }
-    
     
     </style>
 </head>
@@ -73,23 +80,13 @@
     </div>
     <div class="tab-panels">
         <div class="text-docs">
-            <div class="hidden text-panel intro-box auto-format">
-                I'm Iris. This is a website where I compile, host, and link to stuff.
-                <div class="links-panel label-external center">
-                    <a href="https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos"><span class="inline-icon youtube-logo"></span></a>
-                    <a href="https://x.com/irisembury"><span class="inline-icon twitter-logo"></span></a>
-                    <a href="https://irisembury.substack.com"><span class="inline-icon substack-logo"></span></a>
-                    <a href="https://discord.com/invite/aK83BPKQ5G"><span class="inline-icon discord-logo"></span></a>
-                    <a href="https://irisembury.tumblr.com/"><span class="inline-icon tumblr-logo"></span></a>
-                    <a href="https://www.patreon.com/cw/irisembury"><span class="inline-icon patreon-logo"></span></a>
-                </div>
-            </div>
             <div>
-                <div class="pages-index articles label-external">
+                <div class="grid gap-8">
                     <div><a href="page/public-record">Public record (public figure statements)<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a> &mdash; ongoing, continually-updated catalogue of various public figure’s statements with full receipts</div>
                     <div><a href="page/destiny-lawsuit">Steven Bonnell: Lawsuit<span class="nowrap"><span class="inline-icon pin-icon"></span></span></a> &mdash; currently compiling info about this</div>
-                    <hr>
                 </div>
+                <hr>
+                <div class="page-list"></div>
             </div>
         </div>
         <div class="videos">
@@ -97,15 +94,21 @@
                 For a more complete list, check my uploads tab on [YouTube](https://youtube.com/channel/UCXadODjAtT72eYW6xCGyuUA/videos).
                 Patreon links aren't paywalled. It's just an alternate video source in case anything ever goes wrong with YouTube.
             </div>
-            <div style="max-width:714px; width:100%; margin-inline:auto;">
-                <div class="video-index"></div>
+            <div style="max-width:714px; width:100%; margin:20px auto;">
+                <div class="video-index-grid"></div>
             </div>
         </div>
     </div>
 </div>
+
 <script src="assets/layout.js"></script>
 <script>
 window.addEventListener('load', function() {
+
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                      sets up tabs:                                   
+    */
+    
     function setTab(e) {
         const clickedTab = e.currentTarget;
         const clickedTabClass = Array.from(clickedTab.classList).filter(c => c != 'selected').join(' ');
@@ -124,23 +127,118 @@ window.addEventListener('load', function() {
     else {
         document.querySelector(".main-layout.tab-buttons")?.firstElementChild.click();
     }
+
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                            handle ?tab=something in address:                         
+    */
     
-    {
-        const tabKey = new URLSearchParams(window.location.search).get('tab');
-        if (tabKey) {
-            if (['text','articles','text-docs'].includes(tabKey)) {
-                document.querySelector('.main-layout.tab-buttons .text-docs').click();
-            }
-            else if (['videos','video'].includes(tabKey)) {
-                document.querySelector('.main-layout.tab-buttons .videos').click();
-            }
-            else document.querySelector('.tab-buttons ' + tabKey)?.click();
-            
-            window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+    const tabParam = new URLSearchParams(window.location.search).get('tab');
+    if (tabParam) {
+        if (['text','articles','text-docs'].includes(tabParam)) {
+            document.querySelector('.main-layout.tab-buttons .text-docs').click();
         }
+        else if (['videos','video'].includes(tabParam)) {
+            document.querySelector('.main-layout.tab-buttons .videos').click();
+        }
+        else document.querySelector('.tab-buttons ' + tabParam)?.click();
+        window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
     }
     
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+                                    sort stuff by date                                
+    */
+    
+    const pageList = `
+            A review of Leftist YouTube | leftist-youtube | 2026-10-07
+            A synopsis of American decline | american-decline | 2026-01-28
+            Allende and Pinochet | allende-and-pinochet | 2026-08-09
+            Bernie Sanders and the Military Industrial Complex | bias-normal-white-men | 2024-12-16
+            Canada's plan for a sovereign wealth fund | canada-sovereign-wealth-fund | 2026-04-29
+            Elon Musk and the Nazi Salute | elon-musk-nazi-salute | 2025-01-24
+            Fetishism and politics | fetishism-politics | 2024-11-14
+            Floor crossings | floor-crossings | 2026-04-17
+            How bad is America? | how-bad-is-america | 2026-07-01
+            Israel and Palestine | israel-palestine | 2025-07-27
+            Liberal conservatism | liberal-conservatism | 2026-03-24
+            Liberalism not leftism | liberalism-not-leftism | 2025-09-19
+            Lies about Elizabeth Warren and Hillary Clinton | lies-about-warren-clinton | 2024-12-19
+            Lies about Ilhan Omar | lies-about-ilhan-omar | 2025-08-25
+            Mark Robinson | mark-robinson | 2024-12-15
+            Medical Assistance in Dying in Canada | maid | 2026-09-14
+            Nick Shirley and the Somali day cares | somali-day-cares | 2026-01-02
+            Notes on India | india | 2025-10-24
+            On AfD's victory in Saxony-Anhalt | afd-victory-2026 | 2026-09-08
+            Poor Things (film) | poor-things | 2024-10-31
+            Sex, gender, and transsexuals | sex-gender-transsexuals | 2024-11-19
+            The 2024 Destiny, Morris, Finkelstein, Rabbani debate | bonnell-finkelstein-debate | 2026-10-14
+            The case for abortion | abortion | 2026-02-18
+            The Conservative Party's hard problem | conservative-party-hard-problem | 2026-05-01
+            The many problems with Pierre Poilievre | pierre-poilievre | 2026-08-03
+            Thoughts on airport privatization | airport-privatization | 2026-09-20
+            Thoughts on immigration | immigration | 2025-11-06
+            Thoughts on Reddit | reddit | 2025-12-30
+            Types of masculinity | types-of-masculinity | 2024-11-08
+            Voters and rational ignorance | rational-ignorance | 2025-12-30
+            What was the Freedom Convoy? | freedom-convey | 2026-06-15
+            What's the Trump appeal? | trump-appeal | 2024-12-03
+            What's with Trump and Russia? | trump-and-russia | 2025-03-06
+            Why get bottom surgery? | why-bottom-surgery | 2025-02-09
+        `.split("\n").filter(n => n.trim().length > 2).map(
+            line => {
+                line = line.trim().replaceAll('\\|','&verbar;').split("|");
+                while (line.length < 3) { line.push('') }
+                return { title:line[0].trim(), url:line[1].trim(), date:line[2].trim() }
+            }
+        ).sort((a,b) => {
+            return (parseInt(b.date.replace(/[^0-9]/g,''))||0) - (parseInt(a.date.replace(/[^0-9]/g,''))||0)
+        }).map(
+            c => `<div class="col-1"><a href="page/${ c.url }/index.html">${ c.title }</a></div><div class="col-2"><span>${ c.date }</span></div>`
+        ).join('')
+    
+    document.querySelector('.page-list')?.insertAdjacentHTML('beforeend', pageList);
+    
+    const videoList = `
+        title:Toronto mayoral race (Olivia Chow) | date:2026-10-28 | src:youtube:gFBtpeRY0LM | thumb:gFBtpeRY0LM.jpg | length:17:18
+        title:Destiny versus Finkelstein | date:2026-10-20 | src:youtube:2jY-wfdKkyw,patreon:172891823 | thumb:172891823.jpg | length:44:24
+        title:Is Canada going to split up? | date:2026-10-12 | src:patreon:172199226,youtube:Q_ltXhrXb6s | thumb:172199226.jpg | length:10:13
+        title:Macklemore, Ed Sheeran | date:2026-10-10 | src:youtube:_lfRiHlNFbc,patreon:172218877 | thumb:172218877.jpg | length:41:18
+        title:Thoughts on Leftist YouTube | date:2026-09-25 | src:youtube:R_xfJqp3M4g,patreon:171931256 | length:1:17:57 | thumb:1719312562.jpg
+        title:Medical Assistance in Dying (MAiD) | date:2026-09-16 | src:patreon:169696851,youtube:0n0edHbri5k | length:13:32 | thumb:1696968512.jpg
+        title:Mark Carney | date:2026-08-18 | src:youtube:5fsJUueUvpw,patreon:167033503 | thumb:167033503.jpg | length:13:54
+        title:Am I a liberal? | date:2026-08-11 | src:youtube:QPNCs5A3iYo,patreon:166429634 | length:16:26 | thumb:166429634.jpg
+        title:The Freedom Convoy | date:2026-07-19 | src:youtube:ilB3j3BTCTI,patreon:164228303 | thumb:164228303.jpg | length:2:41:06
+        title:How should we feel about floor crossers? | date:2026-05-17 | src:youtube:N3csai2IFDU,patreon:158476239 | thumb:158476239.jpg | length:56:34
+        title:Liberalism not Leftism | date:2026-05-06 | src:youtube:DgGf_g4aGYA,patreon:157517952 | thumb:157517952.jpg | length:41:15
+        title:Liberal Conservatism | date:2026-04-07 | src:youtube:Sy33HSFsuu8,patreon:154996870 | thumb:154996870.jpg | length:2:03:13
+        title:Abortion | date:2026-02-24 | src:youtube:CpjJ8TgOxJY,patreon:151884875 | thumb:151884875.jpg | length:43:04
+        title:How bad is America, really? | date:2026-03-04 | src:youtube:W0Dmtyyc7FU,patreon:152288758 | thumb:152288758.jpg | length:27:04
+        title:American decline | date:2026-02-11 | src:youtube:oUOsAdnK2zs,patreon:150555019 | thumb:150555019.jpg | length:39:47
+        title:Normalization | src:youtube:TYoe1jxBYPY,patreon:148679519 | date:2025-09-19 | thumb:148679519.jpg | length:12:08
+        title:India | thumb:148682097.jpg | src:youtube:Pz0Oq1rb14E,patreon:148682097 | date:2025-10-23 | length:41:17
+        title:Lies about Ilhan Omar | date:2025-09-03 | src:youtube:zgE4L-e9yg0,patreon:148679387 | thumb:148679387.jpg | length:44:50
+        title:Trans fetishism | date:2025-04-02 | src:youtube:vk57rvM1zWo | thumb:vk57rvM1zWo.jpg | length:22:39
+        title:Exploring lies about Warren and Clinton | date:2025-04-09 | src:youtube:LPQD6sxlWOs,patreon:148676394 | thumb:148676394.jpg | length:34:02
+        title:Bernie Sanders & the Military Industrial Complex | date:2025-03-22 | length:12:44 | src:youtube:yt6O0OMdIT0 | thumb:yt6O0OMdIT0.jpg
+        title:Sex, gender, & transsexuals | date:2025-10-17 | src:youtube:Hgh3r7gJoWU,patreon:148676474 | thumb:148676474.jpg | length:1:26:14
+    `.split("\n").filter(r => r.trim().length > 2).map(r => parseObj(r,'title','date','src','thumb','length')).sort(
+        (a,b) => (parseInt(b.date?.replace(/\D/g,'')) || 0) - (parseInt(a.date?.replace(/\D/g,'')) || 0)
+    ).map(vobj => {
+        vobj.src = vobj.src.split(",").sort();
+        if (vobj.thumb) {
+            vobj.thumb = vobj.thumb ? getRootPath() + 'assets/thumbnails/' + vobj.thumb : '';
+            vobj.thumb = `url('${ vobj.thumb }')`;
+        }
+        else {
+            let indx = vobj.src.findIndex(s => s.startsWith('youtube'));
+            if (indx != -1) { vobj.thumb = `url('https://img.youtube.com/vi/${ vobj.src[indx].substring(vobj.src[indx].indexOf(':') + 1) }/sddefault.jpg')`; }
+            else {vobj.thumb = 'black' }
+        }
+        return `<figure class="video-figure"><div class="img-box"><a href="${ linkParse(vobj.src.reverse()[0],0) }"><div class="img" loading="lazy" style="background-image:${ vobj.thumb }">${ vobj.length ?`<span class="timecard no-select">${ vobj.length }</span>` :"" }</div></a></div><figcaption><div class="video-title">${ vobj.title }</div><div class="video-sources">${ vobj.src.map(n => linkParse(n,1)).join(" | ") }</div><div class="video-date"><span>${ dateFromISO(vobj.date) }</span></div></figcaption></figure>` }
+    ).join('');
+    
+    document.querySelector('.video-index-grid')?.insertAdjacentHTML('beforeend', videoList);
+    
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- */
 })
+
 </script></div></body></html>
-
-
